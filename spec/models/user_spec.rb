@@ -5,7 +5,9 @@ describe User do
   	{
   		first_name: "Barry",
   		last_name: "Wallace",
-  		email: "barrywallace.is@gmail.com"
+  		email: "barrywallace.is@gmail.com",
+      password: "trinity1",
+      password_confirmation: "trinity1"
   	}
   }
 
@@ -30,6 +32,11 @@ describe User do
   		user.email = "BARRYWALLACE.IS@GMAIL.COM"
   		expect(user).to validate_uniqueness_of(:email)
   	end
+
+    it "requires the email address to look like an email" do
+      user.email = "jason"
+      expect(user).to_not be_valid
+    end
   end
 
   describe "#downcase_email" do

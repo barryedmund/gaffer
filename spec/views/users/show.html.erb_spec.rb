@@ -5,8 +5,7 @@ describe "users/show" do
     @user = assign(:user, stub_model(User,
       :first_name => "First Name",
       :last_name => "Last Name",
-      :email => "Email",
-      :password_digest => "Password Digest"
+      :email => "Email"
     ))
   end
 
@@ -16,6 +15,5 @@ describe "users/show" do
     rendered.should match(/First Name/)
     rendered.should match(/Last Name/)
     rendered.should match(/Email/)
-    rendered.should match(/Password Digest/)
   end
 end
