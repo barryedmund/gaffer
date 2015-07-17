@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150713052708) do
+ActiveRecord::Schema.define(version: 20150717022834) do
+
+  create_table "team_players", force: true do |t|
+    t.integer  "team_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "team_players", ["team_id"], name: "index_team_players_on_team_id"
 
   create_table "teams", force: true do |t|
     t.string   "title"
