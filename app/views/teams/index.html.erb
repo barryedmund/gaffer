@@ -4,7 +4,7 @@
   <thead>
     <tr>
       <th>Title</th>
-      <th colspan="3"></th>
+      <th></th>
     </tr>
   </thead>
 
@@ -12,9 +12,12 @@
     <% @teams.each do |team| %>
       <tr id="<%= dom_id(team) %>">
         <td><%= team.title %></td>
-        <td><%= link_to 'Show', team %></td>
-        <td><%= link_to 'Edit', edit_team_path(team) %></td>
-        <td><%= link_to 'Destroy', team, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>
+          <%= link_to "View team players", team_team_players_path(team) %>
+          <%= link_to 'Show', team %>
+          <%= link_to 'Edit', edit_team_path(team) %>
+          <%= link_to 'Destroy', team, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
       </tr>
     <% end %>
   </tbody>
