@@ -11,8 +11,12 @@
 	<div class="nav">
 		<h1><%= link_to "Gaffer League", root_path %></h1>
 		<ul>
-			<li><%= link_to "Sign Up", new_user_path %></li>
-			<li><%= link_to "View Teams", teams_path %></li>
+			<% if logged_in? %>
+		    	<li><%= link_to "Log Out", logout_path, method: :delete %></li>
+		    <% else %>
+		        <li><%= link_to "Log In", login_path %></li>
+		        <li><%= link_to "Sign Up", new_user_path %></li>
+		    <% end %>
 		</ul>
 	</div>
 

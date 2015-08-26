@@ -1,14 +1,9 @@
 require 'spec_helper'
 
 describe "Viewing team players" do
-	let!(:team) {Team.create(title: "FC United")}
-
-	def visit_team_players(this_team)
-		visit "/teams"
-		within "#team_#{this_team.id}" do
-			click_link "View team players"
-		end
-	end
+	let(:user) { team.user }
+	let!(:team) { create(:team) }
+	before { sign_in user, password: "gaffer123" }
 
 	it "displays the title of the team" do
 		visit_team_players(team)
@@ -26,6 +21,6 @@ describe "Viewing team players" do
 		team.team_players.create
 		team.team_players.create
 		visit_team_players(team)
-		expect(page.all("ul.team_players li").size).to eq(2)
+		expect(page.all("ul.squad_players li").size).to eq(2)
 	end
 end

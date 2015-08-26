@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe "Creating teams" do
+	let(:user) { create(:user) }
+
 	def create_team(options={})
 		options[:title] ||= "My team"
 
@@ -10,6 +12,10 @@ describe "Creating teams" do
 
 		fill_in "Title", with: options[:title]
 		click_button "Create Team"
+	end
+
+	before do
+		sign_in user, password: "gaffer123"
 	end
 
 	it "redirects to the team index page on success" do

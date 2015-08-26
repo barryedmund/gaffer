@@ -1,7 +1,12 @@
 require 'spec_helper'
 
 describe "Deleting teams" do
-	let!(:team) { Team.create(title: "Fantasy Playas") }
+	let(:user) { team.user }
+	let!(:team) { create(:team) }
+
+	before do
+		sign_in user, password: "gaffer123"
+	end
 
 	it "is successful when clicking the destroy link" do
 		visit "/teams"

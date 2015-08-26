@@ -1,15 +1,16 @@
 class TeamPlayersController < ApplicationController
+  before_action :require_user
+  before_action :find_team_player
+
   def index
-  	@team = Team.find(params[:team_id])
+    
   end
 
   def new
-  	@team = Team.find(params[:team_id])
   	@team_player = @team.team_players.new
   end
 
   def create
-  	@team = Team.find(params[:team_id])
   	@team_player = @team.team_players.new(team_player_params)
   	if @team_player.save
   		flash[:success] = "Added team player"
@@ -20,7 +21,32 @@ class TeamPlayersController < ApplicationController
   	end
   end
 
+  def destroy
+    @team_player = @team.team_players.find(params[:id])
+    if @team_player.destroy
+      flash[:success] = "Team player was removed successfully."
+    else
+      flash[:error] = "Team player was not removed successfully."
+    end
+    redirect_to team_team_players_path
+  end
+
+  def update_first_team
+    @team_player = @team.team_players.find(params[:id])
+    if @team_player.first_team
+      @team_player.update_attribute(:first_team, false)
+      redirect_to team_team_players_path, notice: "Removed from first team."
+    else
+      @team_player.update_attribute(:first_team, true)  
+      redirect_to team_team_players_path, notice: "Added to first team."
+    end
+  end
+
   private
+  def find_team_player
+    @team = current_user.teams.find(params[:team_id])
+  end
+
   def team_player_params
   	params[:team_player]
   end

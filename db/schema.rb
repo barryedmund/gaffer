@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150718020752) do
+ActiveRecord::Schema.define(version: 20150805014510) do
 
   create_table "active_admin_comments", force: true do |t|
     t.string   "namespace"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 20150718020752) do
     t.integer  "team_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "first_team", default: false
   end
 
   add_index "team_players", ["team_id"], name: "index_team_players_on_team_id"
@@ -58,7 +59,10 @@ ActiveRecord::Schema.define(version: 20150718020752) do
     t.string   "title"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "user_id"
   end
+
+  add_index "teams", ["user_id"], name: "index_teams_on_user_id"
 
   create_table "users", force: true do |t|
     t.string   "first_name"
@@ -67,8 +71,10 @@ ActiveRecord::Schema.define(version: 20150718020752) do
     t.string   "password_digest"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "password_reset_token"
   end
 
   add_index "users", ["email"], name: "index_users_on_email"
+  add_index "users", ["password_reset_token"], name: "index_users_on_password_reset_token"
 
 end

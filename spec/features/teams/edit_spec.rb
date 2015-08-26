@@ -1,27 +1,27 @@
 require 'spec_helper'
 
 describe "Editing teams" do
-	let!(:team) { Team.create(title: "Fantasy Playas") }
+	let(:user) { team.user }
+	let!(:team) { create(:team) }
 
 	def update_team(options={})
 		options[:title] ||= "My team"
-		
 		team = options[:team]
-
 		visit "/teams"
 		within "#team_#{team.id}" do
 			click_link "Edit"
 		end
-
 		fill_in "Title", with: options[:title]
 		click_button "Update Team"
 	end
 
+	before do
+		sign_in team.user, password: "gaffer123"
+	end
+
 	it "updates a team successfully with correct information" do
 		update_team team: team, title: "New Title"
-
 		team.reload
-
 		expect(page).to have_content("Team was successfully updated.")
 		expect(team.title).to eq("New Title")
 	end
