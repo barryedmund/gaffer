@@ -1,0 +1,13 @@
+<p id="notice"><%= notice %></p>
+
+<span class="main_header"><%= @league.name %> (<%= link_to 'edit', edit_league_path(@league) %>)</span>
+
+<div class="container">
+	<% @league.teams.each do |team| %>
+		<% if team.user_id != @current_user.id %>
+			<span class="sub_header"><%= team.title %> (<%= team.user.full_name %>)</span>
+		<% else %>
+			<span class="sub_header"><%= link_to team.title, league_team_path(@league, team) %></span>
+		<% end %>
+	<% end %>
+</div>

@@ -25,10 +25,10 @@ describe "Forgotten passwords" do
 		fill_in "Password confirmation", with: "mynewpassword1"	
 		click_button "Change Password"
 		expect(page).to have_content("Password updated")
-		expect(page.current_path).to eq(teams_path)
+		expect(page.current_path).to eq(leagues_path)
 
 		click_link "Log Out"
-		expect(page).to have_content("You have been logged out")
+		expect(page).to have_content("Please log in or create an account before continuing.")
 		visit login_path
 		fill_in "Email", with: user.email
 		fill_in "Password", with: "mynewpassword1"

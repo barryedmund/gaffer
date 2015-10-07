@@ -1,0 +1,16 @@
+<% if @team_player.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@team_player.errors.count, "error") %> prohibited this team player from being saved:</h2>
+
+    <ul>
+    <% @team_player.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form.label :player_id, "Select player for your squad" %><br>
+<%= form.collection_select(:player_id, Player.where('id NOT IN (SELECT DISTINCT(player_id) FROM team_players)'), :id, :full_name) %>
+
+<%= form.submit %>

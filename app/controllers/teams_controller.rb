@@ -26,15 +26,13 @@ class TeamsController < ApplicationController
   # POST /teams.json
   def create
     @team = current_user.teams.new(team_params)
-
-    respond_to do |format|
-      if @team.save
-        format.html { redirect_to @team, notice: 'Team was successfully created.' }
-        format.json { render :show, status: :created, location: @team }
-      else
-        format.html { render :new }
-        format.json { render json: @team.errors, status: :unprocessable_entity }
-      end
+    @team.league_id = params[:league_id]
+    if @team.save
+      flash[:success] = "Added team to league"
+      redirect_to league_teams_path
+    else
+      flash[:error] = "There was a problem adding that team."
+      render action: :new
     end
   end
 
@@ -43,7 +41,7 @@ class TeamsController < ApplicationController
   def update
     respond_to do |format|
       if @team.update(team_params)
-        format.html { redirect_to @team, notice: 'Team was successfully updated.' }
+        format.html { redirect_to league_team_path, notice: 'Team was successfully updated.' }
         format.json { render :show, status: :ok, location: @team }
       else
         format.html { render :edit }
@@ -57,7 +55,7 @@ class TeamsController < ApplicationController
   def destroy
     @team.destroy
     respond_to do |format|
-      format.html { redirect_to teams_url, notice: 'Team was successfully destroyed.' }
+      format.html { redirect_to league_teams_url, notice: 'Team was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -70,6 +68,6 @@ class TeamsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def team_params
-      params.require(:team).permit(:title)
+      params.require(:team).permit(:title, :league_id)
     end
 end

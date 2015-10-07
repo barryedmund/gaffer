@@ -9,7 +9,7 @@ describe "Deleting teams" do
 	end
 
 	it "is successful when clicking the destroy link" do
-		visit "/teams"
+		visit "leagues/#{team.league_id}/teams"
 		within "#team_#{team.id}" do
 			click_link "Destroy"
 		end

@@ -18,8 +18,7 @@ class ApplicationController < ActionController::Base
   	if current_user
   		true
   	else
-  		redirect_to new_user_session_path, notice: "You must be logged in."
+  		redirect_to login_path, notice: "Please log in or create an account before continuing."
   	end
   end
-
 end

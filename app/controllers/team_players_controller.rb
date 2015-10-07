@@ -14,7 +14,7 @@ class TeamPlayersController < ApplicationController
   	@team_player = @team.team_players.new(team_player_params)
   	if @team_player.save
   		flash[:success] = "Added team player"
-  		redirect_to team_team_players_path
+  		redirect_to league_team_team_players_path
   	else
   		flash[:error] = "There was a problem adding that player."
   		render action: :new
@@ -28,17 +28,17 @@ class TeamPlayersController < ApplicationController
     else
       flash[:error] = "Team player was not removed successfully."
     end
-    redirect_to team_team_players_path
+    redirect_to league_team_team_players_path
   end
 
   def update_first_team
     @team_player = @team.team_players.find(params[:id])
     if @team_player.first_team
       @team_player.update_attribute(:first_team, false)
-      redirect_to team_team_players_path, notice: "Removed from first team."
+      redirect_to league_team_team_players_path, notice: "Removed from first team."
     else
       @team_player.update_attribute(:first_team, true)  
-      redirect_to team_team_players_path, notice: "Added to first team."
+      redirect_to league_team_team_players_path, notice: "Added to first team."
     end
   end
 
@@ -48,6 +48,6 @@ class TeamPlayersController < ApplicationController
   end
 
   def team_player_params
-  	params[:team_player]
+  	params.require(:team_player).permit(:first_team, :team_id, :player_id)
   end
 end

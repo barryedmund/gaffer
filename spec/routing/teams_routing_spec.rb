@@ -1,34 +1,35 @@
 require "spec_helper"
 
 describe TeamsController do
+  let!(:team) { create(:team) }
   describe "routing" do
 
     it "routes to #index" do
-      get("/teams").should route_to("teams#index")
+      get("leagues/#{team.league_id}/teams").should route_to("teams#index", :league_id => "1")
     end
 
     it "routes to #new" do
-      get("/teams/new").should route_to("teams#new")
+      get("leagues/#{team.league_id}/teams/new").should route_to("teams#new", :league_id => "1")
     end
 
     it "routes to #show" do
-      get("/teams/1").should route_to("teams#show", :id => "1")
+      get("leagues/#{team.league_id}/teams/1").should route_to("teams#show", :league_id => "1", :id => "1")
     end
 
     it "routes to #edit" do
-      get("/teams/1/edit").should route_to("teams#edit", :id => "1")
+      get("leagues/#{team.league_id}/teams/1/edit").should route_to("teams#edit", :league_id => "1", :id => "1")
     end
 
     it "routes to #create" do
-      post("/teams").should route_to("teams#create")
+      post("leagues/#{team.league_id}/teams").should route_to("teams#create", :league_id => "1")
     end
 
     it "routes to #update" do
-      put("/teams/1").should route_to("teams#update", :id => "1")
+      put("leagues/#{team.league_id}/teams/1").should route_to("teams#update", :league_id => "1", :id => "1")
     end
 
     it "routes to #destroy" do
-      delete("/teams/1").should route_to("teams#destroy", :id => "1")
+      delete("leagues/#{team.league_id}/teams/1").should route_to("teams#destroy", :league_id => "1", :id => "1")
     end
 
   end

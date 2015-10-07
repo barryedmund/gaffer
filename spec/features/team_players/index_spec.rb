@@ -3,6 +3,7 @@ require 'spec_helper'
 describe "Viewing team players" do
 	let(:user) { team.user }
 	let!(:team) { create(:team) }
+	let!(:player) { create(:player) }
 	before { sign_in user, password: "gaffer123" }
 
 	it "displays the title of the team" do
@@ -18,9 +19,10 @@ describe "Viewing team players" do
 	end
 
 	it "displays team players id when a team has team players" do
-		team.team_players.create
-		team.team_players.create
 		visit_team_players(team)
-		expect(page.all("ul.squad_players li").size).to eq(2)
+		click_link "Add player to team"
+		select("Paul Pogba", :from => "team_player_player_id")
+		click_button "Create Team player"
+		expect(page.all("ul.squad_players li").size).to eq(1)
 	end
 end

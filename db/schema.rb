@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150805014510) do
+ActiveRecord::Schema.define(version: 20151003202840) do
 
   create_table "active_admin_comments", force: true do |t|
     t.string   "namespace"
@@ -46,13 +46,29 @@ ActiveRecord::Schema.define(version: 20150805014510) do
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
 
+  create_table "leagues", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "user_id"
+  end
+
+  add_index "leagues", ["user_id"], name: "index_leagues_on_user_id"
+
+  create_table "players", force: true do |t|
+    t.string "first_name"
+    t.string "last_name"
+  end
+
   create_table "team_players", force: true do |t|
     t.integer  "team_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "first_team", default: false
+    t.integer  "player_id"
   end
 
+  add_index "team_players", ["player_id"], name: "index_team_players_on_player_id"
   add_index "team_players", ["team_id"], name: "index_team_players_on_team_id"
 
   create_table "teams", force: true do |t|
@@ -60,8 +76,10 @@ ActiveRecord::Schema.define(version: 20150805014510) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
+    t.integer  "league_id"
   end
 
+  add_index "teams", ["league_id"], name: "index_teams_on_league_id"
   add_index "teams", ["user_id"], name: "index_teams_on_user_id"
 
   create_table "users", force: true do |t|

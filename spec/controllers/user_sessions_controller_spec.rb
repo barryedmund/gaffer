@@ -21,7 +21,7 @@ describe UserSessionsController do
       it "redirects to the user/{id} path" do
         post :create, email: "barrywallace.is@gmail.com", password: "testing123"
         expect(response).to be_redirect
-        expect(response).to redirect_to(users_url)
+        expect(response).to redirect_to(leagues_path)
       end
 
       it "finds the user" do

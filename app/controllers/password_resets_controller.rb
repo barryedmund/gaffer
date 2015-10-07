@@ -28,7 +28,7 @@ class PasswordResetsController < ApplicationController
 		if @user && @user.update_attributes(user_params)
 			@user.update_attribute(:password_reset_token, nil)
 			session[:user_id] = @user.id
-			redirect_to teams_path, success: "Password updated."
+			redirect_to leagues_path, success: "Password updated."
 		else
 			flash.now[:notice] = "Password reset token not found."
 			render action: 'edit'

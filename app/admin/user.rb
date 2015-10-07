@@ -1,9 +1,12 @@
 ActiveAdmin.register User do
+	permit_params :first_name, :last_name, :email
+
 	index do
+		selectable_column
+		column :id
 		column :first_name
 		column :last_name
 		column :email
-		column :created_at
-		column :updated_at
+		actions
 	end
 end

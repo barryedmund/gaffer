@@ -1,0 +1,21 @@
+<div class="centered">
+  <span class="main_header">Your leagues (<%= link_to 'new', new_league_path %>)</span>
+  <% @leagues.each do |league| %>
+    <div class="container">
+      <span class="sub_header"><%= link_to league.name, league %></span>
+        <% league.teams.each do |team| %>
+        <div>
+          <div class="sub_container">
+            <% if team.user_id == @current_user.id %>
+              <span><%= link_to team.title, league_team_path(league, team) %></span>
+            <% else %>
+              <span><%= "#{team.title} (team.user.full_name)" %></span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<br>

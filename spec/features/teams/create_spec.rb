@@ -2,11 +2,12 @@ require 'spec_helper'
 
 describe "Creating teams" do
 	let(:user) { create(:user) }
+	let!(:league) { create(:league) }
 
 	def create_team(options={})
 		options[:title] ||= "My team"
-
-		visit "/teams"
+		visit "/"
+		visit "leagues/#{league.id}/teams"
 		click_link "New Team"
 		expect(page).to have_content("New team")
 
@@ -35,5 +36,10 @@ describe "Creating teams" do
 		create_team title: "FC"
 		expect(page).to have_content("error")
 		expect(Team.count).to eq(0)
+	end
+
+	it "doesn't allow more than 20 teams" do
+		21.times { create_team }
+		expect(page).to have_content("error")
 	end
 end

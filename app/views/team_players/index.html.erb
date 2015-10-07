@@ -5,8 +5,9 @@
 	<% @team.team_players.select{ |tp| tp.first_team }.each do |team_player| %>
 		<li id="<%= dom_id(team_player) %>">
 			<%= team_player.id %>
-			<%= link_to "Remove", team_team_player_path(team_player.team, team_player), method: :delete, data: { confirm: "Are you sure?" } %>
-			<%= link_to "Remove from first team", update_first_team_team_team_player_path(team_player.team, team_player), method: :patch %>
+			<%= team_player.player.full_name %>
+			<%= link_to "Remove", league_team_team_player_path(team_player.team.league, team_player.team, team_player), method: :delete, data: { confirm: "Are you sure?" } %>
+			<%= link_to "Remove from first team", update_first_team_league_team_team_player_path(team_player.team.league, team_player.team, team_player), method: :patch %>
 		</li>
 	<% end %>
 </ul>
@@ -16,12 +17,13 @@
 	<% @team.team_players.select{ |tp| !tp.first_team }.each do |team_player| %>
 		<li id="<%= dom_id(team_player) %>">
 			<%= team_player.id %>
-			<%= link_to "Remove", team_team_player_path(team_player.team, team_player), method: :delete, data: { confirm: "Are you sure?" } %>
-			<%= link_to "Add to first team", update_first_team_team_team_player_path(team_player.team, team_player), method: :patch %>
+			<%= team_player.player.full_name %>
+			<%= link_to "Remove", league_team_team_player_path(team_player.team.league, team_player.team, team_player), method: :delete, data: { confirm: "Are you sure?" } %>
+			<%= link_to "Add to first team", update_first_team_league_team_team_player_path(team_player.team.league, team_player.team, team_player), method: :patch %>
 		</li>
 	<% end %>
 </ul>
 
 <p>
-	<%= link_to "Add player to team", new_team_team_player_path %>
+	<%= link_to "Add player to team", new_league_team_team_player_path %>
 </p>

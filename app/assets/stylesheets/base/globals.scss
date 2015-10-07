@@ -1,0 +1,29 @@
+@import url(https://fonts.googleapis.com/css?family=Catamaran:400,100,700);
+$main-font: 'Catamaran', sans-serif;
+
+body#body_id {
+	font-family: $main-font;
+	font-size: 16px;	
+}
+
+div.container{
+	padding: 10px;
+}
+
+div.sub_container{
+	padding: 0px 10px;	
+}
+
+span.main_header {
+	font-size: 26px;
+	font-weight: bold;
+}
+
+span.sub_header{
+	display: block;
+	font-size: 20px;
+}
+
+.centered{
+	padding: 10px;
+}

@@ -23,13 +23,14 @@ describe TeamsController do
   # This should return the minimal set of attributes required to create a valid
   # Team. As you add validations to Team, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { "title" => "MyString" } }
+  let(:valid_attributes) { { "title" => "MyString", :league_id => 1 } }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # TeamsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
   let!(:user) { create(:user) }
+  let!(:team) { create(:team) }
 
   before do
     sign_in(user)
@@ -39,14 +40,14 @@ describe TeamsController do
     context "logged in" do
       it "assigns all teams as @teams" do
         team = user.teams.create! valid_attributes
-        get :index, {}, valid_session
+        get :index, {:league_id => team.to_param}, valid_session
         assigns(:teams).should eq([team])
         expect(assigns(:teams).map(&:user)).to eq([user])
       end
 
       it "does not load other user's teams" do
         other_team = Team.create!(valid_attributes.merge(user_id: create(:user).id))
-        get :index, {}, valid_session
+        get :index, {:league_id => 1}, valid_session
         expect(assigns(:teams)).to_not include(other_team)
       end
 
@@ -56,7 +57,7 @@ describe TeamsController do
   describe "GET show" do
     it "assigns the requested team as @team for the logged in user" do
       team = user.teams.create! valid_attributes
-      get :show, {:id => team.to_param}, valid_session
+      get :show, {:league_id => team.to_param, :id => team.to_param}, valid_session
       assigns(:team).should eq(team)
       expect(assigns(:team).user).to eq(user)
     end
@@ -64,7 +65,7 @@ describe TeamsController do
 
   describe "GET new" do
     it "assigns a new team as @team for the logged in user" do
-      get :new, {}, valid_session
+      get :new, {:league_id => 1}, valid_session
       assigns(:team).should be_a_new(Team)
       expect(assigns(:team).user).to eq(user)
     end
@@ -73,7 +74,7 @@ describe TeamsController do
   describe "GET edit" do
     it "assigns the requested team as @team" do
       team = user.teams.create! valid_attributes
-      get :edit, {:id => team.to_param}, valid_session
+      get :edit, {:league_id => team.to_param, :id => team.to_param}, valid_session
       assigns(:team).should eq(team)
       expect(assigns(:team).user).to eq(user)
     end
@@ -83,30 +84,31 @@ describe TeamsController do
     describe "with valid params" do
       it "creates a new Team" do
         expect {
-          post :create, {:team => valid_attributes}, valid_session
+          post :create, {:league_id => 1, :team => {:title => "MyString"}}, valid_session
         }.to change(Team, :count).by(1)
       end
 
       it "assigns a newly created team as @team" do
-        post :create, {:team => valid_attributes}, valid_session
+        post :create, {:league_id => 1, :team => {:title => "MyString"}}, valid_session
         assigns(:team).should be_a(Team)
         assigns(:team).should be_persisted
       end
 
-      it "redirects to the created team" do
-        post :create, {:team => valid_attributes}, valid_session
-        response.should redirect_to(Team.last)
+      it "redirects to the league's teams" do
+        post :create, {:league_id => 1, :team => {:title => "MyString"}}, valid_session
+        team = Team.last
+        response.should redirect_to(league_teams_path(team.league_id))
       end
 
       it "create a team for the current user" do
-        post :create, {:team => valid_attributes}, valid_session
+        post :create, {:league_id => 1, :team => {:title => "MyString"}}, valid_session
         team = Team.last
         expect(team.user).to eq(user)
       end
 
       it "does not allow users to create teams for other users" do
         other_user = create(:user)
-        post :create, {:team => valid_attributes.merge(user_id: other_user.id)}, valid_session
+        post :create, {:league_id => 1, :team => {:title => "MyString", :user_id => other_user.id}}, valid_session
         team = Team.last
         expect(team.user).to eq(user)
       end
@@ -115,13 +117,13 @@ describe TeamsController do
     describe "with invalid params" do
       it "assigns a newly created but unsaved team as @team" do
         Team.any_instance.stub(:save).and_return(false)
-        post :create, {:team => { "title" => "invalid value" }}, valid_session
+        post :create, {:league_id => 1, :team => { "title" => "invalid value" }}, valid_session
         assigns(:team).should be_a_new(Team)
       end
 
       it "re-renders the 'new' template" do
         Team.any_instance.stub(:save).and_return(false)
-        post :create, {:team => { "title" => "invalid value" }}, valid_session
+        post :create, {:league_id => 1, :team => { "title" => "invalid value" }}, valid_session
         response.should render_template("new")
       end
     end
@@ -136,19 +138,19 @@ describe TeamsController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         Team.any_instance.should_receive(:update).with({ "title" => "MyString" })
-        put :update, {:id => team.to_param, :team => { "title" => "MyString" }}, valid_session
+        put :update, {:id => team.to_param, :league_id => team.league_id, :team => { "title" => "MyString" }}, valid_session
       end
 
       it "assigns the requested team as @team" do
         team = user.teams.create! valid_attributes
-        put :update, {:id => team.to_param, :team => valid_attributes}, valid_session
+        put :update, {:id => team.to_param, :league_id => team.league_id, :team => valid_attributes}, valid_session
         assigns(:team).should eq(team)
       end
 
       it "redirects to the team" do
         team = user.teams.create! valid_attributes
-        put :update, {:id => team.to_param, :team => valid_attributes}, valid_session
-        response.should redirect_to(team)
+        put :update, {:id => team.to_param, :league_id => team.league_id, :team => valid_attributes}, valid_session
+        response.should redirect_to(league_team_path)
       end
     end
 
@@ -157,7 +159,7 @@ describe TeamsController do
         team = user.teams.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Team.any_instance.stub(:save).and_return(false)
-        put :update, {:id => team.to_param, :team => { "title" => "invalid value" }}, valid_session
+        put :update, {:id => team.to_param, :league_id => team.league_id, :team => { "title" => "invalid value" }}, valid_session
         assigns(:team).should eq(team)
       end
 
@@ -165,7 +167,7 @@ describe TeamsController do
         team = user.teams.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Team.any_instance.stub(:save).and_return(false)
-        put :update, {:id => team.to_param, :team => { "title" => "invalid value" }}, valid_session
+        put :update, {:id => team.to_param, :league_id => team.league_id, :team => { "title" => "invalid value" }}, valid_session
         response.should render_template("edit")
       end
     end
@@ -175,14 +177,14 @@ describe TeamsController do
     it "destroys the requested team" do
       team = user.teams.create! valid_attributes
       expect {
-        delete :destroy, {:id => team.to_param}, valid_session
+        delete :destroy, {:id => team.to_param, :league_id => team.league_id}, valid_session
       }.to change(Team, :count).by(-1)
     end
 
     it "redirects to the teams list" do
       team = user.teams.create! valid_attributes
-      delete :destroy, {:id => team.to_param}, valid_session
-      response.should redirect_to(teams_url)
+      delete :destroy, {:id => team.to_param, :league_id => team.league_id }, valid_session
+      response.should redirect_to(league_teams_url)
     end
   end
 end

@@ -13,10 +13,10 @@
       <tr id="<%= dom_id(team) %>">
         <td><%= team.title %></td>
         <td>
-          <%= link_to "View team players", team_team_players_path(team) %>
-          <%= link_to 'Show', team %>
-          <%= link_to 'Edit', edit_team_path(team) %>
-          <%= link_to 'Destroy', team, method: :delete, data: { confirm: 'Are you sure?' } %>
+          <%= link_to "View team players", league_team_team_players_path(team.league_id, team.id) %>
+          <%= link_to 'Show', league_team_path(team.league_id, team) %>
+          <%= link_to 'Edit', edit_league_team_path(team.league_id, team) %>
+          <%= link_to 'Destroy', league_team_path(team.league_id, team), method: :delete, data: { confirm: 'Are you sure?' } %>
         </td>
       </tr>
     <% end %>
@@ -25,4 +25,4 @@
 
 <br>
 
-<%= link_to 'New Team', new_team_path %>
+<%= link_to 'New Team', new_league_team_path %>

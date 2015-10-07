@@ -3,7 +3,8 @@ require 'spec_helper'
 describe "Marking a team player as first team" do
 	let(:user) { team.user }
 	let!(:team) { create(:team) }
-	let!(:team_player) {team.team_players.create}
+	let!(:player) { create(:player) }
+	let!(:team_player) { team.team_players.create(player_id: player.id) }
 	
 	before { sign_in user, password: "gaffer123" }
 	
@@ -26,7 +27,6 @@ describe "Marking a team player as first team" do
 		team_player.reload
 		expect(team_player.first_team).to eq(true)
 
-		visit_team_players team
 		within dom_id_for(team_player) do
 			click_link "Remove from first team"
 		end

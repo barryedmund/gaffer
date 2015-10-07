@@ -111,7 +111,7 @@ describe PasswordResetsController do
 
 			it "redirects to the team page" do
 				patch :update, id: user.password_reset_token, user: { password: 'newpassword1', password_confirmation: 'newpassword1' }
-				expect(response).to redirect_to(teams_path)
+				expect(response).to redirect_to(leagues_path)
 			end
 		end
 	end

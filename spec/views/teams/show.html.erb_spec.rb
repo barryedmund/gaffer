@@ -1,9 +1,10 @@
 require 'spec_helper'
 
 describe "teams/show" do
+  let!(:league) { create(:league) }
   before(:each) do
     @team = assign(:team, stub_model(Team,
-      :title => "Title"
+      :title => "Title", :league_id => league.id
     ))
   end
 
