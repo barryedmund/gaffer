@@ -2,9 +2,6 @@ class PlayersController < ApplicationController
 	before_action :require_user
 	before_action :set_player, only: [:show]
 
-	def show
-	end
-
 	def index
     	@players = Player.all
   	end

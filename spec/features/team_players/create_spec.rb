@@ -8,9 +8,9 @@ describe "Adding team players" do
 
 	it "is successful with valid content" do
 		visit_team_players(team)
-		click_link "Add player to team"
+		click_link "add player"
 		select("Paul Pogba", :from => "team_player_player_id")
-		click_button "Create Team player"
+		click_button "Add player to squad"
 		expect(page).to have_content("Added team player")
 		within("ul.squad_players") do
 			expect(page).to have_content("Paul Pogba")

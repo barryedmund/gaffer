@@ -1,0 +1,25 @@
+<div class="container">
+	<span class="sub_header">First team</span>
+	<ul class="first_team_players">
+		<% @team.team_players.select{ |tp| tp.first_team }.each do |team_player| %>
+			<li id="<%= dom_id(team_player) %>">
+				<%= link_to team_player.player.full_name,
+					league_team_team_player_player_game_weeks_path(team_player.team.league, team_player.team, team_player, team_player.player_id) %>
+				<%= link_to "Remove from first team", update_first_team_league_team_team_player_path(team_player.team.league, team_player.team, team_player), method: :patch %>
+			</li>
+		<% end %>
+	</ul>
+
+	<span class="sub_header">Squad (<%= link_to "add player",
+		new_league_team_team_player_path(@team.league, @team) %>)</span>
+	<ul class="squad_players">
+		<% @team.team_players.select{ |tp| !tp.first_team }.each do |team_player| %>
+			<li id="<%= dom_id(team_player) %>">
+				<%= link_to team_player.player.full_name,
+					league_team_team_player_player_game_weeks_path(team_player.team.league, team_player.team, team_player, team_player.player_id) %>
+				<%= link_to "Add to first team", update_first_team_league_team_team_player_path(team_player.team.league, team_player.team, team_player), method: :patch %>
+				<%= link_to "Remove from squad", league_team_team_player_path(team_player.team.league, team_player.team, team_player), method: :delete, data: { confirm: "Are you sure?" } %>
+			</li>
+		<% end %>
+	</ul>
+<div>

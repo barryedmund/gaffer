@@ -8,7 +8,7 @@ describe "Viewing team players" do
 
 	it "displays the title of the team" do
 		visit_team_players(team)
-		within("#teamTitleHeader") do
+		within(".main_header") do
 			expect(page).to have_content(team.title)
 		end
 	end
@@ -20,9 +20,9 @@ describe "Viewing team players" do
 
 	it "displays team players id when a team has team players" do
 		visit_team_players(team)
-		click_link "Add player to team"
+		click_link "add player"
 		select("Paul Pogba", :from => "team_player_player_id")
-		click_button "Create Team player"
+		click_button "Add player to squad"
 		expect(page.all("ul.squad_players li").size).to eq(1)
 	end
 end

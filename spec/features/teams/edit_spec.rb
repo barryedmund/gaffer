@@ -9,7 +9,10 @@ describe "Editing teams" do
 		team = options[:team]
 		visit "leagues/#{team.league_id}/teams"
 		within "#team_#{team.id}" do
-			click_link "Edit"
+			click_link "#{team.title}"			
+		end
+		within ".main_header" do
+			click_link "edit"
 		end
 		fill_in "Title", with: options[:title]
 		click_button "Update Team"

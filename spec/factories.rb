@@ -1,4 +1,7 @@
-FactoryGirl.define do 
+FactoryGirl.define do  factory :game_week do
+    
+  end
+ 
 	factory :user do
 		first_name "First"
 		last_name "Last"
@@ -22,4 +25,9 @@ FactoryGirl.define do
 		user
 		league
 	end
+
+	factory :team_player do
+	    team
+	    player
+  	end 
 end

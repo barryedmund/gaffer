@@ -11,7 +11,7 @@ describe "Removing team players" do
 	it "is successful" do
 		visit_team_players(team)
 		within "#team_player_#{team_player.id}" do
-			click_link "Remove"
+			click_link "Remove from squad"
 		end
 		expect(page).to have_content("Team player was removed successfully.")
 	end

@@ -1,8 +1,4 @@
-Rails.application.routes.draw do  
-  resources :leagues
-
-  resources :players
-
+Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
@@ -16,6 +12,9 @@ Rails.application.routes.draw do
   resources :leagues do
     resources :teams do
     	resources :team_players do
+        resources :players do
+          resources :game_weeks
+        end
     		member do
     			patch :update_first_team
     		end

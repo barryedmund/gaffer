@@ -11,13 +11,7 @@
   <tbody>
     <% @teams.each do |team| %>
       <tr id="<%= dom_id(team) %>">
-        <td><%= team.title %></td>
-        <td>
-          <%= link_to "View team players", league_team_team_players_path(team.league_id, team.id) %>
-          <%= link_to 'Show', league_team_path(team.league_id, team) %>
-          <%= link_to 'Edit', edit_league_team_path(team.league_id, team) %>
-          <%= link_to 'Destroy', league_team_path(team.league_id, team), method: :delete, data: { confirm: 'Are you sure?' } %>
-        </td>
+        <td><%= link_to team.title, league_team_path(team.league_id, team) %></td>
       </tr>
     <% end %>
   </tbody>

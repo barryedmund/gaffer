@@ -1,7 +1,7 @@
 class Team < ActiveRecord::Base
 	belongs_to :user
 	belongs_to :league
-	has_many :team_players
+	has_many :team_players, dependent: :destroy
 	validates :title, presence: true
 	validates :title, length: { minimum: 3}
 	validates :league_id, presence: true

@@ -1,0 +1,2 @@
+module GameWeeksHelper
+end
