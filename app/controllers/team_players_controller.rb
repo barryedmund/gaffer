@@ -6,10 +6,6 @@ class TeamPlayersController < ApplicationController
   	@team_player = @team.team_players.new
   end
 
-  def index
-    
-  end
-
   def create
   	@team_player = @team.team_players.new(team_player_params)
     @team_player.squad_position = SquadPosition.find_by short_name: 'SUB'
