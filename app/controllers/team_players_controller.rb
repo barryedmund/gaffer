@@ -6,8 +6,13 @@ class TeamPlayersController < ApplicationController
   	@team_player = @team.team_players.new
   end
 
+  def index
+    
+  end
+
   def create
   	@team_player = @team.team_players.new(team_player_params)
+    @team_player.squad_position = SquadPosition.find_by short_name: 'SUB'
   	if @team_player.save
   		flash[:success] = "Added team player"
   		redirect_to league_team_path(@team_player.team.league, @team_player.team)
@@ -29,12 +34,17 @@ class TeamPlayersController < ApplicationController
 
   def update_first_team
     @team_player = @team.team_players.find(params[:id])
-    if @team_player.first_team
-      @team_player.update_attribute(:first_team, false)
-      redirect_to league_team_path(@team_player.team.league, @team_player.team), notice: "Removed from first team."
+    if params[:team_player][:position_change_only] == true.to_s
+      @team_player.update_attributes(:first_team => true, :squad_position => SquadPosition.where(id: params[:squad_position][:team_player]).take)
+      redirect_to league_team_path(@team_player.team.league, @team_player.team), notice: "Position changed."
     else
-      @team_player.update_attribute(:first_team, true)  
-      redirect_to league_team_path(@team_player.team.league, @team_player.team), notice: "Added to first team."
+      if @team_player.first_team
+        @team_player.update_attributes(:first_team => false, :squad_position => SquadPosition.where(short_name: 'SUB').take)
+        redirect_to league_team_path(@team_player.team.league, @team_player.team), notice: "Removed from first team."
+      else
+        @team_player.update_attributes(:first_team => true, :squad_position => SquadPosition.where(id: params[:squad_position][:team_player]).take)
+        redirect_to league_team_path(@team_player.team.league, @team_player.team), notice: "Added to first team."
+      end
     end
   end
 

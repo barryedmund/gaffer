@@ -1,6 +1,11 @@
-FactoryGirl.define do  factory :game_week do
+FactoryGirl.define do
+	factory :squad_position do
+    	short_name "SUB"
+  	end
+	
+	factory :game_week do
     
-  end
+  	end
  
 	factory :user do
 		first_name "First"
@@ -11,7 +16,7 @@ FactoryGirl.define do  factory :game_week do
 	end
 
 	factory :league do
-    	name "MyString"
+    	name "MyLeague"
     	user
   	end
 
@@ -29,5 +34,6 @@ FactoryGirl.define do  factory :game_week do
 	factory :team_player do
 	    team
 	    player
+	    squad_position
   	end 
 end

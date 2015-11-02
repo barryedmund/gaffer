@@ -8,4 +8,15 @@ ActiveAdmin.register TeamPlayer do
 		column :team
 		actions
 	end
+
+	form do |f|
+	  f.semantic_errors
+	  f.inputs do
+	  	f.input :team
+	  	f.input :player
+	  	f.input :squad_position, :collection => SquadPosition.pluck( :short_name, :id )
+	  end
+	  f.actions
+	end
+
 end
