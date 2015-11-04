@@ -4,7 +4,9 @@ describe "Viewing team players" do
 	let(:user) { team.user }
 	let!(:team) { create(:team) }
 	let!(:player) { create(:player) }
-	let!(:squad_position) { create(:squad_position) }
+	let!(:squad_position_1) { SquadPosition.create(short_name: "GK") }
+	let!(:squad_position_2) { SquadPosition.create(short_name: "SUB") }
+	let!(:squad_position_3) { SquadPosition.create(short_name: "DF") }
 	before { sign_in user, password: "gaffer123" }
 
 	it "displays the title of the team" do

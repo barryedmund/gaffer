@@ -18,7 +18,7 @@ describe "Marking a team player as first team" do
 	let!(:player_10) { Player.create(first_name: "Joe", last_name: "Bloggs10") }
 	let!(:player_11) { Player.create(first_name: "Joe", last_name: "Bloggs11") }
 	let!(:player_12) { Player.create(first_name: "Joe", last_name: "Bloggs12") }
-	let!(:team_player) { team.team_players.create(player_id: player.id, squad_position_id: squad_position.id) }
+	let!(:team_player) { team.team_players.create(player_id: player.id, squad_position_id: squad_position_1.id) }
 	let!(:team_player_1) {team.team_players.create(player_id: player_1.id, first_team: false, squad_position: squad_position_1)}
 	let!(:team_player_3) { team.team_players.create(player_id: player_3.id, first_team: false, squad_position: squad_position_1)}
 	let!(:team_player_4) { team.team_players.create(player_id: player_4.id, first_team: false, squad_position: squad_position_1)}
@@ -58,7 +58,7 @@ describe "Marking a team player as first team" do
 	it "isn't possible when there are already 11 first team players" do
 		visit_team_players team
 		within dom_id_for(team_player) do
-			select("DF", :from => "squad_position_team_player")
+			select("GK", :from => "squad_position_team_player")
 			click_button "Add to first team"
 		end
 		within dom_id_for(team_player_1) do
