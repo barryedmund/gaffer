@@ -1,9 +1,0 @@
-<span class="main_header">
-	<%= link_to @league.name, league_path(@league) %> >> 
-		<%= link_to @team.title, league_team_path(@league, @team) %> >> 
-			<%= @player.full_name %>
-</span>
-<% @game_weeks.each do |game_week| %>
-	<br/>
-	<%= game_week.id %>
-<% end %>

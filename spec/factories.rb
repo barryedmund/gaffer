@@ -35,8 +35,6 @@ FactoryGirl.define do
 
   	factory :game_week do
     	season
-    	player
-    	sequence_number 1
     	starts_at "2015-11-04 21:58:20"
     	ends_at "2016-07-04 21:58:20"
   	end
