@@ -71,7 +71,7 @@ describe TeamsController do
       it "redirects to the league's teams" do
         post :create, {:league_id => 1, :team => {:title => "MyString"}}, valid_session
         team = Team.last
-        response.should redirect_to(league_teams_path(team.league_id))
+        response.should redirect_to(league_path(team.league_id))
       end
 
       it "create a team for the current user" do

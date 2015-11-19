@@ -15,5 +15,6 @@ describe Player do
 
 	context "relationships" do
 	  it { should have_many(:team_players) }
+	  it { should have_many(:player_game_weeks) }
 	end
 end

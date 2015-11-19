@@ -1,13 +1,14 @@
 <p id="notice"><%= notice %></p>
-
 <span class="main_header"><%= @league.name %> (<%= link_to 'edit', edit_league_path(@league) %>)</span>
-
 <div class="container">
 	<% @league.teams.each do |team| %>
-		<% if team.user_id != @current_user.id %>
+		<% if team.user != @current_user %>
 			<span class="sub_header"><%= team.title %> (<%= team.user.full_name %>)</span>
 		<% else %>
 			<span class="sub_header"><%= link_to team.title, league_team_path(@league, team) %></span>
 		<% end %>
+	<% end %>
+	<% if !@league.has_team_owned_by?(@current_user) && @league.teams.count < 20 %>
+		<%= link_to 'Add Team', new_league_team_path(@league) %>
 	<% end %>
 </div>

@@ -7,8 +7,8 @@ describe "Creating teams" do
 	def create_team(options={})
 		options[:title] ||= "My team"
 		visit "/"
-		visit "leagues/#{league.id}/teams"
-		click_link "New Team"
+		visit "leagues/#{league.id}"
+		click_link "Add Team"
 		expect(page).to have_content("New team")
 
 		fill_in "Title", with: options[:title]
@@ -19,9 +19,9 @@ describe "Creating teams" do
 		sign_in user, password: "gaffer123"
 	end
 
-	it "redirects to the team index page on success" do
+	it "redirects to the Dashboard page on success" do
 		create_team
-		expect(page).to have_content("My team")
+		expect(page).to have_content("Added team to league")
 	end
 
 	it "displays an error when the team has no title" do
@@ -39,7 +39,25 @@ describe "Creating teams" do
 	end
 
 	it "doesn't allow more than 20 teams" do
-		21.times { create_team }
-		expect(page).to have_content("error")
+		ActiveRecord::Base.transaction do
+  			21.times do |i|
+  				temp_user = User.create(:first_name => "Barry #{i}", :last_name => "Wallace", :email => "yo#{i}@me.com", :password => "yoyoyoyi", :password_confirmation => "yoyoyoyi")
+  				Team.create(:league_id => 1, :user => temp_user, :title => "Teamy")
+  			end
+		end
+		visit "/"
+		visit "leagues/1"
+		expect(page).to_not have_content("Barry 20 Wallace")
+	end
+
+	it "requires a unique User & League combo" do
+		visit "/"
+		visit "leagues/#{league.id}"
+		click_link "Add Team"
+		expect(page).to have_content("New team")
+		fill_in "Title", with: "Team One"
+		click_button "Create Team"
+
+		expect(page).to_not have_content("Add Team")
 	end
 end

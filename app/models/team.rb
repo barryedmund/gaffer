@@ -2,17 +2,11 @@ class Team < ActiveRecord::Base
 	belongs_to :user
 	belongs_to :league
 	has_many :team_players, dependent: :destroy
-	validates :title, presence: true
+	validates :title, :league, presence: true
 	validates :title, length: { minimum: 3}
-	validates :league_id, presence: true
-	validate :team_count_within_limit, :on => :create
 	validate :squad_positions_are_logical, :on => :update
-
- 	def team_count_within_limit
-    	if self.league.teams(:reload).size >= 20
-      		errors.add(:base, "Exceeded Team limit")
-    	end
-  	end
+	validates_associated :league, :message => "Too mant teams."
+	validates_uniqueness_of :league_id, scope: :user_id
 
   	def squad_positions_are_logical
   		count_of_goalies = self.team_players.joins(:squad_position).where('short_name LIKE "GK"').count

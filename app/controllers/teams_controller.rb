@@ -29,7 +29,7 @@ class TeamsController < ApplicationController
     @team.league_id = params[:league_id]
     if @team.save
       flash[:success] = "Added team to league"
-      redirect_to league_teams_path
+      redirect_to league_path(@team.league_id)
     else
       flash[:error] = "There was a problem adding that team."
       render action: :new

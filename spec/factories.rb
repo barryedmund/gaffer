@@ -35,10 +35,16 @@ FactoryGirl.define do
 
   	factory :game_week do
     	season
-    	starts_at "2015-11-04 21:58:20"
-    	ends_at "2016-07-04 21:58:20"
+    	starts_at Time.new - 100
+    	ends_at Time.new + 100
   	end
   	
+  	factory :player_game_week do
+  		player
+  		game_week
+  		minutes_played 90
+  	end
+
 	factory :season do
 	    description "2015/16"
 		starts_at "2015-11-04 21:58:20"

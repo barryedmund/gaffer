@@ -24,7 +24,7 @@ RSpec.describe LeaguesController, :type => :controller do
   # League. As you add validations to League, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    { name: "MyLeague", user: user }
   }
 
   let(:invalid_attributes) {
@@ -88,19 +88,7 @@ RSpec.describe LeaguesController, :type => :controller do
 
       it "redirects to the created league" do
         post :create, {:league => valid_attributes}, valid_session
-        expect(response).to redirect_to(League.last)
-      end
-    end
-
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved league as @league" do
-        post :create, {:league => invalid_attributes}, valid_session
-        expect(assigns(:league)).to be_a_new(League)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, {:league => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
+        expect(response).to redirect_to(leagues_path)
       end
     end
   end
@@ -108,14 +96,14 @@ RSpec.describe LeaguesController, :type => :controller do
   describe "PUT update" do
     describe "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        { name: "MyUpdatedLeague", user: user }
       }
 
       it "updates the requested league" do
         league = League.create! valid_attributes
         put :update, {:id => league.to_param, :league => new_attributes}, valid_session
         league.reload
-        skip("Add assertions for updated state")
+        expect(response).to redirect_to(league)
       end
 
       it "assigns the requested league as @league" do
@@ -131,19 +119,6 @@ RSpec.describe LeaguesController, :type => :controller do
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the league as @league" do
-        league = League.create! valid_attributes
-        put :update, {:id => league.to_param, :league => invalid_attributes}, valid_session
-        expect(assigns(:league)).to eq(league)
-      end
-
-      it "re-renders the 'edit' template" do
-        league = League.create! valid_attributes
-        put :update, {:id => league.to_param, :league => invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
-      end
-    end
   end
 
   describe "DELETE destroy" do

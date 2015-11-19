@@ -14,6 +14,7 @@ gem 'spring', group: :development
 gem 'activeadmin', github: 'activeadmin'
 gem 'devise'
 gem 'faker'
+gem 'validates_overlap'
 
 group :development, :test do
 	gem 'rspec-rails', '~> 3.0.0'

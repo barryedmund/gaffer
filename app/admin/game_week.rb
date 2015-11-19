@@ -7,6 +7,8 @@ ActiveAdmin.register GameWeek do
 		column :season do |gw|
 			gw.season.description
 		end
+		column :starts_at
+		column :ends_at
 		actions
 	end
 

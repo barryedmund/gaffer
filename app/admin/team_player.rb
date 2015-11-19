@@ -18,5 +18,4 @@ ActiveAdmin.register TeamPlayer do
 	  end
 	  f.actions
 	end
-
 end

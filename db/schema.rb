@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151106055610) do
+ActiveRecord::Schema.define(version: 20151109043113) do
 
   create_table "active_admin_comments", force: true do |t|
     t.string   "namespace"
@@ -62,6 +62,15 @@ ActiveRecord::Schema.define(version: 20151106055610) do
   end
 
   add_index "leagues", ["user_id"], name: "index_leagues_on_user_id"
+
+  create_table "player_game_weeks", force: true do |t|
+    t.integer "minutes_played"
+    t.integer "game_week_id"
+    t.integer "player_id"
+  end
+
+  add_index "player_game_weeks", ["game_week_id"], name: "index_player_game_weeks_on_game_week_id"
+  add_index "player_game_weeks", ["player_id"], name: "index_player_game_weeks_on_player_id"
 
   create_table "players", force: true do |t|
     t.string   "first_name"

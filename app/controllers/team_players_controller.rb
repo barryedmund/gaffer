@@ -1,6 +1,7 @@
 class TeamPlayersController < ApplicationController
   before_action :require_user
-  before_action :find_team_player
+  before_action :set_team
+  before_action :set_team_player, only: [:show]
 
   def new
   	@team_player = @team.team_players.new
@@ -45,8 +46,12 @@ class TeamPlayersController < ApplicationController
   end
 
   private
-  def find_team_player
+  def set_team
     @team = current_user.teams.find(params[:team_id])
+  end
+
+  def set_team_player
+      @team_player = TeamPlayer.find(params[:id])
   end
 
   def team_player_params
