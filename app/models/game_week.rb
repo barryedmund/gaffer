@@ -1,6 +1,7 @@
 class GameWeek < ActiveRecord::Base
 	belongs_to :season
 	has_many :player_game_weeks
+	has_many :games
 	validates :season_id, :starts_at, :ends_at, :presence => true
 	validates :starts_at, :ends_at, :overlap => {:scope => "season_id"}
 	

@@ -1,7 +1,8 @@
 class League < ActiveRecord::Base
 	has_many :teams, dependent: :destroy
 	belongs_to :user
-	validates :user_id, presence: true
+	belongs_to :competition
+	validates :user_id, :competition, presence: true
 	validates_each :teams do |league, attr, value|
    		league.errors.add attr, "Too many teams for league" if league.teams.size >= 20
   	end

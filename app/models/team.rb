@@ -2,6 +2,8 @@ class Team < ActiveRecord::Base
 	belongs_to :user
 	belongs_to :league
 	has_many :team_players, dependent: :destroy
+	has_many :home_games, :class_name => 'Game', :foreign_key => 'home_game_id'
+  	has_many :away_games, :class_name => 'Game', :foreign_key => 'away_game_id'
 	validates :title, :league, presence: true
 	validates :title, length: { minimum: 3}
 	validate :squad_positions_are_logical, :on => :update

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151109043113) do
+ActiveRecord::Schema.define(version: 20151207064343) do
 
   create_table "active_admin_comments", force: true do |t|
     t.string   "namespace"
@@ -46,6 +46,14 @@ ActiveRecord::Schema.define(version: 20151109043113) do
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
 
+  create_table "competitions", force: true do |t|
+    t.string   "country_code"
+    t.string   "description"
+    t.integer  "rounds_per_season"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "game_weeks", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -54,13 +62,23 @@ ActiveRecord::Schema.define(version: 20151109043113) do
     t.datetime "ends_at"
   end
 
+  create_table "games", force: true do |t|
+    t.integer  "home_team_id"
+    t.integer  "away_team_id"
+    t.integer  "game_week_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "leagues", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "user_id"
+    t.integer  "competition_id"
   end
 
+  add_index "leagues", ["competition_id"], name: "index_leagues_on_competition_id"
   add_index "leagues", ["user_id"], name: "index_leagues_on_user_id"
 
   create_table "player_game_weeks", force: true do |t|
@@ -85,7 +103,10 @@ ActiveRecord::Schema.define(version: 20151109043113) do
     t.datetime "ends_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "competition_id"
   end
+
+  add_index "seasons", ["competition_id"], name: "index_seasons_on_competition_id"
 
   create_table "squad_positions", force: true do |t|
     t.string   "short_name"

@@ -3,7 +3,8 @@ require 'spec_helper'
 describe "Adding team players" do
 	let(:user) { team.user }
 	let!(:team) { create(:team) }
-	let!(:league_1) { League.create(user: user, name: "Second League") }
+	let!(:competition) { create(:competition) }
+	let!(:league_1) { League.create(user: user, name: "Second League", competition: competition) }
 	let!(:team_1) { Team.create(title: "Second League Team", user: user, league: league_1) }
 	let!(:player) { create(:player) }
 	let!(:squad_position_1) { SquadPosition.create(short_name: "GK") }

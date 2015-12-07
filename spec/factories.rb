@@ -1,4 +1,17 @@
-FactoryGirl.define do
+FactoryGirl.define do 
+	
+	factory :competition do
+	    country_code "en"
+		description "Premier League"
+		rounds_per_season 38
+  	end
+
+	factory :game do
+		game_week
+		association :home_team, factory: :team
+  		association :away_team, factory: :team, league_id: 1
+    end
+
 	factory :user do
 		first_name "First"
 		last_name "Last"
@@ -10,9 +23,10 @@ FactoryGirl.define do
 	factory :league do
     	name "MyLeague"
     	user
+    	competition
   	end
 
-  	factory :team do
+  	factory :team, aliases: [:home_team, :away_team] do
 		title "Fantasy Playas"
 		user
 		league
@@ -49,5 +63,6 @@ FactoryGirl.define do
 	    description "2015/16"
 		starts_at "2015-11-04 21:58:20"
 		ends_at "2015-11-04 21:58:20"
+		competition
   	end 
 end

@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     end
   end
   resources :player_game_weeks
+  resources :games, only: [:index, :show]
   
   root 'leagues#index'
 end
