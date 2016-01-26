@@ -51,4 +51,9 @@ class League < ActiveRecord::Base
 			create_games
 		end
 	end
+
+	def get_standings
+		teams.order(:title)
+	end
+
 end

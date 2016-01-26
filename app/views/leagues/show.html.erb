@@ -18,3 +18,14 @@
 		<%= link_to 'Add Team', new_league_team_path(@league) %>
 	<% end %>
 </div>
+
+<div>
+	<div>
+		<span>Teams</span>
+	</div>
+	<% @league.get_standings.each do |team| %>
+		<div>
+			<span><%= team.title %></span>
+		</div>
+	<% end %>
+</div>
