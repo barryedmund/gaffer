@@ -5,9 +5,9 @@ describe PlayerGameWeek do
 	let!(:player_game_week_2) { create(:player_game_week) }
 
 	context "relationships" do
-  		it { should belong_to(:player) }
-  		
+  		it { should belong_to(:player) } 		
   		it { should belong_to(:game_week) }
+  		it { should have_many(:player_lineups) }
   	end
   	
   	context "validations" do

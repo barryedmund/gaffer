@@ -1,17 +1,10 @@
-<h1>Listing games</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @games.each do |game| %>
-      <tr>
-        <td><%= link_to game.match_up, game_path(game) %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<% league = League.find(params[:league_id]) %>
+<span class="main_header">
+	<%= link_to league.name, league_path(league) %> >> Games
+</span>
+  
+<% @games.each do |game| %>
+  <div>
+    <%= game.game_week.starts_at %> / <%= game.game_round.game_round_number %> / <%= link_to game.match_up, league_game_path(game.get_league, game) %> / <%= game.get_score %>
+  </div>
+<% end %>

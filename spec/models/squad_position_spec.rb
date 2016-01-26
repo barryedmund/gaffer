@@ -3,6 +3,7 @@ require 'spec_helper'
 describe SquadPosition do
 	context "relationships" do
     	it { should have_many(:team_players) }
+      it { should have_many(:player_lineups) }
   	end
 
   	context "validations" do

@@ -1,5 +1,11 @@
 <p id="notice"><%= notice %></p>
-<span class="main_header"><%= @league.name %> (<%= link_to 'edit', edit_league_path(@league) %>)</span>
+<span class="main_header">
+	<%= @league.name %> (
+	<%= link_to 'edit', edit_league_path(@league) %>
+	/
+	<%= link_to 'view games', league_games_path(@league) %>
+	)
+</span>
 <div class="container">
 	<% @league.teams.each do |team| %>
 		<% if team.user != @current_user %>

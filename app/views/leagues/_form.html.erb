@@ -4,15 +4,16 @@
       <h2><%= pluralize(@league.errors.count, "error") %> prohibited this league from being saved:</h2>
 
       <ul>
-      <% @league.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
+        <% @league.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
       </ul>
     </div>
   <% end %>
 
   <div class="field">
     <%= f.text_field :name %>
+    <%= f.collection_select :competition_id, Competition.all, :id, :description %>
   </div>
   <div class="actions">
     <%= f.submit %>

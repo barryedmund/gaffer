@@ -17,7 +17,7 @@ describe Competition do
 	  		expect(competition).to validate_presence_of(:description)
 	  	end
 	  	it "requires rounds_per_season" do
-	  		expect(competition).to validate_presence_of(:rounds_per_season)
+	  		expect(competition).to validate_presence_of(:game_weeks_per_season)
 	  	end
 	end
 end

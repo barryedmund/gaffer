@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151207064343) do
+ActiveRecord::Schema.define(version: 20160119010032) do
 
   create_table "active_admin_comments", force: true do |t|
     t.string   "namespace"
@@ -49,7 +49,15 @@ ActiveRecord::Schema.define(version: 20151207064343) do
   create_table "competitions", force: true do |t|
     t.string   "country_code"
     t.string   "description"
-    t.integer  "rounds_per_season"
+    t.integer  "game_weeks_per_season"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "game_rounds", force: true do |t|
+    t.integer  "game_round_number"
+    t.integer  "season_id"
+    t.integer  "league_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -58,8 +66,8 @@ ActiveRecord::Schema.define(version: 20151207064343) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "season_id"
-    t.datetime "starts_at"
-    t.datetime "ends_at"
+    t.date     "starts_at"
+    t.date     "ends_at"
   end
 
   create_table "games", force: true do |t|
@@ -68,6 +76,10 @@ ActiveRecord::Schema.define(version: 20151207064343) do
     t.integer  "game_week_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "game_round_id"
+    t.integer  "league_id"
+    t.integer  "home_team_score"
+    t.integer  "away_team_score"
   end
 
   create_table "leagues", force: true do |t|
@@ -89,6 +101,14 @@ ActiveRecord::Schema.define(version: 20151207064343) do
 
   add_index "player_game_weeks", ["game_week_id"], name: "index_player_game_weeks_on_game_week_id"
   add_index "player_game_weeks", ["player_id"], name: "index_player_game_weeks_on_player_id"
+
+  create_table "player_lineups", force: true do |t|
+    t.integer  "team_id"
+    t.integer  "player_game_week_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "squad_position_id"
+  end
 
   create_table "players", force: true do |t|
     t.string   "first_name"
