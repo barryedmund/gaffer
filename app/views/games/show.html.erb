@@ -1,5 +1,40 @@
+<% @game_week = @game.game_week %>
+<% @home_team = @game.home_team %>
+<% @away_team = @game.away_team %>
 <div class="container">
 	<span class="sub_header">
-		<%= @game.home_team.title %> vs <%= @game.away_team.title %> (<%= @game.game_week.starts_at %> - <%= @game.game_week.ends_at %>)
+		<%= @game_week.starts_at %> - <%= @game_week.ends_at %>
 	</span>
+  <span class="sub_header">
+    <%= @game.get_score %>
+  </span>
+	<div id="game_line_ups_div">
+  	<div class="line_up">
+  		<div><%= @home_team.title %></div>
+  		<div class="one_third">Position</div>
+  		<div class="one_third">Player</div>
+  		<div class="one_third">Minutes played</div>
+  		<% @home_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ?', @game_week.id).order("squad_positions.sort_order").each do |player_lineup| %>
+  			<div class="team_player_row">
+	  			<div class="one_third"><%= player_lineup.squad_position.short_name %></div>
+	  			<div class="one_third"><%= player_lineup.player_game_week.player.full_name %></div>
+	  			<div class="one_third"><%= player_lineup.player_game_week.minutes_played %></div>
+	  		</div>
+  		<% end %>
+  	</div>
+
+  	<div class="line_up">
+  		<div><%= @away_team.title %></div>
+  		<div class="one_third">Position</div>
+  		<div class="one_third">Player</div>
+  		<div class="one_third">Minutes played</div>
+  		<% @away_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ?', @game_week.id).order("squad_positions.sort_order").each do |player_lineup| %>
+        <div class="team_player_row">
+          <div class="one_third"><%= player_lineup.squad_position.short_name %></div>
+          <div class="one_third"><%= player_lineup.player_game_week.player.full_name %></div>
+          <div class="one_third"><%= player_lineup.player_game_week.minutes_played %></div>
+        </div>
+      <% end %>
+  	</div>
+  </div>
 </div>

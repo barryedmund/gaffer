@@ -1,6 +1,7 @@
 class PlayerGameWeek < ActiveRecord::Base
 	belongs_to :game_week
 	belongs_to :player
+	has_many :player_lineups
 	validates :game_week_id, :player_id, presence: true
 	validates_uniqueness_of :game_week_id, scope: :player_id
 

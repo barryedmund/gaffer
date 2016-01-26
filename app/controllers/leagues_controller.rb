@@ -23,6 +23,6 @@ class LeaguesController < InheritedResources::Base
 
 	private
 	def league_params
-  		params.require(:league).permit(:name, :user_id)
+  		params.require(:league).permit(:name, :user_id, :competition_id)
 	end
 end

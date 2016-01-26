@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :game_rounds
+
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
@@ -20,9 +22,9 @@ Rails.application.routes.draw do
     		end
     	end
     end
+    resources :games, only: [:index, :show]
   end
   resources :player_game_weeks
-  resources :games, only: [:index, :show]
   
   root 'leagues#index'
 end

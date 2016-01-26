@@ -1,13 +1,9 @@
 require 'spec_helper'
 
 describe GameWeek do
-	let(:valid_attributes){
-  		{
-    		season_id: 1,
-    		starts_at: "2015-11-04 21:58:20",
-    		ends_at: "2016-07-04 21:58:20"
-  		}
-  	}
+	let!(:season){ create(:season) }
+	let!(:game_week_1){ GameWeek.create(:id => 1, :starts_at => Date.today - 2, :ends_at => Date.today + 2, :season => season) }
+	let!(:game_week_2){ GameWeek.create(:id => 2, :starts_at => Date.today, :ends_at => Date.today + 4, :season => season) }
 
 	context "relationships" do
   		it {should belong_to(:season)}
@@ -15,24 +11,20 @@ describe GameWeek do
   	end
 
   	context "validations" do
-  		let(:game_week) {
-  			GameWeek.new(valid_attributes)
-	  	}
-	  	
-	  	before do
-	  		GameWeek.create(valid_attributes)
-	  	end
-
 	  	it "requires a season ID" do
-	  		expect(game_week).to validate_presence_of(:season_id)
+	  		expect(game_week_1).to validate_presence_of(:season_id)
 	  	end
 
 	  	it "requires a start date" do
-	  		expect(game_week).to validate_presence_of(:starts_at)
+	  		expect(game_week_1).to validate_presence_of(:starts_at)
 	  	end
 
 	  	it "requires a end date" do
-	  		expect(game_week).to validate_presence_of(:ends_at)
+	  		expect(game_week_1).to validate_presence_of(:ends_at)
+	  	end
+
+	  	it "requires no overlap of dates" do
+			expect(game_week_2).to_not be_valid  		
 	  	end
   	end
 end

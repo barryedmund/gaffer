@@ -3,7 +3,7 @@ require 'spec_helper'
 RSpec.describe LeaguesController, :type => :controller do
 
   let(:valid_attributes) {
-    { name: "MyLeague", user: user , competition: competition}
+    { name: "MyLeague", user: user, competition_id: 1}
   }
 
   let(:invalid_attributes) {

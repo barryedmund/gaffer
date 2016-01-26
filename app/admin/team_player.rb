@@ -1,5 +1,5 @@
 ActiveAdmin.register TeamPlayer do
-	permit_params :player_id, :team_id, :first_team
+	permit_params :player_id, :team_id, :first_team, :squad_position_id
 
 	index do
 		selectable_column

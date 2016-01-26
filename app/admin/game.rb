@@ -1,12 +1,20 @@
 ActiveAdmin.register Game do
-	permit_params :home_team_id, :away_team_id, :game_week_id
+	permit_params :home_team_id, :away_team_id, :game_week_id, :league_id, :game_round_id
 
 	index do
 		selectable_column
 		column :id
 		column :home_team
 		column :away_team
-		column :game_week
+		column :game_week do |game|
+			"#{game.game_week.starts_at}  -  #{game.game_week.ends_at}"
+		end
+		column :game_round do |game|
+			if game.game_round
+				"Game round ##{game.game_round.game_round_number}"
+			end
+		end
+		column :league
 		actions
 	end
 
@@ -16,6 +24,8 @@ ActiveAdmin.register Game do
 	  	f.input :home_team, :collection => Team.all.map{ |team| ["#{team.title} (#{team.league.name})", team.id]}
 	  	f.input :away_team, :collection => Team.all.map{ |team| ["#{team.title} (#{team.league.name})", team.id]}
 	  	f.input :game_week, :collection => GameWeek.all.map{ |gw| ["Game week ##{gw.id} (#{gw.season.description})", gw.id]}
+	  	f.input :game_round, :collection => GameRound.all.map{ |gr| ["Round ##{gr.game_round_number} (#{gr.league.name} / #{gr.season.description})", gr.id]}
+	  	f.input :league, :collection => League.pluck( :name, :id )
 	  end
 	  f.actions
 	end
