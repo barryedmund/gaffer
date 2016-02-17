@@ -1,5 +1,5 @@
 ActiveAdmin.register Team do
-	permit_params :title, :user_id, :league_id
+	permit_params :title, :user_id, :league_id, :cash_balance_cents
 
 	index do
 		selectable_column
@@ -7,6 +7,9 @@ ActiveAdmin.register Team do
 		column :title
 		column :user
 		column :league
+		column "Cash balance", :cash_balance_cents do |cash|
+			number_to_currency(cash.cash_balance_cents / 100)
+		end
 		actions
 	end
 
@@ -16,6 +19,7 @@ ActiveAdmin.register Team do
 	  	f.input :title
 	  	f.input :user, :collection => User.pluck( :email, :id )
 	  	f.input :league, :collection => League.pluck( :name, :id )
+	  	f.input :cash_balance_cents
 	  end
 	  f.actions
 	end

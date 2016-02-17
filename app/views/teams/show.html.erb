@@ -10,4 +10,6 @@
 		No current game week
 	<% end %>
 </span>
+<br/>
+<span><%= number_to_currency(@team.cash_balance_cents / 100) %></span>
 <%= render partial: "shared/team_players" %>

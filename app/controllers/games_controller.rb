@@ -20,9 +20,7 @@ class GamesController < InheritedResources::Base
 	end
 
   private
-
-    def game_params
-      params.require(:game).permit(:home_team_id, :away_team_id, :game_week_id)
-    end
+  def game_params
+    params.require(:game).permit(:home_team_id, :away_team_id, :game_week_id)
+  end
 end
-

@@ -1,0 +1,26 @@
+<%= form_for([League.find(params[:league_id]), @transfer]) do |f| %>
+  <% if @transfer.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@transfer.errors.count, "error") %> prohibited this transfer from being saved:
+      </h2>
+      <ul>
+      <% @transfer.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <% current_user_team = @current_user.teams.where(:league_id => @league.id).first %>
+    <%= f.hidden_field :primary_team_id, :value => current_user_team.id %>
+    <%= f.hidden_field :primary_team_accepted, :value => true %>
+    <%= f.hidden_field :secondary_team_accepted, :value => false %>
+    <%= f.label :secondary_team_id %>
+    <%= f.collection_select :secondary_team_id, Team.where("league_id = ? AND id != ?", @league.id, current_user_team.id), :id, :title %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

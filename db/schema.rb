@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160119010032) do
+ActiveRecord::Schema.define(version: 20160211054712) do
 
   create_table "active_admin_comments", force: true do |t|
     t.string   "namespace"
@@ -154,10 +154,34 @@ ActiveRecord::Schema.define(version: 20160119010032) do
     t.datetime "updated_at"
     t.integer  "user_id"
     t.integer  "league_id"
+    t.integer  "cash_balance_cents"
   end
 
   add_index "teams", ["league_id"], name: "index_teams_on_league_id"
   add_index "teams", ["user_id"], name: "index_teams_on_user_id"
+
+  create_table "transfer_items", force: true do |t|
+    t.integer  "transfer_id"
+    t.string   "transfer_item_type"
+    t.integer  "team_player_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "cash_cents",         limit: 8
+    t.integer  "sending_team_id"
+    t.integer  "receiving_team_id"
+  end
+
+  add_index "transfer_items", ["team_player_id"], name: "index_transfer_items_on_team_player_id"
+  add_index "transfer_items", ["transfer_id"], name: "index_transfer_items_on_transfer_id"
+
+  create_table "transfers", force: true do |t|
+    t.integer  "primary_team_id"
+    t.integer  "secondary_team_id"
+    t.boolean  "primary_team_accepted"
+    t.boolean  "secondary_team_accepted"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "first_name"

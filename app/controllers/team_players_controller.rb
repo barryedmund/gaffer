@@ -51,7 +51,7 @@ class TeamPlayersController < ApplicationController
   end
 
   def set_team_player
-      @team_player = TeamPlayer.find(params[:id])
+    @team_player = TeamPlayer.find(params[:id])
   end
 
   def team_player_params
