@@ -1,0 +1,25 @@
+<% league = League.find(params[:league_id]) %>
+
+<h1>Listing transfers</h1>
+<span>
+  <%= link_to "Create new transfer", new_league_transfer_path(league) %>
+</span>  
+<% @transfers.each do |transfer| %>
+  <div>
+  	<% if transfer.primary_team.user == @current_user && !transfer.transfer_completed? %> 
+  		<span><%= transfer.primary_team.title %> (<%= transfer.team_transfer_status(transfer.primary_team) %>) <%= link_to "Change response", change_response_league_transfer_path(league, transfer), :method => :patch %> <%= link_to "Cancel transfer", league_transfer_path(league, transfer), :method => :delete %></span>
+  	<% else %>
+  		<span><%= transfer.primary_team.title %> (<%= transfer.team_transfer_status(transfer.primary_team) %>)</span>
+  	<% end %>
+
+  	<br />
+
+  	<% if transfer.secondary_team.user == @current_user && !transfer.transfer_completed? %> 
+  		<span><%= transfer.secondary_team.title %> (<%= transfer.team_transfer_status(transfer.secondary_team) %>) <%= link_to "Change response", change_response_league_transfer_path(league, transfer), :method => :patch %></span>
+  	<% else %>
+  		<span><%= transfer.secondary_team.title %> (<%= transfer.team_transfer_status(transfer.secondary_team) %>)</span>
+  	<% end %>
+  </div>
+  <span><%= link_to "View details", league_transfer_path(league, transfer) %></span>
+  <hr/>
+<% end %>

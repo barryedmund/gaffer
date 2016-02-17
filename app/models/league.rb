@@ -51,4 +51,55 @@ class League < ActiveRecord::Base
 			create_games
 		end
 	end
+
+	def get_standings
+		standings = teams.collect do |team|
+			{
+				:team_record => team,
+				:games_played => 0,
+				:games_won => 0,
+			  :games_drawn => 0,
+			  :games_lost => 0,
+			  :goals_scored => 0,
+			  :goals_conceded => 0,
+			  :goal_difference => 0,
+			  :points => 0
+			}
+		end
+		
+		games.joins(:game_week).where('game_weeks.season_id = ?', competition.seasons.current)
+			.where.not('home_team_score' => nil, 'away_team_score' => nil).each do |game|
+			current_home_team = standings.find do |standing|
+				standing[:team_record] == game.home_team
+			end
+			current_away_team = standings.find do |standing|
+				standing[:team_record] == game.away_team
+			end
+			current_home_team[:games_played] += 1
+			current_home_team[:goals_scored] += game.home_team_score
+			current_home_team[:goals_conceded] += game.away_team_score
+			current_home_team[:goal_difference] = current_home_team[:goals_scored] - current_home_team[:goals_conceded]
+
+			current_away_team[:games_played] += 1
+			current_away_team[:goals_scored] += game.away_team_score
+			current_away_team[:goals_conceded] += game.home_team_score
+			current_away_team[:goal_difference] = current_away_team[:goals_scored] - current_away_team[:goals_conceded]
+
+			if game.home_team_score == game.away_team_score
+				current_home_team[:games_drawn] += 1
+				current_away_team[:games_drawn] += 1
+				current_home_team[:points] += 1
+				current_away_team[:points] += 1
+			elsif game.home_team_score > game.away_team_score
+				current_home_team[:games_won] += 1
+				current_away_team[:games_lost] += 1
+				current_home_team[:points] += 3
+			else
+				current_home_team[:games_lost] += 1
+				current_away_team[:games_won] += 1
+				current_away_team[:points] += 3
+			end
+		end
+		standings.sort_by! { |k| [k[:points], k[:goal_difference], k[:goals_scored]] }.reverse
+	end
 end

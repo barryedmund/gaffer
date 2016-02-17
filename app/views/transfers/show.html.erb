@@ -1,0 +1,47 @@
+<% league = League.find(params[:league_id]) %>
+
+<p id="notice"><%= notice %></p>
+
+<span class="main_header">
+	Transfer #<%= @transfer.id %>: <%= @transfer.primary_team.title %> trading with <%= @transfer.secondary_team.title %>
+</span>
+<br/>
+<span>
+	<% if @current_user === @transfer.primary_team.user || @current_user === @transfer.secondary_team.user %>
+		<%= link_to "Add transfer item", new_league_transfer_transfer_item_path(league, @transfer) %>
+	<% end %>
+</span>
+<table>
+	<tr>
+		<th><%= @transfer.primary_team.title %> receives</th>
+		<th><%= @transfer.secondary_team.title %> receives</th>
+		<th>Options</th>
+	</tr>
+	<% @transfer.transfer_items.each do |transfer_item| %>
+	  <tr>
+	  	<td>
+	  		<% if transfer_item.receiving_team === @transfer.primary_team %>
+		  		<% if transfer_item.transfer_item_type === "player" %>
+		  			<%= transfer_item.team_player.full_name %>
+		  		<% elsif transfer_item.transfer_item_type === "cash" %>
+		  			<%= number_to_currency(transfer_item.cash_cents / 100) %>
+		  		<% end %>
+	  		<%end%>
+	  	</td>
+	  	<td>
+		  	<% if transfer_item.receiving_team === @transfer.secondary_team %>
+		  		<% if transfer_item.transfer_item_type === "player" %>
+		  			<%= transfer_item.team_player.full_name %>
+		  		<% elsif transfer_item.transfer_item_type === "cash" %>
+		  			<%= number_to_currency(transfer_item.cash_cents / 100) %>
+		  		<% end %>
+		  	<% end %>
+	  	</td>
+	  	<td>
+	  		<%= link_to "Remove", league_transfer_transfer_item_path(league, @transfer, transfer_item), method: :delete %>
+	  		or
+	  		<%= link_to "Edit", edit_league_transfer_transfer_item_path(league, @transfer, transfer_item) %>
+	  	</td>
+	  </tr>
+	<% end %>
+</table>

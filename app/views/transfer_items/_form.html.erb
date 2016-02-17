@@ -1,0 +1,34 @@
+<%= form_for([League.find(params[:league_id]), @transfer, @transfer_item]) do |f| %>
+  <% if @transfer_item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@transfer_item.errors.count, "error") %> prohibited this transfer item from being saved:</h2>
+
+      <ul>
+      <% @transfer_item.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.hidden_field :transfer_id, :value => @transfer.id %>
+    <%= f.label :sending_team_id %>
+    <%= f.collection_radio_buttons :sending_team_id, [@transfer.primary_team, @transfer.secondary_team], :id, :title %>
+    <br/>
+    <%= f.label :receiving_team_id %>
+    <%= f.collection_radio_buttons :receiving_team_id, [@transfer.primary_team, @transfer.secondary_team], :id, :title %>
+    <br/>
+    <%= f.label :transfer_item_type %>
+    <%= f.collection_radio_buttons :transfer_item_type, ["cash", "player"], :to_s, :to_s %>
+    <br/>
+    <%= f.label :team_player_id %>
+    <%= f.collection_select :team_player_id, TeamPlayer.where("team_id = ? OR team_id =?", @transfer.primary_team.id, @transfer.secondary_team.id), :id, "#{:full_name}", :include_blank => true %>
+    <br/>
+    <%= f.label :cash_cents %>
+    <%= f.number_field :cash_cents %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,19 +1,42 @@
 <p id="notice"><%= notice %></p>
 <span class="main_header">
-	<%= @league.name %> (
-	<%= link_to 'edit', edit_league_path(@league) %>
-	/
-	<%= link_to 'view games', league_games_path(@league) %>
-	)
+	<%= @league.name %> (<%= link_to 'edit', edit_league_path(@league) %> / <%= link_to 'games', league_games_path(@league) %> / <%= link_to 'transfers', league_transfers_path(@league) %>)
 </span>
-<div class="container">
-	<% @league.teams.each do |team| %>
-		<% if team.user != @current_user %>
-			<span class="sub_header"><%= team.title %> (<%= team.user.full_name %>)</span>
-		<% else %>
-			<span class="sub_header"><%= link_to team.title, league_team_path(@league, team) %></span>
-		<% end %>
-	<% end %>
+
+<div>
+	<table>
+		<tr>
+			<th>Team</th>
+			<th>Pld</th>
+			<th>W</th>
+			<th>D</th>
+			<th>L</th>
+			<th>GF</th>
+			<th>GA</th>
+			<th>GD</th>
+			<th>Pts</th>
+		</tr>
+		<% @league.get_standings.each do |standings_row| %>
+			<tr>
+				<td>
+					<% if standings_row[:team_record].user != @current_user %>
+						<%= standings_row[:team_record].title %> (<%= standings_row[:team_record].user.full_name %>)
+					<% else %>
+						<%= link_to standings_row[:team_record].title, league_team_path(@league, standings_row[:team_record]) %>
+					<% end %>
+				</td>
+				<td><%= standings_row[:games_played] %></td>
+				<td><%= standings_row[:games_won] %></td>
+				<td><%= standings_row[:games_drawn] %></td>
+				<td><%= standings_row[:games_lost] %></td>
+				<td><%= standings_row[:goals_scored] %></td>
+				<td><%= standings_row[:goals_conceded] %></td>
+				<td><%= standings_row[:goal_difference] %></td>
+				<td><%= standings_row[:points] %></td>
+			</tr>
+		<% end %>	
+	</table>
+
 	<% if !@league.has_team_owned_by?(@current_user) && @league.teams.count < 20 %>
 		<%= link_to 'Add Team', new_league_team_path(@league) %>
 	<% end %>
