@@ -60,6 +60,8 @@ class TransferItemsController < ApplicationController
   def require_permission_to_change
     if [@transfer_item.sending_team.user, @transfer_item.receiving_team.user].exclude?(current_user)
       redirect_to(league_transfers_path(@league), :notice => "Hey! You aren't involved in that transfer.")
+    elsif @transfer.transfer_completed?
+      redirect_to(league_transfers_path(@league), :notice => "That transfer is done and dusted.")
     end
   end
 

@@ -31,6 +31,9 @@ class TransfersController < ApplicationController
       new_secondary_value = @transfer.secondary_team_accepted ? false : true
       @transfer.update_attributes(:secondary_team_accepted => new_secondary_value)
     end
+    if @transfer.transfer_completed?
+      @transfer.complete_transfer
+    end
     redirect_to :back
   end
 

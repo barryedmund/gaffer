@@ -3,7 +3,7 @@
 <p id="notice"><%= notice %></p>
 
 <span class="main_header">
-	Transfer #<%= @transfer.id %>: <%= @transfer.primary_team.title %> trading with <%= @transfer.secondary_team.title %>
+	<%= link_to "Transfers", league_transfers_path(league) %> >> #<%= @transfer.id %>: <%= @transfer.primary_team.title %> trading with <%= @transfer.secondary_team.title %>
 </span>
 <br/>
 <span>
@@ -38,9 +38,13 @@
 		  	<% end %>
 	  	</td>
 	  	<td>
-	  		<%= link_to "Remove", league_transfer_transfer_item_path(league, @transfer, transfer_item), method: :delete %>
-	  		or
-	  		<%= link_to "Edit", edit_league_transfer_transfer_item_path(league, @transfer, transfer_item) %>
+	  		<% if @transfer.transfer_completed? %>
+	  			Transfer complete
+	  		<% else %>
+		  		<%= link_to "Remove", league_transfer_transfer_item_path(league, @transfer, transfer_item), method: :delete %>
+		  		or
+		  		<%= link_to "Edit", edit_league_transfer_transfer_item_path(league, @transfer, transfer_item) %>
+	  		<% end %>
 	  	</td>
 	  </tr>
 	<% end %>

@@ -12,21 +12,27 @@
   <% end %>
 
   <div class="field">
-    <%= f.hidden_field :transfer_id, :value => @transfer.id %>
-    <%= f.label :sending_team_id %>
-    <%= f.collection_radio_buttons :sending_team_id, [@transfer.primary_team, @transfer.secondary_team], :id, :title %>
-    <br/>
-    <%= f.label :receiving_team_id %>
-    <%= f.collection_radio_buttons :receiving_team_id, [@transfer.primary_team, @transfer.secondary_team], :id, :title %>
-    <br/>
-    <%= f.label :transfer_item_type %>
-    <%= f.collection_radio_buttons :transfer_item_type, ["cash", "player"], :to_s, :to_s %>
-    <br/>
-    <%= f.label :team_player_id %>
-    <%= f.collection_select :team_player_id, TeamPlayer.where("team_id = ? OR team_id =?", @transfer.primary_team.id, @transfer.secondary_team.id), :id, "#{:full_name}", :include_blank => true %>
-    <br/>
-    <%= f.label :cash_cents %>
-    <%= f.number_field :cash_cents %>
+    <% if !@transfer_item.id %>
+      <%= f.hidden_field :transfer_id, :value => @transfer.id %>
+      <%= f.label :sending_team_id %>
+      <%= f.collection_radio_buttons :sending_team_id, [@transfer.primary_team, @transfer.secondary_team], :id, :title %>
+      <br/>
+      <%= f.label :receiving_team_id %>
+      <%= f.collection_radio_buttons :receiving_team_id, [@transfer.primary_team, @transfer.secondary_team], :id, :title %>
+      <br/>
+      <%= f.label :transfer_item_type %>
+      <%= f.collection_radio_buttons :transfer_item_type, ["cash", "player"], :to_s, :to_s %>
+      <br/>
+    <% end %>
+    <% if !@transfer_item.id || @transfer_item.transfer_item_type === "player" %>
+      <%= f.label :team_player_id %>
+      <%= f.collection_select :team_player_id, TeamPlayer.where("team_id = ? OR team_id =?", @transfer.primary_team.id, @transfer.secondary_team.id), :id, "#{:full_name}", :include_blank => true %>
+      <br/>
+    <% end %>
+    <% if !@transfer_item.id || @transfer_item.transfer_item_type === "cash" %>
+      <%= f.label :cash_cents %>
+      <%= f.number_field :cash_cents %>
+    <% end %>
   </div>
   <div class="actions">
     <%= f.submit %>

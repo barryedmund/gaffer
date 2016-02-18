@@ -24,6 +24,17 @@ class Transfer < ActiveRecord::Base
     self.update_attributes(:primary_team_accepted => false, :secondary_team_accepted => false)
   end
 
+  def complete_transfer
+    self.transfer_items.each do |transfer_item|
+      if transfer_item.transfer_item_type === "cash"
+        transfer_item.sending_team.decrement!(:cash_balance_cents, transfer_item.cash_cents)
+        transfer_item.receiving_team.increment!(:cash_balance_cents, transfer_item.cash_cents)
+      elsif transfer_item.transfer_item_type === "player"
+        transfer_item.team_player.update_attributes(:team => transfer_item.receiving_team, :first_team => false, :squad_position => SquadPosition.find_by(:short_name => 'SUB'))
+      end
+    end
+  end
+
  	private
  	def teams_in_same_league
  		errors.add(:base, "Teams not in same league.") unless primary_team.league === secondary_team.league
