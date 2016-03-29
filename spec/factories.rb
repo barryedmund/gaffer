@@ -20,7 +20,6 @@ FactoryGirl.define do
   end
 
 	factory :game_round do
-		season
 		league_season
   end
 

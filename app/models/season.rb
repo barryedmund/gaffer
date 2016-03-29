@@ -1,6 +1,5 @@
 class Season < ActiveRecord::Base
 	has_many :game_weeks, dependent: :destroy
-	has_many :game_rounds
 	has_many :league_seasons, dependent: :destroy
 	belongs_to :competition
 	validates :competition, presence: true
