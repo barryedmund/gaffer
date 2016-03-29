@@ -5,11 +5,13 @@ class TeamPlayersController < ApplicationController
 
   def new
   	@team_player = @team.team_players.new
+    @team_player.contracts.build
   end
 
   def create
   	@team_player = @team.team_players.new(team_player_params)
     @team_player.squad_position = SquadPosition.find_by short_name: 'SUB'
+
   	if @team_player.save
   		flash[:success] = "Added team player"
   		redirect_to league_team_path(@team_player.team.league, @team_player.team)
@@ -55,6 +57,6 @@ class TeamPlayersController < ApplicationController
   end
 
   def team_player_params
-  	params.require(:team_player).permit(:first_team, :team_id, :player_id)
+  	params.require(:team_player).permit(:first_team, :team_id, :player_id, contracts_attributes: [:weekly_salary_cents, :team_id, :starts_at, :ends_at])
   end
 end

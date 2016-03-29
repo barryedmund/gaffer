@@ -5,6 +5,7 @@ class Team < ActiveRecord::Base
 	has_many :home_games, :class_name => 'Game', :foreign_key => 'home_game_id'
   has_many :away_games, :class_name => 'Game', :foreign_key => 'away_game_id'
   has_many :player_lineups, dependent: :destroy
+  has_many :contracts
 	validates :title, :league, presence: true
 	validates :title, length: { minimum: 3}
 	validate :squad_positions_are_logical, :on => :update

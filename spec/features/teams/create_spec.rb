@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe "Creating teams" do
 	let(:user) { create(:user) }
-	let!(:league) { create(:league) }
+	let!(:league_season) { create(:league_season) }
 
 	def create_team(options={})
 		options[:title] ||= "My team"
 		visit "/"
-		visit "leagues/#{league.id}"
+		visit "leagues/#{league_season.league_id}"
 		click_link "Add Team"
 		expect(page).to have_content("New team")
 
@@ -52,7 +52,7 @@ describe "Creating teams" do
 
 	it "requires a unique User & League combo" do
 		visit "/"
-		visit "leagues/#{league.id}"
+		visit "leagues/#{league_season.league_id}"
 		click_link "Add Team"
 		expect(page).to have_content("New team")
 		fill_in "Title", with: "Team One"

@@ -41,14 +41,6 @@ RSpec.describe LeaguesController, :type => :controller do
     end
   end
 
-  describe "GET edit" do
-    it "assigns the requested league as @league" do
-      league = League.create! valid_attributes
-      get :edit, {:id => league.to_param}, valid_session
-      expect(assigns(:league)).to eq(league)
-    end
-  end
-
   describe "POST create" do
     describe "with valid params" do
       it "creates a new League" do

@@ -1,14 +1,17 @@
 class Season < ActiveRecord::Base
-	has_many :game_weeks
+	has_many :game_weeks, dependent: :destroy
 	has_many :game_rounds
+	has_many :league_seasons, dependent: :destroy
 	belongs_to :competition
 	validates :competition, presence: true
+	after_create :create_game_weeks
 
 	def self.current
     where("starts_at <= :date AND ends_at >= :date", date: Date.today).first
   end
 
-  def create_game_weeks
+	private
+	def create_game_weeks
 		required_game_weeks = competition.game_weeks_per_season
 		current_start_at_date = starts_at
 		current_ends_at_date = current_start_at_date + 7

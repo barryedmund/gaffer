@@ -12,4 +12,15 @@
 
 <% @players_in_this_league = Player.joins(team_players: [:team => :league]).where('leagues.id = ?', @team_player.team.league.id) %>
 <%= form.collection_select(:player_id, Player.where.not(id:@players_in_this_league.map(&:id)), :id, "#{:full_name}") %>
+	
+	<%= form.fields_for :contracts do |ff| %>
+		<%= ff.label :weekly_salary_cents %>
+		<%= ff.number_field :weekly_salary_cents %>
+		<br/>
+		<%= ff.hidden_field :starts_at, :value => Date.today %>
+		<%= ff.label :ends_at %>
+		<%= ff.date_field :ends_at %>
+		<%= ff.hidden_field :team_id, :value => @team_player.team.id %>
+	<% end %>
+	
 <%= form.submit "Add player to squad" %>

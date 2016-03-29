@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :leagues do
     resources :teams do
     	resources :team_players do
+        resources :contracts
         resources :players do
           resources :game_weeks
         end

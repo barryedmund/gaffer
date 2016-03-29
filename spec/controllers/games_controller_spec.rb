@@ -1,12 +1,14 @@
 require 'spec_helper'
 
 RSpec.describe GamesController, :type => :controller do
+  let!(:season) { create(:season) }
   let!(:league) { create(:league) }
-  let!(:home_team) { Team.create(title: "Home Team", league: league) }
-  let!(:away_team) { Team.create(title: "Away Team", league: league) }
-  let!(:game_week) { create(:game_week) }
+  let!(:league_season) { LeagueSeason.create(season: season, league: league) }
+  let!(:game_week) { GameWeek.create(starts_at: Date.today + 100, ends_at: Date.today + 107, league_season: league_season, season: season) }
+  let!(:home_team) { Team.create(title: "Home Team", league: league_season.league) }
+  let!(:away_team) { Team.create(title: "Away Team", league: league_season.league) }
   let!(:game_round) { create(:game_round) }
-  let(:valid_attributes) { { home_team: home_team, away_team: away_team, game_week: game_week, game_round: game_round, league: league } }
+  let(:valid_attributes) { { home_team: home_team, away_team: away_team, game_week: game_week, game_round: game_round} }
   let(:invalid_attributes) { { home_team: "", away_team: "", game_week: "" } }
 
   let(:valid_session) { {} }
@@ -24,20 +26,6 @@ RSpec.describe GamesController, :type => :controller do
       game = Game.create! valid_attributes
       get :show, {:id => game.to_param, :league_id => game.get_league}, valid_session
       expect(assigns(:game)).to eq(game)
-    end
-  end
-
-  describe "GET new" do
-    
-  end
-
-  describe "POST create" do
-    describe "with valid params" do
-      
-    end
-
-    describe "with invalid params" do
-      
     end
   end
 end

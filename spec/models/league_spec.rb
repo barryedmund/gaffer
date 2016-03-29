@@ -12,7 +12,7 @@ describe League do
 	  	it {should belong_to(:competition)}
 	  	it {should belong_to(:user)}
 	  	it {should have_many(:teams)}
-	  	it {should have_many(:games)}
+	  	it {should have_many(:league_seasons)}
 	end
 
 	context "validations" do

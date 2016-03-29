@@ -1,9 +1,8 @@
 <% league = League.find(params[:league_id]) %>
 
-<h1>Listing transfers</h1>
-<span>
-  <%= link_to "Create new transfer", new_league_transfer_path(league) %>
-</span>  
+<span class="main_header">
+  <%= link_to league.name, league_path(league) %> >> Transfers (<%= link_to "new", new_league_transfer_path(league) %>)
+</span>
 <% @transfers.each do |transfer| %>
   <div>
   	<% if transfer.primary_team.user == @current_user && !transfer.transfer_completed? %> 

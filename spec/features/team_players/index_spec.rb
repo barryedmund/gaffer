@@ -25,6 +25,8 @@ describe "Viewing team players" do
 		visit_team_players(team)
 		click_link "add player"
 		select("Paul Pogba", :from => "team_player_player_id")
+		fill_in "team_player_contracts_attributes_0_weekly_salary_cents", :with => 1000000
+		fill_in "team_player_contracts_attributes_0_ends_at", :with => Date.today + 500
 		click_button "Add player to squad"
 		expect(page.all("ul.squad_players li").size).to eq(1)
 	end

@@ -1,5 +1,6 @@
 class GameWeek < ActiveRecord::Base
 	belongs_to :season
+	belongs_to :league_season
 	has_many :player_game_weeks, dependent: :destroy
 	has_many :games, dependent: :destroy
 	validates :season_id, :starts_at, :ends_at, :presence => true

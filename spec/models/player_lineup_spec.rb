@@ -1,7 +1,13 @@
 require 'spec_helper'
 
 describe PlayerLineup do
-	let!(:player_lineup){ create(:player_lineup) }
+	let!(:season) { create(:season) }
+  let!(:game_week) { season.game_weeks.first }
+  let!(:player) { create(:player) }
+	let!(:player_game_week) { PlayerGameWeek.create(player: player, game_week: game_week, minutes_played: 90) }
+	let!(:team) { create(:team) }
+	let!(:squad_position) { create(:squad_position) }
+	let!(:player_lineup) { PlayerLineup.create(team: team, player_game_week: player_game_week, squad_position: squad_position) }
 
 	context "relationships" do
 		it {should belong_to(:player_game_week)}

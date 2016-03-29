@@ -6,6 +6,13 @@ FactoryGirl.define do
 		game_weeks_per_season 38
  	end
 
+  factory :contract do
+    team
+    team_player
+    weekly_salary_cents 1000000
+    ends_at Date.today + 1
+  end
+
  	factory :game do
 		game_week
 		association :home_team, factory: :team
@@ -14,19 +21,25 @@ FactoryGirl.define do
 
 	factory :game_round do
 		season
-		league
+		league_season
   end
 
   factory :game_week do
   	season
-  	starts_at Date.today - 1
-  	ends_at Date.today + 1
+    league_season
+  	starts_at Date.today
+  	ends_at Date.today + 7.days
 	end
 
   factory :league do
   	name "MyLeague"
   	user
   	competition
+  end
+
+  factory :league_season do
+    league
+    season
   end
 
   factory :player do
@@ -36,7 +49,7 @@ FactoryGirl.define do
 
 	factory :player_game_week do
 		player
-		game_week
+    game_week
 		minutes_played 90
 	end
 
@@ -48,8 +61,8 @@ FactoryGirl.define do
 
   factory :season do
 	  description "2015/16"
-		starts_at "2015-11-04 21:58:20"
-		ends_at "2015-11-04 21:58:20"
+		starts_at "2015-08-01"
+		ends_at "2016-05-31"
 		competition
   end
 
@@ -67,6 +80,7 @@ FactoryGirl.define do
     team
     player
     squad_position
+    contract
 	end
 
 	factory :transfer do

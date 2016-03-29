@@ -35,6 +35,10 @@ class Transfer < ActiveRecord::Base
     end
   end
 
+  def current_user_involved?(current_user)
+    (current_user === primary_team.user) ? true : (current_user === secondary_team.user) ? true : false
+  end
+
  	private
  	def teams_in_same_league
  		errors.add(:base, "Teams not in same league.") unless primary_team.league === secondary_team.league

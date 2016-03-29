@@ -3,9 +3,8 @@ class Game < ActiveRecord::Base
  	belongs_to :away_team, :class_name => 'Team', :foreign_key => 'away_team_id'
  	belongs_to :game_week
  	belongs_to :game_round
- 	belongs_to :league
- 	validates :home_team, :away_team, :game_week, :game_round, :league, presence: true
- 	validate :teams_in_same_league, :teams_not_the_same, :team_not_playing_twice_in_same_gameweek, :teams_leagues_same_as_game_league, on: :create
+ 	validates :home_team, :away_team, :game_week, :game_round, presence: true
+ 	validate :teams_in_same_league, :teams_not_the_same, :team_not_playing_twice_in_same_gameweek, on: :create
  	validates_uniqueness_of :game_round, scope: [:home_team, :away_team]
 
  	def match_up
@@ -13,7 +12,7 @@ class Game < ActiveRecord::Base
  	end
 
  	def get_league
- 		home_team.league
+ 		game_week.league_season.league
  	end
 
  	def calculate_score
@@ -48,9 +47,5 @@ class Game < ActiveRecord::Base
  		home_team_games = Game.where('game_week_id=? AND (home_team_id=? OR away_team_id=?)', game_week.id, home_team.id, home_team.id)
  		away_team_games = Game.where('game_week_id=? AND (home_team_id=? OR away_team_id=?)', game_week.id, away_team.id, away_team.id)
  		errors.add(:base, "One of those teams already has a game in this game week.") unless home_team_games.count === 0 && away_team_games.count === 0
- 	end
-
- 	def teams_leagues_same_as_game_league
-		errors.add(:base, "League does not match teams' leagues.") unless home_team.league === league && away_team.league === league
  	end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160211054712) do
+ActiveRecord::Schema.define(version: 20160309054856) do
 
   create_table "active_admin_comments", force: true do |t|
     t.string   "namespace"
@@ -54,13 +54,30 @@ ActiveRecord::Schema.define(version: 20160211054712) do
     t.datetime "updated_at"
   end
 
+  create_table "contracts", force: true do |t|
+    t.integer  "team_id"
+    t.integer  "team_player_id"
+    t.integer  "weekly_salary_cents", limit: 8
+    t.date     "starts_at"
+    t.date     "ends_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "player_id"
+  end
+
+  add_index "contracts", ["player_id"], name: "index_contracts_on_player_id"
+  add_index "contracts", ["team_id"], name: "index_contracts_on_team_id"
+  add_index "contracts", ["team_player_id"], name: "index_contracts_on_team_player_id"
+
   create_table "game_rounds", force: true do |t|
     t.integer  "game_round_number"
     t.integer  "season_id"
-    t.integer  "league_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "league_season_id"
   end
+
+  add_index "game_rounds", ["league_season_id"], name: "index_game_rounds_on_league_season_id"
 
   create_table "game_weeks", force: true do |t|
     t.datetime "created_at"
@@ -68,7 +85,10 @@ ActiveRecord::Schema.define(version: 20160211054712) do
     t.integer  "season_id"
     t.date     "starts_at"
     t.date     "ends_at"
+    t.integer  "league_season_id"
   end
+
+  add_index "game_weeks", ["league_season_id"], name: "index_game_weeks_on_league_season_id"
 
   create_table "games", force: true do |t|
     t.integer  "home_team_id"
@@ -77,10 +97,19 @@ ActiveRecord::Schema.define(version: 20160211054712) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "game_round_id"
-    t.integer  "league_id"
     t.integer  "home_team_score"
     t.integer  "away_team_score"
   end
+
+  create_table "league_seasons", force: true do |t|
+    t.integer  "season_id"
+    t.integer  "league_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "league_seasons", ["league_id"], name: "index_league_seasons_on_league_id"
+  add_index "league_seasons", ["season_id"], name: "index_league_seasons_on_season_id"
 
   create_table "leagues", force: true do |t|
     t.string   "name"
@@ -119,11 +148,11 @@ ActiveRecord::Schema.define(version: 20160211054712) do
 
   create_table "seasons", force: true do |t|
     t.string   "description"
-    t.datetime "starts_at"
-    t.datetime "ends_at"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "competition_id"
+    t.date     "starts_at"
+    t.date     "ends_at"
   end
 
   add_index "seasons", ["competition_id"], name: "index_seasons_on_competition_id"

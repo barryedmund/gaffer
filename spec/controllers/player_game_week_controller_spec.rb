@@ -1,14 +1,10 @@
 require 'spec_helper'
 
 describe PlayerGameWeeksController do
-	let!(:league) { create(:league) }
-	let!(:team) { create(:team) }
-	let!(:team_player) { create(:team_player) }
 	let!(:player) { create(:player) }
-	let!(:game_week) { create(:game_week) }
+	let!(:season) { create(:season) }
+  let!(:game_week) { season.game_weeks.first }
 	let!(:current_game_week) { GameWeek.get_current_game_week }
-	let(:valid_attributes) { {:player => player, :game_week => game_week } }
-	let(:valid_session) { {} }
 
 	describe "POST create" do
 		describe "with valid params" do

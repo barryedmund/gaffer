@@ -1,7 +1,6 @@
 class League < ActiveRecord::Base
 	has_many :teams, dependent: :destroy
-	has_many :games, dependent: :destroy
-	has_many :game_rounds, dependent: :destroy
+	has_many :league_seasons, dependent: :destroy
 	belongs_to :user
 	belongs_to :competition
 	validates :user_id, :competition, presence: true
@@ -67,7 +66,9 @@ class League < ActiveRecord::Base
 			}
 		end
 		
-		games.joins(:game_week).where('game_weeks.season_id = ?', competition.seasons.current)
+		league_games = self.get_games
+
+		league_games.joins(:game_week).where('game_weeks.season_id = ?', competition.seasons.current)
 			.where.not('home_team_score' => nil, 'away_team_score' => nil).each do |game|
 			current_home_team = standings.find do |standing|
 				standing[:team_record] == game.home_team
@@ -101,5 +102,10 @@ class League < ActiveRecord::Base
 			end
 		end
 		standings.sort_by! { |k| [k[:points], k[:goal_difference], k[:goals_scored]] }.reverse
+	end
+
+	def get_games
+		# Games >> GameWeeks >> LeagueSeason >> League
+		Game.joins(game_week: {league_season: :league}).where(leagues: {id: id}).all
 	end
 end

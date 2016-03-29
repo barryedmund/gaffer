@@ -6,6 +6,7 @@ describe Season do
 
 	context "relationships" do
 	  it { should have_many(:game_weeks) }
+	  it { should have_many(:league_seasons) }
 	  it { should belong_to(:competition) }
 	end
 
@@ -17,9 +18,7 @@ describe Season do
 
 	context '#create_game_weeks' do
 		it "should create game_weeks for a season" do
-			season.create_game_weeks
-			game_weeks = season.game_weeks
-			expect(game_weeks.count).to eq(season.competition.game_weeks_per_season)
+			expect(GameWeek.all.count).to eq(season.competition.game_weeks_per_season)
 		end
 	end
 end

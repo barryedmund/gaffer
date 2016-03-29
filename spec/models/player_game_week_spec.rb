@@ -1,8 +1,10 @@
 require 'spec_helper'
 
 describe PlayerGameWeek do
-	let!(:player_game_week_1) { create(:player_game_week) }
-	let!(:player_game_week_2) { create(:player_game_week) }
+  let!(:season) { create(:season) }
+  let!(:game_week) { season.game_weeks.first }
+  let!(:player) { create(:player) }
+	let!(:player_game_week_1) { PlayerGameWeek.create(player: player, game_week: game_week, minutes_played: 90) }
 
 	context "relationships" do
   		it { should belong_to(:player) } 		
@@ -20,7 +22,7 @@ describe PlayerGameWeek do
 	  	end
 
 	  	it "requires a unique Player & GameWeek combo" do
-			should validate_uniqueness_of(:game_week_id).scoped_to(:player_id)
+			 should validate_uniqueness_of(:game_week_id).scoped_to(:player_id)
 	  	end
 	end
 end

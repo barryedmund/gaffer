@@ -7,6 +7,7 @@ describe GameWeek do
 
 	context "relationships" do
   		it {should belong_to(:season)}
+      it {should belong_to(:league_season)}
   		it {should have_many(:player_game_weeks)}
   	end
 

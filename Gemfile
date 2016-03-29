@@ -23,6 +23,7 @@ group :development, :test do
 	gem 'rspec-its', '~> 1.0.1'
 	gem 'rspec-activemodel-mocks', '~> 1.0.1'
 	gem 'rspec-support', '~> 3.0.0'
+	gem 'railroady'
 end
 
 group :development do

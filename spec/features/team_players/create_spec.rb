@@ -15,6 +15,8 @@ describe "Adding team players" do
 	it "is successful with valid content" do
 		visit_team_players(team)
 		click_link "add player"
+		fill_in "team_player_contracts_attributes_0_weekly_salary_cents", :with => 1000000
+		fill_in "team_player_contracts_attributes_0_ends_at", :with => Date.today + 500
 		select("Paul Pogba", :from => "team_player_player_id")
 		click_button "Add player to squad"
 		expect(page).to have_content("Added team player")
@@ -26,6 +28,8 @@ describe "Adding team players" do
 	it "adds squad position SUB to newly added players" do
 		visit_team_players(team)
 		click_link "add player"
+		fill_in "team_player_contracts_attributes_0_weekly_salary_cents", :with => 1000000
+		fill_in "team_player_contracts_attributes_0_ends_at", :with => Date.today + 500
 		select("Paul Pogba", :from => "team_player_player_id")
 		click_button "Add player to squad"
 		expect(page).to have_content("Added team player")
@@ -39,6 +43,8 @@ describe "Adding team players" do
 		visit_team_players(team)
 		click_link "add player"
 		select("Paul Pogba", :from => "team_player_player_id")
+		fill_in "team_player_contracts_attributes_0_weekly_salary_cents", :with => 1000000
+		fill_in "team_player_contracts_attributes_0_ends_at", :with => Date.today + 500
 		click_button "Add player to squad"
 		expect(page).to have_content("Added team player")
 		within("ul.squad_players") do
@@ -48,6 +54,8 @@ describe "Adding team players" do
 		visit_team_players(team_1)
 		click_link "add player"
 		select("Paul Pogba", :from => "team_player_player_id")
+		fill_in "team_player_contracts_attributes_0_weekly_salary_cents", :with => 1000000
+		fill_in "team_player_contracts_attributes_0_ends_at", :with => Date.today + 500
 		click_button "Add player to squad"
 		expect(page).to have_content("Added team player")
 		within("ul.squad_players") do

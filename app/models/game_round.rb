@@ -1,6 +1,6 @@
 class GameRound < ActiveRecord::Base
 	belongs_to :season
-	belongs_to :league
+  belongs_to :league_season
 	has_many :games
-	validates_uniqueness_of :game_round_number, scope: [:season, :league]
+	validates_uniqueness_of :game_round_number, scope: [:league_season]
 end
