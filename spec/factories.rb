@@ -24,8 +24,6 @@ FactoryGirl.define do
   end
 
   factory :game_week do
-  	season
-    league_season
   	starts_at Date.today
   	ends_at Date.today + 7.days
 	end

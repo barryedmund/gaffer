@@ -1,5 +1,5 @@
 ActiveAdmin.register Game do
-	permit_params :home_team_id, :away_team_id, :game_week_id, :league_id, :game_round_id, :home_team_score, :away_team_score
+	permit_params :home_team_id, :away_team_id, :game_week_id, :game_round_id, :home_team_score, :away_team_score
 
 	index do
 		selectable_column

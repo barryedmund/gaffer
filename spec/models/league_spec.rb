@@ -17,7 +17,7 @@ describe League do
 
 	context "validations" do
 		it "requires a competition" do
-	  		expect(league).to validate_presence_of(:competition)
-	  	end
+	  	expect(league).to validate_presence_of(:competition)
+	  end
 	end
 end

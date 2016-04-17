@@ -2,8 +2,13 @@ require 'spec_helper'
 
 describe PlayerGameWeeksController do
 	let!(:player) { create(:player) }
-	let!(:season) { create(:season) }
-  let!(:game_week) { season.game_weeks.first }
+	let!(:user) { create(:user) }
+  let!(:season) { create(:season) }
+  let!(:league) { create(:league) }
+  let!(:home_team) { Team.create(id: 1, title: "Home Team", league: league) }
+  let!(:away_team) { Team.create(id: 2, title: "Away Team", league: league, user: user) }
+  let!(:league_season) { LeagueSeason.create(season: season, league: league) }
+  let!(:game_week) { league_season.game_weeks.first }
 	let!(:current_game_week) { GameWeek.get_current_game_week }
 
 	describe "POST create" do

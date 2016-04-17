@@ -1,22 +1,28 @@
 require 'spec_helper'
 
 describe "Creating teams" do
-	let(:user) { create(:user) }
-	let!(:league_season) { create(:league_season) }
+	let!(:user) { create(:user) }
+	let!(:user_2) { create(:user) }
+	let!(:user_3) { create(:user) }
+  let!(:season) { create(:season) }
+  let!(:league) { create(:league) }
+  let!(:home_team) { Team.create(id: 1, title: "Home Team", league: league, user: user_2) }
+  let!(:away_team) { Team.create(id: 2, title: "Away Team", league: league, user: user) }
+  let!(:league_season) { LeagueSeason.create(season: season, league: league) }
+	
 
 	def create_team(options={})
 		options[:title] ||= "My team"
 		visit "/"
-		visit "leagues/#{league_season.league_id}"
+		visit "leagues/#{league.id}"
 		click_link "Add Team"
 		expect(page).to have_content("New team")
-
 		fill_in "Title", with: options[:title]
 		click_button "Create Team"
 	end
 
 	before do
-		sign_in user, password: "gaffer123"
+		sign_in user_3, password: "gaffer123"
 	end
 
 	it "redirects to the Dashboard page on success" do
@@ -25,17 +31,17 @@ describe "Creating teams" do
 	end
 
 	it "displays an error when the team has no title" do
-		expect(Team.count).to eq(0)
+		expect(Team.count).to eq(2)
 		create_team title: ""
 		expect(page).to have_content("error")
-		expect(Team.count).to eq(0)
+		expect(Team.count).to eq(2)
 	end
 
 	it "displays an error when the team has a title less than three characters" do
-		expect(Team.count).to eq(0)
+		expect(Team.count).to eq(2)
 		create_team title: "FC"
 		expect(page).to have_content("error")
-		expect(Team.count).to eq(0)
+		expect(Team.count).to eq(2)
 	end
 
 	it "doesn't allow more than 20 teams" do

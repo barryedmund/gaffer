@@ -12,42 +12,11 @@ class League < ActiveRecord::Base
 		self.teams.where('user_id = ?', user.id).any?
 	end
 
-	def create_game_rounds
-		number_of_teams = teams.count
-		games_per_game_round = number_of_teams * (number_of_teams - 1)
-		game_weeks_per_game_round = games_per_game_round / (number_of_teams / 2)
-		game_rounds_per_season = (competition.game_weeks_per_season / game_weeks_per_game_round.to_f).ceil
-		season = Season.current.where("competition_id = ?", competition.id).first
-		(1..game_rounds_per_season).each do |i|
-			game_rounds.create(:game_round_number => i, :league => self, :season => season)
-		end
-	end
-
-	def create_games
-		game_permutations = Team.where('league_id = ?', self.id).to_a.permutation(2).to_a.shuffle
-		season = Season.current.where("competition_id = ?", competition.id).first
-		ordered_game_weeks = season.game_weeks.order(:starts_at)
-		ordered_game_rounds = game_rounds.order(:game_round_number)
-		game_round_counter = 0
-		games_per_game_round = teams.count * (teams.count - 1)
-		games_per_game_week = teams.count / 2
-		ordered_game_weeks.each do |game_week|
-			if games.where("league_id = ? AND game_round_id = ?", self, ordered_game_rounds[game_round_counter].id).count == games_per_game_round
-					game_round_counter += 1
+	def current_league_season
+		league_seasons.each do |ls|
+			if ls.season == Season.current
+				return ls
 			end
-			game_permutations.each do |game_perm|
-				game = games.new(:home_team => game_perm[0], :away_team => game_perm[1], :game_week => game_week, :game_round => ordered_game_rounds[game_round_counter])
-				if game.valid?
-					game.save!
-					if games.where("league_id = ? AND game_week_id = ?", self, game_week.id).count >= games_per_game_week
-						break
-					end
-				end
-			end
-		end
-		if games.joins(:game_week).where("games.league_id = ? AND game_weeks.season_id = ?", self, season).count != (games_per_game_week * competition.game_weeks_per_season)
-			games.joins(:game_week).where("games.league_id = ? AND game_weeks.season_id = ?", self, season).delete_all
-			create_games
 		end
 	end
 
@@ -68,8 +37,10 @@ class League < ActiveRecord::Base
 		
 		league_games = self.get_games
 
-		league_games.joins(:game_week).where('game_weeks.season_id = ?', competition.seasons.current)
-			.where.not('home_team_score' => nil, 'away_team_score' => nil).each do |game|
+		# Get games that have been played in the game_weeks that are in the current season
+		# Get all played games from game_weeks that are in the current league_season
+		
+		league_games.joins(:game_week).where('game_weeks.league_season_id = ?', current_league_season).where.not('home_team_score' => nil, 'away_team_score' => nil).each do |game|
 			current_home_team = standings.find do |standing|
 				standing[:team_record] == game.home_team
 			end

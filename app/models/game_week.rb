@@ -1,10 +1,9 @@
 class GameWeek < ActiveRecord::Base
-	belongs_to :season
 	belongs_to :league_season
 	has_many :player_game_weeks, dependent: :destroy
 	has_many :games, dependent: :destroy
-	validates :season_id, :starts_at, :ends_at, :presence => true
-	validates :starts_at, :ends_at, :overlap => {:scope => "season_id"}
+	validates :starts_at, :ends_at, :overlap => {:scope => "league_season_id"}
+	validates :starts_at, :ends_at, presence: true
 	
 	def self.get_current_game_week
 	    @now = Date.today
