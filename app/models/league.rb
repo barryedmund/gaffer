@@ -12,6 +12,10 @@ class League < ActiveRecord::Base
 		self.teams.where('user_id = ?', user.id).any?
 	end
 
+	def is_owned_by_this_user?(this_user)
+		user == this_user ? true : false
+	end
+
 	def current_league_season
 		league_seasons.each do |ls|
 			if ls.season == Season.current
@@ -34,12 +38,7 @@ class League < ActiveRecord::Base
 			  :points => 0
 			}
 		end
-		
 		league_games = self.get_games
-
-		# Get games that have been played in the game_weeks that are in the current season
-		# Get all played games from game_weeks that are in the current league_season
-		
 		league_games.joins(:game_week).where('game_weeks.league_season_id = ?', current_league_season).where.not('home_team_score' => nil, 'away_team_score' => nil).each do |game|
 			current_home_team = standings.find do |standing|
 				standing[:team_record] == game.home_team
@@ -76,7 +75,6 @@ class League < ActiveRecord::Base
 	end
 
 	def get_games
-		# Games >> GameWeeks >> LeagueSeason >> League
 		Game.joins(game_week: {league_season: :league}).where(leagues: {id: id}).all
 	end
 end

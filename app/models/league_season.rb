@@ -3,6 +3,7 @@ class LeagueSeason < ActiveRecord::Base
   belongs_to :season
   has_many :game_rounds, dependent: :destroy
   has_many :game_weeks, dependent: :destroy
+  validate :league_has_an_even_number_of_teams, on: :create
   after_create :create_game_weeks
 
   def create_game_rounds
@@ -56,5 +57,9 @@ class LeagueSeason < ActiveRecord::Base
       current_ends_at_date = current_start_at_date + 7
     end
     create_game_rounds
+  end
+
+  def league_has_an_even_number_of_teams
+    errors.add(:base, "Take a leaf out of Noah's book and make sure there is an even number of teams.") unless league.teams.count % 2 == 0
   end
 end

@@ -13,7 +13,7 @@ ActiveAdmin.register PlayerGameWeek do
 	form do |f|
 	  f.semantic_errors
 	  f.inputs do
-	  	f.input :game_week, :collection => GameWeek.joins(:season).pluck(:starts_at, :id ) 
+	  	f.input :game_week
 	  	f.input :player
 	  	f.input :minutes_played
 	  end

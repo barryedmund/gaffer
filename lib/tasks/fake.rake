@@ -1,16 +1,28 @@
 task :fake => :environment do
 
-	league_user = User.find_by_id(23)
+	league_user = User.find_by(email: 'barrywallace.is@gmail.com')
+
+	competition = Competition.create(
+		country_code: 'en',
+		description: 'Premier League',
+		game_weeks_per_season: 38)
 
 	league = League.create(
 		user_id: league_user.id,
-		competition_id: 1,
+		competition_id: competition.id,
 		name: "#{Faker::Book.title} League")
+
+	season = Season.create(
+		description: 'EPL 2015/16',
+		competition_id: competition.id,
+		starts_at: '2015-08-01',
+		ends_at: '2016-05-31')
 
 	Team.create(
 		title: Faker::Team.name,
 		league: league,
-		user: league_user)
+		user: league_user,
+		cash_balance_cents: rand(100000..9000000000))
 
 	3.times do
 		user = User.create(
@@ -22,11 +34,15 @@ task :fake => :environment do
 		Team.create(
 			title: Faker::Team.name,
 			league: league,
-			user: user)
+			user: user,
+			cash_balance_cents: rand(100000..9000000000))
 	end
 
-	Team.all.each do |team|
+	league_season = LeagueSeason.create(
+		league: league,
+		season: season)
 
+	Team.all.each do |team|
 		goalie_player = Player.create(
 			first_name: Faker::Name.first_name,
 			last_name: Faker::Name.last_name)
@@ -63,22 +79,21 @@ task :fake => :environment do
 			create_player_lineups(sub_team_player)
 		end
 	end
-	league.create_game_rounds
-	league.create_games
+	
 	Game.all.each do |game|
 		game.calculate_score
 	end
 end
 
 def create_player_lineups(team_player)
-		GameWeek.all.each do |game_week|
-			player_game_week = PlayerGameWeek.create(
-				game_week: game_week,
-				player: team_player.player,
-				minutes_played: rand(0..90))
-			PlayerLineup.create(
-				team: team_player.team,
-				player_game_week: player_game_week,
-				squad_position: team_player.squad_position)
-		end
+	GameWeek.all.each do |game_week|
+		player_game_week = PlayerGameWeek.create(
+			game_week: game_week,
+			player: team_player.player,
+			minutes_played: rand(0..90))
+		PlayerLineup.create(
+			team: team_player.team,
+			player_game_week: player_game_week,
+			squad_position: team_player.squad_position)
+	end
 end

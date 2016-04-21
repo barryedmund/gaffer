@@ -15,9 +15,9 @@
 		</tr>
 	</thead>
 	<tbody>
-		<% @team_player.player.player_game_weeks.joins(game_week: :season).where("game_weeks.season_id = ?", Season.current).order("game_weeks.starts_at DESC").each do |pgw| %>
+		<% @team_player.player.player_game_weeks.joins(game_week: :league_season).where("league_seasons.season_id = ?", Season.current.first.id).order("game_weeks.starts_at DESC").each do |pgw| %>
 		<tr>
-			<td><%= pgw.game_week.season.description %></td>
+			<td><%= pgw.game_week.league_season.season.description %></td>
 			<td><%= pgw.game_week.starts_at.strftime("%a %d-%b-%Y") %></td>
 			<td><%= pgw.game_week.ends_at.strftime("%a %d-%b-%Y") %></td>
 			<td><%= pgw.minutes_played %></td>

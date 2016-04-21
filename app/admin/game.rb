@@ -25,9 +25,8 @@ ActiveAdmin.register Game do
 	  f.inputs do
 	  	f.input :home_team, :collection => Team.all.map{ |team| ["#{team.title} (#{team.league.name})", team.id]}
 	  	f.input :away_team, :collection => Team.all.map{ |team| ["#{team.title} (#{team.league.name})", team.id]}
-	  	f.input :game_week, :collection => GameWeek.all.map{ |gw| ["Game week ##{gw.id} (#{gw.season.description})", gw.id]}
-	  	f.input :game_round, :collection => GameRound.all.map{ |gr| ["Round ##{gr.game_round_number} (#{gr.league.name} / #{gr.season.description})", gr.id]}
-	  	f.input :league, :collection => League.pluck( :name, :id )
+	  	f.input :game_week, :collection => GameWeek.all.map{ |gw| ["Game week ##{gw.id} (#{gw.league_season.season.description})", gw.id]}
+	  	f.input :game_round, :collection => GameRound.all.map{ |gr| ["Round ##{gr.game_round_number} (#{gr.league_season.league.name} / #{gr.league_season.season.description})", gr.id]}
 	  	f.input :home_team_score
 	  	f.input :away_team_score
 	  end
