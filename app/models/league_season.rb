@@ -39,10 +39,15 @@ class LeagueSeason < ActiveRecord::Base
         end
       end
     end
-    if league.get_games.count != (games_per_game_week * league.competition.game_weeks_per_season)
-      league.get_games.delete_all
+    if get_games.count != (games_per_game_week * league.competition.game_weeks_per_season)
+      get_games.delete_all
       create_games
     end
+  end
+
+  def get_games
+    league_season_game_weeks = self.game_weeks
+    league_season_games = league_season_game_weeks.joins(:games).all
   end
 
   private
