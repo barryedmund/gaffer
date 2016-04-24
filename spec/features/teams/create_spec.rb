@@ -48,11 +48,11 @@ describe "Creating teams" do
 		ActiveRecord::Base.transaction do
   			21.times do |i|
   				temp_user = User.create(:first_name => "Barry #{i}", :last_name => "Wallace", :email => "yo#{i}@me.com", :password => "yoyoyoyi", :password_confirmation => "yoyoyoyi")
-  				Team.create(:league_id => 1, :user => temp_user, :title => "Teamy")
+  				Team.create(:league_id => league.id, :user => temp_user, :title => "Teamy")
   			end
 		end
 		visit "/"
-		visit "leagues/1"
+		visit "leagues/#{league.id}"
 		expect(page).to_not have_content("Barry 20 Wallace")
 	end
 

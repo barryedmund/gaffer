@@ -1,15 +1,10 @@
 require 'spec_helper'
 
 RSpec.describe LeaguesController, :type => :controller do
-
-  let(:valid_attributes) {
-    { name: "MyLeague", user: user, competition_id: 1}
-  }
-
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
-
+  let!(:competition) { create(:competition) }
+  let(:valid_attributes) { { name: "MyLeague", user: user, competition: competition} }
+  let(:valid_attributes_post) { { id: 2, name: "MyLeague", user_id: user.id, competition_id: competition.id } }
+  let(:invalid_attributes) { skip("Add a hash of attributes invalid for your model") }
   let(:valid_session) { {} }
   let!(:user) { create(:user) }
   let!(:competition) { create(:competition) }
@@ -44,19 +39,17 @@ RSpec.describe LeaguesController, :type => :controller do
   describe "POST create" do
     describe "with valid params" do
       it "creates a new League" do
-        expect {
-          post :create, {:league => valid_attributes}, valid_session
-        }.to change(League, :count).by(1)
+        expect { post :create, {:league => valid_attributes_post}, valid_session }.to change(League, :count).by(1)
       end
 
       it "assigns a newly created league as @league" do
-        post :create, {:league => valid_attributes}, valid_session
+        post :create, {:league => valid_attributes_post}, valid_session
         expect(assigns(:league)).to be_a(League)
         expect(assigns(:league)).to be_persisted
       end
 
       it "redirects to the created league" do
-        post :create, {:league => valid_attributes}, valid_session
+        post :create, {:league => valid_attributes_post}, valid_session
         expect(response).to redirect_to(leagues_path)
       end
     end
