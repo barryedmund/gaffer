@@ -11,6 +11,14 @@ describe Player do
 		it "requires a last name" do
 			expect(player).to validate_presence_of(:last_name)
 		end
+
+		it "requires a playing position" do
+			expect(player).to validate_presence_of(:playing_position)
+		end
+
+		it "requires a pl_player_code" do
+			expect(player).to validate_presence_of(:pl_player_code)
+		end
 	end
 
 	context "relationships" do
