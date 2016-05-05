@@ -42,6 +42,8 @@ FactoryGirl.define do
   factory :player do
     first_name "Paul"
 		last_name "Pogba"
+    playing_position "Midfielder"
+    pl_player_code 12345
 	end
 
 	factory :player_game_week do
