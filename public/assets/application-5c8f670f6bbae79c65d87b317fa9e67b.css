@@ -1,0 +1,60 @@
+/*
+
+
+*/
+@import url(https://fonts.googleapis.com/css?family=Catamaran:400,100,700);
+/* line 4, /Users/barrywallace/Dropbox/dev/gaffer/app/assets/stylesheets/base/globals.scss */
+body#body_id {
+  font-family: "Catamaran", sans-serif;
+  font-size: 16px;
+}
+
+/* line 9, /Users/barrywallace/Dropbox/dev/gaffer/app/assets/stylesheets/base/globals.scss */
+div.container {
+  padding: 10px;
+}
+
+/* line 13, /Users/barrywallace/Dropbox/dev/gaffer/app/assets/stylesheets/base/globals.scss */
+div.sub_container {
+  padding: 0px 10px;
+}
+
+/* line 17, /Users/barrywallace/Dropbox/dev/gaffer/app/assets/stylesheets/base/globals.scss */
+div.one_third {
+  float: left;
+  width: 33.33333333333333%;
+}
+
+/* line 22, /Users/barrywallace/Dropbox/dev/gaffer/app/assets/stylesheets/base/globals.scss */
+div.team_player_row {
+  float: left;
+  width: 100%;
+}
+
+/* line 27, /Users/barrywallace/Dropbox/dev/gaffer/app/assets/stylesheets/base/globals.scss */
+span.main_header {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+/* line 32, /Users/barrywallace/Dropbox/dev/gaffer/app/assets/stylesheets/base/globals.scss */
+span.sub_header {
+  display: block;
+  font-size: 20px;
+}
+
+/* line 37, /Users/barrywallace/Dropbox/dev/gaffer/app/assets/stylesheets/base/globals.scss */
+#game_line_ups_div {
+  width: 100%;
+}
+
+/* line 41, /Users/barrywallace/Dropbox/dev/gaffer/app/assets/stylesheets/base/globals.scss */
+.line_up {
+  float: left;
+  width: 50%;
+}
+
+/* line 46, /Users/barrywallace/Dropbox/dev/gaffer/app/assets/stylesheets/base/globals.scss */
+.centered {
+  padding: 10px;
+}
