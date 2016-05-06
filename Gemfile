@@ -16,6 +16,10 @@ gem 'devise'
 gem 'faker'
 gem 'validates_overlap'
 
+group :production, :staging do
+  gem 'rails_12factor'
+end
+
 group :development, :test do
 	gem 'rspec-rails', '~> 3.0.0'
 	gem 'factory_girl_rails', '~> 4.0'
