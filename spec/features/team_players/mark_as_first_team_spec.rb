@@ -1,23 +1,24 @@
 require 'spec_helper'
 
 describe "Marking a team player as first team" do
+	let!(:competition) { create(:competition) }	
 	let(:user) { team.user }
 	let!(:team) { create(:team) }	
 	let!(:squad_position) { SquadPosition.create(short_name: "GK") }
 	let!(:squad_position_1) { SquadPosition.create(short_name: "SUB") }
 	let!(:squad_position_2) { SquadPosition.create(short_name: "DF") }
 	let!(:player) { create(:player) }
-	let!(:player_1) { Player.create(first_name: "Thierry", last_name: "Henry", playing_position: "Midfielder", pl_player_code: 12345) }
-	let!(:player_3) { Player.create(first_name: "Joe", last_name: "Bloggs3", playing_position: "Midfielder", pl_player_code: 12345) }
-	let!(:player_4) { Player.create(first_name: "Joe", last_name: "Bloggs4", playing_position: "Midfielder", pl_player_code: 12345) }
-	let!(:player_5) { Player.create(first_name: "Joe", last_name: "Bloggs5", playing_position: "Midfielder", pl_player_code: 12345) }
-	let!(:player_6) { Player.create(first_name: "Joe", last_name: "Bloggs6", playing_position: "Midfielder", pl_player_code: 12345) }
-	let!(:player_7) { Player.create(first_name: "Joe", last_name: "Bloggs7", playing_position: "Midfielder", pl_player_code: 12345) }
-	let!(:player_8) { Player.create(first_name: "Joe", last_name: "Bloggs8", playing_position: "Midfielder", pl_player_code: 12345) }
-	let!(:player_9) { Player.create(first_name: "Joe", last_name: "Bloggs9", playing_position: "Midfielder", pl_player_code: 12345) }
-	let!(:player_10) { Player.create(first_name: "Joe", last_name: "Bloggs10", playing_position: "Midfielder", pl_player_code: 12345) }
-	let!(:player_11) { Player.create(first_name: "Joe", last_name: "Bloggs11", playing_position: "Midfielder", pl_player_code: 12345) }
-	let!(:player_12) { Player.create(first_name: "Joe", last_name: "Bloggs12", playing_position: "Midfielder", pl_player_code: 12345) }
+	let!(:player_1) { Player.create(first_name: "Thierry", last_name: "Henry", playing_position: "Midfielder", pl_player_code: 12345, competition: competition) }
+	let!(:player_3) { Player.create(first_name: "Joe", last_name: "Bloggs3", playing_position: "Midfielder", pl_player_code: 12345, competition: competition) }
+	let!(:player_4) { Player.create(first_name: "Joe", last_name: "Bloggs4", playing_position: "Midfielder", pl_player_code: 12345, competition: competition) }
+	let!(:player_5) { Player.create(first_name: "Joe", last_name: "Bloggs5", playing_position: "Midfielder", pl_player_code: 12345, competition: competition) }
+	let!(:player_6) { Player.create(first_name: "Joe", last_name: "Bloggs6", playing_position: "Midfielder", pl_player_code: 12345, competition: competition) }
+	let!(:player_7) { Player.create(first_name: "Joe", last_name: "Bloggs7", playing_position: "Midfielder", pl_player_code: 12345, competition: competition) }
+	let!(:player_8) { Player.create(first_name: "Joe", last_name: "Bloggs8", playing_position: "Midfielder", pl_player_code: 12345, competition: competition) }
+	let!(:player_9) { Player.create(first_name: "Joe", last_name: "Bloggs9", playing_position: "Midfielder", pl_player_code: 12345, competition: competition) }
+	let!(:player_10) { Player.create(first_name: "Joe", last_name: "Bloggs10", playing_position: "Midfielder", pl_player_code: 12345, competition: competition) }
+	let!(:player_11) { Player.create(first_name: "Joe", last_name: "Bloggs11", playing_position: "Midfielder", pl_player_code: 12345, competition: competition) }
+	let!(:player_12) { Player.create(first_name: "Joe", last_name: "Bloggs12", playing_position: "Midfielder", pl_player_code: 12345, competition: competition) }
 	let!(:team_player) { team.team_players.create(player_id: player.id, squad_position_id: squad_position_1.id) }
 	let!(:team_player_1) {team.team_players.create(player_id: player_1.id, first_team: false, squad_position: squad_position_1)}
 	let!(:team_player_3) { team.team_players.create(player_id: player_3.id, first_team: false, squad_position: squad_position_1)}
@@ -108,10 +109,11 @@ describe "Marking a team player as first team" do
 end
 
 describe "Setting a team_player as not first_team" do
+	let!(:competition) { create(:competition) }	
 	let(:user) { team.user }
 	let!(:team) { create(:team) }
-	let!(:player_1) { Player.create(first_name: "Paul", last_name: "Pogba", playing_position: "Midfield", pl_player_code: 12345) }
-	let!(:player_2) { Player.create(first_name: "Thierry", last_name: "Henry", playing_position: "Midfield", pl_player_code: 12345) }
+	let!(:player_1) { Player.create(first_name: "Paul", last_name: "Pogba", playing_position: "Midfield", pl_player_code: 12345, competition: competition) }
+	let!(:player_2) { Player.create(first_name: "Thierry", last_name: "Henry", playing_position: "Midfield", pl_player_code: 12345, competition: competition) }
 	let!(:squad_position_1) { SquadPosition.create(short_name: "GK") }
 	let!(:squad_position_2) { SquadPosition.create(short_name: "SUB") }
 	let!(:team_player_1) { team.team_players.create(player_id: player_1.id, squad_position_id: squad_position_2.id) }

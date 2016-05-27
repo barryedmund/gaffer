@@ -3,7 +3,7 @@
 	<%= link_to league.name, league_path(league) %> >> Games
 </span>
   
-<% @games.each do |game| %>
+<% @games.joins(:game_week).order('game_weeks.game_week_number').each do |game| %>
   <div>
     <%= game.game_week.starts_at %> / <%= game.game_round.game_round_number %> / <%= link_to game.match_up, league_game_path(game.get_league, game) %> / <%= game.get_score %>
   </div>

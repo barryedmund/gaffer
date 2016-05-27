@@ -1,15 +1,13 @@
 ActiveAdmin.register GameWeek do
-	permit_params :league_season_id, :starts_at, :ends_at
+	permit_params :season_id, :game_week_number, :starts_at, :ends_at
 	
 	index do
 		selectable_column
 		column :id
-		column "League" do |gw|
-			gw.league_season.league.name
-		end
 		column "Season" do |gw|
-			gw.league_season.season.description
+			gw.season.description
 		end
+		column :game_week_number
 		column :starts_at
 		column :ends_at
 		actions
@@ -18,7 +16,8 @@ ActiveAdmin.register GameWeek do
 	form do |f|
 		f.semantic_errors
 	  	f.inputs do
-			f.input :league_season
+			f.input :season
+			f.input :game_week_number
 			f.input :starts_at
 			f.input :ends_at
 		end

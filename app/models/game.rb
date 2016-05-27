@@ -12,14 +12,49 @@ class Game < ActiveRecord::Base
  	end
 
  	def get_league
- 		game_week.league_season.league
+ 		game_round.league_season.league
  	end
 
  	def calculate_score
  		if game_week.ends_at.past?
  			if (home_team_score.blank? || away_team_score.blank?)
-	 			home_score = ((home_team.player_lineups.joins(:player_game_week, :squad_position).where('player_game_weeks.game_week_id = ? AND squad_positions.short_name != ?', game_week.id, 'SUB').sum('player_game_weeks.minutes_played')) / 180).round
-	 			away_score = ((away_team.player_lineups.joins(:player_game_week, :squad_position).where('player_game_weeks.game_week_id = ? AND squad_positions.short_name != ?', game_week.id, 'SUB').sum('player_game_weeks.minutes_played')) / 180).round
+	 			home_lineup = home_team.player_lineups.joins(:player_game_week, :squad_position).where('player_game_weeks.game_week_id = ? AND squad_positions.short_name != ?', game_week.id, 'SUB')
+        home_clean_sheet_minutes = 0
+        home_goals_scored = 0
+        home_lineup.each do |lineup|
+          lineup_player_game_week = lineup.player_game_week
+          lineup_player_squad_position = lineup.squad_position
+          player_clean_sheet_minutes = lineup_player_game_week.clean_sheet ? lineup_player_game_week.minutes_played : 0
+          player_goals = lineup_player_game_week.goals
+          if lineup_player_squad_position.short_name === 'MD'
+            player_clean_sheet_minutes = player_clean_sheet_minutes / 2
+          elsif lineup_player_squad_position.short_name === 'FW'
+            player_clean_sheet_minutes = 0
+          end
+          home_clean_sheet_minutes += player_clean_sheet_minutes
+          home_goals_scored += player_goals
+        end
+
+        away_lineup = away_team.player_lineups.joins(:player_game_week, :squad_position).where('player_game_weeks.game_week_id = ? AND squad_positions.short_name != ?', game_week.id, 'SUB')
+        away_clean_sheet_minutes = 0
+        away_goals_scored = 0
+        away_lineup.each do |lineup|
+          lineup_player_game_week = lineup.player_game_week
+          lineup_player_squad_position = lineup.squad_position
+          player_clean_sheet_minutes = lineup_player_game_week.clean_sheet ? lineup_player_game_week.minutes_played : 0
+          player_goals = lineup_player_game_week.goals
+          if lineup_player_squad_position.short_name === 'MD'
+            player_clean_sheet_minutes = player_clean_sheet_minutes / 2
+          elsif lineup_player_squad_position.short_name === 'FW'
+            player_clean_sheet_minutes = 0
+          end
+          away_clean_sheet_minutes += player_clean_sheet_minutes
+          away_goals_scored += player_goals
+        end
+        home_clean_sheet_performance = (home_clean_sheet_minutes / 9.9) / 100
+        away_clean_sheet_performance = (away_clean_sheet_minutes / 9.9) / 100
+        home_score = (home_goals_scored * (1 - away_clean_sheet_performance)).round
+        away_score = (away_goals_scored * (1 - home_clean_sheet_performance)).round
 	 			self.update(home_team_score: home_score)
 	 			self.update(away_team_score: away_score)
 	 		end

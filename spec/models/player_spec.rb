@@ -3,6 +3,12 @@ require 'spec_helper'
 describe Player do
 	let!(:player) { create(:player) }
 
+	context "relationships" do
+	  it { should belong_to(:competition) }
+	  it { should have_many(:team_players) }
+	  it { should have_many(:player_game_weeks) }
+	end
+
 	context "validations" do
 		it "requires a first name" do
 			expect(player).to validate_presence_of(:first_name)
@@ -19,10 +25,9 @@ describe Player do
 		it "requires a pl_player_code" do
 			expect(player).to validate_presence_of(:pl_player_code)
 		end
-	end
 
-	context "relationships" do
-	  it { should have_many(:team_players) }
-	  it { should have_many(:player_game_weeks) }
+		it "requires a competition" do
+			expect(player).to validate_presence_of(:competition)
+		end
 	end
 end

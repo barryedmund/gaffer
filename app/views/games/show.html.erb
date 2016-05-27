@@ -11,28 +11,36 @@
 	<div id="game_line_ups_div">
   	<div class="line_up">
   		<div><%= @home_team.title %></div>
-  		<div class="one_third">Position</div>
-  		<div class="one_third">Player</div>
-  		<div class="one_third">Minutes played</div>
+  		<div class="one_fifth">Position</div>
+  		<div class="one_fifth">Player</div>
+  		<div class="one_fifth">Minutes played</div>
+      <div class="one_fifth">Goals</div>
+      <div class="one_fifth">Clean sheet</div>
   		<% @home_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ?', @game_week.id).order("squad_positions.sort_order").each do |player_lineup| %>
   			<div class="team_player_row">
-	  			<div class="one_third"><%= player_lineup.squad_position.short_name %></div>
-	  			<div class="one_third"><%= player_lineup.player_game_week.player.full_name %></div>
-	  			<div class="one_third"><%= player_lineup.player_game_week.minutes_played %></div>
+	  			<div class="one_fifth"><%= player_lineup.squad_position.short_name %></div>
+	  			<div class="one_fifth"><%= player_lineup.player_game_week.player.full_name %></div>
+	  			<div class="one_fifth"><%= player_lineup.player_game_week.minutes_played %></div>
+          <div class="one_fifth"><%= player_lineup.player_game_week.goals %></div>
+          <div class="one_fifth"><%= player_lineup.player_game_week.clean_sheet  %></div>
 	  		</div>
   		<% end %>
   	</div>
 
   	<div class="line_up">
   		<div><%= @away_team.title %></div>
-  		<div class="one_third">Position</div>
-  		<div class="one_third">Player</div>
-  		<div class="one_third">Minutes played</div>
+  		<div class="one_fifth">Position</div>
+      <div class="one_fifth">Player</div>
+      <div class="one_fifth">Minutes played</div>
+      <div class="one_fifth">Goals</div>
+      <div class="one_fifth">Clean sheet</div>
   		<% @away_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ?', @game_week.id).order("squad_positions.sort_order").each do |player_lineup| %>
         <div class="team_player_row">
-          <div class="one_third"><%= player_lineup.squad_position.short_name %></div>
-          <div class="one_third"><%= player_lineup.player_game_week.player.full_name %></div>
-          <div class="one_third"><%= player_lineup.player_game_week.minutes_played %></div>
+          <div class="one_fifth"><%= player_lineup.squad_position.short_name %></div>
+          <div class="one_fifth"><%= player_lineup.player_game_week.player.full_name %></div>
+          <div class="one_fifth"><%= player_lineup.player_game_week.minutes_played %></div>
+          <div class="one_fifth"><%= player_lineup.player_game_week.goals %></div>
+          <div class="one_fifth"><%= player_lineup.player_game_week.clean_sheet  %></div>
         </div>
       <% end %>
   	</div>

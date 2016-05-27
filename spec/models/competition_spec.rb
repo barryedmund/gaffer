@@ -7,6 +7,7 @@ describe Competition do
 	context "relationships" do
 		it {should have_many(:seasons)}
 		it {should have_many(:leagues)}
+		it {should have_many(:players)}
 	end
 
 	context "validations" do

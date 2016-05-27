@@ -7,7 +7,7 @@ RSpec.describe GamesController, :type => :controller do
   let!(:home_team) { Team.create(id: 1, title: "Home Team", league: league) }
   let!(:away_team) { Team.create(id: 2, title: "Away Team", league: league, user: user) }
   let!(:league_season) { LeagueSeason.create(season: season, league: league) }
-  let!(:game_week) { GameWeek.create(starts_at: Date.today + 100, ends_at: Date.today + 107, league_season: league_season) }
+  let!(:game_week) { GameWeek.create(starts_at: Date.today + 100, ends_at: Date.today + 107, season: season, game_week_number: 1) }
   let!(:game_round) { GameRound.create(game_round_number: 1, league_season: league_season) }
   let(:valid_attributes) { { home_team: home_team, away_team: away_team, game_week: game_week, game_round: game_round} }
   let(:invalid_attributes) { { home_team: "", away_team: "", game_week: "" } }
@@ -16,7 +16,7 @@ RSpec.describe GamesController, :type => :controller do
 
   describe "GET index" do
     it "assigns all games as @games" do
-      game = Game.joins(game_week: :league_season).where('league_seasons.league_id = ?', league.id)
+      game = Game.joins(game_round: :league_season).where('league_seasons.league_id = ?', league.id)
       get :index, {:league_id => league.id}, valid_session
       expect(assigns(:games)).to eq(game)
     end

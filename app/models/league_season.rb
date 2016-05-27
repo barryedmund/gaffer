@@ -2,9 +2,8 @@ class LeagueSeason < ActiveRecord::Base
   belongs_to :league
   belongs_to :season
   has_many :game_rounds, dependent: :destroy
-  has_many :game_weeks, dependent: :destroy
   validate :league_has_an_even_number_of_teams, on: :create
-  after_create :create_game_weeks
+  after_create :create_game_rounds
 
   def create_game_rounds
     number_of_teams = league.teams.count
@@ -19,7 +18,7 @@ class LeagueSeason < ActiveRecord::Base
 
   def create_games
     game_permutations = Team.where('league_id = ?', self.league.id).to_a.permutation(2).to_a.shuffle
-    ordered_game_weeks = game_weeks.order(:starts_at)
+    ordered_game_weeks = season.game_weeks.order(:starts_at)
     ordered_game_rounds = game_rounds.order(:game_round_number)
     game_round_counter = 0
     teams = league.teams
@@ -46,24 +45,10 @@ class LeagueSeason < ActiveRecord::Base
   end
 
   def get_games
-    league_season_game_weeks = self.game_weeks
-    league_season_games = league_season_game_weeks.joins(:games).all
+    game_rounds.joins(:games).all
   end
 
   private
-  def create_game_weeks
-    competition = league.competition
-    required_game_weeks = competition.game_weeks_per_season
-    current_start_at_date = season.starts_at
-    current_ends_at_date = current_start_at_date + 7
-    while game_weeks.count < required_game_weeks do
-      game_weeks.create(:starts_at => current_start_at_date, :ends_at => current_ends_at_date)
-      current_start_at_date = game_weeks.last.ends_at + 1
-      current_ends_at_date = current_start_at_date + 7
-    end
-    create_game_rounds
-  end
-
   def league_has_an_even_number_of_teams
     errors.add(:base, "Take a leaf out of Noah's book and make sure there is an even number of teams.") unless league.teams.count % 2 == 0
   end

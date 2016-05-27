@@ -4,9 +4,13 @@ ActiveAdmin.register PlayerGameWeek do
 	index do
 		selectable_column
 		column :id
-		column :game_week
+		column :game_week do |player_game_week|
+			player_game_week.game_week.game_week_number
+		end
 		column :player
 		column :minutes_played
+		column :goals
+		column :clean_sheet
 		actions
 	end
 

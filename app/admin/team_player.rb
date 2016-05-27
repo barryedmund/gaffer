@@ -4,8 +4,13 @@ ActiveAdmin.register TeamPlayer do
 	index do
 		selectable_column
 		column :id
-		column :player
 		column :team
+		column :player  do |team_player|
+			team_player.player.full_name
+		end
+		column "Playing Position"  do |team_player|
+			team_player.player.playing_position
+		end
 		actions
 	end
 

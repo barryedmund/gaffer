@@ -10,8 +10,8 @@ describe Game do
   let!(:team_3){ Team.create(:id => 3, :title => "Team 3", :league => league_2, :user_id => 3) }
   let!(:team_4){ Team.create(:id => 4, :title => "Team 4", :league => league_1, :user_id => 4) }
   let!(:league_season) { LeagueSeason.create(season: season, league: league_1) }
-  let!(:game_week) { GameWeek.create(starts_at: Date.today + 100, ends_at: Date.today + 107, league_season: league_season) }
-  let!(:game_week_2){ GameWeek.create(id: 2, starts_at: Date.today - 7, ends_at: Date.today, league_season: league_season) }
+  let!(:game_week) { GameWeek.create(id: 1, starts_at: Date.today + 100, ends_at: Date.today + 107, season: season, game_week_number: 1) }
+  let!(:game_week_2){ GameWeek.create(id: 2, starts_at: Date.today - 7, ends_at: Date.today, season: season, game_week_number: 2) }
   let!(:game_round) { GameRound.create(game_round_number: 1, league_season: league_season) }
 	let!(:game){ Game.create(:home_team => team_1, :away_team => team_2, :game_week => game_week, :game_round => game_round) }
 	let!(:invalid_game_1){ Game.create(home_team: team_1, away_team: team_3, game_week: game_week, game_round: game_round) }

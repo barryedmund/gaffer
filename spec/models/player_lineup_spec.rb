@@ -7,7 +7,7 @@ describe PlayerLineup do
   let!(:team) { Team.create(id: 1, title: "Home Team", league: league) }
   let!(:away_team) { Team.create(id: 2, title: "Away Team", league: league, user: user) }
   let!(:league_season) { LeagueSeason.create(season: season, league: league) }
-  let!(:game_week) { GameWeek.create(starts_at: Date.today + 100, ends_at: Date.today + 107, league_season: league_season) } 
+  let!(:game_week) { GameWeek.create(starts_at: Date.today + 100, ends_at: Date.today + 107, season: season) } 
   let!(:player) { create(:player) }
 	let!(:player_game_week) { PlayerGameWeek.create(player: player, game_week: game_week, minutes_played: 90) }
 	let!(:squad_position) { create(:squad_position) }

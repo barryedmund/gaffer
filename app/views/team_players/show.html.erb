@@ -9,18 +9,21 @@
 	<thead>
 		<tr>
 			<td>Season</td>
-			<td>Game week start</td>
-			<td>Game week end</td>
+			<td>Game week #</td>
 			<td>Minutes played</td>
+			<td>Goals scored</td>
+			<td>Clean sheet while on pitch</td>
 		</tr>
 	</thead>
 	<tbody>
-		<% @team_player.player.player_game_weeks.joins(game_week: :league_season).where("league_seasons.season_id = ?", Season.current.first.id).order("game_weeks.starts_at DESC").each do |pgw| %>
+
+		<% @team_player.player.player_game_weeks.joins(game_week: :season).where("season_id = ?", Season.current.first.id).order("game_weeks.starts_at DESC").each do |pgw| %>
 		<tr>
-			<td><%= pgw.game_week.league_season.season.description %></td>
-			<td><%= pgw.game_week.starts_at.strftime("%a %d-%b-%Y") %></td>
-			<td><%= pgw.game_week.ends_at.strftime("%a %d-%b-%Y") %></td>
+			<td><%= pgw.game_week.season.description %></td>
+			<td><%= pgw.game_week.game_week_number %></td>
 			<td><%= pgw.minutes_played %></td>
+			<td><%= pgw.goals %></td>
+			<td><%= pgw.clean_sheet %></td>
 		</tr>
 		<% end %>
 	</tbody>

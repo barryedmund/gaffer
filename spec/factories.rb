@@ -26,6 +26,7 @@ FactoryGirl.define do
   factory :game_week do
   	starts_at Date.today
   	ends_at Date.today + 7.days
+    game_week_number 1
 	end
 
   factory :league do
@@ -40,6 +41,7 @@ FactoryGirl.define do
   end
 
   factory :player do
+    competition
     first_name "Paul"
 		last_name "Pogba"
     playing_position "Midfielder"

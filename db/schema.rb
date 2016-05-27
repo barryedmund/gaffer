@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160505054329) do
+ActiveRecord::Schema.define(version: 20160520065242) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,14 +84,13 @@ ActiveRecord::Schema.define(version: 20160505054329) do
   create_table "game_weeks", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "player_id"
     t.date     "starts_at"
     t.date     "ends_at"
-    t.integer  "league_season_id"
+    t.integer  "season_id"
+    t.integer  "game_week_number"
   end
 
-  add_index "game_weeks", ["league_season_id"], name: "index_game_weeks_on_league_season_id", using: :btree
-  add_index "game_weeks", ["player_id"], name: "index_game_weeks_on_player_id", using: :btree
+  add_index "game_weeks", ["season_id"], name: "index_game_weeks_on_season_id", using: :btree
 
   create_table "games", force: true do |t|
     t.integer  "home_team_id"
@@ -129,6 +128,8 @@ ActiveRecord::Schema.define(version: 20160505054329) do
     t.integer "minutes_played"
     t.integer "game_week_id"
     t.integer "player_id"
+    t.integer "goals"
+    t.boolean "clean_sheet"
   end
 
   add_index "player_game_weeks", ["game_week_id"], name: "index_player_game_weeks_on_game_week_id", using: :btree
@@ -147,7 +148,10 @@ ActiveRecord::Schema.define(version: 20160505054329) do
     t.string  "last_name"
     t.string  "playing_position"
     t.integer "pl_player_code"
+    t.integer "competition_id"
   end
+
+  add_index "players", ["pl_player_code"], name: "index_players_on_pl_player_code", using: :btree
 
   create_table "seasons", force: true do |t|
     t.string   "description"
@@ -165,6 +169,7 @@ ActiveRecord::Schema.define(version: 20160505054329) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "sort_order", default: 0
+    t.string   "long_name"
   end
 
   create_table "team_players", force: true do |t|
