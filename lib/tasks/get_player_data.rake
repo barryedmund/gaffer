@@ -7,8 +7,7 @@ task :get_player_data => :environment do
   ### If so, which was the last game_week_collected?
   ###### Are there any new games since?
   continue = true
-  # i = 1
-  i = 705
+  i = 1
   while continue
     response = Net::HTTP.get_response(URI("http://fantasy.premierleague.com/web/api/elements/#{i}/"))
     break unless response.code.to_i == 200
