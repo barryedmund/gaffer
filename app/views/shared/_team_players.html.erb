@@ -5,7 +5,7 @@
 		<% @team.team_players.includes(:squad_position, :player).where(first_team: true).reorder('squad_positions.sort_order, players.last_name, players.first_name').each do |team_player| %>
 			<li id="<%= dom_id(team_player) %>">
 				(<%= team_player.squad_position.short_name %>)
-				<%= link_to team_player.player.full_name, league_team_team_player_path(team_player.team.league, team_player.team, team_player) %>
+				<%= link_to team_player.player.full_name, league_team_team_player_path(team_player.team.league, team_player.team, team_player) %> (<%= number_to_currency(team_player.current_contract.weekly_salary_cents / 100) %>)
 				<%= form_for team_player, url: update_first_team_league_team_team_player_path(team_player.team.league, team_player.team, team_player)  do |f| %>
 					<%= f.hidden_field :position_change_only, :value => false %>
 					<%= f.submit "Remove from first team." %>
@@ -23,7 +23,7 @@
 	<ul class="squad_players">
 		<% @team.team_players.where(first_team: false).find_each do |team_player| %>
 			<li id="<%= dom_id(team_player) %>">
-				<%= link_to team_player.player.full_name, league_team_team_player_path(team_player.team.league, team_player.team, team_player) %>
+				<%= link_to team_player.player.full_name, league_team_team_player_path(team_player.team.league, team_player.team, team_player) %> (<%= number_to_currency(team_player.current_contract.weekly_salary_cents / 100) %>)
 				<%= form_for team_player, url: league_team_team_player_path(team_player.team.league, team_player.team, team_player), method: :delete, data: { confirm: "Are you sure?" }  do |f| %>
 					<%= f.submit "Remove from squad." %>
 				<% end %>

@@ -9,4 +9,8 @@ class TeamPlayer < ActiveRecord::Base
   def full_name
     "#{player.first_name} #{player.last_name}"
   end
+
+  def current_contract
+    self.contracts.where('starts_at <= ? AND ends_at >= ?', Date.today, Date.today).order(starts_at: :desc).first
+  end
 end

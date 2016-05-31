@@ -18,6 +18,7 @@ describe "Creating teams" do
 		click_link "Add Team"
 		expect(page).to have_content("New team")
 		fill_in "Title", with: options[:title]
+		fill_in :team_stadium_attributes_name, with: "My Stadium"
 		click_button "Create Team"
 	end
 

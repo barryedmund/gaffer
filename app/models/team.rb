@@ -6,12 +6,14 @@ class Team < ActiveRecord::Base
   has_many :away_games, :class_name => 'Game', :foreign_key => 'away_game_id'
   has_many :player_lineups, dependent: :destroy
   has_many :contracts
+  has_one :stadium, dependent: :destroy
 	validates :title, :league, presence: true
 	validates :title, length: { minimum: 3}
 	validate :squad_positions_are_logical, :on => :update
 	validates_associated :league, :message => "Too many teams."
 	validates_uniqueness_of :league_id, scope: :user_id
 	after_initialize :init
+  accepts_nested_attributes_for :stadium, :allow_destroy => :true
 
   def init
     self.cash_balance_cents ||= 0

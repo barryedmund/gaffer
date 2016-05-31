@@ -22,7 +22,7 @@ task :fake => :environment do
 		title: Faker::Team.name,
 		league: league,
 		user: league_user,
-		cash_balance_cents: rand(100000..9000000000))
+		cash_balance_cents: 2000000000)
 
 	3.times do
 		user = User.create(
@@ -35,7 +35,7 @@ task :fake => :environment do
 			title: Faker::Team.name,
 			league: league,
 			user: user,
-			cash_balance_cents: rand(100000..9000000000))
+			cash_balance_cents: 2000000000)
 	end
 
 	league_season = LeagueSeason.create(
