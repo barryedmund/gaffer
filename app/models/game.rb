@@ -69,6 +69,16 @@ class Game < ActiveRecord::Base
  		end
  	end
 
+  def credit_gate_receipts
+    gate_receipts_cents = home_team.stadium.capacity * 5000
+    home_team.update(cash_balance_cents: (home_team.cash_balance_cents + gate_receipts_cents))
+  end
+
+  def debit_weekly_salaries
+    home_team.update(cash_balance_cents: (home_team.cash_balance_cents - calculate_total_weekly_salaries(home_team)))
+    away_team.update(cash_balance_cents: (away_team.cash_balance_cents - calculate_total_weekly_salaries(away_team)))
+  end
+
  	private
  	def teams_in_same_league
  		errors.add(:base, "Teams not in same league.") unless home_team.league === away_team.league
@@ -83,4 +93,13 @@ class Game < ActiveRecord::Base
  		away_team_games = Game.where('game_week_id=? AND (home_team_id=? OR away_team_id=?)', game_week.id, away_team.id, away_team.id)
  		errors.add(:base, "One of those teams already has a game in this game week.") unless home_team_games.count === 0 && away_team_games.count === 0
  	end
+
+  def calculate_total_weekly_salaries(team)
+    team_total_weekly_salary = 0
+    team.player_lineups.joins(:player_game_week).where('player_game_weeks.game_week_id = ?', game_week.id).each do |player_lineup|
+      team_player = TeamPlayer.find_by(player: player_lineup.player_game_week.player)
+      team_total_weekly_salary += team_player.current_contract.weekly_salary_cents
+    end
+    team_total_weekly_salary
+  end
 end

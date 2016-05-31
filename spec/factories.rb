@@ -10,6 +10,7 @@ FactoryGirl.define do
     team
     team_player
     weekly_salary_cents 1000000
+    starts_at Date.today - 1
     ends_at Date.today + 1
   end
 
@@ -70,6 +71,11 @@ FactoryGirl.define do
   factory :squad_position do
   	short_name "SUB"
 	end
+
+  factory :stadium do
+    capacity 10000
+    name "Gaffer Park"
+  end
 
   factory :team, aliases: [:home_team, :away_team, :primary_team, :secondary_team, :sending_team, :receiving_team] do
 		title "Fantasy Playas"

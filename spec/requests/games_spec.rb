@@ -7,6 +7,8 @@ RSpec.describe "Games", :type => :request do
   let!(:home_team) { Team.create(id: 1, title: "Home Team", league: league) }
   let!(:away_team) { Team.create(id: 2, title: "Away Team", league: league, user: user) }
   let!(:league_season) { LeagueSeason.create(season: season, league: league) }
+  let!(:home_stadium) { create(:stadium, team: home_team) }
+  let!(:away_stadium) { create(:stadium, team: away_team) }
 
   	describe "GET /games" do
     	it "works!" do

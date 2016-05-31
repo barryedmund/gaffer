@@ -1,11 +1,4 @@
 task :get_player_data => :environment do
-  # Go get the next player via API
-  # If that returns a 200 response, get the data
-  # If that player doesn't exist in the database, create it
-  # For that player, is there a player_game_week in the database?
-  ### If not, start from the start and create a pgw for each game_week_available
-  ### If so, which was the last game_week_collected?
-  ###### Are there any new games since?
   continue = true
   i = 1
   while continue

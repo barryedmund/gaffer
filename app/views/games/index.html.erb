@@ -2,9 +2,20 @@
 <span class="main_header">
 	<%= link_to league.name, league_path(league) %> >> Games
 </span>
-  
-<% @games.joins(:game_week).order('game_weeks.game_week_number').each do |game| %>
-  <div>
-    <%= game.game_week.starts_at %> / <%= game.game_round.game_round_number %> / <%= link_to game.match_up, league_game_path(game.get_league, game) %> / <%= game.get_score %>
-  </div>
-<% end %>
+
+<div>
+	<div class="one_fifth">Date</div>
+	<div class="one_fifth">Game week #</div>
+	<div class="one_fifth">Teams</div>
+  <div class="one_fifth">Venue</div>
+  <div class="one_fifth">Score</div>
+	<% @games.joins(:game_week).order('game_weeks.game_week_number').each do |game| %>
+		<div>
+			<div class="one_fifth"><%= game.game_week.starts_at %></div>
+			<div class="one_fifth"><%= game.game_week.game_week_number %></div>
+			<div class="one_fifth"><%= link_to game.match_up, league_game_path(game.get_league, game) %></div>
+      <div class="one_fifth"><%= game.home_team.stadium.name %> (<%= number_with_delimiter(game.home_team.stadium.capacity) %>)</div>
+      <div class="one_fifth"><%= game.get_score %></div>
+		</div>
+	<% end %>
+</div>
