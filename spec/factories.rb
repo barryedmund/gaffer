@@ -36,6 +36,11 @@ FactoryGirl.define do
   	competition
   end
 
+  factory :league_invite do
+    email "user1@gaffer.com"
+    league
+  end
+
   factory :league_season do
     league
     season
