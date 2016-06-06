@@ -30,6 +30,7 @@ Rails.application.routes.draw do
       resources :transfer_items
     end
     resources :league_seasons, only: [:new, :create]
+    resources :league_invites
   end
   resources :player_game_weeks
   resources :game_rounds

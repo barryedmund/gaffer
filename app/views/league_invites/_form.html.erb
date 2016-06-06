@@ -1,0 +1,24 @@
+<%= form_for([League.find(params[:league_id]), @league_invite]) do |f| %>
+  <% if @league_invite.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@league_invite.errors.count, "error") %> prohibited this league invite from being saved:
+      </h2>
+
+      <ul>
+        <% @league_invite.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.text_field :email %>
+    <%= f.hidden_field :league_id, value: params[:league_id] %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Send invite" %>
+  </div>
+<% end %>

@@ -5,10 +5,9 @@ describe "Creating teams" do
 	let!(:user_2) { create(:user) }
 	let!(:user_3) { create(:user) }
   let!(:season) { create(:season) }
-  let!(:league) { create(:league) }
+  let!(:league) { create(:league, competition: season.competition) }
   let!(:home_team) { Team.create(id: 1, title: "Home Team", league: league, user: user_2) }
   let!(:away_team) { Team.create(id: 2, title: "Away Team", league: league, user: user) }
-  let!(:league_season) { LeagueSeason.create(season: season, league: league) }
 	
 
 	def create_team(options={})
@@ -59,7 +58,7 @@ describe "Creating teams" do
 
 	it "requires a unique User & League combo" do
 		visit "/"
-		visit "leagues/#{league_season.league_id}"
+		visit "leagues/#{league.id}"
 		click_link "Add Team"
 		expect(page).to have_content("New team")
 		fill_in "Title", with: "Team One"

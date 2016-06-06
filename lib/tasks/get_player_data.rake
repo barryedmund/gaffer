@@ -5,7 +5,7 @@ task :get_player_data => :environment do
     response = Net::HTTP.get_response(URI("http://fantasy.premierleague.com/web/api/elements/#{i}/"))
     break unless response.code.to_i == 200
     body = JSON.parse(response.body)
-    
+
     player_code = body['code']
     player_first_name = body['first_name']
     player_last_name = body['second_name']
@@ -47,6 +47,14 @@ task :get_player_data => :environment do
       end
       previous_game_game_week_number = current_game_game_week_number
     end
+
+    number_of_seasons = body['season_history'].length
+    most_recent_season = body['season_history'][number_of_seasons - 1][0]
+    most_recent_season.gsub!("/","_")
+    File.open("public/player_data/#{most_recent_season}_#{player_code}.json","w") do |f|
+      f.write(body.to_json)
+    end 
+
     i += 1
   end
 end

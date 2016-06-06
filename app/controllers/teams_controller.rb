@@ -29,6 +29,7 @@ class TeamsController < ApplicationController
     @team = current_user.teams.new(team_params)
     @team.league_id = params[:league_id]
     if @team.save
+      LeagueInvite.where(email: current_user.email, league: League.find_by(id: params[:league_id])).destroy_all
       flash[:success] = "Added team to league"
       redirect_to league_path(@team.league_id)
     else
