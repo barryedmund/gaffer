@@ -1,7 +1,7 @@
 class LeagueInvite < ActiveRecord::Base
   belongs_to :league
   validates :league, :email, presence: true
-  validates_uniqueness_of :email, scope: :league, message: "has already been sent an invite for this league."
+  validates_uniqueness_of :email, scope: :league
   validates :email, format: { with: /\A[A-Za-z0-9._%+-]+@[A-Za-z0-9\.-]+\.[A-Za-z]+\Z/ , message:  "isn't formatted properly." }
   validate :email_does_not_exist_in_league
   before_save :downcase_email

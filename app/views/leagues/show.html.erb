@@ -1,6 +1,10 @@
 <p id="notice"><%= notice %></p>
 <span class="main_header">
-	<%= @league.name %> (<%= link_to 'games', league_games_path(@league) %> / <%= link_to 'transfers', league_transfers_path(@league) %>)
+	<%= @league.name %> ( <%= link_to 'games', league_games_path(@league) %> / <%= link_to 'transfers', league_transfers_path(@league) %>
+	<% if @league.is_owned_by_this_user?(@current_user) %>
+		/ <%= link_to 'invites', league_league_invites_path(@league) %>
+	<% end %>
+		)
 </span>
 
 <div>
@@ -37,16 +41,29 @@
 		<% end %>	
 	</table>
 
+	<% current_season = Season.current.where(competition: @league.competition).first %>
+	<% latest_league_season = LeagueSeason.joins(:season).where('league_seasons.league_id = ? AND league_seasons.season_id = ?', @league.id, current_season.id).order('seasons.starts_at DESC').first %>
+
 	<% if !@league.has_team_owned_by?(@current_user) && @league.teams.count < 20 %>
-		<%= link_to 'Add Team', new_league_team_path(@league) %>
-	<% end %>
-	<% if @league.is_owned_by_this_user?(@current_user) %>
-		<% if @league.teams.count > 0 && @league.teams.count % 2 == 0%>
-			<% Season.current.where(competition: @league.competition).where('id NOT IN (SELECT DISTINCT(season_id) FROM league_seasons)').each do |s| %>
-				<%= button_to "Start #{s.description}", {action: :create, controller: :league_seasons, league_id: @league.id, season_id: s.id}, :method => :post %>
-			<% end %>
+		<% if !latest_league_season %>
+			<%= link_to 'Add Team', new_league_team_path(@league) %>
 		<% else %>
-			<span>You need an even number of teams to start a league season.</span>
+			<span>
+				Teams cannot be added to leagues that have already started a season.
+			</span>
 		<% end %>
 	<% end %>
+
+	<% if @league.is_owned_by_this_user?(@current_user) %>
+		<% if @league.teams.count > 0 && @league.teams.count % 2 == 0%>
+			<% if !latest_league_season %>
+				<%= button_to "Start #{current_season.description}", {action: :create, controller: :league_seasons, league_id: @league.id, season_id: current_season.id}, :method => :post %>
+			<% end %>
+		<% else %>
+			<span>
+				You need an even number of teams to start a league season.
+			</span>
+		<% end %>
+	<% end %>
+
 </div>

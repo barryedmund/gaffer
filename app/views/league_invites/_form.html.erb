@@ -16,8 +16,9 @@
   <div class="field">
     <%= f.label :email %>
     <%= f.text_field :email %>
+    <%= f.hidden_field :league_id, value: params[:league_id] %>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit "Send invite" %>
   </div>
 <% end %>

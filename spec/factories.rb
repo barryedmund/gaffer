@@ -37,8 +37,8 @@ FactoryGirl.define do
   end
 
   factory :league_invite do
-    email "user1@gaffer.com"
     league
+    sequence(:email) { |n| "user#{n}@gaffer.com"}
   end
 
   factory :league_season do
@@ -68,7 +68,7 @@ FactoryGirl.define do
 
   factory :season do
 	  description "2015/16"
-		starts_at Date.today
+		starts_at Date.today - 1
     ends_at Date.today + 270.days
 		competition
   end

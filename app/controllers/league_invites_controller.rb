@@ -5,13 +5,13 @@ class LeagueInvitesController < ApplicationController
   end
 
   def create
-    @league_invite = LeagueInvite.new(league_id: params[:league_id], email: params[:league_invite][:email])
+    @league_invite = LeagueInvite.new(league_invite_params)
     if @league_invite.save
       flash[:success] = "Added"
-      redirect_to league_league_invites_path(params[:league_id])
+      render action: :index
     else
       flash[:error] = "There was a problem adding that."
-      render action: :new
+      redirect_to league_path(params[:league_id])
     end
   end
 
@@ -19,8 +19,16 @@ class LeagueInvitesController < ApplicationController
     @league_invites = LeagueInvite.where(league_id: params[:league_id])
   end
 
+  def destroy
+    @league_invite = LeagueInvite.find(params[:id])
+    if @league_invite.present?
+      @league_invite.destroy
+    end
+    render action: :index
+  end
+
   private
   def league_invite_params
-    params.require(:league_invite).permit(:league_id, league_invite: :email)
+    params.require(:league_invite).permit(:league_id, :email)
   end
 end

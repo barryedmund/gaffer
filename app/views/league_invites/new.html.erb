@@ -1,5 +1,6 @@
-<h1>New league invite</h1>
+<% @league = League.find_by_id(params[:league_id]) %>
+<span class="main_header">
+	Send invite for <%= link_to @league.name, league_path(@league) %>
+</span>
 
 <%= render 'form' %>
-
-<%= link_to 'Back', league_league_invites_path(params[:league_id]) %>

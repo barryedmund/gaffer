@@ -17,3 +17,16 @@
     </div>
   <% end %>
 </div>
+<div class="centered">
+  <span class="main_header">Your league invites</span>
+    <% @league_invites = LeagueInvite.where(email: @current_user.email) %>
+    <% @league_invites.each do |league_invite| %>
+      <div class="container">
+        <span>
+          <span class="sub_header">
+            <%= link_to league_invite.league.name, league_invite.league %>
+          </span>
+        </span>
+      </div>
+    <% end %>
+</div>

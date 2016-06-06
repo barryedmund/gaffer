@@ -8,6 +8,7 @@
     @league_season = LeagueSeason.new(league_id: params[:league_id], season_id: params[:season_id])
     if @league_season.save
       flash[:success] = "Added"
+      LeagueInvite.where(league: League.find_by(id: params[:league_id])).destroy_all
       redirect_to league_path(@league_season.league_id)
     else
       flash[:error] = "There was a problem adding that."
