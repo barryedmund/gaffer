@@ -13,4 +13,8 @@ class TeamPlayer < ActiveRecord::Base
   def current_contract
     self.contracts.where('starts_at <= ? AND ends_at >= ?', Date.today, Date.today).order(starts_at: :desc).first
   end
+
+  def get_squad_position_from_players_playing_position
+     SquadPosition.find_by(long_name: player.playing_position)
+  end
 end

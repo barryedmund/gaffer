@@ -10,6 +10,7 @@ describe "Adding team players" do
 	let!(:squad_position_1) { SquadPosition.create(short_name: "GK") }
 	let!(:squad_position_2) { SquadPosition.create(short_name: "SUB") }
 	let!(:squad_position_3) { SquadPosition.create(short_name: "DF") }
+	let!(:squad_position_midfielder) { create(:midfielder_squad_position) }
 	before { sign_in user, password: "gaffer123" }
 
 	it "is successful with valid content" do

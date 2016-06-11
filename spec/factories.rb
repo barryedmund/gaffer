@@ -75,7 +75,13 @@ FactoryGirl.define do
 
   factory :squad_position do
   	short_name "SUB"
+    long_name "Substitute"
 	end
+
+  factory :midfielder_squad_position, :parent => :squad_position do
+    short_name "MD"
+    long_name "Midfielder"
+  end
 
   factory :stadium do
     capacity 10000
