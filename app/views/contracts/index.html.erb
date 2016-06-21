@@ -1,0 +1,23 @@
+<% league = League.find_by_id(params[:league_id]) %>
+<span class="main_header">Pending contracts (<%= link_to 'Offer free agent a contract', new_league_contract_path(league.id) %>)</span>
+<div>
+	<div class="one_quarter">Player</div>
+  <div class="one_quarter">Offering team</div>
+  <div class="one_quarter">Salary offered</div>
+  <div class="one_quarter">Start date</div>
+  <hr/>
+	<% @contracts.joins(:player).order('players.last_name, players.pl_player_code, contracts.starts_at').sort_by {|contract| contract.value }.reverse.each do |contract| %>
+		<div>
+			<div class="one_quarter"><%= contract.player.full_name %></div>
+			<div class="one_quarter"><%= contract.team.title %></div>
+			<div class="one_quarter">
+				<% if contract.team == @current_user.teams.joins(:league).where('leagues.id = ?', league.id).first %>
+					<%= number_to_currency(contract.weekly_salary_cents / 100) %>
+				<% else%>
+					Private
+				<% end %>
+			</div>
+			<div class="one_quarter"><%= contract.starts_at %></div>
+		</div>
+	<% end %>
+</div>

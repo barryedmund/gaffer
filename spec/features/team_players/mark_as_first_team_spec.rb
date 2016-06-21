@@ -36,18 +36,18 @@ describe "Marking a team player as first team" do
 	let!(:team_player_10) { team.team_players.create(player_id: player_10.id, first_team: false, squad_position: squad_position_1)}
 	let!(:team_player_11) { team.team_players.create(player_id: player_11.id, first_team: false, squad_position: squad_position_1)}
 	let!(:team_player_12) { team.team_players.create(player_id: player_12.id, first_team: false, squad_position: squad_position_1)}
-	let!(:contract) {Contract.create(team: team, team_player: team_player, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 1)}
-	let!(:contract_1) {Contract.create(team: team, team_player: team_player_1, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 1)}
-	let!(:contract_3) {Contract.create(team: team, team_player: team_player_3, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 1)}
-	let!(:contract_4) {Contract.create(team: team, team_player: team_player_4, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 1)}
-	let!(:contract_5) {Contract.create(team: team, team_player: team_player_5, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 1)}
-	let!(:contract_6) {Contract.create(team: team, team_player: team_player_6, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 1)}
-	let!(:contract_7) {Contract.create(team: team, team_player: team_player_7, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 1)}
-	let!(:contract_8) {Contract.create(team: team, team_player: team_player_8, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 1)}
-	let!(:contract_9) {Contract.create(team: team, team_player: team_player_9, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 1)}
-	let!(:contract_10) {Contract.create(team: team, team_player: team_player_10, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 1)}
-	let!(:contract_11) {Contract.create(team: team, team_player: team_player_11, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 1)}
-	let!(:contract_12) {Contract.create(team: team, team_player: team_player_12, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 1)}
+	let!(:contract) {Contract.create(team: team, team_player: team_player, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 700)}
+	let!(:contract_1) {Contract.create(team: team, team_player: team_player_1, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 700)}
+	let!(:contract_3) {Contract.create(team: team, team_player: team_player_3, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 700)}
+	let!(:contract_4) {Contract.create(team: team, team_player: team_player_4, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 700)}
+	let!(:contract_5) {Contract.create(team: team, team_player: team_player_5, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 700)}
+	let!(:contract_6) {Contract.create(team: team, team_player: team_player_6, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 700)}
+	let!(:contract_7) {Contract.create(team: team, team_player: team_player_7, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 700)}
+	let!(:contract_8) {Contract.create(team: team, team_player: team_player_8, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 700)}
+	let!(:contract_9) {Contract.create(team: team, team_player: team_player_9, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 700)}
+	let!(:contract_10) {Contract.create(team: team, team_player: team_player_10, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 700)}
+	let!(:contract_11) {Contract.create(team: team, team_player: team_player_11, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 700)}
+	let!(:contract_12) {Contract.create(team: team, team_player: team_player_12, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 700)}
 
 	before { sign_in user, password: "gaffer123" }
 
@@ -123,8 +123,8 @@ describe "Setting a team_player as not first_team" do
 	let!(:squad_position_midfielder) { create(:midfielder_squad_position) }
 	let!(:team_player_1) { team.team_players.create(player_id: player_1.id, squad_position_id: squad_position_2.id) }
 	let!(:team_player_2) { team.team_players.create(player_id: player_2.id, squad_position_id: squad_position_2.id) }
-	let!(:contract_1) {Contract.create(team: team, team_player: team_player_1, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 1)}
-	let!(:contract_2) {Contract.create(team: team, team_player: team_player_2, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 1)}
+	let!(:contract_1) {Contract.create(team: team, team_player: team_player_1, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 700)}
+	let!(:contract_2) {Contract.create(team: team, team_player: team_player_2, weekly_salary_cents: 1000000, starts_at: Date.today - 1, ends_at: Date.today + 700)}
 
 	before { sign_in user, password: "gaffer123" }
 
