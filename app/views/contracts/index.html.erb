@@ -6,7 +6,8 @@
   <div class="one_quarter">Salary offered</div>
   <div class="one_quarter">Start date</div>
   <hr/>
-	<% @contracts.joins(:player).order('players.last_name, players.pl_player_code, contracts.starts_at').sort_by {|contract| contract.value }.reverse.each do |contract| %>
+  <% array_sorted_by_contract_value = @contracts.joins(:player).where(signed: false).sort_by {|contract| contract.value }.reverse %>
+	<% Contract.where(id: array_sorted_by_contract_value.map(&:id)).joins(:player).order('players.last_name, players.pl_player_code, contracts.starts_at').each do |contract| %>
 		<div>
 			<div class="one_quarter"><%= contract.player.full_name %></div>
 			<div class="one_quarter"><%= contract.team.title %></div>
