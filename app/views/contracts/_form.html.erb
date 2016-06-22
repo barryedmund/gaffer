@@ -1,0 +1,26 @@
+<% league = League.find(params[:league_id]) %>
+<%= form_for([league, @contract]) do |f| %>
+  <% if @contract.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@contract.errors.count, "error") %> prohibited this contract from being saved:</h2>
+      <ul>
+        <% @contract.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <% @players_in_this_league = Player.joins(team_players: [:team => :league]).where('leagues.id = ?', league.id) %>
+    <%= f.collection_select(:player_id, Player.where.not(id:@players_in_this_league.map(&:id)), :id, "#{:full_name}") %>
+    <%= f.label :weekly_salary_cents %>
+    <%= f.number_field :weekly_salary_cents %>
+    <br/>
+    <%= f.hidden_field :starts_at, :value => Date.today %>
+    <%= f.label :ends_at %>
+    <%= f.date_field :ends_at %>
+    <%= f.hidden_field :team_id, :value => @current_user.teams.joins(:league).where('leagues.id = ?', league.id).first.id %>
+    <%= f.submit %>
+  </div>
+<% end %>

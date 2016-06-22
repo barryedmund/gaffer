@@ -1,17 +1,22 @@
 ActiveAdmin.register Contract do
+  permit_params :team_id, :team_player_id, :player_id, :weekly_salary_cents, :starts_at, :ends_at, :signed
 
-# See permitted parameters documentation:
-# https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-#
-# permit_params :list, :of, :attributes, :on, :model
-#
-# or
-#
-# permit_params do
-#   permitted = [:permitted, :attributes]
-#   permitted << :other if resource.something?
-#   permitted
-# end
-
-
+  index do
+    selectable_column
+    column :id
+    column :team
+    column 'Player' do |contract|
+      contract.player.full_name
+    end
+    column :weekly_salary_cents do |contract|
+      number_to_currency(contract.weekly_salary_cents / 100)
+    end
+    column :starts_at
+    column :ends_at
+    column 'Value' do |contract|
+      number_to_currency(contract.value / 100)
+    end
+    column :signed
+    actions
+  end
 end

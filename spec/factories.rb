@@ -7,8 +7,6 @@ FactoryGirl.define do
  	end
 
   factory :contract do
-    team
-    team_player
     weekly_salary_cents 1000000
     starts_at Date.today - 1
     ends_at Date.today + 1
