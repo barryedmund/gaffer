@@ -13,11 +13,11 @@
 		<% end %>
 	</ul>
 
-	<span class="sub_header">Squad (<%= link_to "add player", new_league_team_team_player_path(@team.league, @team) %>)</span>
+	<span class="sub_header">Squad players</span>
 	<ul class="squad_players">
 		<% @team.team_players.where(first_team: false).find_each do |team_player| %>
 			<li id="<%= dom_id(team_player) %>">
-				<%= link_to team_player.player.full_name, league_team_team_player_path(team_player.team.league, team_player.team, team_player) %> (<%= number_to_currency(team_player.current_contract.weekly_salary_cents / 100) %>)
+				<%= link_to team_player.player.full_name, league_team_team_player_path(team_player.team.league, team_player.team, team_player) %> (<%= number_to_currency(team_player.current_contract.weekly_salary_cents / 100, precision: 0) %> per week until <%= team_player.current_contract.ends_at.strftime('%d-%b-%Y') %>)
 				<% first_team_players = @team.team_players.where(first_team: true) %>
 				<% if first_team_players.count < 11 %>
 					<% if team_player.player.playing_position != 'Goalkeeper' || first_team_players.joins(:squad_position).where('squad_positions.short_name = ?', 'GK').count === 0 %>

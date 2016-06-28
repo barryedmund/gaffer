@@ -14,4 +14,13 @@ namespace :transfers do
       end
     end
 	end
+
+  task :release_players_with_expired_contracts => :environment do
+    signed_contracts_with_team_players = Contract.where('contracts.signed = ? AND contracts.ends_at < ? AND contracts.team_player_id IS NOT NULL', true, Date.today)
+    signed_contracts_with_team_players.each do |contract|
+      puts "#{contract.team_player.full_name} is being released from #{contract.team.title}..."
+      contract.team_player.destroy
+      puts "... released."
+    end
+  end
 end
