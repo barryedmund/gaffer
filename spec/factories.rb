@@ -9,7 +9,8 @@ FactoryGirl.define do
   factory :contract do
     weekly_salary_cents 1000000
     starts_at Date.today - 1
-    ends_at Date.today + 1
+    ends_at Date.today + 400
+    team Team.last
   end
 
  	factory :game do
@@ -96,7 +97,11 @@ FactoryGirl.define do
     team
     player
     squad_position
-    contract
+    trait :with_contract do
+      after :create do |team_player|
+        FactoryGirl.create :contract, {team_player: team_player, team: team_player.team, weekly_salary_cents: 100000, signed: true}
+      end
+    end
 	end
 
 	factory :transfer do

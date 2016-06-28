@@ -4,6 +4,9 @@ ActiveAdmin.register Contract do
   index do
     selectable_column
     column :id
+    column 'League' do |contract|
+      contract.team.league.name
+    end
     column :team
     column 'Player' do |contract|
       contract.player.full_name
