@@ -1,33 +1,37 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Gaffer</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= csrf_meta_tags %>
-</head>
-<body id="body_id">
+	<head>
+	  <title>Gaffer</title>
+	  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+	  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+	  <%= csrf_meta_tags %>
+	</head>
+	<body id="body_id">
 
-	<div class="nav">
-		<h1><%= link_to "Gaffer League", root_path %></h1>
-		<ul>
-			<% if logged_in? %>
-				<li><%= link_to "Dashboard", leagues_path %></li>
-		    	<li><%= link_to "Log Out", logout_path, method: :delete %></li>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8">
+					<span><%= link_to "Gaffer League", root_path %></span>
+				</div>
+				<% if logged_in? %>
+					<div class="col-md-2"><%= link_to "Dashboard", leagues_path %></div>
+			    <div class="col-md-2"><%= link_to "Log Out", logout_path, method: :delete %></div>
 		    <% else %>
-		        <li><%= link_to "Log In", login_path %></li>
-		        <li><%= link_to "Sign Up", signup_path %></li>
+	        <div class="col-md-2">
+	        	<%= render 'user_sessions/form' %>
+					</div>
+	        <div class="col-md-2"><%= link_to "Sign Up", signup_path %></div>
 		    <% end %>
-		</ul>
-	</div>
-
-	<% flash.each do |type, message| %>
-		<div class="alert flash <%= type %>">
-			<%= message %>
+			</div>
 		</div>
-	<% end %>
-	
-	<%= yield %>
 
-</body>
+		<% flash.each do |type, message| %>
+			<div class="alert flash <%= type %>">
+				<%= message %>
+			</div>
+		<% end %>
+		
+		<%= yield %>
+
+	</body>
 </html>

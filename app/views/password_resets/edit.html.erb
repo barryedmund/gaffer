@@ -2,7 +2,7 @@
 <%= form_for @user, url: password_reset_path(@user.password_reset_token), html: { method: :patch } do |form| %>
 
 	<%= form.label :password %>
-	<%= form.password_field :password %>
+	<%= form.password_field :password, id: 'reset_password' %>
 
 	<br/>
 
