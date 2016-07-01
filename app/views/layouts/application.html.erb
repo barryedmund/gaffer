@@ -5,35 +5,36 @@
 	  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
 	  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 	  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-		<link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css">
+		<link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.light_green-deep_orange.min.css" /> 
 		<script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
 
 	  <%= csrf_meta_tags %>
 	</head>
 	<body id="body_id">
-
 		<div class="container">
-			<div class="row">
-				<div class="col-md-2">
-					<span><%= link_to "Gaffer League", root_path %></span>
+			<div class="row bottom-margin-50">
+				<div class="col-lg-2">
+					<%= link_to image_tag("gaffer_logo_600_x_500.png", class: "logo-icon"), root_path %>
 				</div>
 				<% if logged_in? %>
-					<div class="col-md-5"><%= link_to "Dashboard", leagues_path %></div>
-			    <div class="col-md-5"><%= link_to "Log Out", logout_path, method: :delete %></div>
+					<div class="col-lg-5"><%= link_to "Dashboard", leagues_path %></div>
+			    <div class="col-lg-5"><%= link_to "Log Out", logout_path, method: :delete %></div>
 		    <% else %>
-	        <div class="col-md-9"><%= render 'user_sessions/form' %></div>
-	        <div class="col-md-1"><%= link_to "Sign Up", signup_path %></div>
+	        <div class="col-lg-10">
+	        	<%= render 'user_sessions/form' %>	
+	        </div>
 		    <% end %>
 			</div>
-		</div>
-
-		<% flash.each do |type, message| %>
-			<div class="alert flash <%= type %>">
-				<%= message %>
+			<div class="row">
+				<% flash.each do |type, message| %>
+					<div class="alert flash <%= type %>">
+						<%= message %>
+					</div>
+				<% end %>
 			</div>
-		<% end %>
-		
-		<%= yield %>
-
+			<div class="row">
+				<%= yield %>
+			</div>
+		</div>
 	</body>
 </html>
