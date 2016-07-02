@@ -10,8 +10,8 @@ describe "Signing up" do
 
 		fill_in "First Name", with: "Barry"
 		fill_in "Last Name", with: "Wallace"
-		fill_in "Email", with: "barrywallace.is@gmail.com"
-		fill_in "Password", with: "password12345"
+		fill_in "signup_email", with: "barrywallace.is@gmail.com"
+		fill_in "signup_password", with: "password12345"
 		fill_in "Password (again)", with: "password12345"
 		click_button "Sign Up"
 

@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
-  get "/login" => "user_sessions#new", as: :login
+  get "" => "user_sessions#new", as: :login
   delete "/logout" => "user_sessions#destroy", as: :logout
   get "/signup" => "users#new", as: :signup
 

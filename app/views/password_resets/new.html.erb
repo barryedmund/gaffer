@@ -1,7 +1,25 @@
-<h1>Reset Your Password</h1>
-<%= form_tag password_resets_path do %>
-	<%= label_tag :email, "Email" %>
-	<%= text_field_tag :email %>
-	<br/>
-	<%= submit_tag "Reset Password" %>
-<% end %>
+<div class="row">
+	<div class="col-md-6 col-md-offset-3">
+		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+		  <div class="mdl-card__title">
+		    <h2 class="mdl-card__title-text">Reset your password</h2>
+		  </div>
+		  <div class="mdl-card__supporting-text">
+		    Enter the email address that you signed up with.
+		  </div>
+		  <div class="mdl-card__actions">
+		    <%= form_tag password_resets_path, class: 'form' do %>
+				<div class="form-group">
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						<%= text_field_tag :email, nil, id: 'forgot_password_email', class: "mdl-textfield__input" %>
+						<%= label_tag :email, "Email", class: "mdl-textfield__label", for: "forgot_password_email" %>
+					</div>
+				</div>
+				<div class="form-group">
+					<%= submit_tag "Reset password", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
+				</div>
+			<% end %>
+		  </div>
+		</div>
+	</div>
+</div>
