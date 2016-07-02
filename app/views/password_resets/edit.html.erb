@@ -1,14 +1,31 @@
-<h1>Change Your Password</h1>
-<%= form_for @user, url: password_reset_path(@user.password_reset_token), html: { method: :patch } do |form| %>
-
-	<%= form.label :password %>
-	<%= form.password_field :password, id: 'reset_password' %>
-
-	<br/>
-
-	<%= form.label :password_confirmation %>
-	<%= form.password_field :password_confirmation %>
-	<br/>
-	
-	<%= submit_tag "Change Password" %>
-<% end %>
+<div class="row">
+	<div class="col-md-6 col-md-offset-3">
+		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+		  <div class="mdl-card__title">
+		    <h2 class="mdl-card__title-text">Change your password</h2>
+		  </div>
+		  <div class="mdl-card__supporting-text">
+		    Enter and confirm your new password.
+		  </div>
+		  <div class="mdl-card__actions">
+		    <%= form_for @user, url: password_reset_path(@user.password_reset_token), html: { method: :patch } do |form| %>
+				<div class="form-group">
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						<%= form.password_field :password, id: 'reset_password', class: "mdl-textfield__input" %>
+						<%= form.label :password, class: "mdl-textfield__label", for: "reset_password" %>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+						<%= form.password_field :password_confirmation, id: 'confirm_password', class: "mdl-textfield__input" %>
+						<%= form.label :password_confirmation, class: "mdl-textfield__label", for: "confirm_password" %>
+					</div>
+				</div>
+				<div class="form-group">
+					<%= submit_tag "Change password", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
+				</div>
+			<% end %>
+		  </div>
+		</div>
+	</div>
+</div>

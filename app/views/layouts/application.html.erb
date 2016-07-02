@@ -5,7 +5,8 @@
 	  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
 	  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 	  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-		<link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.light_green-deep_orange.min.css" /> 
+		<link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.light_green-deep_orange.min.css" />
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css"> 
 		<script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
 
 	  <%= csrf_meta_tags %>
@@ -27,8 +28,8 @@
 			</div>
 			<div class="row">
 				<% flash.each do |type, message| %>
-					<div class="alert flash <%= type %>">
-						<%= message %>
+					<div class="col-lg-12 text-center alert flash <%= type %>">
+						<i class="material-icons <%= type %>">face</i><%= message %>
 					</div>
 				<% end %>
 			</div>
