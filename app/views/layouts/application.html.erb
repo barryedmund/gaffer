@@ -14,14 +14,14 @@
 	<body id="body_id">
 		<div class="container">
 			<div class="row bottom-margin-50">
-				<div class="col-lg-2">
-					<%= link_to image_tag("gaffer_logo_600_x_500.png", class: "logo-icon"), root_path %>
+				<div class="col-lg-2 col-sm-3">
+					<%= link_to image_tag("gaffer_logo_263_x_328.png", class: "logo-icon"), root_path %>
 				</div>
 				<% if logged_in? %>
 					<div class="col-lg-5"><%= link_to "Dashboard", leagues_path %></div>
 			    <div class="col-lg-5"><%= link_to "Log Out", logout_path, method: :delete %></div>
 		    <% else %>
-	        <div class="col-lg-10">
+	        <div class="col-lg-10 col-sm-8 pull-right">
 	        	<%= render 'user_sessions/form' %>	
 	        </div>
 		    <% end %>
