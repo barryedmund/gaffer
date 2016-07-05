@@ -7,11 +7,50 @@ body#body_id {
 .bottom-margin-50 {
 	margin-bottom: 50px;
 }
+/************************************************
+
+.col-sm-8
+
+************************************************/
+.col-sm-8 a.mdl-button {
+	font-size: 34px;
+	height: 68px;
+	padding-top: 16px;
+	width: 45%;
+}
+.col-sm-8 input[type="submit"] {
+	font-size: 34px;
+	height: 68px;
+	width: 54%;
+}
+.col-sm-8 form, .col-sm-8 form div, .col-sm-8 .form-group div.mdl-textfield{
+	width: 100%;
+}
+.col-sm-8 .form-group {
+	margin: 0px;
+}
+.col-sm-8 input[type="text"], .col-sm-8 input[type="password"] {
+	font-size: 34px;
+	line-height: 28px;
+	padding: 22px 10px;
+}
+.col-sm-8 label.mdl-textfield__label {
+	font-size: 34px;
+	top: 51px;
+}
+.col-sm-8 .mdl-textfield--floating-label.is-focused .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
+	font-size: 26px;
+	top: -4px;	
+}
+/************************************************/
+.container {
+	margin-top: 20px;
+}
 .demo-card-wide.mdl-card {
-  width: 600px;
+  width: 100%;
 }
 .logo-icon {
-	width: 107px;
+	width: 100%;
 }
 .material-icons {
 	margin-right: 5px;

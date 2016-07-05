@@ -5,25 +5,25 @@ describe "Forgotten passwords" do
 
 	it "sends a user an email" do
 		visit login_path
-		click_link "Forgot Password"
+		click_link "Forgot password"
 		fill_in "forgot_password_email", with: user.email
 		expect {
-			click_button "Reset Password"
+			click_button "Reset password"
 		}.to change{ActionMailer::Base.deliveries.size}.by(1)
 	end
 
 	it "resets a password when following an email link" do
 		visit login_path
-		click_link "Forgot Password"
+		click_link "Forgot password"
 		fill_in "forgot_password_email", with: user.email
-		click_button "Reset Password"
+		click_button "Reset password"
 		open_email(user.email)
 		current_email.click_link "http://"
-		expect(page).to have_content("Change Your Password")
+		expect(page).to have_content("Change your password")
 
 		fill_in "reset_password", with: "mynewpassword1"	
 		fill_in "Password confirmation", with: "mynewpassword1"	
-		click_button "Change Password"
+		click_button "Change password"
 		expect(page).to have_content("Password updated")
 		expect(page.current_path).to eq(leagues_path)
 
