@@ -1,50 +1,51 @@
-body#body_id {
-	font-family: "Roboto";
-}
-.alert {
-	box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
-}
-.bottom-margin-50 {
-	margin-bottom: 50px;
-}
-/************************************************
-
-.col-sm-8
-
-************************************************/
-.col-sm-8 a.mdl-button {
+a.mdl-button {
 	font-size: 34px;
 	height: 68px;
 	padding-top: 16px;
 	width: 45%;
 }
-.col-sm-8 input[type="submit"] {
+body#body_id {
+	font-family: "Roboto";
+}
+div.mdl-card__actions {
+	padding: 16px;
+}
+div.mdl-card__supporting-text {
+	font-size: 32px;
+	line-height: 35px;
+	width: 100%;
+}
+form, form div, .form-group div.mdl-textfield{
+	width: 100%;
+}
+input[type="submit"] {
 	font-size: 34px;
 	height: 68px;
 	width: 54%;
 }
-.col-sm-8 form, .col-sm-8 form div, .col-sm-8 .form-group div.mdl-textfield{
-	width: 100%;
-}
-.col-sm-8 .form-group {
-	margin: 0px;
-}
-.col-sm-8 input[type="text"], .col-sm-8 input[type="password"] {
+input[type="text"], input[type="password"] {
 	font-size: 34px;
 	line-height: 28px;
 	padding: 22px 10px;
 }
-.col-sm-8 label.mdl-textfield__label {
+input.mdl-textfield__input{
+	border-bottom: 5px solid rgba(5,5,5,.12);
+}
+label.mdl-textfield__label {
 	font-size: 34px;
+	padding-top: 3px;
 	top: 51px;
 }
-.col-sm-8 .mdl-textfield--floating-label.is-focused .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
-	font-size: 26px;
-	top: -4px;	
+.alert {
+	box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.14), 0 5px 3px -2px rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.12);
+  font-size: 30px;
+  line-height: 35px;
 }
-/************************************************/
+.bottom-margin-30 {
+	margin-bottom: 30px;
+}
 .container {
-	margin-top: 20px;
+	margin: 25px 0px;
 }
 .demo-card-wide.mdl-card {
   width: 100%;
@@ -52,7 +53,8 @@ body#body_id {
 .logo-icon {
 	width: 100%;
 }
-.material-icons {
+i.material-icons {
+	font-size: 48px;
 	margin-right: 5px;
 	vertical-align: middle;
 }
@@ -62,5 +64,41 @@ body#body_id {
 .material-icons.success {
 	color: #8bc34a;
 }
+#forgot_password_div {
+	font-size: 27px;
+  line-height: 28px;
+  padding: 15px 0px;
+  text-align: right;
+}
+/************************************************
+
+.col-sm-8
+
+************************************************/
+.col-sm-8 .form-group {
+	margin: 0px;
+}
+.col-sm-8 .mdl-textfield--floating-label.is-focused .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
+	font-size: 26px;
+	top: -4px;	
+}
+/************************************************/
+
+/************************************************
+
+.col-sm-12
+
+************************************************/
+.col-sm-12#reset_password_div h2 {
+	font-size: 54px;
+}
+.col-sm-12 .demo-card-wide.mdl-card.mdl-shadow--2dp {
+	box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.14), 0 5px 3px -2px rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.12);
+}
+.col-sm-12 .mdl-textfield--floating-label.is-focused .mdl-textfield__label, .col-sm-12 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .col-sm-12 .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
+	font-size: 26px;
+	top: -4px;	
+}
+/************************************************/
 @import "bootstrap-sprockets";
 @import "bootstrap";

@@ -14,21 +14,21 @@
 	<body id="body_id">
 		<div class="container">
 			<div class="row bottom-margin-50">
-				<div class="col-lg-2 col-sm-3">
+				<div class="col-sm-3">
 					<%= link_to image_tag("gaffer_logo_263_x_328.png", class: "logo-icon"), root_path %>
 				</div>
 				<% if logged_in? %>
 					<div class="col-lg-5"><%= link_to "Dashboard", leagues_path %></div>
 			    <div class="col-lg-5"><%= link_to "Log Out", logout_path, method: :delete %></div>
 		    <% else %>
-	        <div class="col-lg-10 col-sm-8 pull-right">
+	        <div class="col-lg-8 col-sm-8 pull-right">
 	        	<%= render 'user_sessions/form' %>	
 	        </div>
 		    <% end %>
 			</div>
 			<div class="row">
 				<% flash.each do |type, message| %>
-					<div class="col-lg-12 text-center alert flash <%= type %>">
+					<div class="col-sm-12 text-center alert flash <%= type %>">
 						<i class="material-icons <%= type %>">face</i><%= message %>
 					</div>
 				<% end %>
