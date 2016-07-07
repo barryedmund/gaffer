@@ -8,18 +8,22 @@
 		<link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.light_green-deep_orange.min.css" />
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css"> 
 		<script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
-
 	  <%= csrf_meta_tags %>
 	</head>
 	<body id="body_id">
 		<div class="container">
-			<div class="row bottom-margin-50">
+			<div class="row">
 				<div class="col-sm-3">
 					<%= link_to image_tag("gaffer_logo_263_x_328.png", class: "logo-icon"), root_path %>
 				</div>
 				<% if logged_in? %>
-					<div class="col-lg-5"><%= link_to "Dashboard", leagues_path %></div>
-			    <div class="col-lg-5"><%= link_to "Log Out", logout_path, method: :delete %></div>
+					<div id="main-nav" class="col-sm-9">
+						<div class="row">
+							<div class="col-sm-4 main-nav-item"><%= link_to "Home", root_path %></div>
+							<div class="col-sm-4 main-nav-item"><%= link_to "Leagues", leagues_path %></div>
+				    	<div class="col-sm-4 main-nav-item"><%= link_to "Log out", logout_path, method: :delete %></div>
+				  	</div>
+			  	</div>
 		    <% else %>
 	        <div class="col-lg-8 col-sm-8 pull-right">
 	        	<%= render 'user_sessions/form' %>	
