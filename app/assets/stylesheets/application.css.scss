@@ -36,6 +36,13 @@ label.mdl-textfield__label {
 	padding-top: 3px;
 	top: 51px;
 }
+li {
+	font-size: 24px;
+  line-height: 32px;
+}
+ul {
+	list-style: none;
+}
 .alert {
 	box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.14), 0 5px 3px -2px rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.12);
   font-size: 30px;
@@ -89,7 +96,7 @@ i.material-icons {
 .col-sm-12
 
 ************************************************/
-.col-sm-12#reset_password_div h2 {
+.col-sm-12 h2 {
 	font-size: 54px;
 }
 .col-sm-12 .demo-card-wide.mdl-card.mdl-shadow--2dp {
