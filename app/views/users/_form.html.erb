@@ -1,37 +1,52 @@
 <%= form_for(@user) do |f| %>
   <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
-
+    <div class="mdl-card__supporting-text">
+      Please address the <%= "error".pluralize(@user.errors.count) %> and try again:
+    </div>
+    <div>
       <ul>
-      <% @user.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
+        <% @user.errors.full_messages.each do |message| %>
+          <li>
+            <i class="material-icons error">face</i>
+            <%= message %>
+          </li>
+       <% end %>
       </ul>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= f.label :first_name, "First Name" %><br>
-    <%= f.text_field :first_name %>
-  </div>
-  <div class="field">
-    <%= f.label :last_name, "Last Name" %><br>
-    <%= f.text_field :last_name %>
-  </div>
-  <div class="field">
-    <%= f.label :email %><br>
-    <%= f.text_field :email, id: 'signup_email' %>
-  </div>
-  <div class="field">
-    <%= f.label :password %><br>
-    <%= f.password_field :password, id: 'signup_password' %>
-  </div>
-  <div class="field">
-    <%= f.label :password_confirmation, "Password (again)" %><br>
-    <%= f.password_field :password_confirmation %>
-  </div>
-  <div class="actions">
-    <%= f.submit "Sign Up" %>
+  <div class="mdl-card__actions">
+    <div class="form-group">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <%= f.text_field :first_name, class: "mdl-textfield__input" %>
+        <%= f.label :first_name, "First Name", class: "mdl-textfield__label" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <%= f.text_field :last_name, class: "mdl-textfield__input" %>
+        <%= f.label :last_name, "Last Name", class: "mdl-textfield__label" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <%= f.text_field :email, id: 'signup_email', class: "mdl-textfield__input" %>
+        <%= f.label :email, class: "mdl-textfield__label" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <%= f.password_field :password, id: 'signup_password', class: "mdl-textfield__input" %>
+        <%= f.label :password, class: "mdl-textfield__label", for: "signup_password" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <%= f.password_field :password_confirmation, class: "mdl-textfield__input" %>
+        <%= f.label :password_confirmation, "Password (again)", class: "mdl-textfield__label" %>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.submit "Sign Up", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
+    </div>
   </div>
 <% end %>
