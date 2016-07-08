@@ -1,15 +1,19 @@
 a.content-link {
 	border-bottom: 2px solid;
+  text-decoration: none;
+}
+a.content-link, .normal-text, .mdl-data-table th {
 	color: #111111;
 	font-size: 30px;
 	font-weight: 300;
 	line-height: 46px;
-  text-decoration: none;
 }
-a.content-link:hover{
+a.content-link:hover {
 	border-bottom: 2px solid;
 	color: #111111;
+	font-size: 30px;
 	font-weight: 400;
+	line-height: 46px;
 	text-decoration: none;
 }
 a.mdl-button {
@@ -47,7 +51,7 @@ input[type="text"], input[type="password"] {
 	line-height: 28px;
 	padding: 22px 10px;
 }
-input.mdl-textfield__input{
+input.mdl-textfield__input {
 	border-bottom: 5px solid rgba(5,5,5,.12);
 }
 label.mdl-textfield__label {
@@ -58,6 +62,9 @@ label.mdl-textfield__label {
 li {
 	font-size: 24px;
   line-height: 32px;
+}
+table {
+	width: 100%;
 }
 ul {
 	list-style: none;
@@ -82,14 +89,28 @@ ul {
 .material-icons.success {
 	color: #8bc34a;
 }
-.row{
-	margin-bottom: 20px;
+.margin-bottom-50{
+	margin-bottom: 50px;
 }
 #forgot_password_div {
 	font-size: 27px;
   line-height: 28px;
   padding: 15px 0px;
   text-align: right;
+}
+.horizontal-style {
+    display: table;
+    padding: 0px;
+    width: 100%
+}
+.horizontal-style li {
+    display: table-cell;
+}
+.horizontal-style a {
+    display: block;
+    font-size: 30px;
+    text-align: center;
+    margin: 0 5px;
 }
 #main-nav {
 	font-size: 23px;

@@ -1,13 +1,18 @@
 <div class="row">
-  <div class="col-sm-12">
+  <div class="col-sm-12 margin-bottom-50">
     <div class="demo-card-wide mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
-        <h2 class="mdl-card__title-text">Your leagues (<%= link_to 'new', new_league_path %>)</h2>
+        <h2 class="mdl-card__title-text">Your leagues</h2>
       </div>
       <div class="mdl-card__actions">
         <% @leagues.each do |league| %>
-          <div><%= link_to league.name, league, class: "content-link" %></div>
+          <div class="normal-text"><%= link_to league.name, league, class: "content-link" %></div>
         <% end %>
+      </div>
+      <div class="mdl-card__supporting-text">
+        <ul class="horizontal-style">
+          <li><%= link_to 'Create new league', new_league_path, class: "mdl-button--primary" %></li>
+        </ul>
       </div>
     </div>
   </div>
@@ -15,17 +20,19 @@
 <div class="row">
   <div class="col-sm-12">
     <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-      <span class="main_header">Your league invites</span>
-      <% @league_invites = LeagueInvite.where(email: @current_user.email) %>
-      <% @league_invites.each do |league_invite| %>
-        <div class="container">
-          <span>
-            <span class="sub_header">
-              <%= link_to league_invite.league.name, league_invite.league %>
-            </span>
-          </span>
-        </div>
-      <% end %>
+      <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">Your league invites</h2>
+      </div>
+      <div class="mdl-card__actions">
+        <% @league_invites = LeagueInvite.where(email: @current_user.email) %>
+        <% if @league_invites.count > 0 %>
+          <% @league_invites.each do |league_invite| %>
+            <div class="normal-text"><%= link_to league_invite.league.name, league_invite.league, class: "content-link" %></div>
+          <% end %>
+        <% else %>
+          <div class="normal-text">No invites</div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
