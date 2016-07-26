@@ -5,62 +5,73 @@
         <h2 class="mdl-card__title-text"><%= @league.name %></h2>
       </div>
 			<div class="mdl-card__actions">
-				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-					<tr>
-						<th class="mdl-data-table__cell--non-numeric">Team</th>
-						<th>Pld</th>
-						<th>W</th>
-						<th>D</th>
-						<th>L</th>
-						<th>GD</th>
-						<th>Pts</th>
-					</tr>
-					<% @league.get_standings.each do |standings_row| %>
+				<% if @league.teams.count > 0 %>
+					<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 						<tr>
-							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<% if standings_row[:team_record].user != @current_user %>
-									<%= standings_row[:team_record].title %>
-								<% else %>
-									<%= link_to standings_row[:team_record].title, league_team_path(@league, standings_row[:team_record]), class: "content-link" %>
-								<% end %>
-							</td>
-							<td class="normal-text"><%= standings_row[:games_played] %></td>
-							<td class="normal-text"><%= standings_row[:games_won] %></td>
-							<td class="normal-text"><%= standings_row[:games_drawn] %></td>
-							<td class="normal-text"><%= standings_row[:games_lost] %></td>
-							<td class="normal-text"><%= standings_row[:goal_difference] %></td>
-							<td class="normal-text"><%= standings_row[:points] %></td>
+							<th class="mdl-data-table__cell--non-numeric">
+								<span>Team</span>
+							</th>
+							<th>
+								<span>Pld</span>
+							</th>
+							<th>
+								<span>W</span>
+							</th>
+							<th>
+								<span>D</span>
+							</th>
+							<th>
+								<span>L</span>
+							</th>
+							<th>
+								<span>GD</span>
+							</th>
+							<th>
+								<span>Pts</span>
+							</th>
 						</tr>
-					<% end %>	
-				</table>
+						<% @league.get_standings.each do |standings_row| %>
+							<tr>
+								<td class="mdl-data-table__cell--non-numeric normal-text">
+									<% if standings_row[:team_record].user != @current_user %>
+										<%= standings_row[:team_record].title %>
+									<% else %>
+										<%= link_to standings_row[:team_record].title, league_team_path(@league, standings_row[:team_record]), class: "content-link" %>
+									<% end %>
+								</td>
+								<td class="normal-text"><%= standings_row[:games_played] %></td>
+								<td class="normal-text"><%= standings_row[:games_won] %></td>
+								<td class="normal-text"><%= standings_row[:games_drawn] %></td>
+								<td class="normal-text"><%= standings_row[:games_lost] %></td>
+								<td class="normal-text"><%= standings_row[:goal_difference] %></td>
+								<td class="normal-text"><%= standings_row[:points] %></td>
+							</tr>
+						<% end %>	
+					</table>
+				<% end %>
 
 				<% current_season = Season.current.where(competition: @league.competition).first %>
 				<% latest_league_season = LeagueSeason.joins(:season).where('league_seasons.league_id = ? AND league_seasons.season_id = ?', @league.id, current_season.id).order('seasons.starts_at DESC').first %>
 
-				<% if !@league.has_team_owned_by?(@current_user) && @league.teams.count < 20 %>
-					<% if !latest_league_season %>
-						<%= link_to 'Add Team', new_league_team_path(@league) %>
-					<% else %>
-						<span>
-							Teams cannot be added to leagues that have already started a season.
-						</span>
-					<% end %>
-				<% end %>
-
 				<% if @league.is_owned_by_this_user?(@current_user) %>
 					<% if @league.teams.count > 0 && @league.teams.count % 2 == 0%>
 						<% if !latest_league_season %>
-							<%= button_to "Start #{current_season.description}", {action: :create, controller: :league_seasons, league_id: @league.id, season_id: current_season.id}, :method => :post %>
+							<div class="mdl-card__actions">
+								<div class="form-group">
+									<%= button_to "Start #{current_season.description}", {action: :create, controller: :league_seasons, league_id: @league.id, season_id: current_season.id}, :method => :post, class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
+								</div>
+							</div>
 						<% end %>
 					<% else %>
-						<span>
-							You need an even number of teams to start a league season.
-						</span>
+						<% flash[:notice] = "You need an even number of teams to start a season." %>
 					<% end %>
 				<% end %>
 			</div>
 			<div class="mdl-card__supporting-text">
 				<ul class="horizontal-style">
+					<% if !@league.has_team_owned_by?(@current_user) && @league.teams.count < 20 && !latest_league_season %>
+						<li><%= link_to 'Add Team', new_league_team_path(@league), class: "mdl-button--primary" %></li>
+					<% end %>
 					<li><%= link_to 'Games', league_games_path(@league), class: "mdl-button--primary" %></li>
 					<li><%= link_to 'Transfers', league_transfers_path(@league), class: "mdl-button--primary" %></li>
 					<li><%= link_to 'Free agents', league_contracts_path(@league), class: "mdl-button--primary" %></li>

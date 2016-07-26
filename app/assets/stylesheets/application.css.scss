@@ -1,19 +1,13 @@
 a.content-link {
 	border-bottom: 2px solid;
+	color: #111111;
+	font-weight: 300;
   text-decoration: none;
 }
-a.content-link, .normal-text, .mdl-data-table th {
-	color: #111111;
-	font-size: 30px;
-	font-weight: 300;
-	line-height: 46px;
-}
-a.content-link:hover {
+a.content-link:hover, a.content-link:active {
 	border-bottom: 2px solid;
 	color: #111111;
-	font-size: 30px;
 	font-weight: 400;
-	line-height: 46px;
 	text-decoration: none;
 }
 a.mdl-button {
@@ -46,7 +40,7 @@ input[type="submit"] {
 	height: 68px;
 	width: 54%;
 }
-input[type="text"], input[type="password"] {
+input[type="text"], input[type="password"], input[type="date"] {
 	font-size: 34px;
 	line-height: 28px;
 	padding: 22px 10px;
@@ -63,22 +57,63 @@ li {
 	font-size: 24px;
   line-height: 32px;
 }
+span.mdl-textfield__error {
+	font-size: 26px;
+}
 table {
 	width: 100%;
 }
 ul {
 	list-style: none;
 }
+#main-nav {
+	font-size: 23px;
+	text-align: center;
+}
 .alert {
 	box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.14), 0 5px 3px -2px rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.12);
   font-size: 30px;
   line-height: 35px;
 }
+.alert_sub_div {
+	margin: 0px 0px 4px 0px;
+	padding-left: 54px;
+  text-align: left;
+  text-indent: -28px;
+}
+.cancel_link_anchor {
+	display: block;
+	float: right;
+  font-size: 27px;
+  line-height: 38px;
+  padding: 15px 0px;
+  text-align: left;
+  vertical-align: bottom;
+  width: 37%;
+}
 .container {
 	margin: 25px 0px;
 }
 .demo-card-wide.mdl-card {
+  margin: 0px 0px 100px 0px;
   width: 100%;
+}
+.horizontal-style {
+  display: table;
+  padding: 0px;
+  width: 100%
+}
+.horizontal-style li {
+  display: table-cell;
+}
+.horizontal-style a {
+  display: block;
+  font-size: 30px;
+  text-align: center;
+  margin: 0 5px;
+}
+.league_invite_div {
+	margin: 20px 0px;
 }
 .logo-icon {
 	width: 100%;
@@ -92,29 +127,73 @@ ul {
 .margin-bottom-50{
 	margin-bottom: 50px;
 }
-#forgot_password_div {
+.mdl-data-table tr th span {
+	color: #111111;
+	font-size: 30px;
+	font-weight: 400;
+	line-height: 46px;
+}
+.mdl-data-table tr th {
+	padding-top: 8px;
+}
+.negative_action {
+	font-size: 27px;
+}
+.negative_text_link_div {
 	font-size: 27px;
   line-height: 28px;
   padding: 15px 0px;
   text-align: right;
 }
-.horizontal-style {
-    display: table;
-    padding: 0px;
-    width: 100%
+.normal-text {
+	color: #111111;
+	font-size: 30px;
+	font-weight: 300;
+	line-height: 46px;
 }
-.horizontal-style li {
-    display: table-cell;
+/************************************************
+
+select
+
+************************************************/
+.selectdiv {
+  position: relative;
 }
-.horizontal-style a {
-    display: block;
-    font-size: 30px;
-    text-align: center;
-    margin: 0 5px;
+
+.selectdiv:after {
+  content: '<>';
+  font: 30px "Consolas", monospace;
+  color: #333;
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+  right: 11px;
+  top: 18px;
+  padding: 0 0 2px;
+  border-bottom: 1px solid #999;
+  position: absolute;
+  pointer-events: none;
 }
-#main-nav {
-	font-size: 23px;
-	text-align: center;
+
+.selectdiv select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+	display: block;
+  font-size: 30px;
+  width: 100%;
+  height: 60px;
+  float: right;
+  margin: 5px 0px 25px 0px;
+  padding: 0px 24px;
+  line-height: 1.75;
+  color: #333;
+  background-color: #ffffff;
+  background-image: none;
+  border: 1px solid #cccccc;
+  -ms-word-break: normal;
+  word-break: normal;
 }
 /************************************************
 
@@ -126,10 +205,8 @@ ul {
 }
 .col-sm-8 .mdl-textfield--floating-label.is-focused .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
 	font-size: 26px;
-	top: -4px;	
+	top: -4px;
 }
-/************************************************/
-
 /************************************************
 
 .col-sm-12

@@ -12,7 +12,6 @@ class LeaguesController < InheritedResources::Base
       flash[:success] = "Added league"
       redirect_to leagues_path
     else
-      flash[:error] = "There was a problem adding that team."
       render action: :new
     end
   end

@@ -31,10 +31,14 @@
 		    <% end %>
 			</div>
 			<div class="row">
-				<% flash.each do |type, message| %>
-					<div class="col-sm-12 text-center alert flash <%= type %>">
-						<i class="material-icons <%= type %>">face</i><%= message %>
-					</div>
+				<% if flash.count > 0 %>
+				<div class="col-sm-12 text-center alert flash">
+					<% flash.each do |type, message| %>
+						<div class="alert_sub_div">
+							<i class="material-icons <%= type %>">face</i><%= message %>
+						</div>
+					<% end %>
+				</div>
 				<% end %>
 			</div>
 			<div class="row">

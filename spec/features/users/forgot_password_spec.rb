@@ -27,7 +27,7 @@ describe "Forgotten passwords" do
 		expect(page).to have_content("Password updated")
 		expect(page.current_path).to eq(leagues_path)
 
-		click_link "Log Out"
+		click_link "Log out"
 		expect(page).to have_content("Please log in or create an account before continuing.")
 		visit login_path
 		fill_in "login_email", with: user.email

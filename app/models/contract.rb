@@ -12,7 +12,7 @@ class Contract < ActiveRecord::Base
 
   private
   def has_positive_salary
-    errors.add(:base, "Don't be tight. Weekly salary must be greater than $1000.") unless weekly_salary_cents && (weekly_salary_cents >= 100000)
+    errors.add(:base, "Don't be tight. Weekly salary must be greater than $1000.") unless weekly_salary_cents && (weekly_salary_cents >= 1000)
   end
 
   def has_future_end_date
@@ -24,7 +24,7 @@ class Contract < ActiveRecord::Base
   end
 
   def is_a_valid_length
-    errors.add(:base, "Contracts must be between one and four years in length.") unless ends_at && starts_at && (ends_at - starts_at >= 365) && (ends_at - starts_at <= 1461)
+    errors.add(:base, "Contracts must be 1 - 4 years in length.") unless ends_at && starts_at && (ends_at - starts_at >= 365) && (ends_at - starts_at <= 1461)
   end
 
   def one_signed_contract_per_team_player

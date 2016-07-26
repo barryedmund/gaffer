@@ -19,5 +19,9 @@ describe League do
 		it "requires a competition" do
 	  	expect(league).to validate_presence_of(:competition)
 	  end
+
+	  it "requires a name" do
+	  	expect(league).to validate_presence_of(:name)
+	  end
 	end
 end

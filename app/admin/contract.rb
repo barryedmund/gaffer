@@ -12,12 +12,12 @@ ActiveAdmin.register Contract do
       contract.player.full_name
     end
     column :weekly_salary_cents do |contract|
-      number_to_currency(contract.weekly_salary_cents / 100)
+      number_to_currency(contract.weekly_salary_cents)
     end
     column :starts_at
     column :ends_at
     column 'Value' do |contract|
-      number_to_currency(contract.value / 100)
+      number_to_currency(contract.value)
     end
     column :signed
     actions

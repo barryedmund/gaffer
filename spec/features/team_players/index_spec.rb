@@ -12,7 +12,7 @@ describe "Viewing team players" do
 
 	it "displays the title of the team" do
 		visit_team_players(team)
-		within(".main_header") do
+		within(".mdl-card__title-text") do
 			expect(page).to have_content(team.title)
 		end
 	end
