@@ -8,7 +8,7 @@ class Game < ActiveRecord::Base
  	validates_uniqueness_of :game_round, scope: [:home_team, :away_team]
 
  	def match_up
- 		"#{home_team.title} vs #{away_team.title}"
+ 		"#{home_team.title} - #{away_team.title}"
  	end
 
  	def get_league

@@ -11,10 +11,8 @@ describe "Editing teams" do
 		within "#team_#{team.id}" do
 			click_link "#{team.title}"			
 		end
-		within ".main_header" do
-			click_link "edit"
-		end
-		fill_in "Title", with: options[:title]
+		click_link "Edit team"
+		fill_in :team_title, with: options[:title]
 		click_button "Update Team"
 	end
 

@@ -7,11 +7,10 @@ class LeagueInvitesController < ApplicationController
   def create
     @league_invite = LeagueInvite.new(league_invite_params)
     if @league_invite.save
-      flash[:success] = "Added"
+      flash[:success] = "Invite sent"
       render action: :index
     else
-      flash[:error] = "There was a problem adding that."
-      redirect_to league_path(params[:league_id])
+      render action: :new
     end
   end
 

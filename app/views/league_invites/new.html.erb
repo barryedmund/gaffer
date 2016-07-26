@@ -1,6 +1,12 @@
 <% @league = League.find_by_id(params[:league_id]) %>
-<span class="main_header">
-	Send invite for <%= link_to @league.name, league_path(@league) %>
-</span>
-
-<%= render 'form' %>
+<div class="col-sm-12">
+  <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+		<div class="mdl-card__title">
+			<h2 class="mdl-card__title-text">
+				<%= link_to @league.name, league_path(@league), class: "content-link" %>
+        <span>&nbsp;new invite</span>
+			</h2>
+		</div>
+			<%= render 'form' %>
+	</div>
+</div>

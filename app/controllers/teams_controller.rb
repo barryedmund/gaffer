@@ -33,7 +33,6 @@ class TeamsController < ApplicationController
       flash[:success] = "Added team to league"
       redirect_to league_path(@team.league_id)
     else
-      flash[:error] = "There was a problem adding that team."
       render action: :new
     end
   end

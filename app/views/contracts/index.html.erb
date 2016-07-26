@@ -1,24 +1,64 @@
 <% league = League.find_by_id(params[:league_id]) %>
-<span class="main_header">Pending contracts (<%= link_to 'Offer free agent a contract', new_league_contract_path(league.id) %>)</span>
-<div>
-	<div class="one_quarter">Player</div>
-  <div class="one_quarter">Offering team</div>
-  <div class="one_quarter">Salary offered</div>
-  <div class="one_quarter">Start date</div>
-  <hr/>
-  <% array_sorted_by_contract_value = @contracts.joins(:player).where(signed: false).sort_by {|contract| contract.value }.reverse %>
-	<% Contract.where(id: array_sorted_by_contract_value.map(&:id)).joins(:player).order('players.last_name, players.pl_player_code, contracts.starts_at').each do |contract| %>
-		<div>
-			<div class="one_quarter"><%= contract.player.full_name %></div>
-			<div class="one_quarter"><%= contract.team.title %></div>
-			<div class="one_quarter">
-				<% if contract.team == @current_user.teams.joins(:league).where('leagues.id = ?', league.id).first %>
-					<%= number_to_currency(contract.weekly_salary_cents / 100) %>
-				<% else%>
-					Private
-				<% end %>
-			</div>
-			<div class="one_quarter"><%= contract.starts_at %></div>
-		</div>
-	<% end %>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+			<div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">
+        	<%= link_to league.name, league_path(league), class: "content-link" %>
+        	<span>&nbsp;contract offers</span>
+        </h2>
+      </div>
+      <div class="mdl-card__actions">
+      	<% array_sorted_by_contract_value = @contracts.joins(:player).where(signed: false).sort_by {|contract| contract.value }.reverse %>
+      	<% pending_contracts = Contract.where(id: array_sorted_by_contract_value.map(&:id)).joins(:player).order('players.last_name, players.pl_player_code, contracts.starts_at') %>
+      	<% if pending_contracts.count > 0 %>
+      		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+						<tr>
+							<th class="mdl-data-table__cell--non-numeric">
+								<span>Player</span>
+							</th>
+							<th class="mdl-data-table__cell--non-numeric">
+								<span>Team</span>
+							</th>
+							<th>
+								<span>Salary</span>
+							</th>
+							<th class="mdl-data-table__cell--non-numeric">
+								<span>Start</span>
+							</th>
+						</tr>
+	      		<% pending_contracts.each do |contract| %>
+	      			<tr>
+		      			<td class="mdl-data-table__cell--non-numeric normal-text">
+		      				<%= contract.player.full_name %>
+		      			</td>
+		      			<td class="mdl-data-table__cell--non-numeric normal-text">
+		      				<%= contract.team.title %>
+		      			</td>
+		      			<td class="normal-text">
+		      				<% if contract.team == @current_user.teams.joins(:league).where('leagues.id = ?', league.id).first %>
+										<%= number_to_currency(contract.weekly_salary_cents, precision: 0) %>
+									<% else%>
+										Private
+									<% end %>
+		      			</td>
+		      			<td class="mdl-data-table__cell--non-numeric normal-text">
+		      				<%= contract.starts_at.strftime("%d %b") %>
+		      			</td>
+	      			</tr>
+	      		<% end %>
+      		</table>
+      	<% else %>
+      		<div class="normal-text">
+        		No pending contracts.
+        	</div>
+      	<% end %>
+      </div>
+      <div class="mdl-card__supporting-text">
+        <ul class="horizontal-style">
+          <li><%= link_to 'Offer free agent a contract', new_league_contract_path(league.id), class: "mdl-button--primary" %></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>

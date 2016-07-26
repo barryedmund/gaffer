@@ -1,21 +1,53 @@
 <% league = League.find(params[:league_id]) %>
-<span class="main_header">
-	<%= link_to league.name, league_path(league) %> >> Games
-</span>
-
-<div>
-	<div class="one_fifth">Date</div>
-	<div class="one_fifth">Game week #</div>
-	<div class="one_fifth">Teams</div>
-  <div class="one_fifth">Venue</div>
-  <div class="one_fifth">Score</div>
-	<% @games.joins(:game_week).order('game_weeks.game_week_number').each do |game| %>
-		<div>
-			<div class="one_fifth"><%= game.game_week.starts_at %></div>
-			<div class="one_fifth"><%= game.game_week.game_week_number %></div>
-			<div class="one_fifth"><%= link_to game.match_up, league_game_path(game.get_league, game) %></div>
-      <div class="one_fifth"><%= game.home_team.stadium.name %> (<%= number_with_delimiter(game.home_team.stadium.capacity) %>)</div>
-      <div class="one_fifth"><%= game.get_score %></div>
-		</div>
-	<% end %>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+			<div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">
+        	<%= link_to league.name, league_path(league), class: "content-link" %>
+        	<span>&nbsp;games</span>
+        </h2>
+      </div>
+      <div class="mdl-card__actions">
+      	<% if @games.count > 0 %>
+      		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+						<tr>
+							<th class="mdl-data-table__cell--non-numeric">
+								<span>Date</span>
+							</th>
+							<th>
+								<span>GW</span>
+							</th>
+							<th class="mdl-data-table__cell--non-numeric">
+								<span>Home v Away</span>
+							</th>
+							<th class="mdl-data-table__cell--non-numeric">
+								<span>Score</span>
+							</th>
+						</tr>
+						<% @games.joins(:game_week).order('game_weeks.game_week_number').each do |game| %>
+							<tr>
+								<td class="mdl-data-table__cell--non-numeric normal-text">
+									<%= game.game_week.starts_at.strftime("%d %b") %>
+								</td>
+								<td class="normal-text">
+									<%= game.game_week.game_week_number %>
+								</td>
+								<td class="mdl-data-table__cell--non-numeric normal-text">
+									<%= link_to league_game_path(game.get_league, game), class: "content-link" do %>
+										<span><%= game.home_team.title %></span>
+										<br/>
+										<span><%= game.away_team.title %></span>
+									<% end %>
+								</td>
+								<td class="mdl-data-table__cell--non-numeric normal-text">
+									<%= game.get_score %>
+								</td>
+							</tr>
+						<% end %>
+					</table>
+      	<% end %>
+      </div>
+    </div>
+  </div>
 </div>

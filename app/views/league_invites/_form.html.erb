@@ -1,24 +1,32 @@
+<% league = League.find(params[:league_id]) %>
 <%= form_for([League.find(params[:league_id]), @league_invite]) do |f| %>
   <% if @league_invite.errors.any? %>
-    <div id="error_explanation">
-      <h2>
-        <%= pluralize(@league_invite.errors.count, "error") %> prohibited this league invite from being saved:
-      </h2>
-
+    <div class="mdl-card__supporting-text">
+      Please address the <%= "error".pluralize(@league_invite.errors.count) %> and try again:
+    </div>
+    <div>
       <ul>
         <% @league_invite.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+          <li>
+            <i class="material-icons error">face</i>
+            <%= message %>
+          </li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :email %>
-    <%= f.text_field :email %>
+  <div class="mdl-card__actions">
+    <div class="form-group">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <%= f.text_field :email, class: "mdl-textfield__input" %>
+        <%= f.label :email, class: "mdl-textfield__label" %>
+      </div>
+    </div>
     <%= f.hidden_field :league_id, value: params[:league_id] %>
-  </div>
-  <div class="actions">
-    <%= f.submit "Send invite" %>
+    <div class="form-group">
+      <%= f.submit "Send invite", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
+      <%= link_to "Cancel", league_league_invites_path(league), class: "cancel_link_anchor" %>
+    </div>
   </div>
 <% end %>

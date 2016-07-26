@@ -15,8 +15,8 @@ describe "Creating teams" do
 		visit "/"
 		visit "leagues/#{league.id}"
 		click_link "Add Team"
-		expect(page).to have_content("New team")
-		fill_in "Title", with: options[:title]
+		expect(page).to have_content("#{league.name} new team")
+		fill_in :team_title, with: options[:title]
 		fill_in :team_stadium_attributes_name, with: "My Stadium"
 		click_button "Create Team"
 	end
@@ -60,8 +60,8 @@ describe "Creating teams" do
 		visit "/"
 		visit "leagues/#{league.id}"
 		click_link "Add Team"
-		expect(page).to have_content("New team")
-		fill_in "Title", with: "Team One"
+		expect(page).to have_content("#{league.name} new team")
+		fill_in :team_title, with: "Team One"
 		click_button "Create Team"
 
 		expect(page).to_not have_content("Add Team")

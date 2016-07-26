@@ -1,21 +1,34 @@
-<div class="centered">
-	<% @league = League.find_by(id: params[:league_id]) %>
-	<% @league_invites = LeagueInvite.where(league: @league).all %>
-  <span class="main_header">Pending invites to <%= link_to @league.name, league_path(@league) %></span>
-  <div>
-  	<% if @league_invites.length > 0 %>
-	  	<% @league_invites.each do |league_invite| %>
-	    	<div>
-	    		<%= league_invite.email %> (Sent <%= time_ago_in_words(league_invite.created_at) %> ago) <%= link_to "delete", league_league_invite_path(@league, league_invite), method: :delete, data: { confirm: "You sure?" } %>
-	    	</div>
-	  	<% end %>
-	  	<div>
-    		<%= link_to 'Send an invite.', new_league_league_invite_path(@league) %>
-    	</div>
-	 	<% else %>
-	 		<div>
-    		No pending invites. <%= link_to 'Send an invite.', new_league_league_invite_path(@league) %>
-    	</div>
-		<% end %>
-	</div>
+<% @league = League.find_by(id: params[:league_id]) %>
+<% @league_invites = LeagueInvite.where(league: @league).all %>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+			<div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">
+        	<%= link_to @league.name, league_path(@league), class: "content-link" %>
+        	<span>&nbsp;invites</span>
+        </h2>
+      </div>
+      <div class="mdl-card__actions">
+      	<% if @league_invites.length > 0 %>
+	  			<% @league_invites.each do |league_invite| %>
+          	<div class="normal-text league_invite_div">
+          		<%= league_invite.email %> <%= link_to "Revoke", league_league_invite_path(@league, league_invite), method: :delete, class: "negative_action" %>
+              <br/>
+              Sent <%= time_ago_in_words(league_invite.created_at) %> ago
+          	</div>
+          <% end %>
+        <% else %>
+        	<div class="normal-text">
+        		No pending invites.
+        	</div>
+        <% end %>
+      </div>
+      <div class="mdl-card__supporting-text">
+        <ul class="horizontal-style">
+          <li><%= link_to 'Send an invite', new_league_league_invite_path(@league), class: "mdl-button--primary" %></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,32 +1,38 @@
-<div class="centered">
-  <span class="main_header">Your leagues (<%= link_to 'new', new_league_path %>)</span>
-  <% @leagues.each do |league| %>
-    <div class="container">
-      <span class="sub_header"><%= link_to league.name, league %></span>
-        <% league.teams.each do |team| %>
-        <div>
-          <div class="sub_container">
-            <% if team.user_id == @current_user.id %>
-              <span><%= link_to team.title, league_team_path(league, team) %></span>
-            <% else %>
-              <span><%= "#{team.title} (#{team.user.full_name})" %></span>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  <% end %>
-</div>
-<div class="centered">
-  <span class="main_header">Your league invites</span>
-    <% @league_invites = LeagueInvite.where(email: @current_user.email) %>
-    <% @league_invites.each do |league_invite| %>
-      <div class="container">
-        <span>
-          <span class="sub_header">
-            <%= link_to league_invite.league.name, league_invite.league %>
-          </span>
-        </span>
+<div class="row">
+  <div class="col-sm-12 margin-bottom-50">
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">Your leagues</h2>
       </div>
-    <% end %>
+      <div class="mdl-card__actions">
+        <% @leagues.each do |league| %>
+          <div class="normal-text"><%= link_to league.name, league, class: "content-link" %></div>
+        <% end %>
+      </div>
+      <div class="mdl-card__supporting-text">
+        <ul class="horizontal-style">
+          <li><%= link_to 'Create new league', new_league_path, class: "mdl-button--primary" %></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">Your league invites</h2>
+      </div>
+      <div class="mdl-card__actions">
+        <% @league_invites = LeagueInvite.where(email: @current_user.email) %>
+        <% if @league_invites.count > 0 %>
+          <% @league_invites.each do |league_invite| %>
+            <div class="normal-text"><%= link_to league_invite.league.name, league_invite.league, class: "content-link" %></div>
+          <% end %>
+        <% else %>
+          <div class="normal-text">No invites</div>
+        <% end %>
+      </div>
+    </div>
+  </div>
 </div>
