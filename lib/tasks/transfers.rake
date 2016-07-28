@@ -3,7 +3,7 @@ namespace :transfers do
     League.all.each do |league|
       this_league_unsigned_contracts = Contract.joins(:team).where('contracts.signed = ? AND teams.league_id = ?', false, league.id) 
       this_league_unsigned_contracts.select('DISTINCT player_id').each do |contract|
-        ordered_contracts = this_league_unsigned_contracts.where(player: contract.player).order(starts_at: :desc)
+        ordered_contracts = this_league_unsigned_contracts.where(player: contract.player).order('contracts.starts_at DESC, contracts.created_at DESC')
         if ordered_contracts.last.starts_at < 3.days.ago
           best_contract_offer = ordered_contracts.sort_by{ |contract| contract.value }.reverse.first
           team_player = TeamPlayer.create(team: best_contract_offer.team, player: best_contract_offer.player, squad_position: SquadPosition.find_by(short_name: 'SUB'))

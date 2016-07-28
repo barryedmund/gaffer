@@ -10,7 +10,7 @@
       </div>
       <div class="mdl-card__actions">
       	<% array_sorted_by_contract_value = @contracts.joins(:player).where(signed: false).sort_by {|contract| contract.value }.reverse %>
-      	<% pending_contracts = Contract.where(id: array_sorted_by_contract_value.map(&:id)).joins(:player).order('players.last_name, players.pl_player_code, contracts.starts_at') %>
+      	<% pending_contracts = Contract.where(id: array_sorted_by_contract_value.map(&:id)).joins(:player).order('players.last_name, players.pl_player_code, contracts.starts_at, contracts.created_at') %>
       	<% if pending_contracts.count > 0 %>
       		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 						<tr>
