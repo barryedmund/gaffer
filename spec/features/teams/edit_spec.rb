@@ -3,6 +3,7 @@ require 'spec_helper'
 describe "Editing teams" do
 	let(:user) { team.user }
 	let!(:team) { create(:team) }
+	let!(:stadium) { create(:stadium, team: team) }
 
 	def update_team(options={})
 		options[:title] ||= "My team"

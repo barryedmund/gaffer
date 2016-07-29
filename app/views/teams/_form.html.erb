@@ -35,7 +35,11 @@
     <% end %>
     <div class="form-group">
       <%= f.submit class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
-      <%= link_to "Cancel", league_path(league), class: "cancel_link_anchor" %>
+      <% if @team.id %>
+        <%= link_to "Cancel", league_team_path(league, @team), class: "cancel_link_anchor" %>
+      <% else %>
+        <%= link_to "Cancel", league_path(league), class: "cancel_link_anchor" %>
+      <% end %>
     </div>
   </div>
 <% end %>

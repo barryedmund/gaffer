@@ -5,12 +5,13 @@ describe "Moving team players between first team and bench" do
 	let!(:team) { create(:team, league: league, user: league.user) }
 	let!(:team_player) { create(:team_player, :with_contract, team: team) }
 	let!(:midfielder_squad_position) { create(:midfielder_squad_position) }
+	let!(:stadium) { create(:stadium, team: team) }
 	before { sign_in league.user, password: "gaffer123" }
 	
 	it "is successful when marking a single team player as first team" do
 		visit_team_players team
 		within dom_id_for(team_player) do
-			click_button "Add to first team"
+			click_button "Add"
 		end
 		team_player.reload
 		expect(team_player.first_team).to eq(true)
@@ -29,10 +30,10 @@ describe "Moving team players between first team and bench" do
 	it "is successful when removing a single team player from the first team" do
 		visit_team_players team
 		within dom_id_for(team_player) do
-			click_button "Add to first team"
+			click_button "Add"
 		end
 		within dom_id_for(team_player) do
-			click_button "Remove from first team."
+			click_button "Remove"
 		end
 		team_player.reload
 		expect(team_player.first_team).to eq(false)

@@ -35,11 +35,6 @@ i.material-icons {
 	margin-right: 5px;
 	vertical-align: middle;
 }
-input[type="submit"] {
-	font-size: 34px;
-	height: 68px;
-	width: 54%;
-}
 input[type="text"], input[type="password"], input[type="date"] {
 	font-size: 34px;
 	line-height: 28px;
@@ -93,9 +88,10 @@ ul {
 }
 .container {
 	margin: 25px 0px;
+	width: 820px;
 }
 .demo-card-wide.mdl-card {
-  margin: 0px 0px 100px 0px;
+  margin: 0px 0px 30px 0px;
   width: 100%;
 }
 .horizontal-style {
@@ -127,6 +123,11 @@ ul {
 .margin-bottom-50{
 	margin-bottom: 50px;
 }
+.mdl-button--raised.mdl-button--colored{
+	font-size: 34px;
+	height: 68px;
+	width: 54%;
+}
 .mdl-data-table tr th span {
 	color: #111111;
 	font-size: 30px;
@@ -136,8 +137,13 @@ ul {
 .mdl-data-table tr th {
 	padding-top: 8px;
 }
-.negative_action {
-	font-size: 27px;
+.negative_action_button {
+	background-color: rgba(255,255,255, 0);
+	border-radius: 0;
+	border: 0px;
+	color: rgb(255,110,64);
+	font-size: 30px;
+	font-weight: 500;
 }
 .negative_text_link_div {
 	font-size: 27px;
@@ -150,6 +156,14 @@ ul {
 	font-size: 30px;
 	font-weight: 300;
 	line-height: 46px;
+}
+.positive_action_button {
+	background-color: rgba(255,255,255, 0);
+	border-radius: 0;
+	border: 0px;
+	color: rgb(139,195,74);
+	font-size: 30px;
+	font-weight: 500;
 }
 /************************************************
 
