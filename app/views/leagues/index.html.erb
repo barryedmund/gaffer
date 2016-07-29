@@ -5,15 +5,21 @@
         <h2 class="mdl-card__title-text">Your leagues</h2>
       </div>
       <div class="mdl-card__actions">
-        <% @leagues.each do |league| %>
-          <div class="normal-text"><%= link_to league.name, league, class: "content-link" %></div>
+        <% if @leagues.count > 0 %>
+          <% @leagues.each do |league| %>
+            <div class="normal-text"><%= link_to league.name, league, class: "content-link" %></div>
+          <% end %>
+        <% else %>
+          <div class="normal-text">You don't have a team in any leagues yet.</div>
         <% end %>
       </div>
-      <div class="mdl-card__supporting-text">
-        <ul class="horizontal-style">
-          <li><%= link_to 'Create new league', new_league_path, class: "mdl-button--primary" %></li>
-        </ul>
-      </div>
+      <% if AdminUser.exists?(email: @current_user.email) %>
+        <div class="mdl-card__supporting-text">
+          <ul class="horizontal-style">
+            <li><%= link_to 'Create new league', new_league_path, class: "mdl-button--primary" %></li>
+          </ul>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
