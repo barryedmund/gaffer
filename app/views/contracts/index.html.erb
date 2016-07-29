@@ -37,13 +37,13 @@
 		      			</td>
 		      			<td class="normal-text">
 		      				<% if contract.team == @current_user.teams.joins(:league).where('leagues.id = ?', league.id).first %>
-										<%= number_to_currency(contract.weekly_salary_cents, precision: 0) %>
+		      					<%= link_to number_to_currency(contract.weekly_salary_cents, precision: 0), edit_league_contract_path(league, contract), class: "content-link" %>
 									<% else%>
 										Private
 									<% end %>
 		      			</td>
 		      			<td class="mdl-data-table__cell--non-numeric normal-text">
-		      				<%= contract.starts_at.strftime("%d %b") %>
+		      				<%= link_to contract.starts_at.strftime("%d %b"), edit_league_contract_path(league, contract), class: "content-link" %>
 		      			</td>
 	      			</tr>
 	      		<% end %>
