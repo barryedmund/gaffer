@@ -86,6 +86,24 @@ ul {
   vertical-align: bottom;
   width: 37%;
 }
+.collection_radio_buttons {
+	width: 100%;
+}
+.collection_radio_buttons > label {
+	color: #111111;
+	font-size: 30px;
+	font-weight: 300;
+	line-height: 46px;
+	margin: 0px 30px 0px 10px;
+	padding: 10px;
+}
+.collection_radio_buttons > input[type="radio"]:checked + label {
+    border: 2px solid #888;
+    border-radius: 40px;
+}
+.collection_radio_buttons > input[type="radio"] {
+	display: none;
+}
 .container {
 	margin: 25px 0px;
 	width: 820px;
@@ -145,6 +163,10 @@ ul {
 	font-size: 30px;
 	font-weight: 500;
 }
+.negative_action_button:hover {
+	outline: none;
+	text-decoration: underline;
+}
 .negative_text_link_div {
 	font-size: 27px;
   line-height: 28px;
@@ -157,6 +179,11 @@ ul {
 	font-weight: 300;
 	line-height: 46px;
 }
+.non-floating-label {
+	color: rgb(139,195,74);
+	font-size: 26px;
+	top: -4px;
+}
 .positive_action_button {
 	background-color: rgba(255,255,255, 0);
 	border-radius: 0;
@@ -164,6 +191,11 @@ ul {
 	color: rgb(139,195,74);
 	font-size: 30px;
 	font-weight: 500;
+	outline: none;
+}
+.positive_action_button:hover {
+	outline: none;
+	text-decoration: underline;
 }
 /************************************************
 

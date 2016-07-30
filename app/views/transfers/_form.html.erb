@@ -1,26 +1,33 @@
 <%= form_for([League.find(params[:league_id]), @transfer]) do |f| %>
   <% if @transfer.errors.any? %>
-    <div id="error_explanation">
-      <h2>
-        <%= pluralize(@transfer.errors.count, "error") %> prohibited this transfer from being saved:
-      </h2>
+    <div class="mdl-card__supporting-text">
+      Please address the <%= "error".pluralize(@transfer.errors.count) %> and try again:
+    </div>
+    <div>
       <ul>
-      <% @transfer.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
+        <% @transfer.errors.full_messages.each do |message| %>
+          <li>
+            <i class="material-icons error">face</i>
+            <%= message %>
+          </li>
+        <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="mdl-card__actions">
     <% current_user_team = @current_user.teams.where(:league_id => @league.id).first %>
     <%= f.hidden_field :primary_team_id, :value => current_user_team.id %>
     <%= f.hidden_field :primary_team_accepted, :value => true %>
     <%= f.hidden_field :secondary_team_accepted, :value => false %>
-    <%= f.label :secondary_team_id %>
-    <%= f.collection_select :secondary_team_id, Team.where("league_id = ? AND id != ?", @league.id, current_user_team.id), :id, :title %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+    <div class="form-group">
+      <div class="selectdiv">
+        <%= f.collection_select :secondary_team_id, Team.where("league_id = ? AND id != ?", @league.id, current_user_team.id), :id, :title %>    
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.submit "Choose team", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
+      <%= link_to "Cancel", league_transfers_path(@league), class: "cancel_link_anchor" %>
+    </div>
   </div>
 <% end %>

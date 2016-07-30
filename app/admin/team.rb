@@ -8,7 +8,7 @@ ActiveAdmin.register Team do
 		column :user
 		column :league
 		column "Cash balance", :cash_balance_cents do |cash|
-			number_to_currency(cash.cash_balance_cents / 100)
+			number_to_currency(cash.cash_balance_cents)
 		end
 		actions
 	end

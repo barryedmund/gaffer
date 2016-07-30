@@ -10,10 +10,10 @@ class TransfersController < ApplicationController
   def create
   	@transfer = Transfer.new(transfer_params)
     if @transfer.save
-      flash[:success] = "Created transfer"
+      flash[:success] = "Transfer initiated."
       redirect_to new_league_transfer_transfer_item_path(@league, @transfer)
     else
-      flash[:error] = "There was a problem creating that transfer."
+      flash[:error] = "There was a problem initiating that transfer."
       redirect_to league_transfers_path(@league)
     end
 	end

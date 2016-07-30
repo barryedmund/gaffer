@@ -24,7 +24,7 @@
 		  		<% if transfer_item.transfer_item_type === "player" %>
 		  			<%= transfer_item.team_player.full_name %>
 		  		<% elsif transfer_item.transfer_item_type === "cash" %>
-		  			<%= number_to_currency(transfer_item.cash_cents / 100) %>
+		  			<%= number_to_currency(transfer_item.cash_cents) %>
 		  		<% end %>
 	  		<%end%>
 	  	</td>
@@ -33,7 +33,7 @@
 		  		<% if transfer_item.transfer_item_type === "player" %>
 		  			<%= transfer_item.team_player.full_name %>
 		  		<% elsif transfer_item.transfer_item_type === "cash" %>
-		  			<%= number_to_currency(transfer_item.cash_cents / 100) %>
+		  			<%= number_to_currency(transfer_item.cash_cents) %>
 		  		<% end %>
 		  	<% end %>
 	  	</td>

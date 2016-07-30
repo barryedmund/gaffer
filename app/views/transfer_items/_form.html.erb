@@ -1,40 +1,65 @@
-<%= form_for([League.find(params[:league_id]), @transfer, @transfer_item]) do |f| %>
+<% league = League.find(params[:league_id]) %>
+<%= form_for([league, @transfer, @transfer_item]) do |f| %>
   <% if @transfer_item.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@transfer_item.errors.count, "error") %> prohibited this transfer item from being saved:</h2>
-
+    <div class="mdl-card__supporting-text">
+      Please address the <%= "error".pluralize(@transfer_item.errors.count) %> and try again:
+    </div>
+    <div>
       <ul>
-      <% @transfer_item.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
+        <% @transfer_item.errors.full_messages.each do |message| %>
+          <li>
+            <i class="material-icons error">face</i>
+            <%= message %>
+          </li>
+        <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="mdl-card__actions">
     <% if !@transfer_item.id %>
       <%= f.hidden_field :transfer_id, :value => @transfer.id %>
-      <%= f.label :sending_team_id %>
-      <%= f.collection_radio_buttons :sending_team_id, [@transfer.primary_team, @transfer.secondary_team], :id, :title %>
-      <br/>
-      <%= f.label :receiving_team_id %>
-      <%= f.collection_radio_buttons :receiving_team_id, [@transfer.primary_team, @transfer.secondary_team], :id, :title %>
-      <br/>
-      <%= f.label :transfer_item_type %>
-      <%= f.collection_radio_buttons :transfer_item_type, ["cash", "player"], :to_s, :to_s %>
+      <div class="form-group">
+        <%= f.label :sending_team_id, class: "non-floating-label" %>
+        <div class="collection_radio_buttons">
+          <%= f.collection_radio_buttons :sending_team_id, [@transfer.primary_team, @transfer.secondary_team], :id, :title, { checked: @transfer.primary_team.id } %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :receiving_team_id, class: "non-floating-label" %>
+        <div class="collection_radio_buttons">
+          <%= f.collection_radio_buttons :receiving_team_id, [@transfer.primary_team, @transfer.secondary_team], :id, :title, { checked: @transfer.secondary_team.id } %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= f.label :transfer_item_type, class: "non-floating-label" %>
+        <div class="collection_radio_buttons">
+          <%= f.collection_radio_buttons :transfer_item_type, ["cash", "player"], :to_s, :to_s, { checked: "cash" } %>
+        </div>
+      </div>
       <br/>
     <% end %>
     <% if !@transfer_item.id || @transfer_item.transfer_item_type === "player" %>
-      <%= f.label :team_player_id %>
-      <%= f.collection_select :team_player_id, TeamPlayer.where("team_id = ? OR team_id =?", @transfer.primary_team.id, @transfer.secondary_team.id), :id, "#{:full_name}", :include_blank => true %>
+      <div class="form-group">
+        <%= f.label :team_player_id, class: "non-floating-label"  %>
+        <div class="selectdiv">
+          <%= f.collection_select :team_player_id, TeamPlayer.where("team_id = ? OR team_id =?", @transfer.primary_team.id, @transfer.secondary_team.id), :id, "#{:full_name}", :include_blank => true %>
+        </div>
+      </div>
       <br/>
     <% end %>
     <% if !@transfer_item.id || @transfer_item.transfer_item_type === "cash" %>
-      <%= f.label :cash_cents %>
-      <%= f.number_field :cash_cents %>
+      <div class="form-group">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <%= f.text_field :cash_cents, pattern: "^[1-9]{1}[0-9]*$", class: "mdl-textfield__input" %>
+          <%= f.label "Cash amount", class: "mdl-textfield__label" %>
+          <span class="mdl-textfield__error">Invalid amount.</span>
+        </div>
+      </div>
     <% end %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
+    <div class="form-group">
+      <%= f.submit "Add transfer item", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
+      <%= link_to "Cancel", league_transfers_path(league), class: "cancel_link_anchor" %>
+    </div>
   </div>
 <% end %>
