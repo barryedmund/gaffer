@@ -1,53 +1,103 @@
 <% league = League.find(params[:league_id]) %>
-
-<p id="notice"><%= notice %></p>
-
-<span class="main_header">
-	<%= link_to "Transfers", league_transfers_path(league) %> >> #<%= @transfer.id %>: <%= @transfer.primary_team.title %> trading with <%= @transfer.secondary_team.title %>
-</span>
-<br/>
-<span>
-	<% if @transfer.current_user_involved?(@current_user) && !@transfer.transfer_completed? %>
-		<%= link_to "Add transfer item", new_league_transfer_transfer_item_path(league, @transfer) %>
-	<% end %>
-</span>
-<table>
-	<tr>
-		<th><%= @transfer.primary_team.title %> receives</th>
-		<th><%= @transfer.secondary_team.title %> receives</th>
-		<th>Options</th>
-	</tr>
-	<% @transfer.transfer_items.each do |transfer_item| %>
-	  <tr>
-	  	<td>
-	  		<% if transfer_item.receiving_team === @transfer.primary_team %>
-		  		<% if transfer_item.transfer_item_type === "player" %>
-		  			<%= transfer_item.team_player.full_name %>
-		  		<% elsif transfer_item.transfer_item_type === "cash" %>
-		  			<%= number_to_currency(transfer_item.cash_cents) %>
-		  		<% end %>
-	  		<%end%>
-	  	</td>
-	  	<td>
-		  	<% if transfer_item.receiving_team === @transfer.secondary_team %>
-		  		<% if transfer_item.transfer_item_type === "player" %>
-		  			<%= transfer_item.team_player.full_name %>
-		  		<% elsif transfer_item.transfer_item_type === "cash" %>
-		  			<%= number_to_currency(transfer_item.cash_cents) %>
-		  		<% end %>
-		  	<% end %>
-	  	</td>
-	  	<td>
-	  		<% if @transfer.transfer_completed? %>
-	  			Transfer complete
-	  		<% elsif !@transfer.current_user_involved?(@current_user) %>
-	  			Nacho transfer
-	  		<% else %>
-		  		<%= link_to "Remove", league_transfer_transfer_item_path(league, @transfer, transfer_item), method: :delete %>
-		  		or
-		  		<%= link_to "Edit", edit_league_transfer_transfer_item_path(league, @transfer, transfer_item) %>
-	  		<% end %>
-	  	</td>
-	  </tr>
-	<% end %>
-</table>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+			<div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">Transfer details</h2>
+      </div>
+      <div class="mdl-card__supporting-text">
+				Status
+			</div>
+      <div class="mdl-card__supporting-text">
+      	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+					<tr>
+						<th class="mdl-data-table__cell--non-numeric">
+							<span><%= @transfer.primary_team.title %></span>
+						</th>
+						<th class="mdl-data-table__cell--non-numeric">
+							<span><%= @transfer.secondary_team.title %></span>
+						</th>
+					</tr>
+					<tr>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							<%= @transfer.team_transfer_status(@transfer.primary_team).capitalize %>
+						</td>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							<%= @transfer.team_transfer_status(@transfer.secondary_team).capitalize %>
+						</td>
+					</tr>
+				</table>
+      </div>
+      <% if @transfer.current_user_involved?(@current_user) && !@transfer.transfer_completed? %>
+				<div class="mdl-card__supporting-text">
+	        <ul class="horizontal-style">
+	          <li><%= link_to "Change your status", change_response_league_transfer_path(league, @transfer), :method => :patch, class: "mdl-button--primary"  %></li>
+	          <% if @transfer.primary_team.user == @current_user && !@transfer.transfer_completed? %>
+              <li><%= link_to "Cancel transfer", league_transfers_path(league), :method => :delete, class: "mdl-button--primary" %></li>
+            <% end %>
+	        </ul>
+	      </div>
+      <% end %>
+    </div>
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+    	<div class="mdl-card__supporting-text">
+				Who gets what
+			</div>
+    	<div class="mdl-card__actions">
+				<% if @transfer.transfer_items.count > 0 %>
+					<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+						<tr>
+							<th class="mdl-data-table__cell--non-numeric">
+								<span><%= @transfer.primary_team.title %></span>
+							</th>
+							<th class="mdl-data-table__cell--non-numeric">
+								<span><%= @transfer.secondary_team.title %></span>
+							</th>
+							<th class="mdl-data-table__cell--non-numeric">
+								<span> </span>
+							</th>
+						</tr>
+						<% @transfer.transfer_items.each do |transfer_item| %>
+							<tr>
+								<td class="mdl-data-table__cell--non-numeric normal-text">
+									<% if transfer_item.receiving_team === @transfer.primary_team %>
+							  		<% if transfer_item.transfer_item_type === "Player" %>
+							  			<%= transfer_item.team_player.full_name %>
+							  		<% elsif transfer_item.transfer_item_type === "Cash" %>
+							  			<%= number_to_currency(transfer_item.cash_cents, precision: 0) %>
+							  		<% end %>
+						  		<%end%>
+								</td>
+								<td class="mdl-data-table__cell--non-numeric normal-text">
+								<% if transfer_item.receiving_team === @transfer.secondary_team %>
+						  		<% if transfer_item.transfer_item_type === "Player" %>
+						  			<%= transfer_item.team_player.full_name %>
+						  		<% elsif transfer_item.transfer_item_type === "Cash" %>
+						  			<%= number_to_currency(transfer_item.cash_cents, precision: 0) %>
+						  		<% end %>
+						  	<% end %>	
+								</td>
+								<td class="mdl-data-table__cell--non-numeric normal-text">
+									<% if @transfer.transfer_completed? %>
+						  			Done deal
+						  		<% elsif @transfer.current_user_involved?(@current_user) %>
+							  		<%= link_to "Remove", league_transfer_transfer_item_path(league, @transfer, transfer_item), method: :delete %>
+							  		/
+							  		<%= link_to "Edit", edit_league_transfer_transfer_item_path(league, @transfer, transfer_item) %>
+						  		<% end %>
+								</td>
+							</tr>
+						<% end %>
+					</table>
+				<% end %>
+			</div>
+			<% if @transfer.current_user_involved?(@current_user) && !@transfer.transfer_completed? %>
+				<div class="mdl-card__supporting-text">
+	        <ul class="horizontal-style">
+	          <li><%= link_to "Add transfer item", new_league_transfer_transfer_item_path(league, @transfer), class: "mdl-button--primary" %></li>
+	        </ul>
+	      </div>
+      <% end %>
+		</div>
+	</div>
+</div>

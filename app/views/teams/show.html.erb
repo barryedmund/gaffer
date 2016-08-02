@@ -4,10 +4,33 @@
 			<div class="mdl-card__title">
         <h2 class="mdl-card__title-text"><%= @team.title %></h2>
       </div>
-			<div class="mdl-card__supporting-text">
-				Budget: <%= number_to_currency(@team.cash_balance_cents, precision: 0) %>
-				<br/>
-				Stadium: <%= @team.stadium.name %> (<%= number_with_delimiter(@team.stadium.capacity, delimiter: ',') %>)
+      <div class="mdl-card__actions">
+				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+					<tr>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							Manager
+						</td>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							<%= @team.user.full_name %>
+						</td>
+					</tr>
+					<tr>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							Budget
+						</td>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							<%= number_to_currency(@team.cash_balance_cents, precision: 0) %>
+						</td>
+					</tr>
+					<tr>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							Stadium
+						</td>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							<%= @team.stadium.name %> (<%= number_with_delimiter(@team.stadium.capacity, delimiter: ',') %>)
+						</td>
+					</tr>
+				</table>
 			</div>
 			<div class="mdl-card__supporting-text">
 				<ul class="horizontal-style">
@@ -15,6 +38,6 @@
 				</ul>
 			</div>
 		</div>
-		<%= render partial: "shared/team_players" %>
 	</div>
+	<%= render partial: "shared/team_players" %>
 </div>

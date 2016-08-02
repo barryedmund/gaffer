@@ -25,41 +25,45 @@
           <%= f.collection_radio_buttons :sending_team_id, [@transfer.primary_team, @transfer.secondary_team], :id, :title, { checked: @transfer.primary_team.id } %>
         </div>
       </div>
-      <div class="form-group">
-        <%= f.label :receiving_team_id, class: "non-floating-label" %>
-        <div class="collection_radio_buttons">
-          <%= f.collection_radio_buttons :receiving_team_id, [@transfer.primary_team, @transfer.secondary_team], :id, :title, { checked: @transfer.secondary_team.id } %>
-        </div>
-      </div>
+      <%= f.hidden_field :receiving_team_id, value: @transfer.secondary_team.id %>
       <div class="form-group">
         <%= f.label :transfer_item_type, class: "non-floating-label" %>
         <div class="collection_radio_buttons">
-          <%= f.collection_radio_buttons :transfer_item_type, ["cash", "player"], :to_s, :to_s, { checked: "cash" } %>
+          <%= f.collection_radio_buttons :transfer_item_type, ["Cash", "Player"], :to_s, :to_s, { checked: "Cash" } %>
         </div>
       </div>
       <br/>
     <% end %>
-    <% if !@transfer_item.id || @transfer_item.transfer_item_type === "player" %>
-      <div class="form-group">
-        <%= f.label :team_player_id, class: "non-floating-label"  %>
-        <div class="selectdiv">
-          <%= f.collection_select :team_player_id, TeamPlayer.where("team_id = ? OR team_id =?", @transfer.primary_team.id, @transfer.secondary_team.id), :id, "#{:full_name}", :include_blank => true %>
+    <% if !@transfer_item.id || @transfer_item.transfer_item_type === "Cash" %>
+      <div id="transfer_item_cash_div" <% if !@transfer_item.id %>class="hidden_div"<% end %> >
+        <div class="form-group">
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <%= f.text_field :cash_cents, pattern: "^[1-9]{1}[0-9]*$", class: "mdl-textfield__input" %>
+            <%= f.label "Cash amount", class: "mdl-textfield__label" %>
+            <span class="mdl-textfield__error">Invalid amount.</span>
+          </div>
         </div>
       </div>
-      <br/>
     <% end %>
-    <% if !@transfer_item.id || @transfer_item.transfer_item_type === "cash" %>
-      <div class="form-group">
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <%= f.text_field :cash_cents, pattern: "^[1-9]{1}[0-9]*$", class: "mdl-textfield__input" %>
-          <%= f.label "Cash amount", class: "mdl-textfield__label" %>
-          <span class="mdl-textfield__error">Invalid amount.</span>
+    <% if !@transfer_item.id || @transfer_item.transfer_item_type === "Player" %>
+      <div id="transfer_item_player_div" <% if !@transfer_item.id %>class="hidden_div"<% end %> >
+        <div class="form-group">
+          <%= f.label "Player", class: "non-floating-label"  %>
+          <div class="selectdiv">
+            <% available_team_players = TeamPlayer.where("team_id = ? OR team_id =?", @transfer.primary_team.id, @transfer.secondary_team.id) - TeamPlayer.joins(:transfer_items).where('transfer_item_type = ? AND transfer_id = ?', "Player", @transfer.id) %>
+            <%= f.collection_select :team_player_id, available_team_players, :id, "#{:full_name_with_team_name}", :include_blank => true %>
+          </div>
         </div>
+        <br/>
       </div>
     <% end %>
     <div class="form-group">
-      <%= f.submit "Add transfer item", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
-      <%= link_to "Cancel", league_transfers_path(league), class: "cancel_link_anchor" %>
+      <% if !@transfer_item.id %>
+        <%= f.submit "Add", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
+      <% else %>
+        <%= f.submit "Update", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
+      <% end %>
+      <%= link_to "Cancel", league_transfer_path(league, @transfer), class: "cancel_link_anchor" %>
     </div>
   </div>
 <% end %>

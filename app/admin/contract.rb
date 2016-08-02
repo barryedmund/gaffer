@@ -19,6 +19,7 @@ ActiveAdmin.register Contract do
     column 'Value' do |contract|
       number_to_currency(contract.value)
     end
+    column :created_at
     column :signed
     actions
   end

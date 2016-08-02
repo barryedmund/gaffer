@@ -22,7 +22,7 @@
       <div class="form-group">
         <div class="selectdiv">
           <% @players_to_exlcude = Player.joins(team_players: [:team => :league]).where('leagues.id = ?', league.id) | Player.joins(:contracts).where('contracts.team_id = ?', team.id) %>
-          <%= f.collection_select(:player_id, Player.where.not(id:@players_to_exlcude.map(&:id)).sort_by {|p| [p.last_name.downcase, p.first_name.downcase] }, :id, "#{:full_name}") %>
+          <%= f.collection_select(:player_id, Player.where.not(id:@players_to_exlcude.map(&:id)).sort_by {|p| [p.sort_val, p.last_name.downcase, p.first_name.downcase] }, :id, "#{:full_name_and_playing_position}") %>
         </div>
       </div>
     <% end %>

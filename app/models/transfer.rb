@@ -26,10 +26,10 @@ class Transfer < ActiveRecord::Base
 
   def complete_transfer
     self.transfer_items.each do |transfer_item|
-      if transfer_item.transfer_item_type === "cash"
+      if transfer_item.transfer_item_type === "Cash"
         transfer_item.sending_team.decrement!(:cash_balance_cents, transfer_item.cash_cents)
         transfer_item.receiving_team.increment!(:cash_balance_cents, transfer_item.cash_cents)
-      elsif transfer_item.transfer_item_type === "player"
+      elsif transfer_item.transfer_item_type === "Player"
         transfer_item.team_player.update_attributes(:team => transfer_item.receiving_team, :first_team => false, :squad_position => SquadPosition.find_by(:short_name => 'SUB'))
       end
     end

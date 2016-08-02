@@ -1,24 +1,54 @@
 <% league = League.find(params[:league_id]) %>
-
-<span class="main_header">
-  <%= link_to league.name, league_path(league) %> >> Transfers (<%= link_to "new", new_league_transfer_path(league) %>)
-</span>
-<% @transfers.each do |transfer| %>
-  <div>
-  	<% if transfer.primary_team.user == @current_user && !transfer.transfer_completed? %> 
-  		<span><%= transfer.primary_team.title %> (<%= transfer.team_transfer_status(transfer.primary_team) %>) <%= link_to "Change response", change_response_league_transfer_path(league, transfer), :method => :patch %> <%= link_to "Cancel transfer", league_transfer_path(league, transfer), :method => :delete %></span>
-  	<% else %>
-  		<span><%= transfer.primary_team.title %> (<%= transfer.team_transfer_status(transfer.primary_team) %>)</span>
-  	<% end %>
-
-  	<br />
-
-  	<% if transfer.secondary_team.user == @current_user && !transfer.transfer_completed? %> 
-  		<span><%= transfer.secondary_team.title %> (<%= transfer.team_transfer_status(transfer.secondary_team) %>) <%= link_to "Change response", change_response_league_transfer_path(league, transfer), :method => :patch %></span>
-  	<% else %>
-  		<span><%= transfer.secondary_team.title %> (<%= transfer.team_transfer_status(transfer.secondary_team) %>)</span>
-  	<% end %>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">
+          <%= link_to league.name, league_path(league), class: "content-link" %>
+          <span>&nbsp;transfers</span>
+        </h2>
+      </div>
+      <div class="mdl-card__actions">
+        <% if @transfers.count > 0 %>
+          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+            <tr>
+              <th class="mdl-data-table__cell--non-numeric">
+                <span>Team 1</span>
+              </th>
+              <th class="mdl-data-table__cell--non-numeric">
+                <span>Team 2</span>
+              </th>
+              <th class="mdl-data-table__cell--non-numeric">
+                <span> </span>
+              </th>
+            </tr>
+            <% @transfers.order(created_at: :desc).each do |transfer| %>
+              <tr>
+                <td class="mdl-data-table__cell--non-numeric normal-text">
+                  <%= transfer.primary_team.title %>
+                  <br/>
+                  (<%= transfer.team_transfer_status(transfer.primary_team).capitalize %>)
+                </td>
+                <td class="mdl-data-table__cell--non-numeric normal-text">
+                  <%= transfer.secondary_team.title %>
+                  <br/>
+                  (<%= transfer.team_transfer_status(transfer.secondary_team).capitalize %>)
+                </td>
+                <td class="mdl-data-table__cell--non-numeric normal-text">
+                  <%= link_to "View", league_transfer_path(league, transfer) %>
+                </td>
+              </tr>
+            <% end %>
+          </table>
+        <% else %>
+          <span class="normal-text">No pending transfers.</span>
+        <% end %>
+      </div>
+      <div class="mdl-card__supporting-text">
+        <ul class="horizontal-style">
+          <li><%= link_to "New transfer", new_league_transfer_path(league), class: "mdl-button--primary" %></li>
+        </ul>
+      </div>
+    </div>
   </div>
-  <span><%= link_to "View details", league_transfer_path(league, transfer) %></span>
-  <hr/>
-<% end %>
+</div>

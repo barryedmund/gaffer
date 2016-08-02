@@ -3,6 +3,7 @@ class TeamPlayer < ActiveRecord::Base
   belongs_to :player
   belongs_to :squad_position
   has_many :contracts, :dependent => :destroy
+  has_many :transfer_items, :dependent => :destroy
   validates :squad_position_id, presence: true
   accepts_nested_attributes_for :contracts, :allow_destroy => :true
 
@@ -16,5 +17,9 @@ class TeamPlayer < ActiveRecord::Base
 
   def get_squad_position_from_players_playing_position
      SquadPosition.find_by(long_name: player.playing_position)
+  end
+
+  def full_name_with_team_name
+    "#{player.first_name} #{player.last_name} (#{team.title})"
   end
 end
