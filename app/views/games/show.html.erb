@@ -1,48 +1,154 @@
 <% @game_week = @game.game_week %>
 <% @home_team = @game.home_team %>
 <% @away_team = @game.away_team %>
-<div class="container">
-	<span class="sub_header">
-		<%= @game_week.starts_at %> - <%= @game_week.ends_at %>
-	</span>
-  <span class="sub_header">
-    <%= @game.get_score %>
-  </span>
-	<div id="game_line_ups_div">
-  	<div class="line_up">
-  		<div><%= @home_team.title %></div>
-  		<div class="one_fifth">Position</div>
-  		<div class="one_fifth">Player</div>
-  		<div class="one_fifth">Minutes played</div>
-      <div class="one_fifth">Goals</div>
-      <div class="one_fifth">Clean sheet</div>
-  		<% @home_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ?', @game_week.id).order("squad_positions.sort_order").each do |player_lineup| %>
-  			<div class="team_player_row">
-	  			<div class="one_fifth"><%= player_lineup.squad_position.short_name %></div>
-	  			<div class="one_fifth"><%= player_lineup.player_game_week.player.full_name %></div>
-	  			<div class="one_fifth"><%= player_lineup.player_game_week.minutes_played %></div>
-          <div class="one_fifth"><%= player_lineup.player_game_week.goals %></div>
-          <div class="one_fifth"><%= player_lineup.player_game_week.clean_sheet  %></div>
-	  		</div>
-  		<% end %>
-  	</div>
-
-  	<div class="line_up">
-  		<div><%= @away_team.title %></div>
-  		<div class="one_fifth">Position</div>
-      <div class="one_fifth">Player</div>
-      <div class="one_fifth">Minutes played</div>
-      <div class="one_fifth">Goals</div>
-      <div class="one_fifth">Clean sheet</div>
-  		<% @away_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ?', @game_week.id).order("squad_positions.sort_order").each do |player_lineup| %>
-        <div class="team_player_row">
-          <div class="one_fifth"><%= player_lineup.squad_position.short_name %></div>
-          <div class="one_fifth"><%= player_lineup.player_game_week.player.full_name %></div>
-          <div class="one_fifth"><%= player_lineup.player_game_week.minutes_played %></div>
-          <div class="one_fifth"><%= player_lineup.player_game_week.goals %></div>
-          <div class="one_fifth"><%= player_lineup.player_game_week.clean_sheet  %></div>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">
+          Game details
+        </h2>
+      </div>
+      <div class="mdl-card__actions">
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+          <tr>
+            <td class="mdl-data-table__cell--non-numeric normal-text">
+              League
+            </td>
+            <td class="mdl-data-table__cell--non-numeric normal-text">
+              <%= link_to @home_team.league.name, league_path(@home_team.league), class: "content-link" %>
+            </td>
+          </tr>
+          <tr>
+            <td class="mdl-data-table__cell--non-numeric normal-text">
+              Teams
+            </td>
+            <td class="mdl-data-table__cell--non-numeric normal-text">
+              <%= link_to @home_team.title, league_team_path(@home_team.league, @home_team), class: "content-link" %>
+              v
+              <%= link_to @away_team.title, league_team_path(@away_team.league, @away_team), class: "content-link" %>
+            </td>
+          </tr>
+          <tr>
+            <td class="mdl-data-table__cell--non-numeric normal-text">
+              Game week
+            </td>
+            <td class="mdl-data-table__cell--non-numeric normal-text">
+              <span class="normal-text"><%= @game_week.game_week_number %></span>
+            </td>
+          </tr>
+          <tr>
+            <td class="mdl-data-table__cell--non-numeric normal-text">
+              Score
+            </td>
+            <td class="mdl-data-table__cell--non-numeric normal-text">
+              <span class="normal-text"><%= @game.get_score %></span>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="mdl-card__actions">
+        <div class="mdl-card__supporting-text">
+          <%= @home_team.title %>
         </div>
-      <% end %>
-  	</div>
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+          <tr>
+            <th class="mdl-data-table__cell--non-numeric">
+              <span>Pos</span>
+            </th>
+            <th class="mdl-data-table__cell--non-numeric">
+              <span>Player</span>
+            </th>
+            <th>
+              <span>MP</span>
+            </th>
+            <th>
+              <span>G</span>
+            </th>
+            <th>
+              <span>CS</span>
+            </th>
+          </tr>
+          <% @home_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ?', @game_week.id).order("squad_positions.sort_order").each do |player_lineup| %>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric normal-text">
+                <%= player_lineup.squad_position.short_name %>
+              </td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric normal-text">
+                <%= player_lineup.player_game_week.player.full_name(true) %>
+              </td>
+            </tr>
+            <tr>
+              <td class="normal-text">
+                <%= player_lineup.player_game_week.minutes_played %>  
+              </td>
+            </tr>
+            <tr>
+              <td class="normal-text">
+                <%= player_lineup.player_game_week.goals %>
+              </td>
+            </tr>
+            <tr>
+              <td class="normal-text">
+                <%= player_lineup.player_game_week.clean_sheet %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+      <div class="mdl-card__actions">
+        <div class="mdl-card__supporting-text">
+          <%= @away_team.title %>
+        </div>
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+          <tr>
+            <th class="mdl-data-table__cell--non-numeric">
+              <span>Pos</span>
+            </th>
+            <th class="mdl-data-table__cell--non-numeric">
+              <span>Player</span>
+            </th>
+            <th>
+              <span>MP</span>
+            </th>
+            <th>
+              <span>G</span>
+            </th>
+            <th>
+              <span>CS</span>
+            </th>
+          </tr>
+          <% @away_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ?', @game_week.id).order("squad_positions.sort_order").each do |player_lineup| %>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric normal-text">
+                <%= player_lineup.squad_position.short_name %>
+              </td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric normal-text">
+                <%= player_lineup.player_game_week.player.full_name(true) %>
+              </td>
+            </tr>
+            <tr>
+              <td class="normal-text">
+                <%= player_lineup.player_game_week.minutes_played %>  
+              </td>
+            </tr>
+            <tr>
+              <td class="normal-text">
+                <%= player_lineup.player_game_week.goals %>
+              </td>
+            </tr>
+            <tr>
+              <td class="normal-text">
+                <%= player_lineup.player_game_week.clean_sheet %>
+              </td>
+            </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
   </div>
 </div>

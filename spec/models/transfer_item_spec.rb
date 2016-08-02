@@ -18,31 +18,31 @@ describe TransferItem do
 
   let!(:transfer){Transfer.create(:primary_team => team_1, :secondary_team => team_2, :primary_team_accepted => true, :secondary_team_accepted => false)}
 
-  let!(:transfer_item){TransferItem.create(:sending_team => team_1, :receiving_team => team_2, :transfer => transfer, :transfer_item_type => "cash", :cash_cents => 10000000)}
+  let!(:transfer_item){TransferItem.create(:sending_team => team_1, :receiving_team => team_2, :transfer => transfer, :transfer_item_type => "Cash", :cash_cents => 10000000)}
   
   let!(:transfer_item_with_weird_type){TransferItem.create(:sending_team => team_1, :receiving_team => team_2, :transfer => transfer, :transfer_item_type => "pokemon", :cash_cents => 10000000)}
   
-  let!(:cash_transfer_item_with_positive_cash){TransferItem.create(:sending_team => team_1, :receiving_team => team_2, :transfer => transfer, :transfer_item_type => "cash", :cash_cents => 10000000)}
+  let!(:cash_transfer_item_with_positive_cash){TransferItem.create(:sending_team => team_1, :receiving_team => team_2, :transfer => transfer, :transfer_item_type => "Cash", :cash_cents => 10000000)}
   
-  let!(:cash_transfer_item_with_null_cash){TransferItem.create(:sending_team => team_1, :receiving_team => team_2, :transfer => transfer, :transfer_item_type => "cash")}
+  let!(:cash_transfer_item_with_null_cash){TransferItem.create(:sending_team => team_1, :receiving_team => team_2, :transfer => transfer, :transfer_item_type => "Cash")}
   
-  let!(:cash_transfer_item_with_negative_cash){TransferItem.create(:sending_team => team_1, :receiving_team => team_2, :transfer => transfer, :transfer_item_type => "cash", :cash_cents => -10000000)}
+  let!(:cash_transfer_item_with_negative_cash){TransferItem.create(:sending_team => team_1, :receiving_team => team_2, :transfer => transfer, :transfer_item_type => "Cash", :cash_cents => -10000000)}
   
-  let!(:cash_transfer_item_with_team_player){TransferItem.create(:sending_team => team_1, :receiving_team => team_2, :transfer => transfer, :transfer_item_type => "cash", :cash_cents => 10000000, :team_player => team_player)}
+  let!(:cash_transfer_item_with_team_player){TransferItem.create(:sending_team => team_1, :receiving_team => team_2, :transfer => transfer, :transfer_item_type => "Cash", :cash_cents => 10000000, :team_player => team_player)}
   
-  let!(:player_transfer_item_without_team_player){TransferItem.create(:sending_team => team_1, :receiving_team => team_2, :transfer => transfer, :transfer_item_type => "player")}
+  let!(:player_transfer_item_without_team_player){TransferItem.create(:sending_team => team_1, :receiving_team => team_2, :transfer => transfer, :transfer_item_type => "Player")}
   
-  let!(:player_transfer_item_with_cash_cents){TransferItem.create(:sending_team => team_1, :receiving_team => team_2, :transfer => transfer, :transfer_item_type => "player", :cash_cents => 10000000, :team_player => team_player)}
+  let!(:player_transfer_item_with_cash_cents){TransferItem.create(:sending_team => team_1, :receiving_team => team_2, :transfer => transfer, :transfer_item_type => "Player", :cash_cents => 10000000, :team_player => team_player)}
 
-  let!(:player_transfer_item_when_player_not_on_sending_team){TransferItem.create(:sending_team => team_2, :receiving_team => team_1, :transfer => transfer, :transfer_item_type => "player", :team_player => team_player)}
+  let!(:player_transfer_item_when_player_not_on_sending_team){TransferItem.create(:sending_team => team_2, :receiving_team => team_1, :transfer => transfer, :transfer_item_type => "Player", :team_player => team_player)}
 
-  let!(:transfer_item_teams_not_in_same_league){TransferItem.create(:sending_team => team_1, :receiving_team => team_3, :transfer => transfer, :transfer_item_type => "cash", :cash_cents => 100000)}
+  let!(:transfer_item_teams_not_in_same_league){TransferItem.create(:sending_team => team_1, :receiving_team => team_3, :transfer => transfer, :transfer_item_type => "Cash", :cash_cents => 100000)}
 
-  let!(:transfer_item_same_team){TransferItem.create(:sending_team => team_1, :receiving_team => team_1, :transfer => transfer, :transfer_item_type => "cash", :cash_cents => 100000)}
+  let!(:transfer_item_same_team){TransferItem.create(:sending_team => team_1, :receiving_team => team_1, :transfer => transfer, :transfer_item_type => "Cash", :cash_cents => 100000)}
 
-  let!(:transfer_item_team_not_enough_money){TransferItem.create(:sending_team => team_4, :receiving_team => team_1, :transfer => transfer, :transfer_item_type => "cash", :cash_cents => 100000)}
+  let!(:transfer_item_team_not_enough_money){TransferItem.create(:sending_team => team_4, :receiving_team => team_1, :transfer => transfer, :transfer_item_type => "Cash", :cash_cents => 100000)}
 
-  let!(:transfer_item_teams_not_same_as_transfer_teams){TransferItem.create(:sending_team => team_1, :receiving_team => team_5, :transfer => transfer, :transfer_item_type => "cash", :cash_cents => 10000000)}
+  let!(:transfer_item_teams_not_same_as_transfer_teams){TransferItem.create(:sending_team => team_1, :receiving_team => team_5, :transfer => transfer, :transfer_item_type => "Cash", :cash_cents => 10000000)}
 
   context "relationships" do
     it {should belong_to(:sending_team)}

@@ -18,15 +18,14 @@
   <% end %>
 
   <div class="mdl-card__actions">
-    <div class="form-group">
-      <div class="selectdiv">
-        <% if !@contract.id %>
+    <% if !@contract.id %>
+      <div class="form-group">
+        <div class="selectdiv">
           <% @players_to_exlcude = Player.joins(team_players: [:team => :league]).where('leagues.id = ?', league.id) | Player.joins(:contracts).where('contracts.team_id = ?', team.id) %>
-
-          <%= f.collection_select(:player_id, Player.where.not(id:@players_to_exlcude.map(&:id)).sort_by {|p| [p.last_name.downcase, p.first_name.downcase] }, :id, "#{:full_name}") %>
-        <% end %>
+          <%= f.collection_select(:player_id, Player.where.not(id:@players_to_exlcude.map(&:id)).sort_by {|p| [p.sort_val, p.last_name.downcase, p.first_name.downcase] }, :id, "#{:full_name_and_playing_position}") %>
+        </div>
       </div>
-    </div>
+    <% end %>
     <div class="form-group">
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
         <%= f.text_field :weekly_salary_cents, pattern: "^[1-9]{1}[0-9]*$", class: "mdl-textfield__input" %>

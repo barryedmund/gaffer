@@ -71,13 +71,13 @@
 				<ul class="horizontal-style">
 					<% if !@league.has_team_owned_by?(@current_user) && @league.teams.count < 20 && !latest_league_season %>
 						<li><%= link_to 'Add Team', new_league_team_path(@league), class: "mdl-button--primary" %></li>
-					<% else %>
+					<% elsif @league.has_team_owned_by?(@current_user) %>
 						<li><%= link_to 'Games', league_games_path(@league), class: "mdl-button--primary" %></li>
 						<li><%= link_to 'Transfers', league_transfers_path(@league), class: "mdl-button--primary" %></li>
 						<li><%= link_to 'Free agents', league_contracts_path(@league), class: "mdl-button--primary" %></li>
-						<% if @league.is_owned_by_this_user?(@current_user) %>
-							<li><%= link_to 'Invites', league_league_invites_path(@league), class: "mdl-button--primary" %></li>
-						<% end %>
+					<% end %>
+					<% if @league.is_owned_by_this_user?(@current_user) %>
+						<li><%= link_to 'Invites', league_league_invites_path(@league), class: "mdl-button--primary" %></li>
 					<% end %>
 				</ul>
 			</div>

@@ -10,10 +10,10 @@ class TransfersController < ApplicationController
   def create
   	@transfer = Transfer.new(transfer_params)
     if @transfer.save
-      flash[:success] = "Created transfer"
+      flash[:success] = "Transfer initiated."
       redirect_to new_league_transfer_transfer_item_path(@league, @transfer)
     else
-      flash[:error] = "There was a problem creating that transfer."
+      flash[:error] = "There was a problem initiating that transfer."
       redirect_to league_transfers_path(@league)
     end
 	end
@@ -27,9 +27,11 @@ class TransfersController < ApplicationController
     if @transfer.primary_team.user == @current_user
       new_primary_value = @transfer.primary_team_accepted ? false : true
       @transfer.update_attributes(:primary_team_accepted => new_primary_value)
+      flash[:success] = "Response changed."
     elsif @transfer.secondary_team.user == @current_user
       new_secondary_value = @transfer.secondary_team_accepted ? false : true
       @transfer.update_attributes(:secondary_team_accepted => new_secondary_value)
+      flash[:success] = "Response changed."
     end
     if @transfer.transfer_completed?
       @transfer.complete_transfer

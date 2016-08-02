@@ -8,9 +8,18 @@
         	<span>&nbsp;contract offers</span>
         </h2>
       </div>
+      <div class="mdl-card__supporting-text">
+      	These are sorted by player & then by contract value (salary x length). Once a player is offered a contract, other teams have two days to beat it.
+      </div>
+      <div class="mdl-card__supporting-text">
+        <ul class="horizontal-style">
+          <li><%= link_to 'Offer free agent a contract', new_league_contract_path(league.id), class: "mdl-button--primary" %></li>
+        </ul>
+      </div>
+    </div>
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
       <div class="mdl-card__actions">
-      	<% array_sorted_by_contract_value = @contracts.joins(:player).where(signed: false).sort_by {|contract| contract.value }.reverse %>
-      	<% pending_contracts = Contract.where(id: array_sorted_by_contract_value.map(&:id)).joins(:player).order('players.last_name, players.pl_player_code, contracts.starts_at, contracts.created_at') %>
+      	<% pending_contracts = @contracts.joins(:player).where(signed: false).sort_by {|contract| [contract.player.last_name, contract.player.pl_player_code, -contract.value, contract.created_at] } %>
       	<% if pending_contracts.count > 0 %>
       		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 						<tr>
@@ -30,10 +39,10 @@
 	      		<% pending_contracts.each do |contract| %>
 	      			<tr>
 		      			<td class="mdl-data-table__cell--non-numeric normal-text">
-		      				<%= contract.player.full_name %>
+		      				<%= contract.player.full_name(true) %>
 		      			</td>
 		      			<td class="mdl-data-table__cell--non-numeric normal-text">
-		      				<%= contract.team.title %>
+		      				<%= truncate(contract.team.title, length: 13) %>
 		      			</td>
 		      			<td class="normal-text">
 		      				<% if contract.team == @current_user.teams.joins(:league).where('leagues.id = ?', league.id).first %>
@@ -43,7 +52,7 @@
 									<% end %>
 		      			</td>
 		      			<td class="mdl-data-table__cell--non-numeric normal-text">
-		      				<%= link_to contract.starts_at.strftime("%d %b"), edit_league_contract_path(league, contract), class: "content-link" %>
+		      				<%= contract.starts_at.strftime("%d %b") %>
 		      			</td>
 	      			</tr>
 	      		<% end %>
@@ -53,11 +62,6 @@
         		No pending contracts.
         	</div>
       	<% end %>
-      </div>
-      <div class="mdl-card__supporting-text">
-        <ul class="horizontal-style">
-          <li><%= link_to 'Offer free agent a contract', new_league_contract_path(league.id), class: "mdl-button--primary" %></li>
-        </ul>
       </div>
     </div>
   </div>

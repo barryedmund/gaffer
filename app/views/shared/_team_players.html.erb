@@ -1,90 +1,104 @@
-<div class="demo-card-wide mdl-card mdl-shadow--2dp">
-	<div class="mdl-card__supporting-text">
-		First team
-	</div>
-	<div class="mdl-card__actions">
-		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-			<tr>
-				<th class="mdl-data-table__cell--non-numeric">
-					<span>Pos</span>
-				</th>
-				<th class="mdl-data-table__cell--non-numeric">
-					<span>Name</span>
-				</th>
-				<th>
-					<span>Salary</span>
-				</th>
-				<th class="mdl-data-table__cell--non-numeric">
-					<span> </span>
-				</th>
-			</tr>
-			<% squad_position_whtelist = @team.get_squad_position_whitelist %>
-			<% @team.team_players.includes(:squad_position, :player).where(first_team: true).reorder('squad_positions.sort_order, players.last_name, players.first_name').each do |team_player| %>
-				<tr id="<%= dom_id(team_player) %>">
-					<td class="mdl-data-table__cell--non-numeric normal-text">
-						<%= team_player.squad_position.short_name %>
-					</td>
-					<td class="mdl-data-table__cell--non-numeric normal-text">
-						<%= link_to team_player.full_name, league_team_team_player_path(team_player.team.league, team_player.team, team_player), class: "content-link" %>
-					</td>
-					<td class="normal-text">
-						<%= number_to_currency(team_player.current_contract.weekly_salary_cents, precision: 0) %>
-					</td>
-					<td class="mdl-data-table__cell--non-numeric normal-text">
-						<%= form_for team_player, url: update_first_team_league_team_team_player_path(team_player.team.league, team_player.team, team_player)  do |f| %>
-							<%= f.submit "Remove", class: "negative_action_button" %>
-						<% end %>
-					</td>
-				</tr>
-			<% end %>
-		</table>
-	</div>	
-</div>
-
-<div class="demo-card-wide mdl-card mdl-shadow--2dp">
-	<div class="mdl-card__supporting-text">
-		Squad players
-	</div>
-	<div class="mdl-card__actions">
-		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-			<tr>
-				<th class="mdl-data-table__cell--non-numeric">
-					<span>Pos</span>
-				</th>
-				<th class="mdl-data-table__cell--non-numeric">
-					<span>Name</span>
-				</th>
-				<th>
-					<span>Salary</span>
-				</th>
-				<th class="mdl-data-table__cell--non-numeric">
-					<span> </span>
-				</th>
-			</tr>
-			<% @team.team_players.where(first_team: false).find_each do |team_player| %>
-				<tr id="<%= dom_id(team_player) %>">
-					<td class="mdl-data-table__cell--non-numeric normal-text">
-						<%= team_player.squad_position.short_name %>
-					</td>
-					<td class="mdl-data-table__cell--non-numeric normal-text">
-						<%= link_to team_player.full_name, league_team_team_player_path(team_player.team.league, team_player.team, team_player), class: "content-link" %>
-					</td>
-					<td class="normal-text">
-						<%= number_to_currency(team_player.current_contract.weekly_salary_cents, precision: 0) %>
-					</td>
-					<td class="mdl-data-table__cell--non-numeric normal-text">
-						<% first_team_players = @team.team_players.where(first_team: true) %>
-						<% if first_team_players.count < 11 %>
-							<% if team_player.player.playing_position != 'Goalkeeper' || first_team_players.joins(:squad_position).where('squad_positions.short_name = ?', 'GK').count === 0 %>
+<div class="col-sm-12">
+	<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+		<div class="mdl-card__supporting-text">
+			First team
+		</div>
+		<% if @team.team_players.includes(:squad_position, :player).where(first_team: true).count > 0 %>
+			<div class="mdl-card__actions">
+				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+					<tr>
+						<th class="mdl-data-table__cell--non-numeric">
+							<span>Pos</span>
+						</th>
+						<th class="mdl-data-table__cell--non-numeric">
+							<span>Name</span>
+						</th>
+						<th>
+							<span>Salary</span>
+						</th>
+						<th class="mdl-data-table__cell--non-numeric">
+							<span> </span>
+						</th>
+					</tr>
+					<% squad_position_whtelist = @team.get_squad_position_whitelist %>
+					<% @team.team_players.includes(:squad_position, :player).where(first_team: true).reorder('squad_positions.sort_order, players.last_name, players.first_name').each do |team_player| %>
+						<tr id="<%= dom_id(team_player) %>">
+							<td class="mdl-data-table__cell--non-numeric normal-text">
+								<%= team_player.squad_position.short_name %>
+							</td>
+							<td class="mdl-data-table__cell--non-numeric normal-text">
+								<%= link_to team_player.full_name, league_team_team_player_path(team_player.team.league, team_player.team, team_player), class: "content-link" %>
+							</td>
+							<td class="normal-text">
+								<%= number_to_currency(team_player.current_contract.weekly_salary_cents, precision: 0) %>
+							</td>
+							<td class="mdl-data-table__cell--non-numeric normal-text">
 								<%= form_for team_player, url: update_first_team_league_team_team_player_path(team_player.team.league, team_player.team, team_player)  do |f| %>
-									<%= f.hidden_field :squad_position_id, value: team_player.get_squad_position_from_players_playing_position.id %>
-									<%= f.submit "Add", class: "positive_action_button" %>
+									<%= f.submit "Remove", class: "negative_action_button" %>
 								<% end %>
-							<% end %>
-						<% end %>
-					</td>
-				</tr>
-			<% end %>
-		</table>
+							</td>
+						</tr>
+					<% end %>
+				</table>
+			</div>
+		<% else %>
+			<div class="mdl-card__supporting-text">
+				You need to add some players to your first team.
+			</div>
+		<% end %>
+	</div>
+
+	<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+		<div class="mdl-card__supporting-text">
+			Squad players
+		</div>
+		<% if @team.team_players.where(first_team: false).count > 0 %>
+			<div class="mdl-card__actions">
+				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+					<tr>
+						<th class="mdl-data-table__cell--non-numeric">
+							<span>Pos</span>
+						</th>
+						<th class="mdl-data-table__cell--non-numeric">
+							<span>Name</span>
+						</th>
+						<th>
+							<span>Salary</span>
+						</th>
+						<th class="mdl-data-table__cell--non-numeric">
+							<span> </span>
+						</th>
+					</tr>
+					<% @team.team_players.where(first_team: false).find_each do |team_player| %>
+						<tr id="<%= dom_id(team_player) %>">
+							<td class="mdl-data-table__cell--non-numeric normal-text">
+								<%= team_player.squad_position.short_name %>
+							</td>
+							<td class="mdl-data-table__cell--non-numeric normal-text">
+								<%= link_to team_player.full_name, league_team_team_player_path(team_player.team.league, team_player.team, team_player), class: "content-link" %>
+							</td>
+							<td class="normal-text">
+								<%= number_to_currency(team_player.current_contract.weekly_salary_cents, precision: 0) %>
+							</td>
+							<td class="mdl-data-table__cell--non-numeric normal-text">
+								<% first_team_players = @team.team_players.where(first_team: true) %>
+								<% if first_team_players.count < 11 %>
+									<% if team_player.player.playing_position != 'Goalkeeper' || first_team_players.joins(:squad_position).where('squad_positions.short_name = ?', 'GK').count === 0 %>
+										<%= form_for team_player, url: update_first_team_league_team_team_player_path(team_player.team.league, team_player.team, team_player)  do |f| %>
+											<%= f.hidden_field :squad_position_id, value: team_player.get_squad_position_from_players_playing_position.id %>
+											<%= f.submit "Add", class: "positive_action_button" %>
+										<% end %>
+									<% end %>
+								<% end %>
+							</td>
+						</tr>
+					<% end %>
+				</table>
+			</div>
+		<% else %>
+			<div class="mdl-card__supporting-text">
+				You need to add some players to your first team.
+			</div>
+		<% end %>
 	</div>
 </div>
