@@ -1,3 +1,5 @@
+
+<% @league = params[:league_id] %>
 <div class="col-sm-12">
 	<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 		<div class="mdl-card__supporting-text">
@@ -27,13 +29,13 @@
 								<%= team_player.squad_position.short_name %>
 							</td>
 							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<%= link_to team_player.full_name, league_team_team_player_path(team_player.team.league, team_player.team, team_player), class: "content-link" %>
+								<%= link_to team_player.full_name, league_team_team_player_path(@league, team_player.team, team_player), class: "content-link" %>
 							</td>
 							<td class="normal-text">
 								<%= number_to_currency(team_player.current_contract.weekly_salary_cents, precision: 0) %>
 							</td>
 							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<%= form_for team_player, url: update_first_team_league_team_team_player_path(team_player.team.league, team_player.team, team_player)  do |f| %>
+								<%= form_for team_player, url: update_first_team_league_team_team_player_path(@league, team_player.team, team_player)  do |f| %>
 									<%= f.submit "Remove", class: "negative_action_button" %>
 								<% end %>
 							</td>
@@ -75,7 +77,7 @@
 								<%= team_player.squad_position.short_name %>
 							</td>
 							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<%= link_to team_player.full_name, league_team_team_player_path(team_player.team.league, team_player.team, team_player), class: "content-link" %>
+								<%= link_to team_player.full_name, league_team_team_player_path(@league, team_player.team, team_player), class: "content-link" %>
 							</td>
 							<td class="normal-text">
 								<%= number_to_currency(team_player.current_contract.weekly_salary_cents, precision: 0) %>
@@ -84,7 +86,7 @@
 								<% first_team_players = @team.team_players.where(first_team: true) %>
 								<% if first_team_players.count < 11 %>
 									<% if team_player.player.playing_position != 'Goalkeeper' || first_team_players.joins(:squad_position).where('squad_positions.short_name = ?', 'GK').count === 0 %>
-										<%= form_for team_player, url: update_first_team_league_team_team_player_path(team_player.team.league, team_player.team, team_player)  do |f| %>
+										<%= form_for team_player, url: update_first_team_league_team_team_player_path(@league, team_player.team, team_player)  do |f| %>
 											<%= f.hidden_field :squad_position_id, value: team_player.get_squad_position_from_players_playing_position.id %>
 											<%= f.submit "Add", class: "positive_action_button" %>
 										<% end %>
@@ -97,7 +99,7 @@
 			</div>
 		<% else %>
 			<div class="mdl-card__supporting-text">
-				You need to add some players to your first team.
+				You need to add some players to your squad.
 			</div>
 		<% end %>
 	</div>
