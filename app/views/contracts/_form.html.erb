@@ -48,7 +48,9 @@
         <span class="mdl-textfield__error">Invalid salary.</span>
       </div>
     </div>
-    <%= f.hidden_field :starts_at, :value => Date.today %>
+    <% if !@contract.id %>
+      <%= f.hidden_field :starts_at, :value => Date.today %>
+    <% end %>
     <%= f.hidden_field :team_id, :value => team.id %>
     <div class="form-group">
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
