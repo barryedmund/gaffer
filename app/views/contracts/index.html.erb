@@ -1,4 +1,5 @@
 <% league = League.find_by_id(params[:league_id]) %>
+<% team = Team.where(league: league, user: @current_user).first %>
 <div class="row">
 	<div class="col-sm-12">
 		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
@@ -11,6 +12,26 @@
       <div class="mdl-card__supporting-text">
       	These are sorted by player & then by contract value (salary x length). Once a player is offered a contract, other teams have two days to beat it.
       </div>
+      <div class="mdl-card__actions">
+				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+					<tr>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							Your offers total (per week)
+						</td>
+						<td class="normal-text">
+							<%= number_to_currency(team.get_weekly_total_of_unsigned_contracts, precision: 0) %>
+						</td>
+					</tr>
+					<tr>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							Your offers total (per season)
+						</td>
+						<td class="normal-text">
+							<%= number_to_currency(team.get_season_total_of_unsigned_contracts, precision: 0) %>
+						</td>
+					</tr>
+				</table>
+			</div>
       <div class="mdl-card__supporting-text">
         <ul class="horizontal-style">
           <li><%= link_to 'Offer free agent a contract', new_league_contract_path(league.id), class: "mdl-button--primary" %></li>
@@ -42,7 +63,7 @@
 		      				<%= contract.player.full_name(true) %>
 		      			</td>
 		      			<td class="mdl-data-table__cell--non-numeric normal-text">
-		      				<%= truncate(contract.team.title, length: 13) %>
+		      				<%= truncate(contract.team.title, length: 10) %>
 		      			</td>
 		      			<td class="normal-text">
 		      				<% if contract.team == @current_user.teams.joins(:league).where('leagues.id = ?', league.id).first %>

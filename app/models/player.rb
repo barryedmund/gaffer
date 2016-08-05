@@ -8,7 +8,7 @@ class Player < ActiveRecord::Base
 	def full_name(abbreviate = false)
     if abbreviate
       working_full_name = "#{first_name} #{last_name}"
-      cut_off = 15
+      cut_off = 13
       if working_full_name.length >= cut_off
         working_full_name = "#{first_name[0]}. #{last_name}"
       end
