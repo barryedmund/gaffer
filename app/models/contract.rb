@@ -3,7 +3,7 @@ class Contract < ActiveRecord::Base
   belongs_to :team_player
   belongs_to :player
   validates :weekly_salary_cents, :team, :starts_at, :ends_at, :player_id, presence: true
-  validate :has_positive_salary, :has_future_end_date, :has_start_date_before_end_date, :is_a_valid_length, :one_signed_contract_per_team_player, on: :create
+  validate :has_positive_salary, :has_future_end_date, :has_start_date_before_end_date, :is_a_valid_length, :one_signed_contract_per_team_player
 
   def value
     number_of_weeks = (((ends_at - starts_at).to_i) / 7).floor
