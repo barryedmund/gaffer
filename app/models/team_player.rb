@@ -7,8 +7,19 @@ class TeamPlayer < ActiveRecord::Base
   validates :squad_position_id, presence: true
   accepts_nested_attributes_for :contracts, :allow_destroy => :true
 
-  def full_name
-    "#{player.first_name} #{player.last_name}"
+  def full_name(abbreviate = false, cut_off = 13)
+    if abbreviate
+      working_full_name = "#{player.first_name} #{player.last_name}"
+      if working_full_name.length >= cut_off
+        working_full_name = "#{player.first_name[0]}. #{player.last_name}"
+      end
+      if working_full_name.length >= cut_off
+        working_full_name = working_full_name[0, cut_off - 1] + '...'
+      end
+      working_full_name
+    else
+      "#{player.first_name} #{player.last_name}"
+    end
   end
 
   def current_contract

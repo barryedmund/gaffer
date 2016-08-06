@@ -62,7 +62,7 @@
 								<td class="mdl-data-table__cell--non-numeric normal-text">
 									<% if transfer_item.receiving_team === @transfer.primary_team %>
 							  		<% if transfer_item.transfer_item_type === "Player" %>
-							  			<%= transfer_item.team_player.full_name %>
+							  			<%= transfer_item.team_player.full_name(true) %>
 							  		<% elsif transfer_item.transfer_item_type === "Cash" %>
 							  			<%= number_to_currency(transfer_item.cash_cents, precision: 0) %>
 							  		<% end %>
@@ -71,7 +71,7 @@
 								<td class="mdl-data-table__cell--non-numeric normal-text">
 								<% if transfer_item.receiving_team === @transfer.secondary_team %>
 						  		<% if transfer_item.transfer_item_type === "Player" %>
-						  			<%= transfer_item.team_player.full_name %>
+						  			<%= transfer_item.team_player.full_name(true) %>
 						  		<% elsif transfer_item.transfer_item_type === "Cash" %>
 						  			<%= number_to_currency(transfer_item.cash_cents, precision: 0) %>
 						  		<% end %>
