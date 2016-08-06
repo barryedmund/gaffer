@@ -1,6 +1,6 @@
 class TransfersController < ApplicationController
 	before_action :require_user
-  before_action :set_transfer, only: [:show]
+  before_action :set_transfer, only: [:show, :destroy, :edit, :update]
   before_action :set_league
 
 	def new
@@ -46,7 +46,7 @@ class TransfersController < ApplicationController
     else
       flash[:error] = "Transfer was not cancelled successfully."
     end
-    redirect_to :back
+    redirect_to league_transfers_path(@league)
   end
 
 	private
