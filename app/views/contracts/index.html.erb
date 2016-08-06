@@ -38,9 +38,60 @@
         </ul>
       </div>
     </div>
+    <% pending_contracts = @contracts.joins(:player).where(signed: false).sort_by {|contract| [contract.player.last_name, contract.player.pl_player_code, -contract.value, contract.created_at] } %>
+    <% my_pending_contracts = @contracts.joins(:player).where(signed: false).where(team: team).sort_by {|contract| [contract.player.sort_val, contract.player.last_name, contract.player.pl_player_code, -contract.value, contract.created_at] } %>
     <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+    	<div class="mdl-card__supporting-text">
+    		Your offers (<%= my_pending_contracts.count %>)
+    	</div>
+    	<div class="mdl-card__actions">
+	    	<% if my_pending_contracts.length > 0 %>
+	    		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+						<tr>
+							<th class="mdl-data-table__cell--non-numeric">
+								<span>Player</span>
+							</th>
+							<th class="mdl-data-table__cell--non-numeric">
+								<span>Position</span>
+							</th>
+							<th>
+								<span>Salary</span>
+							</th>
+							<th class="mdl-data-table__cell--non-numeric">
+								<span>Start</span>
+							</th>
+						</tr>
+						<% my_pending_contracts.each do |my_contract| %>
+	      			<tr>
+		      			<td class="mdl-data-table__cell--non-numeric normal-text">
+		      				<%= my_contract.player.full_name(true) %>
+		      			</td>
+		      			<td class="mdl-data-table__cell--non-numeric normal-text">
+		      				<%= my_contract.player.playing_position %>
+		      			</td>
+		      			<td class="normal-text">
+		      				<% if my_contract.team == @current_user.teams.joins(:league).where('leagues.id = ?', league.id).first %>
+		      					<%= link_to number_to_currency(my_contract.weekly_salary_cents, precision: 0), edit_league_contract_path(league, my_contract), class: "content-link" %>
+									<% else%>
+										Private
+									<% end %>
+		      			</td>
+		      			<td id="my_contract_offer_<%= my_contract.id %>" class="mdl-data-table__cell--non-numeric normal-text <% if my_contract.starts_at < 3.days.ago %> deadline-closing <% end %>">
+		      				<%= my_contract.starts_at.strftime("%d %b") %>
+		      			</td>
+	      			</tr>
+	      		<% end %>
+					</table>
+	    	<% else %>
+	    		<span>You don't have any pending contracts.</span>
+	    	<% end %>
+	    </div>
+    </div>
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+    	<div class="mdl-card__supporting-text">
+    		All offers
+    	</div>
       <div class="mdl-card__actions">
-      	<% pending_contracts = @contracts.joins(:player).where(signed: false).sort_by {|contract| [contract.player.last_name, contract.player.pl_player_code, -contract.value, contract.created_at] } %>
       	<% if pending_contracts.count > 0 %>
       		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 						<tr>
