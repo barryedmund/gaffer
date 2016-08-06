@@ -58,4 +58,21 @@ class Team < ActiveRecord::Base
       0
     end
   end
+
+  def get_weekly_total_of_signed_contracts
+    if contracts.where('signed = ?', true).count > 0
+      contracts.where('signed = ?', true).sum(:weekly_salary_cents)
+    else
+      0
+    end
+  end
+
+  def get_season_total_of_signed_contracts
+    game_weeks_per_season = league.competition.game_weeks_per_season
+    if contracts.where('signed = ?', true).count > 0
+      contracts.where('signed = ?', true).sum(:weekly_salary_cents) * game_weeks_per_season
+    else
+      0
+    end
+  end
 end
