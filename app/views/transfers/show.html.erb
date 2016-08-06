@@ -33,7 +33,7 @@
 	        <ul class="horizontal-style">
 	          <li><%= link_to "Change your status", change_response_league_transfer_path(league, @transfer), :method => :patch, class: "mdl-button--primary"  %></li>
 	          <% if @transfer.primary_team.user == @current_user && !@transfer.transfer_completed? %>
-              <li><%= link_to "Cancel transfer", league_transfers_path(league), :method => :delete, class: "mdl-button--primary" %></li>
+              <li><%= link_to "Cancel transfer", league_transfer_path(league, @transfer), :method => :delete, class: "mdl-button--primary" %></li>
             <% end %>
 	        </ul>
 	      </div>
