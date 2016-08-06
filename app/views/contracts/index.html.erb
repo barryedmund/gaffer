@@ -16,6 +16,22 @@
 				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 					<tr>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
+							Your squad total (per week)
+						</td>
+						<td class="normal-text">
+							<%= number_to_currency(team.get_weekly_total_of_signed_contracts, precision: 0) %>
+						</td>
+					</tr>
+					<tr>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							Your squad total (per season)
+						</td>
+						<td class="normal-text">
+							<%= number_to_currency(team.get_season_total_of_signed_contracts, precision: 0) %>
+						</td>
+					</tr>
+					<tr>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
 							Your offers total (per week)
 						</td>
 						<td class="normal-text">
@@ -45,6 +61,7 @@
     		Your offers (<%= my_pending_contracts.count %>)
     	</div>
     	<div class="mdl-card__actions">
+
 	    	<% if my_pending_contracts.length > 0 %>
 	    		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 						<tr>
@@ -63,7 +80,8 @@
 						</tr>
 						<% my_pending_contracts.each do |my_contract| %>
 	      			<tr>
-		      			<td class="mdl-data-table__cell--non-numeric normal-text">
+	      				<% best_contract = pending_contracts.find{|x| x.player == my_contract.player } %>
+		      			<td id="my_contract_offer_name_<%= my_contract.id %>" class="mdl-data-table__cell--non-numeric normal-text <% if best_contract.team == team %> best-offer <% end %>">
 		      				<%= my_contract.player.full_name(true) %>
 		      			</td>
 		      			<td class="mdl-data-table__cell--non-numeric normal-text">
@@ -76,7 +94,7 @@
 										Private
 									<% end %>
 		      			</td>
-		      			<td id="my_contract_offer_<%= my_contract.id %>" class="mdl-data-table__cell--non-numeric normal-text <% if my_contract.starts_at < 3.days.ago %> deadline-closing <% end %>">
+		      			<td id="my_contract_offer_date_<%= my_contract.id %>" class="mdl-data-table__cell--non-numeric normal-text <% if my_contract.starts_at < 2.days.ago %> deadline-closing <% end %>">
 		      				<%= my_contract.starts_at.strftime("%d %b") %>
 		      			</td>
 	      			</tr>
