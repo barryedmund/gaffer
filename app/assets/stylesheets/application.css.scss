@@ -61,6 +61,9 @@ table {
 ul {
 	list-style: none;
 }
+td[id^="my_contract_offer_"].deadline-closing {
+	color: rgb(255,110,64);
+}
 #header-row {
 	margin: 0px 0px 30px 0px;
 }
