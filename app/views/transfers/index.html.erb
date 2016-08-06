@@ -25,12 +25,12 @@
             <% @transfers.order(created_at: :desc).each do |transfer| %>
               <tr>
                 <td class="mdl-data-table__cell--non-numeric normal-text">
-                  <%= transfer.primary_team.title %>
+                  <%= truncate(transfer.primary_team.title, length: 20) %>
                   <br/>
                   (<%= transfer.team_transfer_status(transfer.primary_team).capitalize %>)
                 </td>
                 <td class="mdl-data-table__cell--non-numeric normal-text">
-                  <%= transfer.secondary_team.title %>
+                  <%= truncate(transfer.secondary_team.title, length: 20) %>
                   <br/>
                   (<%= transfer.team_transfer_status(transfer.secondary_team).capitalize %>)
                 </td>

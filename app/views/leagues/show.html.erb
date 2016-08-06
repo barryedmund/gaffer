@@ -34,9 +34,9 @@
 							<tr>
 								<td class="mdl-data-table__cell--non-numeric normal-text">
 									<% if standings_row[:team_record].user != @current_user %>
-										<%= standings_row[:team_record].title %>
+										<%= truncate(standings_row[:team_record].title, length: 19) %>
 									<% else %>
-										<%= link_to standings_row[:team_record].title, league_team_path(@league, standings_row[:team_record]), class: "content-link" %>
+										<%= link_to truncate(standings_row[:team_record].title, length: 19), league_team_path(@league, standings_row[:team_record]), class: "content-link" %>
 									<% end %>
 								</td>
 								<td class="normal-text"><%= standings_row[:games_played] %></td>
@@ -52,7 +52,6 @@
 
 				<% current_season = Season.current.where(competition: @league.competition).first %>
 				<% latest_league_season = LeagueSeason.joins(:season).where('league_seasons.league_id = ? AND league_seasons.season_id = ?', @league.id, current_season.id).order('seasons.starts_at DESC').first %>
-
 				<% if @league.is_owned_by_this_user?(@current_user) %>
 					<% if @league.teams.count > 0 && @league.teams.count % 2 == 0%>
 						<% if !latest_league_season %>

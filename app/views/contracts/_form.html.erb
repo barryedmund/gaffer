@@ -20,7 +20,7 @@
   <div class="mdl-card__actions">
     <% if !@contract.id %>
     <%= f.label "Choose player", class: "non-floating-label" %>
-<!--     <div class="collection_radio_buttons">
+    <div class="collection_radio_buttons">
       <form id="position_dropdown_form">
         <input id="position_dropdown_all" type="radio" name="player_position_dropdown" value="All" checked>
         <label for="position_dropdown_all">All</label>
@@ -33,12 +33,17 @@
         <input id="position_dropdown_forward" type="radio" name="player_position_dropdown" value="FW">
         <label for="position_dropdown_forward">FW</label>
       </form>
-    </div> -->
+    </div>
       <div class="form-group">
         <div class="selectdiv">
           <% @players_to_exlcude = Player.joins(team_players: [:team => :league]).where('leagues.id = ?', league.id) | Player.joins(:contracts).where('contracts.team_id = ?', team.id) %>
           <%= f.collection_select(:player_id, Player.where.not(id:@players_to_exlcude.map(&:id)).sort_by {|p| [p.sort_val, p.last_name.downcase, p.first_name.downcase] }, :id, "#{:full_name_and_playing_position}", {include_blank: "Choose player..."}) %>
         </div>
+      </div>
+    <% else %>
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <%= text_field_tag :contract_player_full_name, @contract.player.full_name, disabled: true, class: "mdl-textfield__input" %>
+        <%= label_tag :contract_player_full_name, "Player", class: "mdl-textfield__label" %>
       </div>
     <% end %>
     <div class="form-group">
@@ -54,7 +59,11 @@
     <%= f.hidden_field :team_id, :value => team.id %>
     <div class="form-group">
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <% if !@contract.id %>
         <%= f.date_field :ends_at, value: 2.years.from_now.strftime('%Y-%m-%d'), class: "mdl-textfield__input" %>
+        <% else %>
+        <%= f.date_field :ends_at, class: "mdl-textfield__input" %>
+        <% end %>
         <%= f.label :ends_at, class: "mdl-textfield__label" %>
       </div>
     </div>

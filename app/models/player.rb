@@ -5,7 +5,7 @@ class Player < ActiveRecord::Base
   has_many :contracts, dependent: :destroy
 	validates :first_name, :last_name, :playing_position, :pl_player_code, :competition, presence: true
 
-	def full_name(abbreviate = false)
+	def full_name(abbreviate = false, cut_off = 13)
     if abbreviate
       working_full_name = "#{first_name} #{last_name}"
       cut_off = 13
