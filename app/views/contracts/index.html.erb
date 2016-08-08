@@ -80,7 +80,8 @@
 						</tr>
 						<% my_pending_contracts.each do |my_contract| %>
 	      			<tr>
-	      				<% best_contract = pending_contracts.find{|x| x.player == my_contract.player } %>
+	      				<% best_contract = pending_contracts.find{|pc| pc.player == my_contract.player } %>
+	      				<% first_contract = pending_contracts.select { |pc| pc.player == my_contract.player }.sort_by{ |pc| pc.starts_at }.first %>
 		      			<td id="my_contract_offer_name_<%= my_contract.id %>" class="mdl-data-table__cell--non-numeric normal-text <% if best_contract.team == team %> best-offer <% end %>">
 		      				<%= my_contract.player.full_name(true) %>
 		      			</td>
@@ -94,7 +95,7 @@
 										Private
 									<% end %>
 		      			</td>
-		      			<td id="my_contract_offer_date_<%= my_contract.id %>" class="mdl-data-table__cell--non-numeric normal-text <% if best_contract.starts_at < Contract.next_contract_settlement_date - 2 %> deadline-closing <% end %>">
+		      			<td id="my_contract_offer_date_<%= my_contract.id %>" class="mdl-data-table__cell--non-numeric normal-text <% if first_contract.starts_at < Contract.next_contract_settlement_date - 2 %> deadline-closing <% end %>">
 		      				<%= my_contract.starts_at.strftime("%d %b") %>
 		      			</td>
 	      			</tr>
