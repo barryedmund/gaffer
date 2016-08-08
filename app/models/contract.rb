@@ -10,6 +10,10 @@ class Contract < ActiveRecord::Base
     number_of_weeks * weekly_salary_cents
   end
 
+  def self.next_contract_settlement_date
+    (Time.now+(Time.now.hour >= 7 ? 1 : 0).day).to_date
+  end
+
   private
   def has_positive_salary
     errors.add(:base, "Don't be tight. Weekly salary must be greater than $1000.") unless weekly_salary_cents && (weekly_salary_cents >= 1000)

@@ -61,7 +61,7 @@
     		Your offers (<%= my_pending_contracts.count %>)
     	</div>
     	<div class="mdl-card__actions">
-
+    		
 	    	<% if my_pending_contracts.length > 0 %>
 	    		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 						<tr>
@@ -94,7 +94,7 @@
 										Private
 									<% end %>
 		      			</td>
-		      			<td id="my_contract_offer_date_<%= my_contract.id %>" class="mdl-data-table__cell--non-numeric normal-text <% if my_contract.starts_at < 2.days.ago %> deadline-closing <% end %>">
+		      			<td id="my_contract_offer_date_<%= my_contract.id %>" class="mdl-data-table__cell--non-numeric normal-text <% if best_contract.starts_at < Contract.next_contract_settlement_date - 2 %> deadline-closing <% end %>">
 		      				<%= my_contract.starts_at.strftime("%d %b") %>
 		      			</td>
 	      			</tr>
