@@ -11,36 +11,59 @@ class LeagueSeason < ActiveRecord::Base
     game_weeks_per_game_round = games_per_game_round / (number_of_teams / 2)
     game_rounds_per_season = (league.competition.game_weeks_per_season / game_weeks_per_game_round.to_f).ceil
     (1..game_rounds_per_season).each do |i|
-      game_rounds.create(:game_round_number => i, :league_season => self)
+      game_round = game_rounds.create(:game_round_number => i, :league_season => self)
     end
     create_games
   end
 
   def create_games
-    game_permutations = Team.where('league_id = ?', self.league.id).to_a.permutation(2).to_a.shuffle
-    ordered_game_weeks = season.game_weeks.order(:starts_at)
-    ordered_game_rounds = game_rounds.order(:game_round_number)
-    game_round_counter = 0
-    teams = league.teams
-    games_per_game_round = teams.count * (teams.count - 1)
-    games_per_game_week = teams.count / 2
-    ordered_game_weeks.each do |game_week|
-      if league.get_games.where("league_id = ? AND game_round_id = ?", self.league, ordered_game_rounds[game_round_counter].id).count == games_per_game_round
-          game_round_counter += 1
+    game_permutations = Team.where('league_id = ?', self.league.id).to_a.permutation(2).to_a
+    ordered_game_weeks = season.game_weeks.order(:starts_at) # 38
+    ordered_game_rounds = game_rounds.order(:game_round_number) # 3
+    teams = league.teams # 10
+    if teams.count == 8
+      games_per_game_week = teams.count / 2 # 5
+      games_per_season = games_per_game_week * league.competition.game_weeks_per_season # 190
+      games_per_game_round = teams.count * (teams.count - 1) # 90
+      game_weeks_per_game_round = games_per_game_round / games_per_game_week # 18
+      try_games = true
+
+      while try_games
+        for i in 0..(game_weeks_per_game_round - 1)
+          for j in 0..(game_permutations.length - 1)
+            game_permutations.shuffle
+            game = Game.new(home_team: game_permutations[j][0], away_team: game_permutations[j][1], game_week: ordered_game_weeks[i], game_round: ordered_game_rounds[0])
+            if game.valid?
+              game.save!
+            end
+          end
+        end
+        if ordered_game_rounds[0].games.count == games_per_game_round
+          try_games = false
+        else
+          Game.where(game_round: ordered_game_rounds[0]).delete_all
+        end
       end
-      game_permutations.each do |game_perm|
-        game = Game.new(:home_team => game_perm[0], :away_team => game_perm[1], :game_week => game_week, :game_round => ordered_game_rounds[game_round_counter])
-        if game.valid?
-          game.save!
-          if league.get_games.where("league_id = ? AND game_week_id = ?", self.league, game_week.id).count >= games_per_game_week
-            break
+
+      if ordered_game_rounds.length > 1
+        for i in 1..(ordered_game_rounds.length - 1)
+          remaining_games = games_per_season - get_games.count
+          if remaining_games >= games_per_game_round
+            ordered_game_rounds[0].games.each do |first_game_round_equivalent|
+              this_round_game_week_number = first_game_round_equivalent.game_week.game_week_number + (game_weeks_per_game_round * i)
+              this_round_game_week = ordered_game_weeks.where('game_week_number = ?', this_round_game_week_number).first
+              Game.create(home_team: first_game_round_equivalent.home_team, away_team: first_game_round_equivalent.away_team, game_week: this_round_game_week, game_round: ordered_game_rounds[i])
+            end
+          else
+            ordered_game_rounds[0].games.each do |first_game_round_equivalent|
+              this_round_game_week_number = first_game_round_equivalent.game_week.game_week_number + (game_weeks_per_game_round * i)
+              this_round_game_week = ordered_game_weeks.where('game_week_number = ?', this_round_game_week_number).first
+              Game.create(home_team: first_game_round_equivalent.home_team, away_team: first_game_round_equivalent.away_team, game_week: this_round_game_week, game_round: ordered_game_rounds[i])
+              break if ordered_game_rounds[i].games.count == remaining_games
+            end
           end
         end
       end
-    end
-    if get_games.count != (games_per_game_week * league.competition.game_weeks_per_season)
-      get_games.delete_all
-      create_games
     end
   end
 

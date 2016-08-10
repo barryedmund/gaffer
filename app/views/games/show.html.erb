@@ -24,9 +24,9 @@
               Teams
             </td>
             <td class="mdl-data-table__cell--non-numeric normal-text">
-              <%= link_to @home_team.title, league_team_path(@home_team.league, @home_team), class: "content-link" %>
+              <%= truncate(@home_team.title, length: 17) %>
               v
-              <%= link_to @away_team.title, league_team_path(@away_team.league, @away_team), class: "content-link" %>
+              <%= truncate(@away_team.title, length: 17) %>
             </td>
           </tr>
           <tr>

@@ -21,6 +21,26 @@ namespace :player_data do
     end
   end
 
+  task :get_game_week_details => :environment do
+    response = Net::HTTP.get_response(URI("https://fantasy.premierleague.com/drf/bootstrap-static"))
+    if response.code.to_i == 200
+      body = JSON.parse(response.body)
+      game_week_elements = body['events']
+      current_season = Season.current.first
+      for i in 0..(game_week_elements.length - 1)
+        current_element = game_week_elements[i]
+        start_time = Time.at(current_element['deadline_time_epoch']).utc
+        if GameWeek.find_by(game_week_number: current_element['id'])
+          game_week = GameWeek.find_by(game_week_number: current_element['id'])
+          game_week.update_attributes(starts_at: start_time.to_datetime, finished: current_element['finished'])
+        else
+          game_week = GameWeek.create(game_week_number: current_element['id'], starts_at: start_time.to_datetime, ends_at: start_time + 1.second, finished: current_element['finished'], season: current_season)
+        end
+        puts game_week.inspect
+      end
+    end
+  end
+
   task :get_player_game_weeks => :environment do
     Player.all.each do |player|
       season = player.competition.current_season

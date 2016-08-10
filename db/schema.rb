@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160617053603) do
+ActiveRecord::Schema.define(version: 20160809050506) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,10 +85,11 @@ ActiveRecord::Schema.define(version: 20160617053603) do
   create_table "game_weeks", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.date     "starts_at"
-    t.date     "ends_at"
+    t.datetime "starts_at"
     t.integer  "season_id"
     t.integer  "game_week_number"
+    t.boolean  "finished",         default: false
+    t.datetime "ends_at"
   end
 
   add_index "game_weeks", ["season_id"], name: "index_game_weeks_on_season_id", using: :btree
@@ -166,8 +167,8 @@ ActiveRecord::Schema.define(version: 20160617053603) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "competition_id"
-    t.date     "starts_at"
     t.date     "ends_at"
+    t.date     "starts_at"
   end
 
   add_index "seasons", ["competition_id"], name: "index_seasons_on_competition_id", using: :btree
