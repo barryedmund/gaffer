@@ -30,6 +30,14 @@
 							<%= @team.stadium.name %> (<%= number_with_delimiter(@team.stadium.capacity, delimiter: ',') %>)
 						</td>
 					</tr>
+					<tr>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							Active deadline
+						</td>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							<%= @team.league.next_game_week_deadline.strftime("%a %d %b, %l:%M%P %Z") %>
+						</td>
+					</tr>
 				</table>
 			</div>
 			<div class="mdl-card__supporting-text">

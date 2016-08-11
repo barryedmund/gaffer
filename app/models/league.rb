@@ -77,4 +77,26 @@ class League < ActiveRecord::Base
 	def get_games
 		Game.joins(game_round: {league_season: :league}).where(leagues: {id: id}).all
 	end
+
+	def next_game_week_deadline
+		previous_game_week = competition.current_season.game_weeks.order(starts_at: :desc).where('ends_at < ?', Time.now).first
+		next_game_week = competition.current_season.game_weeks.order(:starts_at).where('starts_at > ?', Time.now).first
+		if previous_game_week
+			if !previous_game_week.finished
+				previous_game_week.starts_at
+			else
+				if next_game_week
+					next_game_week.starts_at
+				else
+					"None upcoming"
+				end
+			end
+		else
+			if next_game_week
+				next_game_week.starts_at
+			else
+				"None upcoming"
+			end
+		end
+	end
 end

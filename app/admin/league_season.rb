@@ -1,6 +1,15 @@
 ActiveAdmin.register LeagueSeason do
   permit_params :league_id, :season_id
 
+  index do
+    column :id
+    column :league
+    column :season do |ls|
+      ls.season.description
+    end
+    actions
+  end
+
   form do |f|
     f.semantic_errors
     f.inputs do
