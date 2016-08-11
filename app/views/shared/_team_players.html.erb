@@ -29,7 +29,7 @@
 								<%= team_player.squad_position.short_name %>
 							</td>
 							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<%= link_to team_player.full_name, league_team_team_player_path(@league, team_player.team, team_player), class: "content-link" %>
+								<%= link_to team_player.full_name(true, 17), league_team_team_player_path(@league, team_player.team, team_player), class: "content-link" %>
 							</td>
 							<td class="normal-text">
 								<%= number_to_currency(team_player.current_contract.weekly_salary_cents, precision: 0) %>
