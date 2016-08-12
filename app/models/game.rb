@@ -16,6 +16,7 @@ class Game < ActiveRecord::Base
  	end
 
  	def calculate_score
+    # Should use game_week.finished
  		if game_week.ends_at.past?
  			if (home_team_score.blank? || away_team_score.blank?)
 	 			home_lineup = home_team.player_lineups.joins(:player_game_week, :squad_position).where('player_game_weeks.game_week_id = ? AND squad_positions.short_name != ?', game_week.id, 'SUB')

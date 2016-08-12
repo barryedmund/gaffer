@@ -1,7 +1,9 @@
 require 'spec_helper'
 
 describe "Moving team players between first team and bench" do
-	let!(:league) { create(:league) }
+	let!(:competition) { create(:competition) }
+  let!(:season) { create(:season, competition: competition) }
+  let!(:league) { create(:league, competition: competition) }
 	let!(:team) { create(:team, league: league, user: league.user) }
 	let!(:team_player) { create(:team_player, :with_contract, team: team) }
 	let!(:midfielder_squad_position) { create(:midfielder_squad_position) }
