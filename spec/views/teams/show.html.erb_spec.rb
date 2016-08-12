@@ -1,8 +1,11 @@
 require 'spec_helper'
 
 describe "teams/show" do
-  let!(:league) { create(:league) }
   let!(:user) { create(:user) }
+  let!(:competition) { create(:competition) }
+  let!(:season) { create(:season, competition: competition) }
+  let!(:league) { create(:league, competition: competition) }
+  let!(:team) { create(:team, league: league, user: user) }
 
   before(:each) do
     @team = assign(:team, stub_model(Team,

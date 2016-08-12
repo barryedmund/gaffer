@@ -11,6 +11,9 @@ ActiveAdmin.register TeamPlayer do
 		column "Playing Position"  do |team_player|
 			team_player.player.playing_position
 		end
+		column "Squad Position"  do |team_player|
+			team_player.squad_position.short_name
+		end
 		actions
 	end
 

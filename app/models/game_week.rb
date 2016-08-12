@@ -6,13 +6,6 @@ class GameWeek < ActiveRecord::Base
 	validates :starts_at, :ends_at, :game_week_number, presence: true
 	validates :game_week_number, numericality: { greater_than: 0 }
 	validates :game_week_number, uniqueness: { scope: :season, message: "a game week only happens once per season" }
-	
-	def self.get_current_game_week
-    @now = Date.today
-    if current_game_week = GameWeek.where('DATE(?) BETWEEN starts_at AND ends_at', @now).first
-      current_game_week
-		end
-	end
 
 	def self.has_current_game_week?
 		@now = Date.today

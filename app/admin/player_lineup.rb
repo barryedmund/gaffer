@@ -1,17 +1,18 @@
 ActiveAdmin.register PlayerLineup do
 
-# See permitted parameters documentation:
-# https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-#
-# permit_params :list, :of, :attributes, :on, :model
-#
-# or
-#
-# permit_params do
-#   permitted = [:permitted, :attributes]
-#   permitted << :other if resource.something?
-#   permitted
-# end
+  index do
+    selectable_column
+    column :id
+    column :team
+    column :player do |player_lineup|
+      player_lineup.player_game_week.player.full_name
+    end
+    column :game_week  do |player_lineup|
+      player_lineup.player_game_week.game_week.game_week_number
+    end
+    actions
+  end
 
+  filter :team
 
 end

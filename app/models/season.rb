@@ -9,6 +9,24 @@ class Season < ActiveRecord::Base
     where("starts_at <= :date AND ends_at >= :date", date: Date.today)
   end
 
+  def get_current_game_week
+    previous_game_week = game_weeks.order(starts_at: :desc).where('ends_at < ?', Time.now).first
+    next_game_week = game_weeks.order(:starts_at).where('starts_at > ?', Time.now).first
+    if previous_game_week
+      if !previous_game_week.finished
+        previous_game_week
+      else
+        if next_game_week
+          next_game_week
+        end
+      end
+    else
+      if next_game_week
+        next_game_week
+      end
+    end
+  end
+
   private
   def create_game_weeks
     required_game_weeks = competition.game_weeks_per_season
