@@ -130,7 +130,12 @@
 	      		<% pending_contracts.each do |contract| %>
 	      			<tr>
 		      			<td class="mdl-data-table__cell--non-numeric normal-text">
-		      				<%= contract.player.full_name(true) %>
+		      				<% if Contract.where('signed = ? AND team_id = ? AND player_id = ?', false, team.id, contract.player.id).count > 0 %>
+		      				  <% my_offer = Contract.where('signed = ? AND team_id = ? AND player_id = ?', false, team.id, contract.player.id).first %>
+		      					<%= link_to contract.player.full_name(true), edit_league_contract_path(league, my_offer), class: "content-link" %>
+		      				<% else %>
+		      					<%= link_to contract.player.full_name(true), new_league_contract_path(league.id, {player_id: contract.player.id}), class: "content-link" %>
+		      				<% end %>
 		      			</td>
 		      			<td class="mdl-data-table__cell--non-numeric normal-text">
 		      				<%= truncate(contract.team.title, length: 10) %>

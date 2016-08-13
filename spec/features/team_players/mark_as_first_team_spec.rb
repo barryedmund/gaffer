@@ -35,7 +35,7 @@ describe "Moving team players between first team and bench" do
 			click_button "Add"
 		end
 		within dom_id_for(team_player) do
-			click_button "Remove"
+			click_button "Drop"
 		end
 		team_player.reload
 		expect(team_player.first_team).to eq(false)
