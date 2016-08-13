@@ -1,6 +1,7 @@
 class TeamsController < ApplicationController
   before_action :require_user
   before_action :set_team, only: [:show, :edit, :update, :destroy]
+  before_action :set_team_from_param, only: [:display]
 
   # GET /teams
   # GET /teams.json
@@ -11,6 +12,9 @@ class TeamsController < ApplicationController
   # GET /teams/1
   # GET /teams/1.json
   def show
+  end
+
+  def display
   end
 
   # GET /teams/new
@@ -65,6 +69,10 @@ class TeamsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_team
       @team = current_user.teams.find(params[:id])
+    end
+
+    def set_team_from_param
+      @team = Team.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
