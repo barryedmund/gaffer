@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   resources :password_resets, only: [:new, :create, :edit, :update]
   resources :leagues do
     resources :teams do
+      member do
+        get :display
+      end
     	resources :team_players do
         resources :players do
           resources :game_weeks

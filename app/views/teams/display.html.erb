@@ -32,46 +32,15 @@
 					</tr>
 					<tr>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
-							Squad salary (week)
-						</td>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= number_to_currency(@team.get_weekly_total_of_signed_contracts, precision: 0) %>
-						</td>
-					</tr>
-					<tr>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							Squad salary (season)
-						</td>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= number_to_currency(@team.get_season_total_of_signed_contracts, precision: 0) %>
-						</td>
-					</tr>
-					<tr>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
 							Stadium
 						</td>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
 							<%= @team.stadium.name %> (<%= number_with_delimiter(@team.stadium.capacity, delimiter: ',') %>)
 						</td>
 					</tr>
-					<tr>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							Active deadline
-						</td>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= @team.league.next_game_week_deadline.strftime("%a %d %b, %l:%M%P %Z") %>
-						</td>
-					</tr>
 				</table>
-			</div>
-			<div class="mdl-card__supporting-text">
-				<ul class="horizontal-style">
-					<li><%= link_to 'Edit team', edit_league_team_path(@team.league, @team), class: "mdl-button--primary" %></li>
-					<li><%= link_to 'Transfers', league_transfers_path(@team.league), class: "mdl-button--primary" %></li>
-					<li><%= link_to 'Free agents', league_contracts_path(@team.league), class: "mdl-button--primary" %></li>
-				</ul>
 			</div>
 		</div>
 	</div>
-	<%= render partial: "shared/team_players" %>
+	<%= render partial: "shared/team_players_display" %>
 </div>

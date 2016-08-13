@@ -1,0 +1,29 @@
+<% @league = params[:league_id] %>
+<div class="col-sm-12">
+	<% if @team.team_players.count > 0 %>
+		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+			<div class="mdl-card__actions">
+				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+					<tr>
+						<th class="mdl-data-table__cell--non-numeric">
+							<span>Pos</span>
+						</th>
+						<th class="mdl-data-table__cell--non-numeric">
+							<span>Name</span>
+						</th>
+					</tr>
+					<% @team.team_players.includes(:player).sort_by{ |tp| [tp.player.sort_val, tp.player.last_name, tp.player.first_name] }.each do |team_player| %>
+						<tr id="<%= dom_id(team_player) %>">
+							<td class="mdl-data-table__cell--non-numeric normal-text">
+								<%= team_player.player.playing_position %>
+							</td>
+							<td class="mdl-data-table__cell--non-numeric normal-text">
+								<%= team_player.full_name(true, 17) %>
+							</td>
+						</tr>
+					<% end %>
+				</table>
+			</div>
+		</div>
+	<% end %>
+</div>

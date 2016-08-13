@@ -71,7 +71,8 @@
 							<span> </span>
 						</th>
 					</tr>
-					<% @team.team_players.where(first_team: false).find_each do |team_player| %>
+					<% @team.team_players.includes(:player).where(first_team: false).sort_by{ |tp| [tp.player.sort_val, tp.player.last_name, tp.player.first_name] }.each do |team_player| %>
+					
 						<tr id="<%= dom_id(team_player) %>">
 							<td class="mdl-data-table__cell--non-numeric normal-text">
 								<%= team_player.squad_position.short_name %>
