@@ -1,4 +1,6 @@
 <% league = League.find(params[:league_id]) %>
+<% team = Team.where(league: league, user: @current_user).first %>
+<% your_transfers = @transfers.where('(transfers.primary_team_id = :your_team OR transfers.secondary_team_id = :your_team) AND (transfers.primary_team_accepted = :not_accepted OR transfers.secondary_team_accepted = :not_accepted)', your_team: team.id, not_accepted: false) %>
 <div class="row">
   <div class="col-sm-12">
     <div class="demo-card-wide mdl-card mdl-shadow--2dp">
@@ -7,6 +9,55 @@
           <%= link_to league.name, league_path(league), class: "content-link" %>
           <span>&nbsp;transfers</span>
         </h2>
+      </div>
+      <div class="mdl-card__supporting-text">
+        Your active transfers
+      </div>
+      <div class="mdl-card__actions">
+        <% if your_transfers.count > 0 %>
+          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+            <tr>
+              <th class="mdl-data-table__cell--non-numeric">
+                <span>Team 1</span>
+              </th>
+              <th class="mdl-data-table__cell--non-numeric">
+                <span>Team 2</span>
+              </th>
+              <th class="mdl-data-table__cell--non-numeric">
+                <span> </span>
+              </th>
+            </tr>
+            <% your_transfers.order(created_at: :desc).each do |transfer| %>
+              <tr>
+                <td class="mdl-data-table__cell--non-numeric normal-text">
+                  <%= truncate(transfer.primary_team.title, length: 20) %>
+                  <br/>
+                  (<%= transfer.team_transfer_status(transfer.primary_team).capitalize %>)
+                </td>
+                <td class="mdl-data-table__cell--non-numeric normal-text">
+                  <%= truncate(transfer.secondary_team.title, length: 20) %>
+                  <br/>
+                  (<%= transfer.team_transfer_status(transfer.secondary_team).capitalize %>)
+                </td>
+                <td class="mdl-data-table__cell--non-numeric normal-text">
+                  <%= link_to "View", league_transfer_path(league, transfer) %>
+                </td>
+              </tr>
+            <% end %>
+          </table>
+        <% else %>
+          <span class="normal-text">No pending transfers.</span>
+        <% end %>
+      </div>
+      <div class="mdl-card__supporting-text">
+        <ul class="horizontal-style">
+          <li><%= link_to "New transfer", new_league_transfer_path(league), class: "mdl-button--primary" %></li>
+        </ul>
+      </div>
+    </div>
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__supporting-text">
+        All transfers
       </div>
       <div class="mdl-card__actions">
         <% if @transfers.count > 0 %>
@@ -43,11 +94,6 @@
         <% else %>
           <span class="normal-text">No pending transfers.</span>
         <% end %>
-      </div>
-      <div class="mdl-card__supporting-text">
-        <ul class="horizontal-style">
-          <li><%= link_to "New transfer", new_league_transfer_path(league), class: "mdl-button--primary" %></li>
-        </ul>
       </div>
     </div>
   </div>
