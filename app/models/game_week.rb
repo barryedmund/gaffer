@@ -38,6 +38,7 @@ class GameWeek < ActiveRecord::Base
     team_total_weekly_salary = 0
     team.player_lineups.joins(:player_game_week).where('player_game_weeks.game_week_id = ?', self.id).each do |player_lineup|
 			team_player = TeamPlayer.find_by("player_id = ? AND team_id = ?", player_lineup.player_game_week.player.id, team.id)
+			puts "#{team_player.full_name}"
       team_total_weekly_salary += team_player.current_contract.weekly_salary_cents
     end
     team_total_weekly_salary
