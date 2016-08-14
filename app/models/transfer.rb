@@ -31,6 +31,7 @@ class Transfer < ActiveRecord::Base
         transfer_item.receiving_team.increment!(:cash_balance_cents, transfer_item.cash_cents)
       elsif transfer_item.transfer_item_type === "Player"
         transfer_item.team_player.update_attributes(:team => transfer_item.receiving_team, :first_team => false, :squad_position => SquadPosition.find_by(:short_name => 'SUB'))
+        Contract.where(team_player: transfer_item.team_player).first.update_attributes(team: transfer_item.receiving_team)
       end
     end
   end
