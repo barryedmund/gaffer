@@ -16,16 +16,16 @@ class Game < ActiveRecord::Base
  	end
 
  	def calculate_score
-    # Should use game_week.finished
- 		if game_week.ends_at.past?
+ 		if game_week.finished
  			if (home_team_score.blank? || away_team_score.blank?)
+
 	 			home_lineup = home_team.player_lineups.joins(:player_game_week, :squad_position).where('player_game_weeks.game_week_id = ? AND squad_positions.short_name != ?', game_week.id, 'SUB')
         home_clean_sheet_minutes = 0
         home_goals_scored = 0
         home_lineup.each do |lineup|
           lineup_player_game_week = lineup.player_game_week
           lineup_player_squad_position = lineup.squad_position
-          player_clean_sheet_minutes = lineup_player_game_week.clean_sheet ? lineup_player_game_week.minutes_played : 0
+          player_clean_sheet_minutes = lineup_player_game_week.minutes_played > 0 ? (lineup_player_game_week.minutes_played / (lineup_player_game_week.goals_conceded + 1)) : 0
           player_goals = lineup_player_game_week.goals
           if lineup_player_squad_position.short_name === 'MD'
             player_clean_sheet_minutes = player_clean_sheet_minutes / 2
@@ -42,7 +42,7 @@ class Game < ActiveRecord::Base
         away_lineup.each do |lineup|
           lineup_player_game_week = lineup.player_game_week
           lineup_player_squad_position = lineup.squad_position
-          player_clean_sheet_minutes = lineup_player_game_week.clean_sheet ? lineup_player_game_week.minutes_played : 0
+          player_clean_sheet_minutes = lineup_player_game_week.minutes_played > 0 ? (lineup_player_game_week.minutes_played / (lineup_player_game_week.goals_conceded + 1)) : 0
           player_goals = lineup_player_game_week.goals
           if lineup_player_squad_position.short_name === 'MD'
             player_clean_sheet_minutes = player_clean_sheet_minutes / 2
@@ -52,6 +52,7 @@ class Game < ActiveRecord::Base
           away_clean_sheet_minutes += player_clean_sheet_minutes
           away_goals_scored += player_goals
         end
+
         home_clean_sheet_performance = (home_clean_sheet_minutes / 9.9) / 100
         away_clean_sheet_performance = (away_clean_sheet_minutes / 9.9) / 100
         home_score = (home_goals_scored * (1 - away_clean_sheet_performance)).round
@@ -61,6 +62,10 @@ class Game < ActiveRecord::Base
 	 		end
  		end
 	end
+
+  def calculate_score_for_team(team)
+
+  end
 
  	def get_score
  		if home_team_score.present? && away_team_score.present?
