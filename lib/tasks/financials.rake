@@ -1,5 +1,7 @@
 namespace :financials do
-  # Should just be used as a once-off
+  # 
+  # Should just be used as a ONCE_OFF
+  # 
   task :process_game_week_financials => :environment do 
     this_season = Season.current
     this_season_game_weeks = GameWeek.where(season: this_season).order(:starts_at)
