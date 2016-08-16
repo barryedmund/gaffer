@@ -11,7 +11,7 @@ namespace :games do
     this_season_game_weeks.each do |game_week|
       if game_week.starts_at < Time.now && !game_week.finished && game_week.player_game_weeks.count == 0
         Player.all.each do |player|
-          player_game_week = PlayerGameWeek.create(player: player, game_week: game_week, minutes_played: 0, goals: 0, clean_sheet: true)
+          player_game_week = PlayerGameWeek.create(player: player, game_week: game_week, minutes_played: 0, goals: 0, clean_sheet: true, goals_conceded: 0)
           league_seasons = LeagueSeason.where(season: this_season)
           league_seasons.each do |league_season|
             league = league_season.league

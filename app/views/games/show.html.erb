@@ -71,10 +71,10 @@
               <span>MP</span>
             </th>
             <th>
-              <span>G</span>
+              <span>GSco</span>
             </th>
             <th>
-              <span>CS</span>
+              <span>GCon</span>
             </th>
           </tr>
           <% @home_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ?', @game_week.id).order("squad_positions.sort_order").each do |player_lineup| %>
@@ -92,7 +92,7 @@
                 <%= player_lineup.player_game_week.goals %>
               </td>
               <td class="normal-text">
-                <%= player_lineup.player_game_week.clean_sheet %>
+                <%= player_lineup.player_game_week.goals_conceded %>
               </td>
             </tr>
           <% end %>
@@ -114,10 +114,10 @@
               <span>MP</span>
             </th>
             <th>
-              <span>G</span>
+              <span>GSco</span>
             </th>
             <th>
-              <span>CS</span>
+              <span>GCon</span>
             </th>
           </tr>
           <% @away_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ?', @game_week.id).order("squad_positions.sort_order").each do |player_lineup| %>
@@ -135,7 +135,7 @@
                 <%= player_lineup.player_game_week.goals %>
               </td>
               <td class="normal-text">
-                <%= player_lineup.player_game_week.clean_sheet %>
+                <%= player_lineup.player_game_week.goals_conceded %>
               </td>
             </tr>
           <% end %>

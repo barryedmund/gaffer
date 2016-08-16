@@ -11,6 +11,7 @@ ActiveAdmin.register PlayerGameWeek do
 		column :minutes_played
 		column :goals
 		column :clean_sheet
+		column :goals_conceded
 		actions
 	end
 
