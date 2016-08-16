@@ -62,10 +62,10 @@
 								<span>MP</span>
 							</th>
 							<th>
-								<span>G</span>
+								<span>GSco</span>
 							</th>
 							<th>
-								<span>CS</span>
+								<span>GCon</span>
 							</th>
 						</tr>
 						<% @team_player.player.player_game_weeks.joins(game_week: :season).where("season_id = ?", Season.current.first.id).order("game_weeks.starts_at DESC").each do |pgw| %>
@@ -83,7 +83,7 @@
 									<%= pgw.goals %>
 								</td>
 								<td class="normal-text">
-									<%= pgw.clean_sheet %>
+									<%= pgw.goals_conceded %>
 								</td>
 							</tr>
 						<% end %>
