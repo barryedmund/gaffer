@@ -110,13 +110,13 @@ td[id^="my_contract_offer_name_"].best-offer {
 	margin: 0px 30px 0px 10px;
 	padding: 10px;
 }
-.collection_radio_buttons label[for^="position_dropdown_"] {
+.collection_radio_buttons label[for^="position_dropdown_"], .collection_radio_buttons label[for^="real_team_dropdown_"] {
 	text-align: center;
 	width: 13%;
 }
 .collection_radio_buttons > input[type="radio"]:checked + label {
-    border: 1px solid #888;
-    font-weight: 500;
+  border: 1px solid #888;
+  font-weight: 500;
 }
 .collection_radio_buttons > input[type="radio"] {
 	display: none;

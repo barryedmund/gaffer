@@ -34,10 +34,21 @@
         <label for="position_dropdown_forward">FW</label>
       </form>
     </div>
+    <!-- <div class="collection_radio_buttons">
+      <form id="real_team_dropdown_form">
+        <input id="real_team_dropdown_all" type="radio" name="player_real_team_dropdown" value="All" checked>
+        <label for="real_team_dropdown_all">All</label>
+        <% real_team_options = Player.uniq.order(:real_team_short_name).pluck(:real_team_short_name) %>
+        <% real_team_options.each do |real_team_item| %>
+          <input id="real_team_dropdown_<%= real_team_item %>" type="radio" name="player_real_team_dropdown" value="<%= real_team_item %>">
+          <label for="real_team_dropdown_<%= real_team_item %>"><%= real_team_item %></label>
+        <% end %>
+      </form>
+    </div> -->
       <div class="form-group">
         <div class="selectdiv">
           <% @players_to_exlcude = Player.joins(team_players: [:team => :league]).where('leagues.id = ?', league.id) | Player.joins(:contracts).where('contracts.team_id = ?', team.id) %>
-          <%= f.collection_select(:player_id, Player.where.not(id:@players_to_exlcude.map(&:id)).sort_by {|p| [p.sort_val, p.last_name.downcase, p.first_name.downcase] }, :id, "#{:full_name_and_playing_position}", {include_blank: "Choose player...", selected: params[:player_id]}) %>
+          <%= f.collection_select(:player_id, Player.where.not(id:@players_to_exlcude.map(&:id)).sort_by {|p| [p.sort_val, p.last_name.downcase, p.first_name.downcase] }, :id, "#{:full_name_and_playing_position_and_real_team}", {include_blank: "Choose player...", selected: params[:player_id]}) %>
         </div>
       </div>
     <% else %>

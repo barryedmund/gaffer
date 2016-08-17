@@ -3,13 +3,13 @@ $(document).ready(function() {
 	$('input[name=player_position_dropdown]').change(function() {
 		$('#contract_player_id').empty().append( $default_opts.clone() );
 		if($('#position_dropdown_goalkeeper').is(':checked')) {
-			$('#contract_player_id option:not(:contains("(Goalkeeper)"))').remove();
+			$('#contract_player_id option:not(:contains("(GK"))').remove();
 		} else if($('#position_dropdown_defender').is(':checked')) {
-			$('#contract_player_id option:not(:contains("(Defender)"))').remove();
+			$('#contract_player_id option:not(:contains("(DF"))').remove();
 		} else if($('#position_dropdown_midfielder').is(':checked')) {
-			$('#contract_player_id option:not(:contains("(Midfielder)"))').remove();
+			$('#contract_player_id option:not(:contains("(MD"))').remove();
 		} else if($('#position_dropdown_forward').is(':checked')) {
-			$('#contract_player_id option:not(:contains("(Forward)"))').remove();
+			$('#contract_player_id option:not(:contains("(FW"))').remove();
 		} else {
 			$('#contract_player_id').empty().append( $default_opts.clone() );
 		}
