@@ -4,6 +4,7 @@ namespace :player_data do
     if response.code.to_i == 200
       body = JSON.parse(response.body)
       playing_position_elements = body['element_types']
+      real_team_elements = body['teams']
       number_of_players = body['elements'].length
       for i in 0..(number_of_players - 1)
         current_player = body['elements'][i]
@@ -13,10 +14,11 @@ namespace :player_data do
         player_first_name = current_player['first_name']
         player_last_name = current_player['second_name']
         player_position = playing_position_elements.find { |e| e['id'] == current_player['element_type']}['singular_name']
+        player_real_team = real_team_elements.find { |f| f['code'] == current_player['team_code']}['short_name']
         player_competition = Competition.find_by description: 'Premier League'
 
         player = Player.find_by(pl_player_code: player_code) ? Player.find_by(pl_player_code: player_code) : Player.create(first_name: player_first_name, last_name: player_last_name, playing_position: player_position, pl_player_code: player_code, competition: player_competition)
-        player.update_attributes(pl_element_id: player_element_id)
+        player.update_attributes(pl_element_id: player_element_id, real_team_short_name: player_real_team)
         puts player.inspect
       end
     end
