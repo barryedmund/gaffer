@@ -3,6 +3,10 @@ class Player < ActiveRecord::Base
   has_many :team_players, dependent: :destroy
 	has_many :player_game_weeks, dependent: :destroy
   has_many :contracts, dependent: :destroy
+
+  # Polymorhic association with news_items
+  has_many :news_items, as: :news_item_resource
+
 	validates :first_name, :last_name, :playing_position, :pl_player_code, :competition, presence: true
 
 	def full_name(abbreviate = false, cut_off = 13)
@@ -32,10 +36,25 @@ class Player < ActiveRecord::Base
     end
   end
 
+  def news_item_display
+    full_name_and_playing_position_and_real_team
+  end
+
   def sort_val
     return 0 if self.playing_position == 'Goalkeeper'
     return 1 if self.playing_position == 'Defender'
     return 2 if self.playing_position == 'Midfielder'
     return 3 if self.playing_position == 'Forward'
+  end
+
+  def has_current_contract_in_league?(league)
+    return_value = false
+    contracts.joins(:team).where('teams.league_id = ?', league.id).each do |contract|
+      if contract.is_signed_and_current?
+        return_value = true
+        break
+      end
+    end
+    return_value
   end
 end

@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     resources :league_seasons, only: [:new, :create]
     resources :league_invites
     resources :contracts
+    resources :news_items
   end
   resources :player_game_weeks
   resources :game_rounds

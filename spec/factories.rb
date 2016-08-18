@@ -45,6 +45,12 @@ FactoryGirl.define do
     season
   end
 
+  factory :news_item do
+    league
+    news_item_resource_type "Player"
+    news_item_resource_id 1
+  end
+
   factory :player do
     competition
     first_name "Paul"

@@ -1,0 +1,12 @@
+<% if @league.news_items.count > 0 %>
+	<% @league.news_items.order(created_at: :desc).each do |news_item| %>
+		<% if news_item.news_item_resource.instance_of? Player %>
+			<% if news_item.news_item_resource.has_current_contract_in_league?(@league) %>
+				<%= news_item.body %> <%= news_item.news_item_resource.full_name(true) %>
+			<% else %>
+				<%= news_item.body %> <%= link_to news_item.news_item_resource.full_name(true), new_league_contract_path(@league.id, {player_id: news_item.news_item_resource.id}), class: "content-link" %>
+			<% end %>
+		<% end %>
+		<br/>
+	<% end %>
+<% end %>
