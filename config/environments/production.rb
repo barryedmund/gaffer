@@ -76,4 +76,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # [BW] Added to get the expire_after attribute on cookie_store to work on production
+  config.api_only = false
 end
