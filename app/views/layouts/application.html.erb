@@ -14,7 +14,7 @@
 		<div class="container">
 			<div id="header-row" class="row">
 				<div class="col-sm-3">
-					<%= image_tag("gaffer_logo_263_x_328.png", class: "logo-icon")%>
+					<%= link_to image_tag("gaffer_logo_263_x_328.png", class: "logo-icon"), root_path %>
 				</div>
 				<% if logged_in? %>
 					<div id="main-nav" class="col-sm-9">

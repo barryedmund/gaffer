@@ -1,5 +1,4 @@
 class NewsItemsController < ApplicationController
-  before_action :set_league, only: [:index]
   before_action :require_user
   before_action :find_news_item_resource_object, only: [:create]
 
@@ -30,9 +29,5 @@ class NewsItemsController < ApplicationController
 
   def news_item_params
     params.require(:news_item).permit(:league_id, :news_item_resource_type, :news_item_resource_id)
-  end
-
-  def set_league
-      @league = League.find(params[:league_id])
   end
 end

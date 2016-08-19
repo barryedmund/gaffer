@@ -23,7 +23,7 @@ namespace :player_data do
         else
           player = Player.create(first_name: player_first_name, last_name: player_last_name, playing_position: player_position, pl_player_code: player_code, competition: player_competition, pl_element_id: player_element_id, real_team_short_name: player_real_team)
           League.all.each do |league|
-            NewsItem.create(league: league, news_item_resource_type: 'Player', news_item_resource_id: player.id, body: "Now available as a free agent.")
+            NewsItem.create(league: league, news_item_resource_type: 'Player', news_item_resource_id: player.id, body: "New free agent")
           end
         end
         puts player.inspect

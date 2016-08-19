@@ -9,7 +9,7 @@ class UserSessionsController < ApplicationController
   	if user && user.authenticate(params[:password])
   		session[:user_id] = user.id
   		flash[:success] = "Welcome back #{user.first_name}!"
-  		redirect_to leagues_url
+  		redirect_to root_path
   	else
   		flash[:error] = "There was a problem logging in. Please check your email and password."
   		render action: 'new'
