@@ -5,6 +5,14 @@ class Contract < ActiveRecord::Base
   validates :weekly_salary_cents, :team, :starts_at, :ends_at, :player_id, presence: true
   validate :has_positive_salary, :has_future_end_date, :has_start_date_before_end_date, :is_a_valid_length, :one_signed_contract_per_team_player
 
+  def is_signed_and_current?
+    if signed && (starts_at <= Time.now) && (ends_at > Time.now)
+      true
+    else
+      false
+    end
+  end
+
   def value
     number_of_weeks = (((ends_at - starts_at).to_i) / 7).floor
     number_of_weeks * weekly_salary_cents

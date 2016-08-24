@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
-  get "" => "user_sessions#new", as: :login
+  get "" => "news_items#index"
+  get "/login" => "user_sessions#new", as: :login
   delete "/logout" => "user_sessions#destroy", as: :logout
   get "/signup" => "users#new", as: :signup
 
@@ -37,6 +38,7 @@ Rails.application.routes.draw do
   end
   resources :player_game_weeks
   resources :game_rounds
+  resources :news_items
   
-  root 'leagues#index'
+  root 'news_items#index'
 end

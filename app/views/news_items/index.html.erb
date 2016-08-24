@@ -1,0 +1,42 @@
+<% leagues = League.joins(:teams).where('teams.user_id = ?', @current_user.id) %>
+<% news_items = NewsItem.where(league: leagues.all.pluck(:id)).order(created_at: :desc) %>
+<div class="col-sm-12">
+	<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+		<div class="mdl-card__title">
+      <h2 class="mdl-card__title-text">
+      	Gaffer news
+      </h2>
+    </div>
+    <div class="mdl-card__actions">
+    	<% if news_items.count > 0 %>
+	    	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+	    		<% news_items.where('created_at > ?', 2.weeks.ago).each do |news_item| %>
+	    			<% resource = news_item.news_item_resource %>
+	    			<tr>
+							<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
+								<%= news_item.body %>
+							</td>
+						</tr>
+						<tr>
+							<td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;">
+								<%= link_to news_item.league.name, league_path(news_item.league), class: "content-link" %>
+							</td>
+							<td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;">
+								<% if resource.instance_of? Player %>
+									<% if resource.has_current_contract_in_league?(news_item.league) %>
+										<%= resource.full_name_and_playing_position_and_real_team %> 
+									<% else %>
+										<%= link_to resource.full_name_and_playing_position_and_real_team, new_league_contract_path(news_item.league.id, {player_id: resource.id}), class: "content-link" %>
+									<% end %>
+								<% end %>
+							</td>
+						</tr>
+					<% end %>
+				</table>
+			<% else %>
+				<% offset = rand(@current_user.teams.count) %>
+				<span class="normal-text">:-/ It's a slow news day.</span>
+			<% end %>
+    </div>
+  </div>
+</div>
