@@ -30,8 +30,10 @@ class Transfer < ActiveRecord::Base
         transfer_item.sending_team.decrement!(:cash_balance_cents, transfer_item.cash_cents)
         transfer_item.receiving_team.increment!(:cash_balance_cents, transfer_item.cash_cents)
       elsif transfer_item.transfer_item_type === "Player"
-        transfer_item.team_player.update_attributes(:team => transfer_item.receiving_team, :first_team => false, :squad_position => SquadPosition.find_by(:short_name => 'SUB'))
-        Contract.where(team_player: transfer_item.team_player).first.update_attributes(team: transfer_item.receiving_team)
+        contract = transfer_item.team_player.current_contract
+        contract.update_attributes!(signed: false)
+        contract.update_attributes!(team: transfer_item.receiving_team, signed: true)
+        transfer_item.team_player.update_attributes(team: transfer_item.receiving_team, first_team: false, squad_position: SquadPosition.find_by(:short_name => 'SUB'))
       end
     end
   end
