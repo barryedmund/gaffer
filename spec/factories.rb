@@ -97,6 +97,7 @@ FactoryGirl.define do
 		title "Fantasy Playas"
 		user
 		league
+    cash_balance_cents 200000000
 	end
 
 	factory :team_player do
