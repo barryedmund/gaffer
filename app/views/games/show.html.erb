@@ -68,16 +68,19 @@
               <span>Player</span>
             </th>
             <th>
-              <span>MP</span>
+              <span>Min</span>
             </th>
             <th>
-              <span>GSco</span>
+              <span>Sco</span>
             </th>
             <th>
-              <span>GCon</span>
+              <span>Ass</span>
+            </th>
+            <th>
+              <span>Con</span>
             </th>
           </tr>
-          <% @home_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ?', @game_week.id).order("squad_positions.sort_order").each do |player_lineup| %>
+          <% @home_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ? AND squad_positions.short_name != ?', @game_week.id, 'SUB').order("squad_positions.sort_order").each do |player_lineup| %>
             <tr>
               <td class="mdl-data-table__cell--non-numeric normal-text">
                 <%= player_lineup.squad_position.short_name %>
@@ -86,13 +89,16 @@
                 <%= player_lineup.player_game_week.player.full_name(true) %>
               </td>
               <td class="normal-text">
-                <%= player_lineup.player_game_week.minutes_played %>  
+                <%= player_lineup.player_game_week.minutes_played.to_i %>
               </td>
               <td class="normal-text">
-                <%= player_lineup.player_game_week.goals %>
+                <%= player_lineup.player_game_week.goals.to_i %>
               </td>
               <td class="normal-text">
-                <%= player_lineup.player_game_week.goals_conceded %>
+                <%= player_lineup.player_game_week.assists.to_i %>
+              </td>
+              <td class="normal-text">
+                <%= player_lineup.player_game_week.goals_conceded.to_i %>
               </td>
             </tr>
           <% end %>
@@ -111,16 +117,19 @@
               <span>Player</span>
             </th>
             <th>
-              <span>MP</span>
+              <span>Min</span>
             </th>
             <th>
-              <span>GSco</span>
+              <span>Sco</span>
             </th>
             <th>
-              <span>GCon</span>
+              <span>Ass</span>
+            </th>
+            <th>
+              <span>Con</span>
             </th>
           </tr>
-          <% @away_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ?', @game_week.id).order("squad_positions.sort_order").each do |player_lineup| %>
+          <% @away_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ? AND squad_positions.short_name != ?', @game_week.id, 'SUB').order("squad_positions.sort_order").each do |player_lineup| %>
             <tr>
               <td class="mdl-data-table__cell--non-numeric normal-text">
                 <%= player_lineup.squad_position.short_name %>
@@ -129,13 +138,16 @@
                 <%= player_lineup.player_game_week.player.full_name(true) %>
               </td>
               <td class="normal-text">
-                <%= player_lineup.player_game_week.minutes_played %>  
+                <%= player_lineup.player_game_week.minutes_played.to_i %>  
               </td>
               <td class="normal-text">
-                <%= player_lineup.player_game_week.goals %>
+                <%= player_lineup.player_game_week.goals.to_i %>
               </td>
               <td class="normal-text">
-                <%= player_lineup.player_game_week.goals_conceded %>
+                <%= player_lineup.player_game_week.assists.to_i %>
+              </td>
+              <td class="normal-text">
+                <%= player_lineup.player_game_week.goals_conceded.to_i %>
               </td>
             </tr>
           <% end %>
