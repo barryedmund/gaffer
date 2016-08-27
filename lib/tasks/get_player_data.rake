@@ -78,6 +78,7 @@ namespace :player_data do
         total_minutes_played = 0
         total_goals_scored = 0
         total_goals_conceded = 0
+        total_assists = 0
         total_clean_sheet = true
         fixtures_in_game_week = 0;
         
@@ -88,6 +89,7 @@ namespace :player_data do
             total_minutes_played += body_game_weeks[j]['minutes']
             total_goals_scored += body_game_weeks[j]['goals_scored']
             total_goals_conceded += body_game_weeks[j]['goals_conceded']
+            total_assists += body_game_weeks[j]['assists']
           end
         end
         
@@ -101,13 +103,14 @@ namespace :player_data do
           total_minutes_played = total_minutes_played / fixtures_in_game_week
           total_goals_scored = total_goals_scored / fixtures_in_game_week
           total_goals_conceded = total_goals_conceded / fixtures_in_game_week
+          total_assists = total_assists / fixtures_in_game_week
         end
 
         this_player_current_player_game_week = PlayerGameWeek.where('game_week_id = ? AND player_id = ?', current_game_week.id, player.id).first
 
         # If the PlayerGameWeek was found
         if this_player_current_player_game_week
-          this_player_current_player_game_week.update_attributes(minutes_played: total_minutes_played, goals: total_goals_scored, clean_sheet: total_clean_sheet, goals_conceded: total_goals_conceded)
+          this_player_current_player_game_week.update_attributes(minutes_played: total_minutes_played, goals: total_goals_scored, clean_sheet: total_clean_sheet, goals_conceded: total_goals_conceded, assists: total_assists)
           puts "#{player.full_name}: #{this_player_current_player_game_week.inspect}"
         end
       else
