@@ -1,5 +1,5 @@
 ActiveAdmin.register PlayerGameWeek do
-	permit_params :game_week_id, :player_id, :minutes_played
+	permit_params :game_week_id, :player_id, :minutes_played, :assists
 
 	index do
 		selectable_column
@@ -10,6 +10,7 @@ ActiveAdmin.register PlayerGameWeek do
 		column :player
 		column :minutes_played
 		column :goals
+		column :assists
 		column :clean_sheet
 		column :goals_conceded
 		actions
@@ -21,6 +22,7 @@ ActiveAdmin.register PlayerGameWeek do
 	  	f.input :game_week
 	  	f.input :player
 	  	f.input :minutes_played
+	  	f.input :assists
 	  end
 	  f.actions
 	end
