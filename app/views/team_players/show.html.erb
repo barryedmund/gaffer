@@ -59,13 +59,16 @@
 								<span>GW</span>
 							</th>
 							<th>
-								<span>MP</span>
+								<span>Min</span>
 							</th>
 							<th>
-								<span>GSco</span>
+								<span>Gsc</span>
 							</th>
 							<th>
-								<span>GCon</span>
+								<span>Ass</span>
+							</th>
+							<th>
+								<span>Gco</span>
 							</th>
 						</tr>
 						<% @team_player.player.player_game_weeks.joins(game_week: :season).where("season_id = ?", Season.current.first.id).order("game_weeks.starts_at DESC").each do |pgw| %>
@@ -77,13 +80,16 @@
 									<%= pgw.game_week.game_week_number %>
 								</td>
 								<td class="normal-text">
-									<%= pgw.minutes_played %>
+									<%= pgw.minutes_played.to_i %>
 								</td>
 								<td class="normal-text">
-									<%= pgw.goals %>
+									<%= pgw.goals.to_i %>
 								</td>
 								<td class="normal-text">
-									<%= pgw.goals_conceded %>
+									<%= pgw.assists.to_i %>
+								</td>
+								<td class="normal-text">
+									<%= pgw.goals_conceded.to_i %>
 								</td>
 							</tr>
 						<% end %>

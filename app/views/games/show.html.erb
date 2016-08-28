@@ -57,7 +57,7 @@
       </div>
       <div class="mdl-card__actions">
         <div class="mdl-card__supporting-text">
-          <%= @home_team.title %>
+          <%= @home_team.title %> (<%= @home_team.user.full_name %>)
         </div>
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
           <tr>
@@ -106,7 +106,7 @@
       </div>
       <div class="mdl-card__actions">
         <div class="mdl-card__supporting-text">
-          <%= @away_team.title %>
+          <%= @away_team.title %> (<%= @away_team.user.full_name %>)
         </div>
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
           <tr>

@@ -24,7 +24,7 @@ class Contract < ActiveRecord::Base
 
   private
   def has_positive_salary
-    errors.add(:base, "Don't be tight. Weekly salary must be greater than $1000.") unless weekly_salary_cents && (weekly_salary_cents >= 1000)
+    errors.add(:base, "Don't be tight. Weekly salary must be greater than $25,000.") unless weekly_salary_cents && (weekly_salary_cents >= 25000)
   end
 
   def has_future_end_date

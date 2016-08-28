@@ -75,7 +75,7 @@
 					
 						<tr id="<%= dom_id(team_player) %>">
 							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<%= team_player.squad_position.short_name %>
+								<%= team_player.squad_position.short_name %> (<%= SquadPosition.long_name_to_short_name(team_player.player.playing_position) %>)
 							</td>
 							<td class="mdl-data-table__cell--non-numeric normal-text">
 								<%= link_to team_player.full_name(true, 17), league_team_team_player_path(@league, team_player.team, team_player), class: "content-link" %>

@@ -77,6 +77,9 @@ td[id^="my_contract_offer_name_"].best-offer {
 	font-size: 23px;
 	text-align: right;
 }
+#wide-container{
+	min-width: 900px;
+}
 .alert {
 	box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.14), 0 5px 3px -2px rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.12);
   font-size: 30px;
@@ -123,7 +126,7 @@ td[id^="my_contract_offer_name_"].best-offer {
 }
 .container {
 	margin: 25px 0px;
-	width: 820px;
+	width: 900px;
 }
 .demo-card-wide.mdl-card {
   margin: 0px 0px 30px 0px;
