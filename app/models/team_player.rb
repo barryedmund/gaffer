@@ -33,4 +33,8 @@ class TeamPlayer < ActiveRecord::Base
   def full_name_with_team_name
     "#{player.first_name} #{player.last_name} (#{team.title})"
   end
+
+  def get_season_stats(season)
+    player.player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id)
+  end
 end
