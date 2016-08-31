@@ -56,12 +56,25 @@ class Game < ActiveRecord::Base
         away_lineup.each do |lineup|
           lineup_player_game_week = lineup.player_game_week
           lineup_player_squad_position = lineup.squad_position
+          
           player_clean_sheet_minutes = lineup_player_game_week.minutes_played > 0 ? (lineup_player_game_week.minutes_played / (lineup_player_game_week.goals_conceded + 1)) : 0
+          
           player_goals = lineup_player_game_week.goals
-          if lineup_player_squad_position.short_name === 'MD'
+          
+          if lineup_player_squad_position.short_name === 'GK'
+            player_goals += lineup_player_game_week.assists.to_i * 0.5
+
+          elsif lineup_player_squad_position.short_name === 'DF'
+            player_goals += lineup_player_game_week.assists.to_i * 0.4
+
+          elsif lineup_player_squad_position.short_name === 'MD'
             player_clean_sheet_minutes = player_clean_sheet_minutes / 2
+            player_goals += lineup_player_game_week.assists.to_i * 0.3
+
           elsif lineup_player_squad_position.short_name === 'FW'
             player_clean_sheet_minutes = 0
+            player_goals += lineup_player_game_week.assists.to_i * 0.2
+            
           end
           away_clean_sheet_minutes += player_clean_sheet_minutes
           away_goals_scored += player_goals
@@ -76,10 +89,6 @@ class Game < ActiveRecord::Base
 	 		end
  		end
 	end
-
-  def calculate_score_for_team(team)
-
-  end
 
  	def get_score
  		if home_team_score.present? && away_team_score.present?
