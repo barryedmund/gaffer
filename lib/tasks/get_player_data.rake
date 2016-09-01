@@ -52,71 +52,75 @@ namespace :player_data do
   end
 
   task :get_player_game_weeks => :environment do
-    i = 1
-    continue = true
-    while continue
-      response = Net::HTTP.get_response(URI("https://fantasy.premierleague.com/drf/element-summary/#{i}"))
-      break unless response.code.to_i == 200
-      body = JSON.parse(response.body)
-      body_game_weeks = body['history']
-      body_history = body['history_past']
+    active_game_week = Competition.find_by(description: 'Premier League').current_season.get_current_game_week
+    if active_game_week.starts_at <= Time.now
+      puts "GameWeek #{active_game_week.id} has started."
+      i = 1
+      continue = true
+      while continue
+        response = Net::HTTP.get_response(URI("https://fantasy.premierleague.com/drf/element-summary/#{i}"))
+        break unless response.code.to_i == 200
+        body = JSON.parse(response.body)
+        body_game_weeks = body['history']
+        body_history = body['history_past']
 
-      # If the player has played in the EPL in a previous season
-      if body_history.length > 0
-        player_code = body_history[body_history.length - 1]['element_code']
-        player = Player.find_by(pl_player_code: player_code)
-      else
-        player = Player.find_by(pl_element_id: i)
-      end
+        # If the player has played in the EPL in a previous season
+        if body_history.length > 0
+          player_code = body_history[body_history.length - 1]['element_code']
+          player = Player.find_by(pl_player_code: player_code)
+        else
+          player = Player.find_by(pl_element_id: i)
+        end
 
-      # If the player was found
-      if player
-        season = player.competition.current_season
-        player_game_weeks = player.player_game_weeks.joins(:game_week).where("game_weeks.season_id =?", season.id).order('game_weeks.game_week_number DESC')  
-        current_game_week = season.get_current_game_week
-        
-        total_minutes_played = 0
-        total_goals_scored = 0
-        total_goals_conceded = 0
-        total_assists = 0
-        total_clean_sheet = true
-        fixtures_in_game_week = 0;
-        
-        # Go through each 'round' and, if it is this round, update the counter
-        for j in 0..(body_game_weeks.length - 1)
-          if body_game_weeks[j]['round'] == current_game_week.game_week_number
-            fixtures_in_game_week = fixtures_in_game_week + 1
-            total_minutes_played += body_game_weeks[j]['minutes']
-            total_goals_scored += body_game_weeks[j]['goals_scored']
-            total_goals_conceded += body_game_weeks[j]['goals_conceded']
-            total_assists += body_game_weeks[j]['assists']
+        # If the player was found
+        if player
+          season = player.competition.current_season
+          player_game_weeks = player.player_game_weeks.joins(:game_week).where("game_weeks.season_id =?", season.id).order('game_weeks.game_week_number DESC')  
+          current_game_week = season.get_current_game_week
+          
+          total_minutes_played = 0
+          total_goals_scored = 0
+          total_goals_conceded = 0
+          total_assists = 0
+          total_clean_sheet = true
+          fixtures_in_game_week = 0;
+          
+          # Go through each 'round' and, if it is this round, update the counter
+          for j in 0..(body_game_weeks.length - 1)
+            if body_game_weeks[j]['round'] == current_game_week.game_week_number
+              fixtures_in_game_week = fixtures_in_game_week + 1
+              total_minutes_played += body_game_weeks[j]['minutes']
+              total_goals_scored += body_game_weeks[j]['goals_scored']
+              total_goals_conceded += body_game_weeks[j]['goals_conceded']
+              total_assists += body_game_weeks[j]['assists']
+            end
+          end
+          
+          #  If he played and didn't concede goals
+          if !(total_minutes_played > 0 && total_goals_conceded == 0)
+            total_clean_sheet = false
+          end
+
+          # If it was a multi-fixture EPL round for this player
+          if fixtures_in_game_week > 1
+            total_minutes_played = total_minutes_played / fixtures_in_game_week
+            total_goals_scored = total_goals_scored / fixtures_in_game_week
+            total_goals_conceded = total_goals_conceded / fixtures_in_game_week
+            total_assists = total_assists / fixtures_in_game_week
+          end
+
+          this_player_current_player_game_week = PlayerGameWeek.where('game_week_id = ? AND player_id = ?', current_game_week.id, player.id).first
+
+          # If the PlayerGameWeek was found
+          if this_player_current_player_game_week
+            this_player_current_player_game_week.update_attributes(minutes_played: total_minutes_played, goals: total_goals_scored, clean_sheet: total_clean_sheet, goals_conceded: total_goals_conceded, assists: total_assists)
+            puts "#{player.full_name}: #{this_player_current_player_game_week.inspect}"
           end
         end
-        
-        #  If he played and didn't concede goals
-        if !(total_minutes_played > 0 && total_goals_conceded == 0)
-          total_clean_sheet = false
-        end
-
-        # If it was a multi-fixture EPL round for this player
-        if fixtures_in_game_week > 1
-          total_minutes_played = total_minutes_played / fixtures_in_game_week
-          total_goals_scored = total_goals_scored / fixtures_in_game_week
-          total_goals_conceded = total_goals_conceded / fixtures_in_game_week
-          total_assists = total_assists / fixtures_in_game_week
-        end
-
-        this_player_current_player_game_week = PlayerGameWeek.where('game_week_id = ? AND player_id = ?', current_game_week.id, player.id).first
-
-        # If the PlayerGameWeek was found
-        if this_player_current_player_game_week
-          this_player_current_player_game_week.update_attributes(minutes_played: total_minutes_played, goals: total_goals_scored, clean_sheet: total_clean_sheet, goals_conceded: total_goals_conceded, assists: total_assists)
-          puts "#{player.full_name}: #{this_player_current_player_game_week.inspect}"
-        end
-      else
-
+        i = i + 1
       end
-      i = i + 1
+    else
+      puts "GameWeek #{active_game_week.id} starts at #{active_game_week.starts_at}."
     end
   end
 end
