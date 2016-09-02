@@ -1,5 +1,5 @@
 class TransferItem < ActiveRecord::Base
-  belongs_to :transfer
+  belongs_to :transfer, touch: true
   belongs_to :sending_team, :class_name => 'Team', :foreign_key => 'sending_team_id'
   belongs_to :receiving_team, :class_name => 'Team', :foreign_key => 'receiving_team_id'
   belongs_to :team_player
