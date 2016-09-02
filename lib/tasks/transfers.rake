@@ -23,4 +23,10 @@ namespace :transfers do
       puts "... released."
     end
   end
+
+  task :clean_up_transfers => :environment do
+    empty_transfers = Transfer.includes(:transfer_items).where(:transfer_items => { :id => nil })
+    stale_transfers = Transfer.where('updated_at < ? AND (primary_team_accepted = ? OR secondary_team_accepted = ?)', 1.week.ago, false, false)
+    (empty_transfers | stale_transfers).each(&:destroy)
+  end  
 end
