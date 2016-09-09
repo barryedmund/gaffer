@@ -72,7 +72,7 @@ table {
 ul {
 	list-style: none;
 }
-td[id^="my_contract_offer_date_"].deadline-closing, .orange-border-right {
+td[id^="my_contract_offer_date_"].deadline-closing {
 	border-right: 6px solid #ff6e40;
 }
 td[id^="my_contract_offer_name_"].best-offer {
@@ -152,8 +152,23 @@ td[id^="my_contract_offer_name_"].best-offer {
 .show_div {
 	display: block;
 }
-.green-border-right {
-	border-right: 4px solid rgb(139,195,74);
+.orange-circle, .green-circle, .white-circle {
+	border-radius: 50%;
+	display: inline-block;
+	height: 15px;
+	margin: 3px;
+	vertical-align: middle;
+	width: 15px;
+}
+.orange-circle {
+	background: #ff6e40;
+}
+.green-circle {
+	background: rgb(139,195,74);
+}
+.white-circle {
+	background: #ffffff;
+	border: 1px solid #000000;
 }
 .horizontal-style {
   display: table;

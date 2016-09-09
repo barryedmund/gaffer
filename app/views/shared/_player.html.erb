@@ -58,15 +58,18 @@
 <% if owned %>
 	<% if owned_by_current_user %>
 		<td class="mdl-data-table__cell--non-numeric normal-text">
+			<div class="white-circle"></div>
 			<%= player_object_status %>
 		</td>
 	<% else %>
-		<td class="mdl-data-table__cell--non-numeric normal-text orange-border-right">
+		<td class="mdl-data-table__cell--non-numeric normal-text">
+			<div class="orange-circle"></div>
 			<%= player_object_status %>
 		</td>
 	<% end %>
 <% else %>
-	<td class="mdl-data-table__cell--non-numeric normal-text green-border-right">
+	<td class="mdl-data-table__cell--non-numeric normal-text">
+		<div class="green-circle"></div>
 		<%= player_object_status %>
 	</td>
 <% end %>
