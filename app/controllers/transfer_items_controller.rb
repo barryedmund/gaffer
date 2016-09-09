@@ -19,7 +19,7 @@ class TransferItemsController < ApplicationController
       redirect_to league_transfer_path(@league, @transfer)
     else
       flash[:error] = "There was a problem creating that transfer item."
-      render action: :new
+      redirect_to league_transfer_path(@league, @transfer)
     end
   end
 

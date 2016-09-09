@@ -40,6 +40,17 @@ input[type="text"], input[type="password"], input[type="date"] {
 	line-height: 28px;
 	padding: 22px 10px;
 }
+input[type="submit"].content-link {
+	background-color: rgba(0, 0, 0, 0);
+	border-bottom: 2px solid;
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	color: #111111;
+	font-weight: 300;
+	padding: 0px;
+  text-decoration: none;
+}
 input.mdl-textfield__input {
 	border-bottom: 5px solid rgba(5,5,5,.12);
 }
@@ -61,7 +72,7 @@ table {
 ul {
 	list-style: none;
 }
-td[id^="my_contract_offer_date_"].deadline-closing {
+td[id^="my_contract_offer_date_"].deadline-closing, .orange-border-right {
 	border-right: 6px solid #ff6e40;
 }
 td[id^="my_contract_offer_name_"].best-offer {
@@ -140,6 +151,9 @@ td[id^="my_contract_offer_name_"].best-offer {
 }
 .show_div {
 	display: block;
+}
+.green-border-right {
+	border-right: 4px solid rgb(139,195,74);
 }
 .horizontal-style {
   display: table;

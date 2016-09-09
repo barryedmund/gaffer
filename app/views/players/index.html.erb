@@ -1,0 +1,36 @@
+<% @league = League.find_by(id: params[:league_id]) %>
+<% team_players = TeamPlayer.joins(:team).where('teams.league_id = ?', @league.id) %>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+			<div class="mdl-card__title">
+	      <h2 class="mdl-card__title-text">
+	      	All players
+	      </h2>
+	    </div>
+	    <div class="mdl-card__actions">
+	    	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+	    		<tr>
+						<th class="mdl-data-table__cell--non-numeric">
+							<span>Ps</span>
+						</th>
+						<th class="mdl-data-table__cell--non-numeric">
+							<span>Tm</span>
+						</th>
+						<th class="mdl-data-table__cell--non-numeric">
+							<span>Name</span>
+						</th>
+						<th class="mdl-data-table__cell--non-numeric">
+							<span>Status</span>
+						</th>
+					</tr>
+					<% @players.sort_by{ |player| [player.sort_val, player.real_team_short_name, player.last_name, player.first_name] }.each do |player| %>
+						<tr>
+							<%= render partial: 'shared/player', locals: {player: player, team_players: team_players, league: @league} %>
+						</tr>
+					<% end %>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

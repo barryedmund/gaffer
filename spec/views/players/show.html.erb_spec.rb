@@ -11,10 +11,4 @@ RSpec.describe "players/show", :type => :view do
       competition: competition
     ))
   end
-
-  it "renders attributes in <p>" do
-    render
-    expect(rendered).to match(/First Name/)
-    expect(rendered).to match(/Last Name/)
-  end
 end

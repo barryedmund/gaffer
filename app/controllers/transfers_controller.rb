@@ -5,13 +5,25 @@ class TransfersController < ApplicationController
 
 	def new
 		@transfer = Transfer.new
+    @transfer.transfer_items.build
   end
 
   def create
   	@transfer = Transfer.new(transfer_params)
     if @transfer.save
       flash[:success] = "Transfer initiated."
-      redirect_to new_league_transfer_transfer_item_path(@league, @transfer)
+
+      # Has nested transfer_item details
+      if params[:transfer].has_key?('transfer_item')
+        transfer_item_params = params[:transfer][:transfer_item]
+        puts ">>>> #{transfer_item_params}"
+        TransferItem.create(transfer: @transfer, sending_team_id: transfer_item_params[:sending_team_id], receiving_team_id: transfer_item_params[:receiving_team_id], transfer_item_type: transfer_item_params[:transfer_item_type], team_player_id: transfer_item_params[:team_player_id])
+        redirect_to new_league_transfer_transfer_item_path(@league, @transfer, direct_bid: transfer_item_params[:team_player_id])
+      # Does not have nested transfer_item details
+      else
+        redirect_to new_league_transfer_transfer_item_path(@league, @transfer)
+      end
+
     else
       flash[:error] = "There was a problem initiating that transfer."
       redirect_to league_transfers_path(@league)
@@ -51,7 +63,7 @@ class TransfersController < ApplicationController
 
 	private
   def transfer_params
-    params.require(:transfer).permit(:primary_team_id, :secondary_team_id, :primary_team_accepted, :secondary_team_accepted)
+    params.require(:transfer).permit(:primary_team_id, :secondary_team_id, :primary_team_accepted, :secondary_team_accepted, transfer_items_attributes: [:transfer, :sending_team_id, :receiving_team_id, :transfer_item_type, :team_player_id])
   end
 
   def set_transfer
