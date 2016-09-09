@@ -1,8 +1,20 @@
+<% direct_bid = params[:direct_bid] && (params[:direct_bid].to_i == @transfer.transfer_items.first.team_player_id) ? true : false%>
 <div class="col-sm-12">
   <div class="demo-card-wide mdl-card mdl-shadow--2dp">
 		<div class="mdl-card__title">
-			<h2 class="mdl-card__title-text">Add item to transfer</h2>
+			<h2 class="mdl-card__title-text">
+				<% if direct_bid %>
+					Make offer
+				<% else %>
+					Add item to transfer
+				<% end %>		
+			</h2>
 		</div>
-		<%= render 'form' %>
+
+		<% if direct_bid %>
+			<%= render 'bid_form' %>
+		<% else %>
+			<%= render 'form' %>
+		<% end %>
 	</div>
 </div>

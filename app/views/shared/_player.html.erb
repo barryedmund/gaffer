@@ -1,0 +1,76 @@
+<% if team_player = team_players.find_by(player_id: player.id) %>
+	<% owned = true %>
+	<% current_user_team_in_this_league = Team.where('league_id = ? AND user_id = ?', league.id, @current_user.id).first %>
+	<% team_owned_by = team_player.team %>
+	<% owned_by_current_user = current_user_team_in_this_league === team_owned_by ? true : false %>
+	<% player_object = team_player.player %>
+	<% if owned_by_current_user %>
+		<% player_object_status = "Owned by you" %>
+	<% else %>
+		<% player_object_status = "Owned by #{truncate(team_player.team.title, length: 13)}" %>
+	<% end %>
+<% else %>
+	<% player_object = player %>
+	<% num_of_contract_offers = Contract.joins(:team).where('player_id = ? AND teams.id IN (?)', player.id, league.teams.pluck(:id)).count %>
+	<% if num_of_contract_offers > 0 %>
+		<% player_object_status = "#{num_of_contract_offers} contract #{'offer'.pluralize(num_of_contract_offers)}" %>
+	<% else %>
+		<% player_object_status = "No contract offers" %>
+	<% end %>
+<% end %>
+
+<!-- Position -->
+<td class="mdl-data-table__cell--non-numeric normal-text">
+	<%= SquadPosition.long_name_to_short_name(player_object.playing_position) %>
+</td>
+
+<!-- Real team -->
+<td class="mdl-data-table__cell--non-numeric normal-text">
+	<%= player_object.real_team_short_name %>
+</td>
+
+<!-- Player name with link to action -->
+<td class="mdl-data-table__cell--non-numeric normal-text">
+	<% if owned %>
+		<% if owned_by_current_user %>
+			<%= link_to team_player.full_name(true, 16), league_team_team_player_path(@league, team_player.team, team_player), class: "content-link" %>
+		<% else %>
+			<%= form_for ([league, Transfer.new]) do |f| %>
+				<%= f.hidden_field :primary_team_id, value: current_user_team_in_this_league.id %>
+				<%= f.hidden_field :secondary_team_id, value: team_player.team.id %>
+		    <%= f.hidden_field :primary_team_accepted, :value => true %>
+		    <%= f.hidden_field :secondary_team_accepted, :value => false %>
+		    <%= f.fields_for TransferItem.new do |ff| %>
+		    	<%= ff.hidden_field :sending_team_id, value: team_player.team.id %>
+		    	<%= ff.hidden_field :receiving_team_id, value: current_user_team_in_this_league.id %>
+		    	<%= ff.hidden_field :transfer_item_type, value: "Player" %>
+		    	<%= ff.hidden_field :team_player_id, value: team_player.id %>
+		    <% end %>
+				<%= f.submit player_object.full_name(true, 14), class: "content-link" %>
+			<% end %>
+		<% end %>
+	<% else %>
+		<%= link_to player_object.full_name(true, 14), new_league_contract_path(league.id, {player_id: player_object.id}), class: "content-link" %>
+	<% end %>
+</td>
+
+<!-- Status -->
+<% if owned %>
+	<% if owned_by_current_user %>
+		<td class="mdl-data-table__cell--non-numeric normal-text">
+			<div class="white-circle"></div>
+			<%= player_object_status %>
+		</td>
+	<% else %>
+		<td class="mdl-data-table__cell--non-numeric normal-text">
+			<div class="orange-circle"></div>
+			<%= player_object_status %>
+		</td>
+	<% end %>
+<% else %>
+	<td class="mdl-data-table__cell--non-numeric normal-text">
+		<div class="green-circle"></div>
+		<%= player_object_status %>
+	</td>
+<% end %>
+

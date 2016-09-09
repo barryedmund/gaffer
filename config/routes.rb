@@ -17,13 +17,13 @@ Rails.application.routes.draw do
         get :display
       end
     	resources :team_players do
-        resources :players do
-          resources :game_weeks
-        end
     		member do
     			patch :update_first_team
     		end
     	end
+    end
+    resources :players do
+      resources :game_weeks
     end
     resources :games, only: [:index, :show]
     resources :transfers do

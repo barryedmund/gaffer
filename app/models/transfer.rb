@@ -5,6 +5,7 @@ class Transfer < ActiveRecord::Base
  	validates :primary_team, :secondary_team, presence: true
  	validates :primary_team_accepted, :secondary_team_accepted, inclusion: { in: [true, false] }
  	validate :teams_in_same_league, :teams_not_the_same, on: :create
+  accepts_nested_attributes_for :transfer_items
 
   def transfer_completed?
     primary_team_accepted ? (secondary_team_accepted ? true : false) : false

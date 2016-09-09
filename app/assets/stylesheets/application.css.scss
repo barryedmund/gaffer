@@ -40,6 +40,17 @@ input[type="text"], input[type="password"], input[type="date"] {
 	line-height: 28px;
 	padding: 22px 10px;
 }
+input[type="submit"].content-link {
+	background-color: rgba(0, 0, 0, 0);
+	border-bottom: 2px solid;
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	color: #111111;
+	font-weight: 300;
+	padding: 0px;
+  text-decoration: none;
+}
 input.mdl-textfield__input {
 	border-bottom: 5px solid rgba(5,5,5,.12);
 }
@@ -140,6 +151,24 @@ td[id^="my_contract_offer_name_"].best-offer {
 }
 .show_div {
 	display: block;
+}
+.orange-circle, .green-circle, .white-circle {
+	border-radius: 50%;
+	display: inline-block;
+	height: 15px;
+	margin: 3px;
+	vertical-align: middle;
+	width: 15px;
+}
+.orange-circle {
+	background: #ff6e40;
+}
+.green-circle {
+	background: rgb(139,195,74);
+}
+.white-circle {
+	background: #ffffff;
+	border: 1px solid #000000;
 }
 .horizontal-style {
   display: table;
