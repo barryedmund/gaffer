@@ -1,4 +1,4 @@
-a.content-link {
+a.content-link, .pagination > a {
 	border-bottom: 2px solid;
 	color: #111111;
 	font-weight: 300;
@@ -143,32 +143,14 @@ td[id^="my_contract_offer_name_"].best-offer {
   margin: 0px 0px 30px 0px;
   width: 100%;
 }
+.green-circle {
+	background: rgb(139,195,74);
+}
 .hide-option {
 	display: none;
 }
 .hidden_div {
 	display: none;
-}
-.show_div {
-	display: block;
-}
-.orange-circle, .green-circle, .white-circle {
-	border-radius: 50%;
-	display: inline-block;
-	height: 15px;
-	margin: 3px;
-	vertical-align: middle;
-	width: 15px;
-}
-.orange-circle {
-	background: #ff6e40;
-}
-.green-circle {
-	background: rgb(139,195,74);
-}
-.white-circle {
-	background: #ffffff;
-	border: 1px solid #000000;
 }
 .horizontal-style {
   display: table;
@@ -242,6 +224,27 @@ td[id^="my_contract_offer_name_"].best-offer {
 	font-size: 26px;
 	top: -4px;
 }
+.orange-circle, .green-circle, .white-circle {
+	border-radius: 50%;
+	display: inline-block;
+	height: 15px;
+	margin: 3px;
+	vertical-align: middle;
+	width: 15px;
+}
+.orange-circle {
+	background: #ff6e40;
+}
+.pagination {
+	font-size: 30px;
+	font-weight: 300;
+	line-height: 46px;
+	text-align: center;
+	width: 100%;
+}
+.pagination > * {
+	margin: 0px 25px;
+}
 .positive_action_button {
 	background-color: rgba(255,255,255, 0);
 	border-radius: 0;
@@ -254,6 +257,13 @@ td[id^="my_contract_offer_name_"].best-offer {
 .positive_action_button:hover {
 	outline: none;
 	text-decoration: underline;
+}
+.show_div {
+	display: block;
+}
+.white-circle {
+	background: #ffffff;
+	border: 1px solid #000000;
 }
 /************************************************
 
