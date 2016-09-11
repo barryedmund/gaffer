@@ -32,7 +32,7 @@
     </div>
     <div class="form-group">
       <%= f.submit "Bid", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
-      <%= link_to "Cancel", league_transfer_path(league, @transfer), class: "cancel_link_anchor" %>
+      <%= link_to "Cancel", league_transfer_path(league, @transfer), method: :delete, class: "cancel_link_anchor" %>
     </div>
   </div>
 <% end %>
