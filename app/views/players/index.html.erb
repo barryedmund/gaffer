@@ -5,7 +5,7 @@
 		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 			<div class="mdl-card__title">
 	      <h2 class="mdl-card__title-text">
-	      	All players
+	      	<%= link_to @league.name, league_path(@league), class: 'content-link' %>&nbsp;players
 	      </h2>
 	    </div>
 	    <div class="mdl-card__actions">
@@ -24,12 +24,14 @@
 							<span>Status</span>
 						</th>
 					</tr>
-					<% @players.sort_by{ |player| [player.sort_val, player.real_team_short_name, player.last_name, player.first_name] }.each do |player| %>
+					<% players_array = @players.sort_by{ |player| [player.sort_val, player.real_team_short_name, player.last_name, player.first_name] }.paginate(page: params[:page], per_page: ((@players.count / 5).ceil + 1)) %>
+					<% players_array.each do |player| %>
 						<tr>
 							<%= render partial: 'shared/player', locals: {player: player, team_players: team_players, league: @league} %>
 						</tr>
 					<% end %>
 				</table>
+				<%= will_paginate players_array %>
 			</div>
 		</div>
 	</div>
