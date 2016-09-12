@@ -14,7 +14,7 @@
 	    			<% resource = news_item.news_item_resource %>
 	    			<tr>
 							<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
-								<%= news_item.created_at.strftime("%d %b") %> - <%= news_item.body %>
+								<%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 28) %>
 							</td>
 						</tr>
 						<tr>

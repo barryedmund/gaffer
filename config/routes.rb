@@ -19,6 +19,7 @@ Rails.application.routes.draw do
     	resources :team_players do
     		member do
     			patch :update_first_team
+          patch :release
     		end
     	end
     end
