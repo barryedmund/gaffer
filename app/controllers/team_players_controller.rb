@@ -1,7 +1,7 @@
 class TeamPlayersController < ApplicationController
   before_action :require_user
   before_action :set_team
-  before_action :set_team_player, only: [:show]
+  before_action :set_team_player, only: [:show, :release]
 
   def new
   	@team_player = @team.team_players.new
@@ -40,6 +40,14 @@ class TeamPlayersController < ApplicationController
       @team_player.update_attributes(:first_team => true, squad_position: SquadPosition.find_by(id: params[:team_player][:squad_position_id]))
       redirect_to league_team_path(@team_player.team.league, @team_player.team), notice: "Added to first team."
     end
+  end
+
+  def release
+    player_for_news_item = @team_player.player
+    league = @team.league
+    @team.update_attributes(cash_balance_cents: (@team.cash_balance_cents - @team_player.current_contract.release_value))
+    self.destroy
+    NewsItem.create(league: league, news_item_resource_type: 'Player', news_item_resource_id: player_for_news_item.id, body: "Player released by #{@team.title}")
   end
 
   private

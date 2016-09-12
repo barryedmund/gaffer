@@ -46,29 +46,46 @@
 							<%= @team_player.current_contract.starts_at.strftime("%d %b %y") %> - <%= @team_player.current_contract.ends_at.strftime("%d %b %y") %>
 						</td>
 					</tr>
+					<tr>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							Release cost
+						</td>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							<%= number_to_currency(@team_player.current_contract.release_value, precision: 0) %>
+						</td>
+					</tr>
 				</table>
 			</div>
+			<div class="mdl-card__supporting-text">
+				<ul class="horizontal-style">
+					<li>
+						<%= link_to "Pay #{number_to_currency(@team_player.current_contract.release_value, precision: 0)} to release player", release_league_team_team_player_path(@team.league, @team, @team_player), method: :patch, class: "mdl-button--secondary" %>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 			<% if @team_player.player.player_game_weeks.joins(game_week: :season).where("season_id = ?", Season.current.first.id).count > 0 %>
 				<div class="mdl-card__actions">
 					<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 						<tr>
 							<th class="mdl-data-table__cell--non-numeric">
-								<span>Sn</span>
+								<span>Season</span>
 							</th>
 							<th>
 								<span>GW</span>
 							</th>
 							<th>
-								<span>Min</span>
+								<span>Mp</span>
 							</th>
 							<th>
-								<span>Gsc</span>
+								<span>Gs</span>
 							</th>
 							<th>
-								<span>Ass</span>
+								<span>A</span>
 							</th>
 							<th>
-								<span>Gco</span>
+								<span>Gc</span>
 							</th>
 						</tr>
 						<% @team_player.player.player_game_weeks.joins(game_week: :season).where("season_id = ?", Season.current.first.id).order("game_weeks.starts_at DESC").each do |pgw| %>

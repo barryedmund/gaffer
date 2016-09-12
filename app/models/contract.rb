@@ -22,6 +22,10 @@ class Contract < ActiveRecord::Base
     (Time.now+(Time.now.hour >= 7 ? 1 : 0).day).to_date
   end
 
+  def release_value
+    weekly_salary_cents * 20
+  end
+
   private
   def has_positive_salary
     errors.add(:base, "Don't be tight. Weekly salary must be greater than $25,000.") unless weekly_salary_cents && (weekly_salary_cents >= 25000)
