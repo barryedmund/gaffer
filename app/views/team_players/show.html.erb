@@ -35,7 +35,8 @@
 							Salary
 						</td>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= number_to_currency(@team_player.current_contract.weekly_salary_cents, precision: 0) %>
+							<%= number_to_currency(@team_player.current_contract.weekly_salary_cents, precision: 0) %> 
+							(Release cost: <%= number_to_currency(@team_player.current_contract.release_value, precision: 0) %>)
 						</td>
 					</tr>
 					<tr>
@@ -44,14 +45,6 @@
 						</td>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
 							<%= @team_player.current_contract.starts_at.strftime("%d %b %y") %> - <%= @team_player.current_contract.ends_at.strftime("%d %b %y") %>
-						</td>
-					</tr>
-					<tr>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							Release cost
-						</td>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= number_to_currency(@team_player.current_contract.release_value, precision: 0) %>
 						</td>
 					</tr>
 				</table>
