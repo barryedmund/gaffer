@@ -23,7 +23,12 @@ class Contract < ActiveRecord::Base
   end
 
   def release_value
-    weekly_salary_cents * 20
+    if weekly_salary_cents < 25000
+      release_val = 0
+    else
+      release_val = weekly_salary_cents * 20
+    end
+    release_val
   end
 
   private
