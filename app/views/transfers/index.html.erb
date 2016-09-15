@@ -10,8 +10,8 @@
           <span>&nbsp;transfers</span>
         </h2>
       </div>
-      <div class="mdl-card__supporting-text">
-        Your active transfers
+      <div class="mdl-card__title">
+        <h3 class="mdl-card__title-text">Your active transfers</h3>
       </div>
       <div class="mdl-card__actions">
         <% if your_transfers.count > 0 %>
@@ -52,6 +52,7 @@
       <div class="mdl-card__supporting-text">
         <ul class="horizontal-style">
           <li><%= link_to "New transfer", new_league_transfer_path(league), class: "mdl-button--primary" %></li>
+          <li><%= link_to "View all players", league_players_path(league), class: "mdl-button--primary" %></li>
         </ul>
       </div>
     </div>
