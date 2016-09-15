@@ -1,0 +1,21 @@
+<td class="mdl-data-table__cell--non-numeric normal-text">
+	<%= link_to team_player.full_name(true, 16), league_team_team_player_path(@league, team_player.team, team_player), class: "content-link" %>
+</td>
+<td class="normal-text performance_details">
+	<%= team_player.get_season_stats(Season.current.first).sum(:minutes_played) || 0 %>
+</td>
+<td class="normal-text performance_details">
+	<%= team_player.get_season_stats(Season.current.first).sum(:goals) || 0 %>
+</td>
+<td class="normal-text performance_details">
+	<%= team_player.get_season_stats(Season.current.first).sum(:assists) || 0 %>
+</td>
+<td class="normal-text performance_details">
+	<%= team_player.get_season_stats(Season.current.first).sum(:goals_conceded) || 0 %>
+</td>
+<td class="normal-text contract_details hide">
+	<%= number_to_currency(team_player.current_contract.weekly_salary_cents, precision: 0) %>
+</td>
+<td class="normal-text contract_details hide">
+	<%= team_player.current_contract.ends_at.strftime("%d-%b-%y") %>
+</td>

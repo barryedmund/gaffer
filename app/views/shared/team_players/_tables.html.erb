@@ -1,56 +1,26 @@
 <% @league = params[:league_id] %>
-<div class="col-sm-12">
+<div class="col-sm-12 show">
 	<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 		<div class="mdl-card__supporting-text">
-			First team
+			<div class="mdl-card__title">
+        <h3 class="mdl-card__title-text">Squad</h3>
+      </div>
+			<ul class="horizontal-style-tabs">
+				<li><a id="performance_details_link" class="normal-text">View stats</a></li>
+				<li><a id="contract_details_link" class="normal-text">View contracts</a></li>
+			</ul>
 		</div>
 		<% if @team.team_players.includes(:squad_position, :player).where(first_team: true).count > 0 %>
 			<div class="mdl-card__actions">
 				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-					<tr>
-						<th class="mdl-data-table__cell--non-numeric">
-							<span>Pos</span>
-						</th>
-						<th class="mdl-data-table__cell--non-numeric">
-							<span>Name</span>
-						</th>
-						<th>
-							<span>Mp</span>
-						</th>
-						<th>
-							<span>Gs</span>
-						</th>
-						<th>
-							<span>A</span>
-						</th>
-						<th>
-							<span>Gc</span>
-						</th>
-						<th class="mdl-data-table__cell--non-numeric">
-							<span> </span>
-						</th>
-					</tr>
+					<%= render partial: "shared/team_players/table_header" %>
 					<% squad_position_whtelist = @team.get_squad_position_whitelist %>
 					<% @team.team_players.includes(:squad_position, :player).where(first_team: true).reorder('squad_positions.sort_order, players.last_name, players.first_name').each do |team_player| %>
 						<tr id="<%= dom_id(team_player) %>">
 							<td class="mdl-data-table__cell--non-numeric normal-text">
 								<%= team_player.squad_position.short_name %>
 							</td>
-							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<%= link_to team_player.full_name(true, 16), league_team_team_player_path(@league, team_player.team, team_player), class: "content-link" %>
-							</td>
-							<td class="normal-text">
-								<%= team_player.get_season_stats(Season.current.first).sum(:minutes_played) || 0 %>
-							</td>
-							<td class="normal-text">
-								<%= team_player.get_season_stats(Season.current.first).sum(:goals) || 0  %>
-							</td>
-							<td class="normal-text">
-								<%= team_player.get_season_stats(Season.current.first).sum(:assists) || 0  %>
-							</td>
-							<td class="normal-text">
-								<%= team_player.get_season_stats(Season.current.first).sum(:goals_conceded) || 0  %>
-							</td>
+							<%= render partial: 'shared/team_players/details', locals: {team_player: team_player} %>
 							<td class="mdl-data-table__cell--non-numeric normal-text">
 								<%= form_for team_player, url: update_first_team_league_team_team_player_path(@league, team_player.team, team_player)  do |f| %>
 									<%= f.submit "Drop", class: "negative_action_button" %>
@@ -65,59 +35,17 @@
 				You need to add some players to your first team.
 			</div>
 		<% end %>
-	</div>
-
-	<div class="demo-card-wide mdl-card mdl-shadow--2dp">
-		<div class="mdl-card__supporting-text">
-			Squad players
-		</div>
 		<% if @team.team_players.where(first_team: false).count > 0 %>
 			<div class="mdl-card__actions">
 				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-					<tr>
-						<th class="mdl-data-table__cell--non-numeric">
-							<span>Pos</span>
-						</th>
-						<th class="mdl-data-table__cell--non-numeric">
-							<span>Name</span>
-						</th>
-						<th>
-							<span>Mp</span>
-						</th>
-						<th>
-							<span>Gs</span>
-						</th>
-						<th>
-							<span>A</span>
-						</th>
-						<th>
-							<span>Gc</span>
-						</th>
-						<th class="mdl-data-table__cell--non-numeric">
-							<span> </span>
-						</th>
-					</tr>
+					<%= render partial: "shared/team_players/table_header" %>
 					<% @team.team_players.includes(:player).where(first_team: false).sort_by{ |tp| [tp.player.sort_val, tp.player.last_name, tp.player.first_name] }.each do |team_player| %>
 					
 						<tr id="<%= dom_id(team_player) %>">
 							<td class="mdl-data-table__cell--non-numeric normal-text">
 								<%= team_player.squad_position.short_name %> <%= SquadPosition.long_name_to_short_name(team_player.player.playing_position) %>
 							</td>
-							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<%= link_to team_player.full_name(true, 16), league_team_team_player_path(@league, team_player.team, team_player), class: "content-link" %>
-							</td>
-							<td class="normal-text">
-								<%= team_player.get_season_stats(Season.current.first).sum(:minutes_played) %>
-							</td>
-							<td class="normal-text">
-								<%= team_player.get_season_stats(Season.current.first).sum(:goals) %>
-							</td>
-							<td class="normal-text">
-								<%= team_player.get_season_stats(Season.current.first).sum(:assists) %>
-							</td>
-							<td class="normal-text">
-								<%= team_player.get_season_stats(Season.current.first).sum(:goals_conceded) %>
-							</td>
+							<%= render partial: 'shared/team_players/details', locals: {team_player: team_player} %>
 							<td class="mdl-data-table__cell--non-numeric normal-text">
 								<% first_team_players = @team.team_players.where(first_team: true) %>
 								<% if first_team_players.count < 11 %>

@@ -152,20 +152,29 @@ td[id^="my_contract_offer_name_"].best-offer {
 .hidden_div {
 	display: none;
 }
-.horizontal-style {
+.horizontal-style, .horizontal-style-tabs {
   display: table;
   padding: 0px;
-  width: 100%
 }
-.horizontal-style li {
+.horizontal-style {
+	width: 100%
+}
+.horizontal-style-tabs {
+	margin: 0 0 0 auto;
+	width: 55%
+}
+.horizontal-style li, .horizontal-style-tabs li {
   display: table-cell;
 }
-.horizontal-style a {
+.horizontal-style a, .horizontal-style-tabs a {
   display: block;
   font-size: 30px;
   text-align: center;
-  margin: 0 5px;
 }
+.horizontal-style a {
+	margin: 0 5px;
+}
+
 .league_invite_div {
 	margin: 20px 0px;
 }
@@ -258,6 +267,12 @@ td[id^="my_contract_offer_name_"].best-offer {
 	outline: none;
 	text-decoration: underline;
 }
+.selected-tab, .selected-tab:active, .selected-tab:hover, .selected-tab:visited {
+	border: 1px solid #888;
+	color: #111111;
+	font-weight: 500;
+	text-decoration: none;
+}
 .show_div {
 	display: block;
 }
@@ -327,7 +342,10 @@ select
 
 ************************************************/
 .col-sm-12 h2 {
-	font-size: 54px;
+	font-size: 56px;
+}
+.col-sm-12 h3 {
+	font-size: 48px;
 }
 .col-sm-12 .demo-card-wide.mdl-card.mdl-shadow--2dp {
 	box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.14), 0 5px 3px -2px rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.12);
