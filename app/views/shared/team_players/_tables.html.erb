@@ -2,10 +2,14 @@
 <div class="col-sm-12 show">
 	<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 		<div class="mdl-card__supporting-text">
-			First team
+			<div class="mdl-card__title">
+        <h3 class="mdl-card__title-text">Squad</h3>
+      </div>
+			<ul class="horizontal-style-tabs">
+				<li><a id="performance_details_link" class="normal-text">View stats</a></li>
+				<li><a id="contract_details_link" class="normal-text">View contracts</a></li>
+			</ul>
 		</div>
-		<a id="contract_details_link" class="normal-text content-link">Contract</a>
-		<a id="performance_details_link" class="normal-text content-link">Performance</a>
 		<% if @team.team_players.includes(:squad_position, :player).where(first_team: true).count > 0 %>
 			<div class="mdl-card__actions">
 				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
@@ -31,12 +35,6 @@
 				You need to add some players to your first team.
 			</div>
 		<% end %>
-	</div>
-
-	<div class="demo-card-wide mdl-card mdl-shadow--2dp">
-		<div class="mdl-card__supporting-text">
-			Squad players
-		</div>
 		<% if @team.team_players.where(first_team: false).count > 0 %>
 			<div class="mdl-card__actions">
 				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">

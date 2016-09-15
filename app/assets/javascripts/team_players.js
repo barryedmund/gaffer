@@ -1,20 +1,34 @@
 $(document).ready(function() {
 	if(getCookie() == "contract_details"){
 		$('.contract_details').removeClass("hide");
+		$('#contract_details_link').addClass("selected-tab");
+		
 		$('.performance_details').addClass("hide");
+		$('#performance_details_link').removeClass("selected-tab");
 	}
 	else if(getCookie() == "performance_details"){
-		$('.contract_details').addClass("hide");
 		$('.performance_details').removeClass("hide");
+		$('#performance_details_link').addClass("selected-tab");
+		
+		$('.contract_details').addClass("hide");
+		$('#contract_details_link').removeClass("selected-tab");
 	}
 	$('#contract_details_link').click(function(){
 		$('.contract_details').removeClass("hide");
+		$('#contract_details_link').addClass("selected-tab");
+		
 		$('.performance_details').addClass("hide");
+		$('#performance_details_link').removeClass("selected-tab");
+		
 		setCookie("contract_details");
 	});
 	$('#performance_details_link').click(function(){
-		$('.contract_details').addClass("hide");
 		$('.performance_details').removeClass("hide");
+		$('#performance_details_link').addClass("selected-tab");
+		
+		$('.contract_details').addClass("hide");
+		$('#contract_details_link').removeClass("selected-tab");
+
 		setCookie("performance_details");
 	});
 });
