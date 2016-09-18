@@ -30,12 +30,12 @@
             <% your_transfers.order(created_at: :desc).each do |transfer| %>
               <tr>
                 <td class="mdl-data-table__cell--non-numeric normal-text">
-                  <%= truncate(transfer.primary_team.title, length: 20) %>
+                  <%= truncate(transfer.primary_team.title, length: 14) %>
                   <br/>
                   (<%= transfer.team_transfer_status(transfer.primary_team).capitalize %>)
                 </td>
                 <td class="mdl-data-table__cell--non-numeric normal-text">
-                  <%= truncate(transfer.secondary_team.title, length: 20) %>
+                  <%= truncate(transfer.secondary_team.title, length: 14) %>
                   <br/>
                   (<%= transfer.team_transfer_status(transfer.secondary_team).capitalize %>)
                 </td>
@@ -46,7 +46,7 @@
             <% end %>
           </table>
         <% else %>
-          <span class="normal-text">No pending transfers.</span>
+          <span class="normal-text">None</span>
         <% end %>
       </div>
       <div class="mdl-card__supporting-text">
@@ -57,8 +57,8 @@
       </div>
     </div>
     <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-      <div class="mdl-card__supporting-text">
-        All transfers
+      <div class="mdl-card__title">
+        <h3 class="mdl-card__title-text">All transfers</h3>
       </div>
       <div class="mdl-card__actions">
         <% if @transfers.count > 0 %>
@@ -77,12 +77,12 @@
             <% @transfers.order(created_at: :desc).each do |transfer| %>
               <tr>
                 <td class="mdl-data-table__cell--non-numeric normal-text">
-                  <%= truncate(transfer.primary_team.title, length: 20) %>
+                  <%= truncate(transfer.primary_team.title, length: 14) %>
                   <br/>
                   (<%= transfer.team_transfer_status(transfer.primary_team).capitalize %>)
                 </td>
                 <td class="mdl-data-table__cell--non-numeric normal-text">
-                  <%= truncate(transfer.secondary_team.title, length: 20) %>
+                  <%= truncate(transfer.secondary_team.title, length: 14) %>
                   <br/>
                   (<%= transfer.team_transfer_status(transfer.secondary_team).capitalize %>)
                 </td>
@@ -93,7 +93,7 @@
             <% end %>
           </table>
         <% else %>
-          <span class="normal-text">No pending transfers.</span>
+          <span class="normal-text">None</span>
         <% end %>
       </div>
     </div>

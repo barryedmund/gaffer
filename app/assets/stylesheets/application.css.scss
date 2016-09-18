@@ -35,6 +35,9 @@ i.material-icons {
 	margin-right: 5px;
 	vertical-align: middle;
 }
+input:disabled {
+	color: #ff0000;
+}
 input[type="text"], input[type="password"], input[type="date"] {
 	font-size: 34px;
 	line-height: 28px;
@@ -345,7 +348,7 @@ select
 	font-size: 56px;
 }
 .col-sm-12 h3 {
-	font-size: 48px;
+	font-size: 42px;
 }
 .col-sm-12 .demo-card-wide.mdl-card.mdl-shadow--2dp {
 	box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.14), 0 5px 3px -2px rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.12);

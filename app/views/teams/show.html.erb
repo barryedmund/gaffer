@@ -2,7 +2,7 @@
 	<div class="col-sm-12">
 		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 			<div class="mdl-card__title">
-        <h2 class="mdl-card__title-text"><%= @team.title %></h2>
+        <h2 class="mdl-card__title-text"><%= truncate(@team.title, length: 19) %></h2>
       </div>
       <div class="mdl-card__actions">
 				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">

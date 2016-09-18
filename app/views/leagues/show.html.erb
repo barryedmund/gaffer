@@ -34,9 +34,9 @@
 							<tr>
 								<td class="mdl-data-table__cell--non-numeric normal-text">
 									<% if standings_row[:team_record].user != @current_user %>
-										<%= link_to truncate(standings_row[:team_record].title, length: 19), display_league_team_path(@league, standings_row[:team_record]), class: "content-link" %>
+										<%= link_to truncate(standings_row[:team_record].title, length: 18), display_league_team_path(@league, standings_row[:team_record]), class: "content-link" %>
 									<% else %>
-										<%= link_to truncate(standings_row[:team_record].title, length: 19), league_team_path(@league, standings_row[:team_record]), class: "content-link" %>
+										<%= link_to truncate(standings_row[:team_record].title, length: 18), league_team_path(@league, standings_row[:team_record]), class: "content-link" %>
 									<% end %>
 								</td>
 								<td class="normal-text"><%= standings_row[:games_played] %></td>
