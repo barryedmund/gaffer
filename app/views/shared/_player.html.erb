@@ -35,19 +35,13 @@
 		<% if owned_by_current_user %>
 			<%= link_to team_player.full_name(true, 16), league_team_team_player_path(@league, team_player.team, team_player), class: "content-link" %>
 		<% else %>
-			<%= form_for ([league, Transfer.new]) do |f| %>
-				<%= f.hidden_field :primary_team_id, value: current_user_team_in_this_league.id %>
-				<%= f.hidden_field :secondary_team_id, value: team_player.team.id %>
-		    <%= f.hidden_field :primary_team_accepted, :value => true %>
-		    <%= f.hidden_field :secondary_team_accepted, :value => false %>
-		    <%= f.fields_for TransferItem.new do |ff| %>
-		    	<%= ff.hidden_field :sending_team_id, value: team_player.team.id %>
-		    	<%= ff.hidden_field :receiving_team_id, value: current_user_team_in_this_league.id %>
-		    	<%= ff.hidden_field :transfer_item_type, value: "Player" %>
-		    	<%= ff.hidden_field :team_player_id, value: team_player.id %>
-		    <% end %>
-				<%= f.submit player_object.full_name(true, 14), class: "content-link" %>
-			<% end %>
+			<%= render partial: 'shared/form_direct_transfer_bid', locals: {
+				league: league,
+				player: player_object,
+				primary_team: current_user_team_in_this_league,
+				secondary_team: team_player.team,
+				team_player: team_player,
+				truncate_to: 14 } %>
 		<% end %>
 	<% else %>
 		<%= link_to player_object.full_name(true, 14), new_league_contract_path(league.id, {player_id: player_object.id}), class: "content-link" %>

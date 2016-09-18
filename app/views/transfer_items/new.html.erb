@@ -1,4 +1,9 @@
-<% direct_bid = params[:direct_bid] && (params[:direct_bid].to_i == @transfer.transfer_items.first.team_player_id) ? true : false%>
+<% direct_bid = params[:direct_bid] && (params[:direct_bid].to_i == @transfer.transfer_items.first.team_player_id) ? true : false %>
+<% if direct_bid %>
+	<% player = TeamPlayer.find(@transfer.transfer_items.first.team_player_id).player %>
+	<% team_player = TeamPlayer.find(@transfer.transfer_items.first.team_player_id) %>
+<% end %>
+
 <div class="col-sm-12">
   <div class="demo-card-wide mdl-card mdl-shadow--2dp">
 		<div class="mdl-card__title">
@@ -12,7 +17,8 @@
 		</div>
 
 		<% if direct_bid %>
-			<%= render 'bid_form' %>
+			<%= render partial: 'bid_form', locals: {team_player: team_player} %>
+			<%= render partial: 'shared/player_game_week_table', locals: {player: player} %>
 		<% else %>
 			<%= render 'form' %>
 		<% end %>

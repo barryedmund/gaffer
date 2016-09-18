@@ -1,8 +1,21 @@
+<% league = League.find(params[:league_id]) %>
+<% team = @current_user.teams.joins(:league).where('leagues.id = ?', league.id).first %>
+<% players_to_exlcude = Player.where(id: (Player.joins(team_players: [:team => :league]).where('leagues.id = ?', league.id) | Player.joins(:contracts).where('contracts.team_id = ?', team.id)).map(&:id)) %>
+<% direct_offer = params[:player_id]  && (players_to_exlcude.where(id: params[:player_id].to_i).empty? ) ? true : false %>
+<% if direct_offer %>
+	<% player = Player.find(params[:player_id].to_i)%>
+<% end %>
+
 <div class="col-sm-12">
   <div class="demo-card-wide mdl-card mdl-shadow--2dp">
 		<div class="mdl-card__title">
-			<h2 class="mdl-card__title-text">Offer contract</h2>
+			<h2 class="mdl-card__title-text">
+				Offer contract
+			</h2>
 		</div>
-		<%= render 'form' %>
+		<%= render partial: 'form', locals: { league: league, team: team, players_to_exlcude: players_to_exlcude, direct_offer: direct_offer, player: player } %>
+		<% if direct_offer %>
+			<%= render partial: 'shared/player_game_week_table', locals: {player: player} %>
+		<% end %>
 	</div>
 </div>

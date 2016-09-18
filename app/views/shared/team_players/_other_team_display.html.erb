@@ -1,4 +1,4 @@
-<% @league = params[:league_id] %>
+<% @league = League.find(params[:league_id].to_i) %>
 <div class="col-sm-12">
 	<% if @team.team_players.count > 0 %>
 		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
@@ -18,7 +18,14 @@
 								<%= team_player.player.playing_position %>
 							</td>
 							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<%= team_player.full_name(true, 31) %>
+								<% current_user_team_in_this_league = Team.where('league_id = ? AND user_id = ?', @league.id, @current_user.id).first %>
+								<%= render partial: 'shared/form_direct_transfer_bid', locals: {
+									league: @team.league,
+									player: team_player.player,
+									primary_team: current_user_team_in_this_league,
+									secondary_team: team_player.team,
+									team_player: team_player,
+									truncate_to: 25 } %>
 							</td>
 						</tr>
 					<% end %>
