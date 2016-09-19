@@ -14,24 +14,6 @@ describe TeamsController do
     sign_in(user)
   end
 
-  describe "GET index" do
-    context "logged in" do
-      it "assigns all teams as @teams" do
-        team = user.teams.create! valid_attributes
-        get :index, {:league_id => team.to_param}, valid_session
-        assigns(:teams).should eq([team])
-        expect(assigns(:teams).map(&:user)).to eq([user])
-      end
-
-      it "does not load other user's teams" do
-        other_team = Team.create!(valid_attributes.merge(user_id: create(:user).id))
-        get :index, {:league_id => 1}, valid_session
-        expect(assigns(:teams)).to_not include(other_team)
-      end
-
-    end
-  end
-
   describe "GET show" do
     it "assigns the requested team as @team for the logged in user" do
       team = user.teams.create! valid_attributes

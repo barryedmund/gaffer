@@ -1,5 +1,5 @@
 class GamesController < InheritedResources::Base
-
+  before_action :require_user
 	def new
 		@game = Game.new
   end

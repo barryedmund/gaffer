@@ -14,6 +14,10 @@ RSpec.describe GamesController, :type => :controller do
 
   let(:valid_session) { {} }
 
+  before do
+    sign_in(user)
+  end
+  
   describe "GET index" do
     it "assigns all games as @games" do
       game = Game.joins(game_round: :league_season).where('league_seasons.league_id = ?', league.id)

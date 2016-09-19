@@ -11,10 +11,8 @@ describe "Editing teams" do
 	def update_team(options={})
 		options[:title] ||= "My team"
 		team = options[:team]
-		visit "leagues/#{team.league_id}/teams"
-		within "#team_#{team.id}" do
-			click_link "#{team.title}"			
-		end
+		visit "leagues/#{team.league_id}"
+		click_link "#{team.title}"
 		click_link "Edit team"
 		fill_in :team_title, with: options[:title]
 		click_button "Update Team"

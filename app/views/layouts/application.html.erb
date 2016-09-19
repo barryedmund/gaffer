@@ -33,10 +33,34 @@
 					<%= link_to image_tag("gaffer_logo_263_x_328.png", class: "logo-icon"), root_path %>
 				</div>
 				<% if logged_in? %>
+					<% current_user_leagues = League.includes(:teams).where('teams.user_id = :current_user OR leagues.user_id = :current_user', {current_user: @current_user}).references(:teams).distinct %>
 					<div id="main-nav" class="col-sm-9">
 						<div class="row">
-							<div class="col-sm-6 main-nav-item"><%= link_to "Your leagues", leagues_path %></div>
-				    	<div class="col-sm-6 main-nav-item"><%= link_to "Log out", logout_path, method: :delete %></div>
+							<% if current_user_leagues.count == 1 %>
+								<% current_user_team = Team.where(user: @current_user, league: current_user_leagues.first).first %>
+								<div class="col-sm-2 main-nav-item">
+									<%= link_to "League", league_path(current_user_leagues.first) %>
+								</div>
+								<div class="col-sm-2 main-nav-item">
+									<%= link_to "Team", league_team_path(current_user_leagues.first, current_user_team) %>
+								</div>
+								<div class="col-sm-2 main-nav-item">
+									<%= link_to "Players", league_players_path(current_user_leagues.first) %>
+								</div>
+								<div class="col-sm-2 main-nav-item">
+									<%= link_to "Games", league_games_path(current_user_leagues.first) %>
+								</div>
+								<div class="col-sm-3 main-nav-item">
+					    		<%= link_to "Log out", logout_path, method: :delete %>
+					    	</div>
+							<% else %>
+								<div class="col-sm-6 main-nav-item">
+									<%= link_to "Leagues", leagues_path %>
+								</div>
+								<div class="col-sm-6 main-nav-item">
+					    		<%= link_to "Log out", logout_path, method: :delete %>
+					    	</div>
+							<% end %>
 				  	</div>
 			  	</div>
 		    <% else %>

@@ -7,19 +7,19 @@
       <div class="mdl-card__actions">
         <% if @leagues.count > 0 %>
           <% @leagues.each do |league| %>
-            <div class="normal-text"><%= link_to league.name, league, class: "content-link" %></div>
+            <div class="normal-text">
+              <%= link_to league.name, league, class: "content-link" %>
+            </div>
           <% end %>
         <% else %>
           <div class="normal-text">You don't have a team in any leagues yet.</div>
         <% end %>
       </div>
-      <% if AdminUser.exists?(email: @current_user.email) %>
-        <div class="mdl-card__supporting-text">
-          <ul class="horizontal-style">
-            <li><%= link_to 'Create new league', new_league_path, class: "mdl-button--primary" %></li>
-          </ul>
-        </div>
-      <% end %>
+      <div class="mdl-card__supporting-text">
+        <ul class="horizontal-style">
+          <li><%= link_to 'View leagues and invites', leagues_path, class: "mdl-button--primary" %></li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
@@ -33,7 +33,9 @@
         <% @league_invites = LeagueInvite.where(email: @current_user.email) %>
         <% if @league_invites.count > 0 %>
           <% @league_invites.each do |league_invite| %>
-            <div class="normal-text"><%= link_to league_invite.league.name, league_invite.league, class: "content-link" %></div>
+            <div class="normal-text">
+              <%= link_to league_invite.league.name, league_invite.league, class: "content-link" %>
+            </div>
           <% end %>
         <% else %>
           <div class="normal-text">No invites</div>
