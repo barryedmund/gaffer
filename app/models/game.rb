@@ -98,6 +98,22 @@ class Game < ActiveRecord::Base
  		end
  	end
 
+  def get_total_attacking_contribution(lineups)
+    total_attacking_contribution = 0
+    lineups.each do |lineup|
+      total_attacking_contribution += lineup.get_attacking_contribution
+    end
+    total_attacking_contribution
+  end
+
+  def get_total_defensive_contribution(lineups)
+    total_defensive_contribution = 0
+    lineups.each do |lineup|
+      total_defensive_contribution += lineup.get_defensive_contribution
+    end
+    total_defensive_contribution = 1 - ((total_defensive_contribution / 9.9) / 100)
+  end
+
  	private
  	def teams_in_same_league
  		errors.add(:base, "Teams not in same league.") unless home_team.league === away_team.league

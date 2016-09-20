@@ -1,0 +1,20 @@
+<tr>
+  <td class="mdl-data-table__cell--non-numeric normal-text">
+    <%= player_lineup.squad_position.short_name %>
+  </td>
+  <td class="mdl-data-table__cell--non-numeric normal-text">
+    <%= player_lineup.player_game_week.player.full_name(true) %>
+  </td>
+  <td class="normal-text">
+    <%= player_lineup.player_game_week.minutes_played.to_i %>  
+  </td>
+  <td class="normal-text">
+    <%= player_lineup.player_game_week.goals.to_i %>
+  </td>
+  <td class="normal-text">
+    <%= player_lineup.player_game_week.assists.to_i %>
+  </td>
+  <td class="normal-text">
+    <%= player_lineup.player_game_week.goals_conceded.to_i %>
+  </td>
+</tr>

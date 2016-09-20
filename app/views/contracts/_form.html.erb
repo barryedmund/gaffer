@@ -70,7 +70,7 @@
       <%= f.hidden_field :team_id, :value => team.id %>
       <%= f.hidden_field :player_id, :value => player.id %>
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        <%= text_field_tag :contract_player_full_name, player.full_name, disabled: true, class: "mdl-textfield__input" %>
+        <%= text_field_tag :contract_player_full_name, player.full_name(true, 15), disabled: true, class: "mdl-textfield__input" %>
         <%= label_tag :contract_player_full_name, "Player", class: "mdl-textfield__label" %>
       </div>
       <div class="form-group">
