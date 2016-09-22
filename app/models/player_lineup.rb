@@ -8,13 +8,13 @@ class PlayerLineup < ActiveRecord::Base
   def get_attacking_contribution
     attacking_contribution = 0
     if squad_position.short_name === 'GK'
-      attacking_contribution += (player_game_week.goals + (player_game_week.assists * 0.5))
+      attacking_contribution += (player_game_week.goals + (player_game_week.assists.to_i * 0.5))
     elsif squad_position.short_name === 'DF'
-      attacking_contribution += (player_game_week.goals + (player_game_week.assists * 0.4))
+      attacking_contribution += (player_game_week.goals + (player_game_week.assists.to_i * 0.4))
     elsif squad_position.short_name === 'MD'
-      attacking_contribution += (player_game_week.goals + (player_game_week.assists * 0.3))
+      attacking_contribution += (player_game_week.goals + (player_game_week.assists.to_i * 0.3))
     elsif squad_position.short_name === 'FW'
-      attacking_contribution += (player_game_week.goals + (player_game_week.assists * 0.2))
+      attacking_contribution += (player_game_week.goals + (player_game_week.assists.to_i * 0.2))
     end
     attacking_contribution
   end

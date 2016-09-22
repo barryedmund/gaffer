@@ -100,18 +100,22 @@ class Game < ActiveRecord::Base
 
   def get_total_attacking_contribution(lineups)
     total_attacking_contribution = 0
-    lineups.each do |lineup|
-      total_attacking_contribution += lineup.get_attacking_contribution
+    if lineups.count > 0
+      lineups.each do |lineup|
+        total_attacking_contribution += lineup.get_attacking_contribution
+      end
     end
     total_attacking_contribution
   end
 
-  def get_total_defensive_contribution(lineups)
+  def get_clean_sheet_minutes(lineups)
     total_defensive_contribution = 0
-    lineups.each do |lineup|
-      total_defensive_contribution += lineup.get_defensive_contribution
+    if lineups.count > 0
+      lineups.each do |lineup|
+        total_defensive_contribution += lineup.get_defensive_contribution
+      end
     end
-    total_defensive_contribution = 1 - ((total_defensive_contribution / 9.9) / 100)
+    total_defensive_contribution
   end
 
  	private

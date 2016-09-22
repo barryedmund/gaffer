@@ -55,9 +55,15 @@
           </tr>
         </table>
       </div>
+      <ul class="horizontal-style-tabs">
+        <li><a id="raw_details_link" class="normal-text selected-tab">View raw player stats</a></li>
+        <li><a id="contribution_details_link" class="normal-text">View player contributions</a></li>
+      </ul>
       <div class="mdl-card__actions">
         <div class="mdl-card__supporting-text">
-          <%= @home_team.title %> (<%= @home_team.user.full_name %>)
+          <div class="mdl-card__title">
+            <h3 class="mdl-card__title-text"><%= @home_team.title %> (<%= @home_team.user.full_name %>)</h3>
+          </div>
         </div>
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
           <%= render partial: "shared/games/table_header" %>
@@ -65,14 +71,15 @@
           <% home_team_lineups.each do |player_lineup| %>
             <%= render partial: "shared/games/player_lineup_table_row", locals: {player_lineup: player_lineup} %>
           <% end %>
+          <%= render partial: "shared/games/summary_row", locals: {player_lineups: home_team_lineups} %>
         </table>
-        <%= @game.get_total_attacking_contribution(home_team_lineups) %>
-        <br/>
-        <%= @game.get_total_defensive_contribution(home_team_lineups) %>
       </div>
+
       <div class="mdl-card__actions">
         <div class="mdl-card__supporting-text">
-          <%= @away_team.title %> (<%= @away_team.user.full_name %>)
+          <div class="mdl-card__title">
+            <h3 class="mdl-card__title-text"><%= @away_team.title %> (<%= @away_team.user.full_name %>)</h3>
+          </div>
         </div>
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
           <%= render partial: "shared/games/table_header" %>
@@ -80,10 +87,8 @@
           <% away_team_lineups.each do |player_lineup| %>
             <%= render partial: "shared/games/player_lineup_table_row", locals: {player_lineup: player_lineup} %>
           <% end %>
+          <%= render partial: "shared/games/summary_row", locals: {player_lineups: away_team_lineups} %>
         </table>
-        <%= @game.get_total_attacking_contribution(away_team_lineups) %>
-        <br/>
-        <%= @game.get_total_defensive_contribution(away_team_lineups) %>
       </div>
     </div>
   </div>
