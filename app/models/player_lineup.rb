@@ -16,16 +16,16 @@ class PlayerLineup < ActiveRecord::Base
     elsif squad_position.short_name === 'FW'
       attacking_contribution += (player_game_week.goals + (player_game_week.assists.to_i * 0.2))
     end
-    attacking_contribution
+    attacking_contribution.round(1)
   end
 
   def get_defensive_contribution
-    clean_sheet_minutes = player_game_week.minutes_played > 0 ? (player_game_week.minutes_played / (player_game_week.goals_conceded + 1)).to_f : 0
+    clean_sheet_minutes = player_game_week.minutes_played > 0 ? (player_game_week.minutes_played.to_f / (player_game_week.goals_conceded + 1)) : 0.0
     if squad_position.short_name === 'MD'
       clean_sheet_minutes = clean_sheet_minutes / 2
     elsif squad_position.short_name === 'FW'
-      clean_sheet_minutes = 0
+      clean_sheet_minutes = 0.0
     end
-    clean_sheet_minutes
+    clean_sheet_minutes.round(1)
   end
 end

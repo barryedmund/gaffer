@@ -57,4 +57,42 @@ class Player < ActiveRecord::Base
     end
     return_value
   end
+
+  def total_minutes_played(season)
+    player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id).sum(:minutes_played)
+  end
+
+  def total_attacking_contribution(season)
+    this_season_player_game_weeks = player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id)
+    attacking_contribution = 0
+    if playing_position === 'Goalkeeper'
+      attacking_contribution += (this_season_player_game_weeks.sum(:goals) + (this_season_player_game_weeks.sum(:assists).to_f * 0.5))
+    elsif playing_position === 'Defender'
+      attacking_contribution += (this_season_player_game_weeks.sum(:goals) + (this_season_player_game_weeks.sum(:assists).to_f * 0.4))
+    elsif playing_position === 'Midfielder'
+      attacking_contribution += (this_season_player_game_weeks.sum(:goals) + (this_season_player_game_weeks.sum(:assists).to_f * 0.3))
+    elsif playing_position === 'Forward'
+      attacking_contribution += (this_season_player_game_weeks.sum(:goals) + (this_season_player_game_weeks.sum(:assists).to_f * 0.2))
+    end
+    attacking_contribution.round(1)
+  end
+
+  def total_defensive_contribution(season)
+    this_season_player_game_weeks = player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id)
+    total_clean_sheet_minutes = 0
+    this_season_player_game_weeks.each do |player_game_week|
+      clean_sheet_minutes = player_game_week.minutes_played > 0 ? (player_game_week.minutes_played.to_f / (player_game_week.goals_conceded + 1)) : 0.0
+      if playing_position === 'Midfielder'
+        clean_sheet_minutes = clean_sheet_minutes / 2
+      elsif playing_position === 'Forward'
+        clean_sheet_minutes = 0.0
+      end
+      total_clean_sheet_minutes += clean_sheet_minutes
+    end
+    total_clean_sheet_minutes.round(1)
+  end
+
+  def eligible_game_weeks(season)
+    player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id).count
+  end
 end

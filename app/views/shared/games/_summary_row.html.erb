@@ -8,13 +8,19 @@
   <td class="normal-text">
     <%= player_game_weeks.sum('player_game_weeks.minutes_played') %>
   </td>
-  <td class="normal-text">
+  <td class="normal-text detailed_stats">
     <%= player_game_weeks.sum('player_game_weeks.goals') %>
   </td>
-  <td class="normal-text">
+  <td class="normal-text detailed_stats">
     <%= player_game_weeks.sum('player_game_weeks.assists') %>
   </td>
-  <td class="normal-text">
+  <td class="normal-text detailed_stats">
     <%= player_game_weeks.sum('player_game_weeks.goals_conceded') %>
+  </td>
+  <td class="normal-text hide summary_stats">
+    <%= @game.get_total_attacking_contribution(player_lineups).round(1) %>
+  </td>
+  <td class="normal-text hide summary_stats">
+    <%= @game.get_clean_sheet_minutes(player_lineups).round(1) %>
   </td>
 </tr>

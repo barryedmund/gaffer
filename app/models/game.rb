@@ -26,7 +26,7 @@ class Game < ActiveRecord::Base
           lineup_player_game_week = lineup.player_game_week
           lineup_player_squad_position = lineup.squad_position
           
-          player_clean_sheet_minutes = lineup_player_game_week.minutes_played > 0 ? (lineup_player_game_week.minutes_played / (lineup_player_game_week.goals_conceded + 1)) : 0
+          player_clean_sheet_minutes = lineup_player_game_week.minutes_played > 0 ? (lineup_player_game_week.minutes_played.to_f / (lineup_player_game_week.goals_conceded + 1)) : 0
           
           player_goals = lineup_player_game_week.goals
           
@@ -57,7 +57,7 @@ class Game < ActiveRecord::Base
           lineup_player_game_week = lineup.player_game_week
           lineup_player_squad_position = lineup.squad_position
           
-          player_clean_sheet_minutes = lineup_player_game_week.minutes_played > 0 ? (lineup_player_game_week.minutes_played / (lineup_player_game_week.goals_conceded + 1)) : 0
+          player_clean_sheet_minutes = lineup_player_game_week.minutes_played > 0 ? (lineup_player_game_week.minutes_played.to_f / (lineup_player_game_week.goals_conceded + 1)) : 0
           
           player_goals = lineup_player_game_week.goals
           
