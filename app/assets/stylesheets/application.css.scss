@@ -105,6 +105,12 @@ td[id^="my_contract_offer_name_"].best-offer {
   text-align: left;
   text-indent: -28px;
 }
+.bold-row {
+	border-top: 2px solid #999;
+}
+.bold-row > td {
+	font-weight: 400;
+}
 .cancel_link_anchor {
 	display: block;
 	float: right;
@@ -349,6 +355,9 @@ select
 }
 .col-sm-12 h3 {
 	font-size: 42px;
+}
+.col-sm-12 h4 {
+	font-size: 30px;
 }
 .col-sm-12 .demo-card-wide.mdl-card.mdl-shadow--2dp {
 	box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.14), 0 5px 3px -2px rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.12);

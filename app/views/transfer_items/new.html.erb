@@ -18,7 +18,9 @@
 
 		<% if direct_bid %>
 			<%= render partial: 'bid_form', locals: {team_player: team_player} %>
-			<%= render partial: 'shared/player_game_week_table', locals: {player: player} %>
+			</div>
+			<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+				<%= render partial: 'shared/player_game_week_table', locals: {player: player} %>
 		<% else %>
 			<%= render 'form' %>
 		<% end %>

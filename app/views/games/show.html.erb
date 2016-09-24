@@ -55,102 +55,39 @@
           </tr>
         </table>
       </div>
+      <ul class="horizontal-style-tabs">
+        <li><a id="detailed_stats_link" class="normal-text selected-tab">View details</a></li>
+        <li><a id="summary_stats_link" class="normal-text">View summary</a></li>
+      </ul>
       <div class="mdl-card__actions">
         <div class="mdl-card__supporting-text">
-          <%= @home_team.title %> (<%= @home_team.user.full_name %>)
+          <div class="mdl-card__title">
+            <h3 class="mdl-card__title-text"><%= @home_team.title %> (<%= @home_team.user.full_name %>)</h3>
+          </div>
         </div>
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-          <tr>
-            <th class="mdl-data-table__cell--non-numeric">
-              <span>Pos</span>
-            </th>
-            <th class="mdl-data-table__cell--non-numeric">
-              <span>Player</span>
-            </th>
-            <th>
-              <span>Min</span>
-            </th>
-            <th>
-              <span>Sco</span>
-            </th>
-            <th>
-              <span>Ass</span>
-            </th>
-            <th>
-              <span>Con</span>
-            </th>
-          </tr>
-          <% @home_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ? AND squad_positions.short_name != ?', @game_week.id, 'SUB').order("squad_positions.sort_order").each do |player_lineup| %>
-            <tr>
-              <td class="mdl-data-table__cell--non-numeric normal-text">
-                <%= player_lineup.squad_position.short_name %>
-              </td>
-              <td class="mdl-data-table__cell--non-numeric normal-text">
-                <%= player_lineup.player_game_week.player.full_name(true) %>
-              </td>
-              <td class="normal-text">
-                <%= player_lineup.player_game_week.minutes_played.to_i %>
-              </td>
-              <td class="normal-text">
-                <%= player_lineup.player_game_week.goals.to_i %>
-              </td>
-              <td class="normal-text">
-                <%= player_lineup.player_game_week.assists.to_i %>
-              </td>
-              <td class="normal-text">
-                <%= player_lineup.player_game_week.goals_conceded.to_i %>
-              </td>
-            </tr>
+          <%= render partial: "shared/games/table_header" %>
+          <% home_team_lineups = @home_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ? AND squad_positions.short_name != ?', @game_week.id, 'SUB').order("squad_positions.sort_order") %>
+          <% home_team_lineups.each do |player_lineup| %>
+            <%= render partial: "shared/games/player_lineup_table_row", locals: {player_lineup: player_lineup} %>
           <% end %>
+          <%= render partial: "shared/games/summary_row", locals: {player_lineups: home_team_lineups} %>
         </table>
       </div>
+
       <div class="mdl-card__actions">
         <div class="mdl-card__supporting-text">
-          <%= @away_team.title %> (<%= @away_team.user.full_name %>)
+          <div class="mdl-card__title">
+            <h3 class="mdl-card__title-text"><%= @away_team.title %> (<%= @away_team.user.full_name %>)</h3>
+          </div>
         </div>
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-          <tr>
-            <th class="mdl-data-table__cell--non-numeric">
-              <span>Pos</span>
-            </th>
-            <th class="mdl-data-table__cell--non-numeric">
-              <span>Player</span>
-            </th>
-            <th>
-              <span>Min</span>
-            </th>
-            <th>
-              <span>Sco</span>
-            </th>
-            <th>
-              <span>Ass</span>
-            </th>
-            <th>
-              <span>Con</span>
-            </th>
-          </tr>
-          <% @away_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ? AND squad_positions.short_name != ?', @game_week.id, 'SUB').order("squad_positions.sort_order").each do |player_lineup| %>
-            <tr>
-              <td class="mdl-data-table__cell--non-numeric normal-text">
-                <%= player_lineup.squad_position.short_name %>
-              </td>
-              <td class="mdl-data-table__cell--non-numeric normal-text">
-                <%= player_lineup.player_game_week.player.full_name(true) %>
-              </td>
-              <td class="normal-text">
-                <%= player_lineup.player_game_week.minutes_played.to_i %>  
-              </td>
-              <td class="normal-text">
-                <%= player_lineup.player_game_week.goals.to_i %>
-              </td>
-              <td class="normal-text">
-                <%= player_lineup.player_game_week.assists.to_i %>
-              </td>
-              <td class="normal-text">
-                <%= player_lineup.player_game_week.goals_conceded.to_i %>
-              </td>
-            </tr>
+          <%= render partial: "shared/games/table_header" %>
+          <% away_team_lineups = @away_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ? AND squad_positions.short_name != ?', @game_week.id, 'SUB').order("squad_positions.sort_order") %>
+          <% away_team_lineups.each do |player_lineup| %>
+            <%= render partial: "shared/games/player_lineup_table_row", locals: {player_lineup: player_lineup} %>
           <% end %>
+          <%= render partial: "shared/games/summary_row", locals: {player_lineups: away_team_lineups} %>
         </table>
       </div>
     </div>

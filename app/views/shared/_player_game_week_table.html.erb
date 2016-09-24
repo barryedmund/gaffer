@@ -1,5 +1,50 @@
 <% if player.player_game_weeks.joins(game_week: :season).where("season_id = ?", Season.current.first.id).count > 0 %>
+	<div class="mdl-card__title">
+		<h3 class="mdl-card__title-text">Stats</h3>
+	</div>
 	<div class="mdl-card__actions">
+		<div class="mdl-card__title">
+			<h4 class="mdl-card__title-text">Summary</h4>
+		</div>
+		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+			<tr>
+				<th>
+					<span>Mp</span>
+				</th>
+				<th>
+					<span>Att</span>
+				</th>
+				<th>
+					<span>Att / 90</span>
+				</th>
+				<th>
+					<span>Def</span>
+				</th>
+				<th>
+					<span>Def / 90</span>
+				</th>
+			</tr>
+			<tr>
+				<td class="normal-text">
+					<%= total_minutes_played = player.total_minutes_played(Season.current.first) %> / <%= player.eligible_game_weeks(Season.current.first) * 90 %>
+				</td>
+				<td class="normal-text">
+					<%= total_attacking_contribution = player.total_attacking_contribution(Season.current.first) %>
+				</td>
+				<td class="normal-text">
+					<%= total_minutes_played > 0 ? (total_attacking_contribution / (total_minutes_played.to_f / 90)).round(3) : (0.to_f).round(3) %>
+				</td>
+				<td class="normal-text">
+					<%= total_defensive_contribution = player.total_defensive_contribution(Season.current.first) %>
+				</td>
+				<td class="normal-text">
+					<%= total_minutes_played > 0 ? (total_defensive_contribution / (total_minutes_played.to_f / 90)).round(3) : (0.to_f).round(3) %>
+				</td>
+			</tr>
+		</table>
+		<div class="mdl-card__title">
+			<h4 class="mdl-card__title-text">Game weeks</h4>
+		</div>
 		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 			<tr>
 				<th class="mdl-data-table__cell--non-numeric">

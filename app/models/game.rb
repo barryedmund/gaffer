@@ -26,7 +26,7 @@ class Game < ActiveRecord::Base
           lineup_player_game_week = lineup.player_game_week
           lineup_player_squad_position = lineup.squad_position
           
-          player_clean_sheet_minutes = lineup_player_game_week.minutes_played > 0 ? (lineup_player_game_week.minutes_played / (lineup_player_game_week.goals_conceded + 1)) : 0
+          player_clean_sheet_minutes = lineup_player_game_week.minutes_played > 0 ? (lineup_player_game_week.minutes_played.to_f / (lineup_player_game_week.goals_conceded + 1)) : 0
           
           player_goals = lineup_player_game_week.goals
           
@@ -57,7 +57,7 @@ class Game < ActiveRecord::Base
           lineup_player_game_week = lineup.player_game_week
           lineup_player_squad_position = lineup.squad_position
           
-          player_clean_sheet_minutes = lineup_player_game_week.minutes_played > 0 ? (lineup_player_game_week.minutes_played / (lineup_player_game_week.goals_conceded + 1)) : 0
+          player_clean_sheet_minutes = lineup_player_game_week.minutes_played > 0 ? (lineup_player_game_week.minutes_played.to_f / (lineup_player_game_week.goals_conceded + 1)) : 0
           
           player_goals = lineup_player_game_week.goals
           
@@ -97,6 +97,26 @@ class Game < ActiveRecord::Base
  			"- : -"
  		end
  	end
+
+  def get_total_attacking_contribution(lineups)
+    total_attacking_contribution = 0
+    if lineups.count > 0
+      lineups.each do |lineup|
+        total_attacking_contribution += lineup.get_attacking_contribution
+      end
+    end
+    total_attacking_contribution
+  end
+
+  def get_clean_sheet_minutes(lineups)
+    total_defensive_contribution = 0
+    if lineups.count > 0
+      lineups.each do |lineup|
+        total_defensive_contribution += lineup.get_defensive_contribution
+      end
+    end
+    total_defensive_contribution
+  end
 
  	private
  	def teams_in_same_league
