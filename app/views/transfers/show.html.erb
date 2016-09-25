@@ -5,43 +5,38 @@
 			<div class="mdl-card__title">
         <h2 class="mdl-card__title-text">Transfer details</h2>
       </div>
-      <div class="mdl-card__supporting-text">
-				Status
+      <div class="mdl-card__title">
+				<h3 class="mdl-card__title-text">Status</h3>
 			</div>
       <div class="mdl-card__supporting-text">
       	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 					<tr>
-						<th class="mdl-data-table__cell--non-numeric">
-								<span><%= truncate(@transfer.primary_team.title, length: 13) %></span>
-							</th>
-							<th class="mdl-data-table__cell--non-numeric">
-								<span><%= truncate(@transfer.secondary_team.title, length: 13) %></span>
-							</th>
-					</tr>
+            <th class="mdl-data-table__cell--non-numeric">
+              <span>Team 1</span>
+            </th>
+            <th class="mdl-data-table__cell--non-numeric">
+              <span>Team 2</span>
+            </th>
 					<tr>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= @transfer.team_transfer_status(@transfer.primary_team).capitalize %>
-						</td>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= @transfer.team_transfer_status(@transfer.secondary_team).capitalize %>
-						</td>
+						<%= render partial: 'transfer_teams_status_row', locals: {transfer: @transfer} %>
 					</tr>
 				</table>
       </div>
-      <% if @transfer.current_user_involved?(@current_user) && !@transfer.transfer_completed? %>
-				<div class="mdl-card__supporting-text">
-	        <ul class="horizontal-style">
-	          <li><%= link_to "Change your status", change_response_league_transfer_path(league, @transfer), :method => :patch, class: "mdl-button--primary"  %></li>
+      <div class="mdl-card__supporting-text">
+	    	<ul class="horizontal-style">
+	      	<li><%= link_to "View all transfers", league_transfers_path(league), class: "mdl-button--primary" %></li>
+      		<% if @transfer.current_user_involved?(@current_user) && !@transfer.transfer_completed? %>
+	        	<li><%= link_to "Change your status", change_response_league_transfer_path(league, @transfer), :method => :patch, class: "mdl-button--primary"  %></li>
 	          <% if @transfer.primary_team.user == @current_user && !@transfer.transfer_completed? %>
-              <li><%= link_to "Cancel transfer", league_transfer_path(league, @transfer), :method => :delete, class: "mdl-button--primary" %></li>
+            	<li><%= link_to "Cancel transfer", league_transfer_path(league, @transfer), :method => :delete, class: "mdl-button--primary" %></li>
             <% end %>
-	        </ul>
-	      </div>
-      <% end %>
+          <% end %>
+	      </ul>
+	     </div>
     </div>
     <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-    	<div class="mdl-card__supporting-text">
-				Who gets what
+    	<div class="mdl-card__title">
+				<h3 class="mdl-card__title-text">Who gets what</h3>
 			</div>
     	<div class="mdl-card__actions">
 				<% if @transfer.transfer_items.count > 0 %>

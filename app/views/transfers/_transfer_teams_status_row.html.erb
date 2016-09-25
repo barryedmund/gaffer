@@ -1,0 +1,16 @@
+<td class="mdl-data-table__cell--non-numeric normal-text">
+  <% if transfer.primary_team_accepted %>
+    <div class="green-circle"></div>
+  <% else %>
+    <div class="orange-circle"></div>
+  <% end %>
+  <%= truncate(transfer.primary_team.title, length: 14) %>
+</td>
+<td class="mdl-data-table__cell--non-numeric normal-text">
+  <% if transfer.secondary_team_accepted %>
+    <div class="green-circle"></div>
+  <% else %>
+    <div class="orange-circle"></div>
+  <% end %>
+  <%= truncate(transfer.secondary_team.title, length: 14) %>
+</td>

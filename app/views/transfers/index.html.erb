@@ -29,16 +29,7 @@
             </tr>
             <% your_transfers.order(created_at: :desc).each do |transfer| %>
               <tr>
-                <td class="mdl-data-table__cell--non-numeric normal-text">
-                  <%= truncate(transfer.primary_team.title, length: 14) %>
-                  <br/>
-                  (<%= transfer.team_transfer_status(transfer.primary_team).capitalize %>)
-                </td>
-                <td class="mdl-data-table__cell--non-numeric normal-text">
-                  <%= truncate(transfer.secondary_team.title, length: 14) %>
-                  <br/>
-                  (<%= transfer.team_transfer_status(transfer.secondary_team).capitalize %>)
-                </td>
+                <%= render partial: 'transfer_teams_status_row', locals: {transfer: transfer} %>
                 <td class="mdl-data-table__cell--non-numeric normal-text">
                   <%= link_to "View", league_transfer_path(league, transfer) %>
                 </td>
@@ -76,16 +67,7 @@
             </tr>
             <% @transfers.order(created_at: :desc).each do |transfer| %>
               <tr>
-                <td class="mdl-data-table__cell--non-numeric normal-text">
-                  <%= truncate(transfer.primary_team.title, length: 14) %>
-                  <br/>
-                  (<%= transfer.team_transfer_status(transfer.primary_team).capitalize %>)
-                </td>
-                <td class="mdl-data-table__cell--non-numeric normal-text">
-                  <%= truncate(transfer.secondary_team.title, length: 14) %>
-                  <br/>
-                  (<%= transfer.team_transfer_status(transfer.secondary_team).capitalize %>)
-                </td>
+                <%= render partial: 'transfer_teams_status_row', locals: {transfer: transfer} %>
                 <td class="mdl-data-table__cell--non-numeric normal-text">
                   <%= link_to "View", league_transfer_path(league, transfer) %>
                 </td>
