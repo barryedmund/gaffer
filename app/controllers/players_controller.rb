@@ -3,7 +3,7 @@ class PlayersController < ApplicationController
 	before_action :set_player, only: [:show]
 
 	def index
-    @players = Player.all
+    @players = Player.where(available: true)
   end
 
 	def new

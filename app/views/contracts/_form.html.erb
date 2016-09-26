@@ -35,7 +35,7 @@
         </div>
         <div class="form-group">
           <div class="selectdiv">
-            <%= f.collection_select(:player_id, Player.where.not(id: players_to_exlcude.map(&:id)).sort_by {|p| [p.sort_val, p.last_name.downcase, p.first_name.downcase] }, :id, "#{:full_name_and_playing_position_and_real_team}", {include_blank: "Choose player...", selected: params[:player_id]}) %>
+            <%= f.collection_select(:player_id, Player.where.not(id: players_to_exlcude.map(&:id), available: false).sort_by {|p| [p.sort_val, p.last_name.downcase, p.first_name.downcase] }, :id, "#{:full_name_and_playing_position_and_real_team}", {include_blank: "Choose player...", selected: params[:player_id]}) %>
           </div>
         </div>
       <% else %>

@@ -54,9 +54,9 @@
     <% pending_contracts = @contracts.joins(:player).where(signed: false).sort_by {|contract| [contract.player.last_name, contract.player.pl_player_code, -contract.value, contract.created_at] } %>
     <% my_pending_contracts = @contracts.joins(:player).where(signed: false).where(team: team).sort_by {|contract| [contract.player.sort_val, contract.player.last_name, contract.player.pl_player_code, -contract.value, contract.created_at] } %>
     <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-    	<div class="mdl-card__supporting-text">
-    		Your offers (<%= my_pending_contracts.count %>)
-    	</div>
+    	<div class="mdl-card__title">
+        <h3 class="mdl-card__title-text">Your offers (<%= my_pending_contracts.count %>)</h3>
+      </div>
     	<div class="mdl-card__actions">
     		
 	    	<% if my_pending_contracts.length > 0 %>
@@ -99,14 +99,14 @@
 	      		<% end %>
 					</table>
 	    	<% else %>
-	    		<span>You don't have any pending contracts.</span>
+	    		<span class="normal-text">You don't have any pending contracts.</span>
 	    	<% end %>
 	    </div>
     </div>
     <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-    	<div class="mdl-card__supporting-text">
-    		All offers
-    	</div>
+    	<div class="mdl-card__title">
+        <h3 class="mdl-card__title-text">All offers</h3>
+      </div>
       <div class="mdl-card__actions">
       	<% if pending_contracts.count > 0 %>
       		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
