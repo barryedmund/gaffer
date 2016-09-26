@@ -1,7 +1,7 @@
 <% league = League.find(params[:league_id]) %>
 <% team = @current_user.teams.joins(:league).where('leagues.id = ?', league.id).first %>
 <% players_to_exlcude = Player.where(id: (Player.joins(team_players: [:team => :league]).where('leagues.id = ?', league.id) | Player.joins(:contracts).where('contracts.team_id = ?', team.id)).map(&:id)) %>
-<% direct_offer = params[:player_id]  && (players_to_exlcude.where(id: params[:player_id].to_i).empty? ) ? true : false %>
+<% direct_offer = params[:player_id] && (players_to_exlcude.where(id: params[:player_id].to_i).empty? ) ? true : false %>
 <% if direct_offer %>
 	<% player = Player.find(params[:player_id].to_i)%>
 <% end %>

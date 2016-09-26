@@ -13,20 +13,29 @@ namespace :player_data do
         player_code = current_player['code']
         player_first_name = current_player['first_name']
         player_last_name = current_player['second_name']
+        player_status = current_player['status']
         player_position = playing_position_elements.find { |e| e['id'] == current_player['element_type']}['singular_name']
         player_real_team = real_team_elements.find { |f| f['code'] == current_player['team_code']}['short_name']
         player_competition = Competition.find_by description: 'Premier League'
 
         player = Player.find_by(pl_player_code: player_code)
         if player
-          player.update_attributes(pl_element_id: player_element_id, real_team_short_name: player_real_team)
+          if player_status == "u"
+            player.update_attributes(pl_element_id: player_element_id, real_team_short_name: player_real_team, available: false)
+            TeamPlayer.where(player: player).destroy_all
+          else
+            player.update_attributes(pl_element_id: player_element_id, real_team_short_name: player_real_team, available: true)
+          end
         else
-          player = Player.create(first_name: player_first_name, last_name: player_last_name, playing_position: player_position, pl_player_code: player_code, competition: player_competition, pl_element_id: player_element_id, real_team_short_name: player_real_team)
-          League.all.each do |league|
-            NewsItem.create(league: league, news_item_resource_type: 'Player', news_item_resource_id: player.id, body: "New free agent")
+          if player_status != "u"
+            player = Player.create(first_name: player_first_name, last_name: player_last_name, playing_position: player_position, pl_player_code: player_code, competition: player_competition, pl_element_id: player_element_id, real_team_short_name: player_real_team, available: true)
+            League.all.each do |league|
+              NewsItem.create(league: league, news_item_resource_type: 'Player', news_item_resource_id: player.id, body: "New free agent")
+            end
           end
         end
         puts player.inspect
+        puts player_status
       end
     end
   end

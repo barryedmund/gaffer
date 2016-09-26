@@ -9,6 +9,7 @@ ActiveAdmin.register Player do
     column :playing_position
     column :pl_player_code
     column :pl_element_id
+    column :available
     actions
   end
 end
