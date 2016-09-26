@@ -10,14 +10,6 @@
 			</div>
       <div class="mdl-card__supporting-text">
       	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-					<tr>
-            <th class="mdl-data-table__cell--non-numeric">
-              <span>Team 1</span>
-            </th>
-            <th class="mdl-data-table__cell--non-numeric">
-              <span>Team 2</span>
-            </th>
-					<tr>
 						<%= render partial: 'transfer_teams_status_row', locals: {transfer: @transfer} %>
 					</tr>
 				</table>
@@ -28,7 +20,7 @@
       		<% if @transfer.current_user_involved?(@current_user) && !@transfer.transfer_completed? %>
 	        	<li><%= link_to "Change your status", change_response_league_transfer_path(league, @transfer), :method => :patch, class: "mdl-button--primary"  %></li>
 	          <% if @transfer.primary_team.user == @current_user && !@transfer.transfer_completed? %>
-            	<li><%= link_to "Cancel transfer", league_transfer_path(league, @transfer), :method => :delete, class: "mdl-button--primary" %></li>
+            	<li><%= link_to "Cancel transfer", league_transfer_path(league, @transfer), :method => :delete %></li>
             <% end %>
           <% end %>
 	      </ul>
