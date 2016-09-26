@@ -16,22 +16,11 @@
       <div class="mdl-card__actions">
         <% if your_transfers.count > 0 %>
           <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-            <tr>
-              <th class="mdl-data-table__cell--non-numeric">
-                <span>Team 1</span>
-              </th>
-              <th class="mdl-data-table__cell--non-numeric">
-                <span>Team 2</span>
-              </th>
-              <th class="mdl-data-table__cell--non-numeric">
-                <span> </span>
-              </th>
-            </tr>
             <% your_transfers.order(created_at: :desc).each do |transfer| %>
               <tr>
                 <%= render partial: 'transfer_teams_status_row', locals: {transfer: transfer} %>
                 <td class="mdl-data-table__cell--non-numeric normal-text">
-                  <%= link_to "View", league_transfer_path(league, transfer) %>
+                  <%= link_to "View", league_transfer_path(league, transfer), class: "mdl-button--primary" %>
                 </td>
               </tr>
             <% end %>
@@ -54,22 +43,11 @@
       <div class="mdl-card__actions">
         <% if @transfers.count > 0 %>
           <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-            <tr>
-              <th class="mdl-data-table__cell--non-numeric">
-                <span>Team 1</span>
-              </th>
-              <th class="mdl-data-table__cell--non-numeric">
-                <span>Team 2</span>
-              </th>
-              <th class="mdl-data-table__cell--non-numeric">
-                <span> </span>
-              </th>
-            </tr>
             <% @transfers.order(created_at: :desc).each do |transfer| %>
               <tr>
                 <%= render partial: 'transfer_teams_status_row', locals: {transfer: transfer} %>
                 <td class="mdl-data-table__cell--non-numeric normal-text">
-                  <%= link_to "View", league_transfer_path(league, transfer) %>
+                  <%= link_to "View", league_transfer_path(league, transfer), class: "mdl-button--primary" %>
                 </td>
               </tr>
             <% end %>

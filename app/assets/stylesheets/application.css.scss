@@ -30,9 +30,18 @@ div.mdl-card__supporting-text {
 form, form div, .form-group div.mdl-textfield{
 	width: 100%;
 }
-i.material-icons {
+i.ghost {
+	visibility: hidden;
+}
+i.large {
 	font-size: 48px;
 	margin-right: 5px;
+}
+i.small {
+	font-size: 30px;
+	margin-right: 2px;
+}
+i.material-icons {
 	vertical-align: middle;
 }
 input:disabled {
@@ -69,6 +78,16 @@ li {
 span.mdl-textfield__error {
 	font-size: 26px;
 }
+span.skooch-left {
+	display: inline-block;
+	text-align: left;
+	width: 100%;
+}
+span.skooch-right {
+	display: inline-block;
+	text-align: right;
+	width: 100%;	
+}
 table {
 	width: 100%;
 }
@@ -80,6 +99,9 @@ td[id^="my_contract_offer_date_"].deadline-closing {
 }
 td[id^="my_contract_offer_name_"].best-offer {
 	border-left: 6px solid rgb(139,195,74);
+}
+td.transfer-item-cell {
+	width: 28%;
 }
 #header-row {
 	margin: 0px 0px 30px 0px;
