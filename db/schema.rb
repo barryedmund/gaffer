@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160827063833) do
+ActiveRecord::Schema.define(version: 20160926054702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -171,6 +171,7 @@ ActiveRecord::Schema.define(version: 20160827063833) do
     t.integer "competition_id"
     t.integer "pl_element_id"
     t.string  "real_team_short_name"
+    t.boolean "available",            default: false
   end
 
   add_index "players", ["pl_player_code"], name: "index_players_on_pl_player_code", using: :btree
