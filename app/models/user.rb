@@ -22,4 +22,8 @@ class User < ActiveRecord::Base
 	def full_name
 		"#{first_name} #{last_name}"
 	end
+
+	def first_name_camel_cased
+		"#{first_name.downcase.capitalize}"
+	end
 end

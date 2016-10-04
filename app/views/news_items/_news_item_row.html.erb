@@ -1,0 +1,35 @@
+<% resource = news_item.news_item_resource %>
+<tr>
+	<td class="mdl-data-table__cell--non-numeric normal-text" colspan="3" style="border-bottom:0px;">
+		<%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
+	</td>
+</tr>
+<tr>
+	<td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;">
+		<%= link_to news_item.league.name, league_path(news_item.league), class: "content-link" %>
+	</td>
+	
+		<!-- PLAYER news_items -->
+		<% if resource.instance_of? Player %>
+			<td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;">
+				<!-- PLAYER news_item: Has contract -->
+				<% if resource.has_current_contract_in_league?(news_item.league) %>
+					<%= resource.full_name_and_playing_position_and_real_team %> 
+				<!-- PLAYER news_item: Does not have contract -->
+				<% else %>
+					<%= link_to resource.full_name_and_playing_position_and_real_team, new_league_contract_path(news_item.league.id, {player_id: resource.id}), class: "content-link" %>
+				<% end %>
+				<!-- GAME news_items -->
+			</td>
+			<td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;">
+			</td>
+		<% elsif resource.instance_of? Game %>
+			<td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;">
+				<%= render partial: 'games/full_game_result', locals: { game: resource } %>
+			</td>
+			<td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;">
+				<%= link_to 'View', league_game_path(news_item.league.id, resource.id), class: "mdl-button--primary" %>
+			</td>
+		<% end %>
+	</td>
+</tr>
