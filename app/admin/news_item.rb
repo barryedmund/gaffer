@@ -6,6 +6,7 @@ ActiveAdmin.register NewsItem do
     column :league
     column :news_item_resource_type
     column :news_item_resource_id
+    column :body
     actions
   end
 

@@ -86,6 +86,8 @@ class Game < ActiveRecord::Base
         away_score = (away_goals_scored * (1 - home_clean_sheet_performance)).round
 	 			self.update(home_team_score: home_score)
 	 			self.update(away_team_score: away_score)
+
+        NewsItem.create(league: get_league, news_item_resource_type: 'Game', news_item_resource_id: id, body: get_score_description)
 	 		end
  		end
 	end
@@ -116,6 +118,33 @@ class Game < ActiveRecord::Base
       end
     end
     total_defensive_contribution
+  end
+
+  def get_score_description
+    if (!home_team_score.blank? && !away_team_score.blank?)
+      winner = home_team_score == away_team_score ? false : true
+      if winner
+        winning_team = home_team_score > away_team_score ? home_team : away_team
+        losing_team = home_team_score < away_team_score ? home_team : away_team
+        scraped = (home_team_score - away_team_score).abs < 2 ? true : false
+        hammered = (home_team_score - away_team_score).abs > 2 ? true : false
+        if scraped
+          "#{losing_team.user.first_name_camel_cased} narrowly defeated by #{winning_team.user.first_name_camel_cased}"
+        elsif hammered
+          "#{winning_team.user.first_name_camel_cased} hammered #{losing_team.user.first_name_camel_cased}"
+        else
+          "#{winning_team.user.first_name_camel_cased} easily beats #{losing_team.user.first_name_camel_cased}"
+        end
+      else
+        if home_team_score == 0 && away_team_score == 0
+          "#{home_team.user.first_name_camel_cased} and #{away_team.user.first_name_camel_cased} involved in bore draw"
+        elsif (home_team_score + away_team_score > 3)
+          "#{home_team.user.first_name_camel_cased} and #{away_team.user.first_name_camel_cased} tussle in exciting draw"
+        else
+          "#{home_team.user.first_name_camel_cased} drew with #{away_team.user.first_name_camel_cased}"
+        end
+      end
+    end
   end
 
  	private

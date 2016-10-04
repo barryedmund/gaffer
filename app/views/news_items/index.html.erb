@@ -19,9 +19,6 @@
 								&nbsp;(which was <%= time_ago_in_words(leagues.first.next_game_week_deadline, include_seconds: true) %> ago)
 							<% end %>
 						</td>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							
-						</td>
 					</tr>
 				</table>
 			</div>
@@ -37,26 +34,7 @@
     	<% if news_items.count > 0 %>
 	    	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 	    		<% news_items.where('created_at > ?', 2.weeks.ago).each do |news_item| %>
-	    			<% resource = news_item.news_item_resource %>
-	    			<tr>
-							<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
-								<%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
-							</td>
-						</tr>
-						<tr>
-							<td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;">
-								<%= link_to news_item.league.name, league_path(news_item.league), class: "content-link" %>
-							</td>
-							<td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;">
-								<% if resource.instance_of? Player %>
-									<% if resource.has_current_contract_in_league?(news_item.league) %>
-										<%= resource.full_name_and_playing_position_and_real_team %> 
-									<% else %>
-										<%= link_to resource.full_name_and_playing_position_and_real_team, new_league_contract_path(news_item.league.id, {player_id: resource.id}), class: "content-link" %>
-									<% end %>
-								<% end %>
-							</td>
-						</tr>
+	    			<%= render partial: 'news_item_row', locals: { news_item: news_item } %>
 					<% end %>
 				</table>
 			<% else %>
