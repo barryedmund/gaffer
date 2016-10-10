@@ -23,7 +23,7 @@ class NewsItemsController < ApplicationController
 
   private
   def find_news_item_resource_object
-    @klass = params[:news_item_resource_type].capitalize.constantize
+    @klass = params[:news_item_resource_type].classify.constantize
     @news_item_resource_object = klass.find(params[:news_item_resource_id])
   end
 

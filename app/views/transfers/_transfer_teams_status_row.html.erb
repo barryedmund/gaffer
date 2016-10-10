@@ -1,22 +1,22 @@
-<td class="mdl-data-table__cell--non-numeric normal-text transfer-item-cell">
+<td class="mdl-data-table__cell--non-numeric normal-text transfer-item-cell" style="border-top:0px;">
   <% if transfer.primary_team_accepted %>
     <div class="green-circle"></div>
   <% else %>
     <div class="orange-circle"></div>
   <% end %>
-  <%= truncate(transfer.primary_team.title, length: 11) %>
+  <%= transfer.primary_team.title %>
 </td>
-<td class="mdl-data-table__cell--non-numeric normal-text">
+<td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;">
   <% transfer.transfer_items.each do |transfer_item| %>
     <%= render partial: 'transfer_items/transfer_item', locals: {transfer_item: transfer_item} %>
     <br/>
   <% end %>
 </td>
-<td class="mdl-data-table__cell--non-numeric normal-text transfer-item-cell">
+<td class="mdl-data-table__cell--non-numeric normal-text transfer-item-cell" style="border-top:0px;">
   <% if transfer.secondary_team_accepted %>
     <div class="green-circle"></div>
   <% else %>
     <div class="orange-circle"></div>
   <% end %>
-  <%= truncate(transfer.secondary_team.title, length: 11) %>
+  <%= transfer.secondary_team.title %>
 </td>

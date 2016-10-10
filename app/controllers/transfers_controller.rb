@@ -12,7 +12,6 @@ class TransfersController < ApplicationController
   	@transfer = Transfer.new(transfer_params)
     if @transfer.save
       flash[:success] = "Transfer initiated."
-
       # Has nested transfer_item details
       if params[:transfer].has_key?('transfer_item')
         transfer_item_params = params[:transfer][:transfer_item]
@@ -23,7 +22,7 @@ class TransfersController < ApplicationController
       else
         redirect_to new_league_transfer_transfer_item_path(@league, @transfer)
       end
-
+      NewsItem.create(league: @league, news_item_resource_type: 'Transfer', news_item_resource_id: @transfer.id, body: "Transfer initiated by #{@transfer.primary_team.title}")
     else
       flash[:error] = "There was a problem initiating that transfer."
       redirect_to league_transfers_path(@league)
