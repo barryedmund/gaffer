@@ -31,9 +31,10 @@
       </h3>
     </div>
     <div class="mdl-card__actions">
-    	<% if news_items.count > 0 %>
-	    	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-	    		<% news_items.where('created_at > ?', 2.weeks.ago).each do |news_item| %>
+    	<% fresh_news_items = news_items.where('created_at > ?', 2.weeks.ago) %>
+    	<% if fresh_news_items.count > 0 %>
+	    	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-data-table-fixed">
+	    		<% fresh_news_items.each do |news_item| %>
 	    			<%= render partial: 'news_item_row', locals: { news_item: news_item } %>
 					<% end %>
 				</table>
