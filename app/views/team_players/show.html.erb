@@ -47,6 +47,21 @@
 							<%= @team_player.current_contract.starts_at.strftime("%d %b %y") %> - <%= @team_player.current_contract.ends_at.strftime("%d %b %y") %>
 						</td>
 					</tr>
+					<% if team_player_deadline = @team_player.player.game_week_deadline_at %>
+						<tr>
+							<td class="mdl-data-table__cell--non-numeric normal-text">
+								Deadline
+							</td>
+							<td class="mdl-data-table__cell--non-numeric normal-text">
+								<%= team_player_deadline.strftime("%a %d %b, %l:%M%P %Z") %>
+								<% if Time.now <= team_player_deadline %>
+									&nbsp;(in <%= time_ago_in_words(team_player_deadline, include_seconds: true) %>)
+								<% else %>
+									&nbsp;(<%= time_ago_in_words(team_player_deadline, include_seconds: true) %> ago)
+								<% end %>
+							</td>
+						</tr>
+					<% end %>
 				</table>
 			</div>
 			<div class="mdl-card__supporting-text">

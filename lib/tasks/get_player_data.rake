@@ -122,7 +122,6 @@ namespace :player_data do
           # If the PlayerGameWeek was found
           if this_player_current_player_game_week
             this_player_current_player_game_week.update_attributes(minutes_played: total_minutes_played, goals: total_goals_scored, clean_sheet: total_clean_sheet, goals_conceded: total_goals_conceded, assists: total_assists)
-            puts "#{player.full_name}: #{this_player_current_player_game_week.inspect}"
           end
         end
         i = i + 1
@@ -131,4 +130,38 @@ namespace :player_data do
       puts "GameWeek #{active_game_week.id} starts at #{active_game_week.starts_at}."
     end
   end
+
+  task :get_player_gameweek_deadlines => :environment do
+    active_game_week = Competition.find_by(description: 'Premier League').current_season.get_current_game_week
+    active_game_week_number = active_game_week.game_week_number
+    i = 1
+    continue = true
+    while continue
+      response = Net::HTTP.get_response(URI("https://fantasy.premierleague.com/drf/element-summary/#{i}"))
+      break unless response.code.to_i == 200
+
+      body = JSON.parse(response.body)
+      body_history = body['history_past']
+      body_fixture_summary = body['fixtures_summary']
+
+      if body_history.length > 0
+        player_code = body_history[body_history.length - 1]['element_code']
+        player = Player.find_by(pl_player_code: player_code)
+      else
+        player = Player.find_by(pl_element_id: i)
+      end
+
+      if player && (body_fixture_summary.length > 0) && (body_fixture_summary[0]['event'] == active_game_week_number)
+        deadline_datetime = DateTime.parse(body_fixture_summary[0]['kickoff_time']) - 10.minutes
+        active_game_week_opponent = body_fixture_summary[0]['opponent_short_name']
+        active_game_week_location = body_fixture_summary[0]['is_home'] == true ? 'home' : 'away'
+        player.update_attributes(
+          game_week_deadline_at: deadline_datetime,
+          active_game_week_opponent: active_game_week_opponent,
+          active_game_week_location: active_game_week_location)
+        puts "#{player.full_name}: #{player.game_week_deadline_at}"
+      end
+      i = i + 1
+    end
+  end  
 end

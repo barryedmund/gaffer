@@ -1,0 +1,5 @@
+<% if current_game.home_team.user == @current_user %>
+	<%= link_to truncate(current_game.home_team.title, length: 18), league_team_path(league, current_game.home_team), class: "content-link" %> vs. <%= link_to truncate(current_game.away_team.title, length: 18), display_league_team_path(league, current_game.away_team), class: "content-link" %>
+<% else %>
+	<%= link_to truncate(current_game.home_team.title, length: 18), display_league_team_path(league, current_game.home_team), class: "content-link" %> vs. <%= link_to truncate(current_game.away_team.title, length: 18), league_team_path(league, current_game.away_team), class: "content-link" %>
+<% end %>

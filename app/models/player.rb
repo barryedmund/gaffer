@@ -95,4 +95,14 @@ class Player < ActiveRecord::Base
   def eligible_game_weeks(season)
     player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id).count
   end
+
+  def opponent_location_short
+    if active_game_week_location
+      active_game_week_location == 'home' ? 'H' : 'A'
+    end
+  end
+
+  def past_gameweek_deadline?
+    game_week_deadline_at ? (team_player.player.game_week_deadline_at > Time.now) : false
+  end
 end
