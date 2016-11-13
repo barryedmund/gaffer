@@ -9,9 +9,6 @@ namespace :games do
     this_season = Season.current
     this_season_game_weeks = GameWeek.where(season: this_season).order(:starts_at)
     this_season_game_weeks.each do |game_week|
-      #
-      # NEW
-      #
       if game_week.starts_at < Time.now && !game_week.finished
         puts "GameWeek #{game_week.game_week_number} started & not finished"
         if game_week.player_game_weeks.count == 0

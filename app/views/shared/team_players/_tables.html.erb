@@ -23,7 +23,7 @@
 							</td>
 							<%= render partial: 'shared/team_players/details', locals: {team_player: team_player} %>
 							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<% if team_player.player.game_week_deadline_at && team_player.player.game_week_deadline_at - 10.minutes > Time.now %>
+								<% if team_player.player.game_week_deadline_at && team_player.player.game_week_deadline_at > Time.now %>
 									<%= form_for team_player, url: update_first_team_league_team_team_player_path(@league, team_player.team, team_player)  do |f| %>
 										<%= f.submit "Drop", class: "negative_action_button" %>
 									<% end %>
@@ -53,7 +53,7 @@
 								<% first_team_players = @team.team_players.where(first_team: true) %>
 								<% if first_team_players.count < 11 %>
 									<% if (team_player.player.playing_position == 'Goalkeeper' && first_team_players.joins(:squad_position).where('squad_positions.short_name = ?', 'GK').count === 0 ) || (team_player.player.playing_position != 'Goalkeeper' && first_team_players.joins(:squad_position).where.not('squad_positions.short_name = ?', 'GK').count < 10 ) %>
-										<% if team_player.player.game_week_deadline_at && team_player.player.game_week_deadline_at - 10.minutes > Time.now %>
+										<% if team_player.player.game_week_deadline_at && team_player.player.game_week_deadline_at > Time.now %>
 											<%= form_for team_player, url: update_first_team_league_team_team_player_path(@league, team_player.team, team_player)  do |f| %>
 												<%= f.hidden_field :squad_position_id, value: team_player.get_squad_position_from_players_playing_position.id %>
 												<%= f.submit "Add", class: "positive_action_button" %>

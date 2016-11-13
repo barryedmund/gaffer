@@ -29,6 +29,35 @@ describe "Moving team players between first team and bench" do
 		end
 	end
 
+	it "isn't possible to add player when player's game_week_deadline_at has passed" do
+		visit_team_players team
+		team_player.player.update_attributes(game_week_deadline_at: Time.now - 2.hours)
+		within dom_id_for(team_player) do
+			click_button "Add"
+		end
+		expect(page).to_not have_content("Added to first team.")
+		expect(page).to have_content("That player's deadline has passed for this gameweek.")
+		team_player.reload
+		expect(team_player.first_team).to eq(false)
+		expect(team_player.squad_position.short_name).to eq("SUB")
+	end
+
+	it "isn't possible to drop player when player's game_week_deadline_at has passed" do
+		visit_team_players team
+		within dom_id_for(team_player) do
+			click_button "Add"
+		end
+		team_player.player.update_attributes(game_week_deadline_at: Time.now - 2.hours)
+		within dom_id_for(team_player) do
+			click_button "Drop"
+		end
+		expect(page).to_not have_content("Removed from first team.")
+		expect(page).to have_content("That player's deadline has passed for this gameweek.")
+		team_player.reload
+		expect(team_player.first_team).to eq(true)
+		expect(team_player.squad_position.short_name).to_not eq("SUB")
+	end
+
 	it "is successful when removing a single team player from the first team" do
 		visit_team_players team
 		within dom_id_for(team_player) do

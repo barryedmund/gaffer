@@ -5,6 +5,7 @@ class TeamPlayer < ActiveRecord::Base
   has_many :contracts, :dependent => :destroy
   has_many :transfer_items, :dependent => :destroy
   validates :squad_position_id, presence: true
+  validate :game_week_deadline_has_not_passed, on: :update
   accepts_nested_attributes_for :contracts, :allow_destroy => :true
 
   def full_name(abbreviate = false, cut_off = 13)
@@ -36,5 +37,11 @@ class TeamPlayer < ActiveRecord::Base
 
   def get_season_stats(season)
     player.player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id)
+  end
+
+  def game_week_deadline_has_not_passed
+    if player.game_week_deadline_at < Time.now
+      errors.add(:base, "That player's deadline has passed for this gameweek.")
+    end
   end
 end
