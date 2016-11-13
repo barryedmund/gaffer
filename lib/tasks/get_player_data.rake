@@ -132,7 +132,7 @@ namespace :player_data do
   end
 
   task :get_player_gameweek_deadlines => :environment do
-    if Time.now.hour % 2 == 0 
+    if Time.now.hour % 2 != 0 
       active_game_week = Competition.find_by(description: 'Premier League').current_season.get_current_game_week
       active_game_week_number = active_game_week.game_week_number
       i = 1
