@@ -36,9 +36,11 @@ class Transfer < ActiveRecord::Base
         contract.update_attributes!(team: transfer_item.receiving_team, signed: true)
         transfer_item.team_player.update_attributes(team: transfer_item.receiving_team, first_team: false, squad_position: SquadPosition.find_by(:short_name => 'SUB'))
         TransferItem.where(transfer_item_type: "Player", team_player: transfer_item.team_player).where.not(id: transfer_item.id).each do |other_transfer_item|
-          other_transfer_item.transfer.reset_teams_transfer_status
-          other_transfer_item.destroy
+          if !other_transfer_item.transfer.transfer_completed?
+            other_transfer_item.transfer.reset_teams_transfer_status
+            other_transfer_item.destroy
           end
+        end
       end
     end
   end

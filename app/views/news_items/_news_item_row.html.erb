@@ -29,7 +29,7 @@
 		</tr>
 		<tr>
 			<td class="mdl-data-table__cell--non-numeric normal-text" colspan="3" style="border-top:0px;">
-				<%= link_to resource.full_name_and_playing_position_and_real_team, new_league_contract_path(news_item.league.id, {player_id: resource.id}), class: "content-link" %>
+				<%= resource.full_name_and_playing_position_and_real_team %>
 			</td>
 		</tr>
 	<% end %>

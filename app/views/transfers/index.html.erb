@@ -15,7 +15,7 @@
       </div>
       <div class="mdl-card__actions">
         <% if your_transfers.count > 0 %>
-          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-data-table-fixed">
             <% your_transfers.order(created_at: :desc).each do |transfer| %>
               <tr>
                 <td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
@@ -47,7 +47,7 @@
       </div>
       <div class="mdl-card__actions">
         <% if @transfers.count > 0 %>
-          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-data-table-fixed">
             <% @transfers.order(created_at: :desc).each do |transfer| %>
               <tr>
                 <td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">

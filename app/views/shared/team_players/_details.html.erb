@@ -1,5 +1,5 @@
 <td class="mdl-data-table__cell--non-numeric normal-text">
-	<%= link_to team_player.full_name(true, 16), league_team_team_player_path(@league, team_player.team, team_player), class: "content-link" %>
+	<%= link_to team_player.full_name(true, 14), league_team_team_player_path(@league, team_player.team, team_player), class: "content-link" %>
 </td>
 <td class="normal-text performance_details">
 	<%= team_player.get_season_stats(Season.current.first).sum(:minutes_played) || 0 %>
@@ -18,4 +18,10 @@
 </td>
 <td class="normal-text contract_details hide">
 	<%= team_player.current_contract.ends_at.strftime("%d-%b-%y") %>
+</td>
+<td class="normal-text next_up_details hide mdl-data-table__cell--non-numeric">
+	<%= team_player.player.game_week_deadline_at.strftime("%a %l:%M%P") %>
+</td>
+<td class="normal-text next_up_details hide mdl-data-table__cell--non-numeric">
+	<%= team_player.player.active_game_week_opponent %> (<%= team_player.player.opponent_location_short %>)
 </td>

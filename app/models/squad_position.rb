@@ -6,7 +6,7 @@ class SquadPosition < ActiveRecord::Base
   def self.long_name_to_short_name(position_long_name)
     squad_position = SquadPosition.where(long_name: position_long_name).first
     if squad_position
-      squad_position.short_name
+      squad_position.short_name[0,1]
     else
       position_long_name
     end
