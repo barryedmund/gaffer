@@ -75,4 +75,12 @@ class Team < ActiveRecord::Base
       0
     end
   end
+
+  def get_current_game
+    if league.current_league_season.first
+      season = league.current_league_season.first.season
+      game_week = season.get_current_game_week
+      game_week.games.where('home_team_id = :this_team OR away_team_id = :this_team', this_team: self.id).first
+    end
+  end
 end
