@@ -21,7 +21,7 @@
 							Manager
 						</td>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= @team.user.full_name %>
+							<%= truncate(@team.user.full_name, length: 22) %>
 						</td>
 					</tr>
 					<tr>
@@ -61,7 +61,7 @@
 							Earliest deadline
 						</td>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= @team.league.next_game_week_deadline.strftime("%a %d %b, %l:%M%P %Z") %>
+							<%= render partial: 'teams/earliest_deadline', locals: { team: @team, display_distance: false } %>
 						</td>
 					</tr>
 				</table>

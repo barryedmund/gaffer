@@ -1,0 +1,13 @@
+<% if team && team.team_players.count > 0 %>
+	<% earliest_team_player_deadline = team.team_players.joins(:player).order('players.game_week_deadline_at').first.player.game_week_deadline_at %>
+<% else %>
+	<% earliest_team_player_deadline = Player.order(:game_week_deadline_at).first.game_week_deadline_at %>
+<% end %>
+<%= earliest_team_player_deadline.strftime("%a %d %b, %l:%M%P %Z") %>
+<% if display_distance %>
+	<% if Time.now <= earliest_team_player_deadline %>
+		&nbsp;(which is in <%= time_ago_in_words(earliest_team_player_deadline, include_seconds: true) %>)
+	<% else %>
+		&nbsp;(which was <%= time_ago_in_words(earliest_team_player_deadline, include_seconds: true) %> ago)
+	<% end %>
+<% end %>
