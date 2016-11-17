@@ -6,6 +6,7 @@ describe "teams/show" do
   let!(:season) { create(:season, competition: competition) }
   let!(:league) { create(:league, competition: competition) }
   let!(:team) { create(:team, league: league, user: user) }
+  let!(:player) { create(:player) }
 
   before(:each) do
     @team = assign(:team, stub_model(Team,
