@@ -147,6 +147,18 @@ class Game < ActiveRecord::Base
     end
   end
 
+  def get_team_lineup_including_yet_to_play(team)
+    home_team_lineups = team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ? AND squad_positions.short_name != ?', game_week.id, 'SUB').order("squad_positions.sort_order")
+          
+    all_home_team_players = Player.where(id: team.team_players.where('team_players.first_team = ?', true).pluck('team_players.player_id'))
+    played_players = Player.where(id: (home_team_lineups.joins(player_game_week: :player).pluck('player_game_weeks.player_id')))
+    other_first_team_players = Player.where(id: (all_home_team_players - played_players).map(&:id))
+    other_first_team_players_wth_game_week = other_first_team_players.joins(:player_game_weeks).where('player_game_weeks.game_week_id = ?', game_week.id)
+    other_first_team_players_yet_to_play = Player.where(id: (other_first_team_players - other_first_team_players_wth_game_week).map(&:id))
+
+    other_first_team_players_yet_to_play
+  end
+
  	private
  	def teams_in_same_league
  		errors.add(:base, "Teams not in same league.") unless home_team.league === away_team.league
