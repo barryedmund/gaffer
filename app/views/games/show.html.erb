@@ -59,37 +59,8 @@
         <li><a id="detailed_stats_link" class="normal-text selected-tab">View details</a></li>
         <li><a id="summary_stats_link" class="normal-text">View summary</a></li>
       </ul>
-      <div class="mdl-card__actions">
-        <div class="mdl-card__supporting-text">
-          <div class="mdl-card__title">
-            <h3 class="mdl-card__title-text"><%= truncate(@home_team.title, length: 13) %> (<%= truncate(@home_team.user.full_name, length: 14) %>)</h3>
-          </div>
-        </div>
-        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-          <%= render partial: "shared/games/table_header" %>
-          <% home_team_lineups = @home_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ? AND squad_positions.short_name != ?', @game_week.id, 'SUB').order("squad_positions.sort_order") %>
-          <% home_team_lineups.each do |player_lineup| %>
-            <%= render partial: "shared/games/player_lineup_table_row", locals: {player_lineup: player_lineup} %>
-          <% end %>
-          <%= render partial: "shared/games/summary_row", locals: {player_lineups: home_team_lineups} %>
-        </table>
-      </div>
-
-      <div class="mdl-card__actions">
-        <div class="mdl-card__supporting-text">
-          <div class="mdl-card__title">
-            <h3 class="mdl-card__title-text"><%= truncate(@away_team.title, length: 13) %> (<%= truncate(@away_team.user.full_name, length: 14) %>)</h3>
-          </div>
-        </div>
-        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-          <%= render partial: "shared/games/table_header" %>
-          <% away_team_lineups = @away_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ? AND squad_positions.short_name != ?', @game_week.id, 'SUB').order("squad_positions.sort_order") %>
-          <% away_team_lineups.each do |player_lineup| %>
-            <%= render partial: "shared/games/player_lineup_table_row", locals: {player_lineup: player_lineup} %>
-          <% end %>
-          <%= render partial: "shared/games/summary_row", locals: {player_lineups: away_team_lineups} %>
-        </table>
-      </div>
+      <%= render partial: "shared/games/team_lineup_table", locals: {team: @home_team, game_week: @game_week, game: @game} %>
+      <%= render partial: "shared/games/team_lineup_table", locals: {team: @away_team, game_week: @game_week, game: @game} %>
     </div>
   </div>
 </div>

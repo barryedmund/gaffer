@@ -36,6 +36,10 @@ class Player < ActiveRecord::Base
     end
   end
 
+  def short_playing_position
+    SquadPosition.long_name_to_short_name(playing_position)
+  end
+
   def news_item_display
     full_name_and_playing_position_and_real_team
   end
