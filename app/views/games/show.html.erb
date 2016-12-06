@@ -59,46 +59,8 @@
         <li><a id="detailed_stats_link" class="normal-text selected-tab">View details</a></li>
         <li><a id="summary_stats_link" class="normal-text">View summary</a></li>
       </ul>
-      <div class="mdl-card__actions">
-        <div class="mdl-card__supporting-text">
-          <div class="mdl-card__title">
-            <h3 class="mdl-card__title-text"><%= truncate(@home_team.title, length: 13) %> (<%= truncate(@home_team.user.full_name, length: 14) %>)</h3>
-          </div>
-        </div>
-        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-          <%= render partial: "shared/games/table_header" %>
-          <% home_team_lineups = @home_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ? AND squad_positions.short_name != ?', @game_week.id, 'SUB').order("squad_positions.sort_order") %>
-
-          
-          
-          <% @game.get_team_lineup_including_yet_to_play(@home_team).each do |game_player| %>
-            <% if game_player.player_game_weeks.joins(:player_lineups).where('player_game_weeks.game_week_id = ?', @game_week.id).count == 0 %>
-              <%= render partial: "shared/games/player_lineup_yet_to_play_row", locals: {yet_to_play_team_player: game_player} %>
-            <% else %>
-              <% player_lineup = home_team_lineups.joins(:player_game_week).where('player_game_weeks.game_week_id = ? AND player_game_weeks.player_id = ?', @game_week.id, game_player.id).first %>
-              <%= render partial: "shared/games/player_lineup_table_row", locals: {player_lineup: player_lineup} %>
-            <% end %>
-          <% end %>
-
-          <%= render partial: "shared/games/summary_row", locals: {player_lineups: home_team_lineups} %>
-        </table>
-      </div>
-
-      <div class="mdl-card__actions">
-        <div class="mdl-card__supporting-text">
-          <div class="mdl-card__title">
-            <h3 class="mdl-card__title-text"><%= truncate(@away_team.title, length: 13) %> (<%= truncate(@away_team.user.full_name, length: 14) %>)</h3>
-          </div>
-        </div>
-        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-          <%= render partial: "shared/games/table_header" %>
-          <% away_team_lineups = @away_team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ? AND squad_positions.short_name != ?', @game_week.id, 'SUB').order("squad_positions.sort_order") %>
-          <% away_team_lineups.each do |player_lineup| %>
-            <%= render partial: "shared/games/player_lineup_table_row", locals: {player_lineup: player_lineup, first_team_players: @home_team.team_players.joins(:player).where('team_players.first_team = ? ', true)} %>
-          <% end %>
-          <%= render partial: "shared/games/summary_row", locals: {player_lineups: away_team_lineups} %>
-        </table>
-      </div>
+      <%= render partial: "shared/games/team_lineup_table", locals: {team: @home_team, game_week: @game_week, game: @game} %>
+      <%= render partial: "shared/games/team_lineup_table", locals: {team: @away_team, game_week: @game_week, game: @game} %>
     </div>
   </div>
 </div>
