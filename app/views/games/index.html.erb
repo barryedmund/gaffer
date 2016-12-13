@@ -8,47 +8,36 @@
         	<span>&nbsp;games</span>
         </h2>
       </div>
+      <% this_game_week_games = @games.where(home_team_score: nil, away_team_score: nil, game_week: league.current_game_week) %>
+    	<% if this_game_week_games.count > 0 %>
+    		<div class="mdl-card__title">
+    			<h3 class="mdl-card__title-text">This week's games</h3>
+    		</div>
+    		<div class="mdl-card__actions">
+    			<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+    				<%= render partial: 'game_index_header_row' %>
+						<% this_game_week_games.each do |game| %>
+							<%= render partial: 'game_index_row', locals: { game: game } %>
+						<% end %>
+					</table>
+    		</div>
+    	<% end %>
       <div class="mdl-card__actions">
       	<% if @games.count > 0 %>
+      		<div class="mdl-card__title">
+    				<h3 class="mdl-card__title-text">All games</h3>
+    			</div>
       		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-						<tr>
-							<th class="mdl-data-table__cell--non-numeric">
-								<span>Date</span>
-							</th>
-							<th>
-								<span>GW</span>
-							</th>
-							<th class="mdl-data-table__cell--non-numeric">
-								<span>Home v Away</span>
-							</th>
-							<th class="mdl-data-table__cell--non-numeric">
-								<span>Score</span>
-							</th>
-						</tr>
-						<% @games.joins(:game_week).order('game_weeks.game_week_number').each do |game| %>
-							<tr>
-								<td class="mdl-data-table__cell--non-numeric normal-text">
-									<%= game.game_week.starts_at.strftime("%d %b") %>
-								</td>
-								<td class="normal-text">
-									<%= game.game_week.game_week_number %>
-								</td>
-								<td class="mdl-data-table__cell--non-numeric normal-text">
-									<%= link_to league_game_path(game.get_league, game), class: "content-link" do %>
-										<span><%= truncate(game.home_team.title, length: 20) %></span>
-										<br/>
-										<span><%= truncate(game.away_team.title, length: 20) %></span>
-									<% end %>
-								</td>
-								<td class="mdl-data-table__cell--non-numeric normal-text">
-									<% if game.game_week.in_play? %> (<%= game.get_live_score %>)<% else %><%= game.get_score %><% end %>
-								</td>
-							</tr>
+      			<%= render partial: 'game_index_header_row' %>
+            <% games_to_display = @games.joins(:game_week).order('game_weeks.game_week_number').paginate(page: params[:page], per_page: (league.teams.count * 4)) %>
+						<% games_to_display.each do |game| %>
+							<%= render partial: 'game_index_row', locals: { game: game } %>
 						<% end %>
 					</table>
       	<% else %>
       		<span class="normal-text">Games for this season are yet to be scheduled.</span>
       	<% end %>
+        <%= will_paginate games_to_display %>
       </div>
     </div>
   </div>

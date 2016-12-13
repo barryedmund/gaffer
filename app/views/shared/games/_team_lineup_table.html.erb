@@ -8,7 +8,8 @@
       		<%= link_to truncate(team.title, length: 13), display_league_team_path(team.league, team), class: "content-link" %>
       	<% end %>
       	&nbsp;
-      	(<%= truncate(team.user.full_name, length: 14) %>)</h3>
+      	(<%= truncate(team.user.full_name, length: 14) %>)
+      </h3>
     </div>
   </div>
 	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
