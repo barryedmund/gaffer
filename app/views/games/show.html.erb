@@ -47,10 +47,10 @@
           </tr>
           <tr>
             <td class="mdl-data-table__cell--non-numeric normal-text">
-              Score
+              Score<% if @game_week.in_play? %> (live)<% end %>
             </td>
             <td class="mdl-data-table__cell--non-numeric normal-text">
-              <span class="normal-text"><%= @game.get_score %></span>
+              <%= @game.get_score %><% if @game_week.in_play? %> (<%= @game.get_live_score %>)<% end %>
             </td>
           </tr>
         </table>

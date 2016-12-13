@@ -15,11 +15,27 @@ class Game < ActiveRecord::Base
  		game_round.league_season.league
  	end
 
+  def get_live_score
+    home_lineup = get_team_lineup(home_team)
+    away_lineup = get_team_lineup(away_team)
+
+    home_team_attack = get_total_attacking_contribution(home_lineup)
+    away_team_attack = get_total_attacking_contribution(away_lineup)
+
+    home_team_defence = get_clean_sheet_minutes(home_lineup)
+    away_team_defence = get_clean_sheet_minutes(away_lineup)
+    
+    home_team_score = (home_team_attack * (1 - away_team_defence/990)).round
+    away_team_score = (away_team_attack * (1 - home_team_defence/990)).round
+
+    "#{home_team_score} : #{away_team_score}"
+  end
+
  	def calculate_score
  		if game_week.finished
  			if (home_team_score.blank? || away_team_score.blank?)
 
-	 			home_lineup = home_team.player_lineups.joins(:player_game_week, :squad_position).where('player_game_weeks.game_week_id = ? AND squad_positions.short_name != ?', game_week.id, 'SUB')
+	 			home_lineup = get_team_lineup(home_team)
         home_clean_sheet_minutes = 0
         home_goals_scored = 0
         home_lineup.each do |lineup|
@@ -50,7 +66,7 @@ class Game < ActiveRecord::Base
           home_goals_scored += player_goals
         end
 
-        away_lineup = away_team.player_lineups.joins(:player_game_week, :squad_position).where('player_game_weeks.game_week_id = ? AND squad_positions.short_name != ?', game_week.id, 'SUB')
+        away_lineup = get_team_lineup(away_team)
         away_clean_sheet_minutes = 0
         away_goals_scored = 0
         away_lineup.each do |lineup|
@@ -168,6 +184,10 @@ class Game < ActiveRecord::Base
   end
 
  	private
+  def get_team_lineup(team)
+    team.player_lineups.joins(:player_game_week, :squad_position).where('player_game_weeks.game_week_id = ? AND squad_positions.short_name != ?', game_week.id, 'SUB')
+  end
+
  	def teams_in_same_league
  		errors.add(:base, "Teams not in same league.") unless home_team.league === away_team.league
  	end
