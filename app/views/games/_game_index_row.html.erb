@@ -1,0 +1,18 @@
+<tr>
+	<td class="mdl-data-table__cell--non-numeric normal-text">
+		<%= game.game_week.starts_at.strftime("%d %b") %>
+	</td>
+	<td class="normal-text">
+		<%= game.game_week.game_week_number %>
+	</td>
+	<td class="mdl-data-table__cell--non-numeric normal-text">
+		<%= link_to league_game_path(game.get_league, game), class: "content-link" do %>
+			<span><%= truncate(game.home_team.title, length: 20) %></span>
+			<br/>
+			<span><%= truncate(game.away_team.title, length: 20) %></span>
+		<% end %>
+	</td>
+	<td class="mdl-data-table__cell--non-numeric normal-text">
+		<% if game.game_week.in_play? %> (<%= game.get_live_score %>)<% else %><%= game.get_score %><% end %>
+	</td>
+	</tr>

@@ -25,6 +25,10 @@ class League < ActiveRecord::Base
 		end
 	end
 
+	def current_game_week
+		current_league_season.first.season.get_current_game_week
+	end
+
 	def get_standings
 		standings = teams.collect do |team|
 			{

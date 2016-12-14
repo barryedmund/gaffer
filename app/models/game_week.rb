@@ -12,6 +12,10 @@ class GameWeek < ActiveRecord::Base
 		GameWeek.where('DATE(?) BETWEEN starts_at AND ends_at', @now).any?
 	end
 
+  def in_play?
+    starts_at < Time.now && !finished
+  end
+
 	def do_financials
 		credit_gate_receipts
 		debit_weekly_salaries
