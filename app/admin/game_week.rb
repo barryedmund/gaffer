@@ -1,5 +1,5 @@
 ActiveAdmin.register GameWeek do
-	permit_params :season_id, :game_week_number, :starts_at, :ends_at, :finished
+	permit_params :season_id, :game_week_number, :starts_at, :ends_at, :finished, :financials_processed
 	
 	index do
 		selectable_column
@@ -11,6 +11,7 @@ ActiveAdmin.register GameWeek do
 		column :starts_at
 		column :ends_at
 		column :finished
+		column :financials_processed
 		actions
 	end
 
@@ -22,6 +23,7 @@ ActiveAdmin.register GameWeek do
 			f.input :starts_at
 			f.input :ends_at
 			f.input :finished
+			f.input :financials_processed
 		end
 		f.actions
 	end
