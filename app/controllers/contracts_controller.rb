@@ -10,6 +10,7 @@ class ContractsController < ApplicationController
     respond_to do |format|
       if @contract.save
         format.html { redirect_to league_contracts_path(League.find_by_id(params[:league_id])), notice: 'Contract has been offered.' }
+        NewsItem.create(league: @contract.team.league, news_item_resource_type: 'Contract', news_item_resource_id: @contract.id, body: "#{@contract.player.full_name(true,13)} offered contract")
       else
         format.html { render :new }
       end
