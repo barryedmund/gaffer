@@ -9,7 +9,7 @@
 				<%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
 			</td>
 			<td class="normal-text" style="border-bottom:0px;">
-				Signed
+				<%= link_to 'View', league_player_path(news_item.league.id, resource.id), class: "mdl-button--primary" %>
 			</td>
 		</tr>
 		<tr>
@@ -24,7 +24,7 @@
 				<%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
 			</td>
 			<td class="normal-text" style="border-bottom:0px;">
-				<%= link_to 'View', new_league_contract_path(news_item.league.id, {player_id: resource.id}), class: "mdl-button--primary" %>
+				<%= link_to 'View', league_player_path(news_item.league.id, resource.id), class: "mdl-button--primary" %>
 			</td>
 		</tr>
 		<tr>

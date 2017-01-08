@@ -9,5 +9,5 @@
   	<%= ff.hidden_field :transfer_item_type, value: "Player" %>
   	<%= ff.hidden_field :team_player_id, value: team_player.id %>
   <% end %>
-	<%= f.submit player.full_name(true, truncate_to), class: "content-link" %>
+	<%= f.submit "Make offer", class: "mdl-button--primary", method: "get" %>
 <% end %>
