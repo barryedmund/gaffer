@@ -31,20 +31,10 @@
 
 <!-- Player name with link to action -->
 <td class="mdl-data-table__cell--non-numeric normal-text">
-	<% if owned %>
-		<% if owned_by_current_user %>
-			<%= link_to team_player.full_name(true, 16), league_team_team_player_path(@league, team_player.team, team_player), class: "content-link" %>
-		<% else %>
-			<%= render partial: 'shared/form_direct_transfer_bid', locals: {
-				league: league,
-				player: player_object,
-				primary_team: current_user_team_in_this_league,
-				secondary_team: team_player.team,
-				team_player: team_player,
-				truncate_to: 14 } %>
-		<% end %>
+	<% if !owned_by_current_user %>
+		<%= link_to player_object.full_name(true, 14), league_player_path(league.id, player_object.id), class: "content-link" %>
 	<% else %>
-		<%= link_to player_object.full_name(true, 14), new_league_contract_path(league.id, {player_id: player_object.id}), class: "content-link" %>
+		<%= link_to player_object.full_name(true, 14), league_team_team_player_path(league.id, team_player.team.id, team_player.id), class: "content-link" %>
 	<% end %>
 </td>
 

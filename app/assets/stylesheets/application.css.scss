@@ -185,12 +185,15 @@ td.transfer-item-cell {
 .hidden_div {
 	display: none;
 }
-.horizontal-style, .horizontal-style-tabs {
+.horizontal-style, .horizontal-style-tabs, .horizontal-style-centre-form {
   display: table;
   padding: 0px;
 }
 .horizontal-style {
 	width: 100%
+}
+.horizontal-style-centre-form{
+	margin: 0 auto;
 }
 .horizontal-style-tabs {
 	margin: 0 0 0 auto;
@@ -199,7 +202,7 @@ td.transfer-item-cell {
 .horizontal-style li, .horizontal-style-tabs li {
   display: table-cell;
 }
-.horizontal-style a, .horizontal-style-tabs a {
+.horizontal-style a, .horizontal-style-tabs a, .horizontal-style-centre-form a, .horizontal-style-centre-form input[type="submit"] {
   display: block;
   font-size: 30px;
   text-align: center;
@@ -207,7 +210,15 @@ td.transfer-item-cell {
 .horizontal-style a {
 	margin: 0 5px;
 }
-
+.horizontal-style-centre-form input[type="submit"]{
+	background: none;
+	border: none;
+	font-weight: 500;
+	padding: 0px;
+}
+.horizontal-style-centre-form input[type="submit"]:hover{
+	border-bottom: 2px solid;
+}
 .league_invite_div {
 	margin: 20px 0px;
 }

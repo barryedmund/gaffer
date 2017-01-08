@@ -18,14 +18,7 @@
 								<%= team_player.player.playing_position %>
 							</td>
 							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<% current_user_team_in_this_league = Team.where('league_id = ? AND user_id = ?', @league.id, @current_user.id).first %>
-								<%= render partial: 'shared/form_direct_transfer_bid', locals: {
-									league: @team.league,
-									player: team_player.player,
-									primary_team: current_user_team_in_this_league,
-									secondary_team: team_player.team,
-									team_player: team_player,
-									truncate_to: 25 } %>
+								<%= link_to team_player.full_name(true, 14), league_player_path(@league.id, team_player.player.id), class: "content-link" %>
 							</td>
 						</tr>
 					<% end %>
