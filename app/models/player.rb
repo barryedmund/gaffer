@@ -66,6 +66,10 @@ class Player < ActiveRecord::Base
     player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id).sum(:minutes_played)
   end
 
+  def percentage_of_minutes_played(season)
+    eligible_game_weeks(season) > 0 ? (total_minutes_played(season).to_f / (eligible_game_weeks(season) * 90).to_f).round(3) : 0
+  end
+
   def total_attacking_contribution(season)
     this_season_player_game_weeks = player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id)
     attacking_contribution = 0
@@ -79,6 +83,11 @@ class Player < ActiveRecord::Base
       attacking_contribution += (this_season_player_game_weeks.sum(:goals) + (this_season_player_game_weeks.sum(:assists).to_f * 0.2))
     end
     attacking_contribution.round(1)
+  end
+
+  def total_attacking_contribution_per_90(season)
+    total_minutes_played = total_minutes_played(season)
+    total_minutes_played > 0 ? (total_attacking_contribution(season) / (total_minutes_played.to_f / 90)).round(3) : (0.to_f).round(3)
   end
 
   def total_defensive_contribution(season)
@@ -96,6 +105,11 @@ class Player < ActiveRecord::Base
     total_clean_sheet_minutes.round(1)
   end
 
+  def total_defensive_contribution_per_90(season)
+    total_minutes_played = total_minutes_played(season)
+    total_minutes_played > 0 ? (total_defensive_contribution(season) / (total_minutes_played.to_f / 90)).round(3) : (0.to_f).round(3)
+  end
+
   def eligible_game_weeks(season)
     player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id).count
   end
@@ -108,5 +122,12 @@ class Player < ActiveRecord::Base
 
   def past_gameweek_deadline?
     game_week_deadline_at ? (team_player.player.game_week_deadline_at > Time.now) : false
+  end
+
+  def player_value(season)
+    defensive_index = ((total_defensive_contribution_per_90(season) / 90) * percentage_of_minutes_played(season)) / 4
+    attacking_index = ((total_attacking_contribution_per_90(season)) * percentage_of_minutes_played(season))
+    value = ((defensive_index + attacking_index) * 10000000) * 1.5
+    ActionController::Base.helpers.number_to_currency([value, Rails.application.config.minimum_player_value].max, precision: 0)
   end
 end

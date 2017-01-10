@@ -22,5 +22,6 @@ module Gaffer
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
     config.revenue_per_ticket = 50
+    config.minimum_player_value = 50000
   end
 end
