@@ -42,10 +42,10 @@
 					</tr>
 					<tr>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
-							Squad salary (season)
+							Squad salary (rest of season)
 						</td>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= number_to_currency(@team.get_season_total_of_signed_contracts, precision: 0) %>
+							<%= number_to_currency(@team.get_season_remaining_of_signed_contracts, precision: 0) %>
 						</td>
 					</tr>
 					<tr>

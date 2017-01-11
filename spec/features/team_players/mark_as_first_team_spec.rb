@@ -4,7 +4,9 @@ describe "Moving team players between first team and bench" do
 	let!(:competition) { create(:competition) }
   let!(:season) { create(:season, competition: competition) }
   let!(:league) { create(:league, competition: competition) }
-	let!(:team) { create(:team, league: league, user: league.user) }
+  let!(:team) { create(:team, league: league, user: league.user) }
+  let!(:team_2) { create(:team, league: league, title: "Blurp") }
+  let!(:league_season) { create(:league_season, season: season, league: league) }
 	let!(:team_player) { create(:team_player, :with_contract, team: team) }
 	let!(:midfielder_squad_position) { create(:midfielder_squad_position) }
 	let!(:stadium) { create(:stadium, team: team) }

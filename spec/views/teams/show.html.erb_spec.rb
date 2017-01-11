@@ -6,6 +6,8 @@ describe "teams/show" do
   let!(:season) { create(:season, competition: competition) }
   let!(:league) { create(:league, competition: competition) }
   let!(:team) { create(:team, league: league, user: user) }
+  let!(:team_2) { create(:team, league: league, title: "Blurp") }
+  let!(:league_season) { create(:league_season, season: season, league: league) }
   let!(:player) { create(:player) }
 
   before(:each) do
