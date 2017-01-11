@@ -76,6 +76,11 @@ class Team < ActiveRecord::Base
     end
   end
 
+  def get_season_remaining_of_signed_contracts
+    season = league.current_league_season.first.season
+    GameWeek.where(season_id: season.id, finished: false).count * get_weekly_total_of_signed_contracts
+  end
+
   def get_current_game
     if league.current_league_season.first
       season = league.current_league_season.first.season

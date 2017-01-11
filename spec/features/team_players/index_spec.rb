@@ -6,9 +6,10 @@ describe "Viewing team players" do
   let!(:competition) { create(:competition) }
   let!(:season) { create(:season, competition: competition) }
   let!(:league) { create(:league, competition: competition) }
-  let!(:home_team) { Team.create(id: 1, title: "Home Team", league: league, user: user) }
+  let!(:home_team) { Team.create(id: 1, title: "Home Team", league: league, user: user) } 
   let!(:team_player) { create(:team_player, :with_contract, team: home_team) }
-  let!(:league_season) { LeagueSeason.create(season: season, league: league) }
+  let!(:team_2) { create(:team, league: league, title: "Blurp") }
+  let!(:league_season) { create(:league_season, season: season, league: league) }
 	let!(:squad_position_1) { SquadPosition.create(short_name: "GK") }
 	let!(:squad_position_2) { SquadPosition.create(short_name: "SUB") }
 	let!(:squad_position_3) { SquadPosition.create(short_name: "DF") }
