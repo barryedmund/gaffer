@@ -75,6 +75,9 @@
 			<div class="mdl-card__supporting-text">
 				<ul class="horizontal-style">
 					<li>
+						<%= link_to "Transfer list player", new_league_auction_path(league: @team.league, team_player: @team_player), class: "mdl-button--secondary" %>
+					</li>
+					<li>
 						<%= link_to "Pay #{number_to_currency(@team_player.current_contract.release_value, precision: 0)} to release player", release_league_team_team_player_path(@team.league, @team, @team_player), method: :patch, class: "mdl-button--secondary" %>
 					</li>
 				</ul>
