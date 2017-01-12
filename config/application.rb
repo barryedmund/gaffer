@@ -21,7 +21,12 @@ module Gaffer
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+    
+    # Euros per attendance at a home game
     config.revenue_per_ticket = 50
+    # Player value is based on performance, but if they have no history, or are terrible, this is their value
     config.minimum_player_value = 50000
+    # Weeks per year of contract that a team pays when releasing a player
+    config.contract_weeks_to_pay_out_on_release = 20
   end
 end

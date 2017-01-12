@@ -23,8 +23,12 @@ class Contract < ActiveRecord::Base
   end
 
   def release_value
-    release_val = weekly_salary_cents * 20
+    release_val = (weekly_salary_cents * Rails.application.config.contract_weeks_to_pay_out_on_release) * remaining_years_in_contract
     release_val
+  end
+
+  def remaining_years_in_contract
+    (((ends_at - Date.today).to_f) / 365).ceil
   end
 
   private
