@@ -1,0 +1,14 @@
+<% team_player = TeamPlayer.find_by(id: params[:team_player]) %>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+			<div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">Transfer list player</h2>
+      </div>
+      <%= render 'form', team_player: team_player %>
+		</div>
+		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+		<%= render partial: 'shared/player_game_week_table', locals: {player: team_player.player} %>
+	</div>
+	</div>
+</div>

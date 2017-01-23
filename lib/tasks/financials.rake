@@ -6,7 +6,7 @@ namespace :financials do
     this_season = Season.current
     this_season_game_weeks = GameWeek.where(season: this_season).order(:starts_at)
     this_season_game_weeks.each do |game_week|
-      if game_week.starts_at < Time.now && !game_week.finished
+      if game_week.starts_at < Time.now && game_week.finished && !game_week.financials_processed
         game_week.do_financials
       end
     end
