@@ -19,7 +19,9 @@ class GameWeek < ActiveRecord::Base
 	def do_financials
 		credit_gate_receipts
 		debit_weekly_salaries
+    puts "GW ##{self.game_week_number} financials_processed: #{self.financials_processed}"
     update(financials_processed: true)
+    puts "GW ##{self.game_week_number} financials_processed: #{self.financials_processed}"
 	end
 
 	def credit_gate_receipts
@@ -43,8 +45,10 @@ class GameWeek < ActiveRecord::Base
   def get_player_lineup_salary(team)
     team_total_weekly_salary = 0
     team.player_lineups.joins(:player_game_week).where('player_game_weeks.game_week_id = ?', self.id).each do |player_lineup|
-			team_player = TeamPlayer.find_by("player_id = ? AND team_id = ?", player_lineup.player_game_week.player.id, team.id)
-      team_total_weekly_salary += team_player.current_contract.weekly_salary_cents
+			if team_player = TeamPlayer.find_by("player_id = ? AND team_id = ?", player_lineup.player_game_week.player.id, team.id)
+        puts "#{player_lineup.player_game_week.player.full_name}"
+        team_total_weekly_salary += team_player.current_contract.weekly_salary_cents
+      end
     end
     team_total_weekly_salary
   end
