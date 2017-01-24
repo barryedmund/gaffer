@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :auctions
-
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 
@@ -38,7 +36,6 @@ Rails.application.routes.draw do
     resources :league_seasons, only: [:new, :create]
     resources :league_invites
     resources :contracts
-    resources :auctions
   end
   resources :player_game_weeks
   resources :game_rounds
