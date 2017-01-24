@@ -1,7 +1,4 @@
-FactoryGirl.define do  factory :auction do
-    
-  end
-
+FactoryGirl.define do
 
 	factory :competition do
 	  country_code "en"
