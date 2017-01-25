@@ -3,11 +3,13 @@ class Player < ActiveRecord::Base
   has_many :team_players, dependent: :destroy
 	has_many :player_game_weeks, dependent: :destroy
   has_many :contracts, dependent: :destroy
-
   # Polymorhic association with news_items
   has_many :news_items, as: :news_item_resource
-
 	validates :first_name, :last_name, :playing_position, :pl_player_code, :competition, presence: true
+
+  def self.search(search)
+    where("lower(first_name) LIKE :search OR lower(last_name) LIKE :search OR lower(playing_position) LIKE :search OR lower(real_team_short_name) LIKE :search", {search: "%#{search.downcase}%"})
+  end
 
 	def full_name(abbreviate = false, cut_off = 13)
     if abbreviate
