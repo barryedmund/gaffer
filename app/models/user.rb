@@ -26,4 +26,9 @@ class User < ActiveRecord::Base
 	def first_name_camel_cased
 		"#{first_name.downcase.capitalize}"
 	end
+
+	def only_league
+		user_leagues = League.includes(:teams).where('teams.user_id = :current_user OR leagues.user_id = :current_user', {current_user: self}).references(:teams).distinct
+		user_leagues.count == 1 ? user_leagues.first : false
+	end
 end
