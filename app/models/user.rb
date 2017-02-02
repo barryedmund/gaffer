@@ -31,4 +31,8 @@ class User < ActiveRecord::Base
 		user_leagues = League.includes(:teams).where('teams.user_id = :current_user OR leagues.user_id = :current_user', {current_user: self}).references(:teams).distinct
 		user_leagues.count == 1 ? user_leagues.first : false
 	end
+
+	def get_team(league)
+		Team.where(league: league, user: self).first
+	end
 end

@@ -36,8 +36,13 @@ class TransferItemsController < ApplicationController
   end
 
   def update
-    @transfer_item.update!(transfer_item_params)
-    redirect_to league_transfer_path(@league, @transfer)
+    if @transfer_item.update!(transfer_item_params)
+      flash[:success] = "Updated transfer item"
+      redirect_to league_transfer_path(@league, @transfer)
+    else
+      flash[:error] = @transfer_item.errors.full_messages.first
+      redirect_to league_transfer_path(@league, @transfer)
+    end
   end
 
   private

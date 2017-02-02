@@ -130,6 +130,6 @@ class Player < ActiveRecord::Base
     defensive_index = ((total_defensive_contribution_per_90(season) / 90) * percentage_of_minutes_played(season)) / 4
     attacking_index = ((total_attacking_contribution_per_90(season)) * percentage_of_minutes_played(season))
     value = ((defensive_index + attacking_index) * 10000000) * 1.5
-    ActionController::Base.helpers.number_to_currency([value, Rails.application.config.minimum_player_value].max, precision: 0)
+    [value, Rails.application.config.minimum_player_value].max.round
   end
 end

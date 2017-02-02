@@ -54,7 +54,7 @@
 								Value
 							</td>
 							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<%= team_player.player.player_value(Season.current.first) %>
+								<%= number_to_currency(team_player.player.player_value(Season.current.first), precision:0) %>
 							</td>
 						</tr>
 					<% end %>

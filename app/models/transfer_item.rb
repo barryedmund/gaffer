@@ -5,7 +5,8 @@ class TransferItem < ActiveRecord::Base
   belongs_to :team_player
   validates :transfer, :sending_team, :receiving_team, :transfer_item_type, presence: true
   validates :transfer_item_type, inclusion: { in: ['Cash', 'Player'] }
-  validate :cash_transfer_items_have_positive_cash, :cash_transfer_items_do_not_have_team_player, :player_trasnfer_item_to_have_team_player, :player_transfer_items_do_not_have_cash_cents, :sending_team_owns_player, :teams_in_same_league, :teams_involved_different, :sending_team_as_enough_money, on: :create
+  validate :cash_transfer_items_have_positive_cash, :cash_transfer_items_do_not_have_team_player, :player_trasnfer_item_to_have_team_player, :player_transfer_items_do_not_have_cash_cents, :sending_team_owns_player, :teams_involved_different, :teams_in_same_league, on: :create
+  validate :sending_team_has_enough_money
 
   private
   def cash_transfer_items_have_positive_cash
@@ -36,11 +37,7 @@ class TransferItem < ActiveRecord::Base
     errors.add(:base, "Transfer items can not be from and to the same team.") unless sending_team != receiving_team
   end
 
-  def sending_team_as_enough_money
+  def sending_team_has_enough_money
     errors.add(:base, "Sending team does not have enough money.") unless transfer_item_type != "Cash" || cash_cents === nil || sending_team.cash_balance_cents >= cash_cents
   end
-
-  # def teams_match_transfer_teams
-  #   errors.add(:base, "Teams selected are the teams in the transfer.") unless [Transfer.find_by_id(:tramsfer_id).primary_team, transfer.secondary_team] - [sending_team, receiving_team] === []
-  # end
 end

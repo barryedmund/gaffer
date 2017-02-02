@@ -24,25 +24,35 @@
     <div class="mdl-card__actions">
       <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
         <tr>
-          <th class="mdl-data-table__cell--non-numeric">
-            <span>Player</span>
-          </th>
-          <th>
-            <span>Salary</span>
-          </th>
-          <th>
-            <span>Ends</span>
-          </th>
-        </tr>
-        <tr>
+          <td class="mdl-data-table__cell--non-numeric normal-text">
+            Player
+          </td>
           <td class="mdl-data-table__cell--non-numeric normal-text">
             <%= team_player.full_name(true, 20) %>
           </td>
-          <td class="normal-text">
-            <%= number_to_currency(team_player.current_contract.weekly_salary_cents, precision: 0) %>
+        </tr>
+        <tr>
+          <td class="mdl-data-table__cell--non-numeric normal-text">
+            Contract
           </td>
-          <td class="normal-text">
-            <%= team_player.current_contract.ends_at.strftime("%d-%b-%y") %>
+          <td class="mdl-data-table__cell--non-numeric normal-text">
+            <%= number_to_currency(team_player.current_contract.weekly_salary_cents, precision: 0) %> until <%= team_player.current_contract.ends_at.strftime("%d-%b-%y") %>
+          </td>
+        </tr>
+        <tr>
+          <td class="mdl-data-table__cell--non-numeric normal-text">
+            Player value
+          </td>
+          <td class="mdl-data-table__cell--non-numeric normal-text">
+            <%= number_to_currency(team_player.player.player_value(Season.current.first), precision:0) %>
+          </td>
+        </tr>
+        <tr>
+          <td class="mdl-data-table__cell--non-numeric normal-text">
+            Your team budget
+          </td>
+          <td class="mdl-data-table__cell--non-numeric normal-text">
+            <%= number_to_currency(@current_user.get_team(league).cash_balance_cents, precision: 0) %>
           </td>
         </tr>
       </table>
@@ -51,7 +61,7 @@
     <div id="transfer_item_cash_div" >
       <div class="form-group">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <%= f.text_field :cash_cents, pattern: "^[1-9]{1}[0-9]*$", value: params[:cash_cents], class: "mdl-textfield__input" %>
+          <%= f.text_field :cash_cents, pattern: "^[1-9]{1}[0-9]*$", value: team_player.player.player_value(Season.current.first), class: "mdl-textfield__input" %>
           <%= f.label "Tranfer bid", class: "mdl-textfield__label" %>
           <span class="mdl-textfield__error">Invalid amount.</span>
         </div>

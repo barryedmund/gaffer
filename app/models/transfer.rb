@@ -49,6 +49,10 @@ class Transfer < ActiveRecord::Base
     (current_user === primary_team.user) ? true : (current_user === secondary_team.user) ? true : false
   end
 
+  def get_cash_transfer_item
+    transfer_items.where(transfer_item_type: 'Cash').first
+  end
+
  	private
  	def teams_in_same_league
  		errors.add(:base, "Teams not in same league.") unless primary_team.league === secondary_team.league
