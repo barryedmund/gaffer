@@ -8,7 +8,13 @@ class TransferItem < ActiveRecord::Base
   validate :cash_transfer_items_have_positive_cash, :cash_transfer_items_do_not_have_team_player, :player_trasnfer_item_to_have_team_player, :player_transfer_items_do_not_have_cash_cents, :sending_team_owns_player, :teams_involved_different, :teams_in_same_league, on: :create
   validate :sending_team_has_enough_money
 
+
+  def get_league
+    sending_team.league
+  end
+
   private
+
   def cash_transfer_items_have_positive_cash
     errors.add(:base, "Cash must be positive for cash transfer items.") unless transfer_item_type != "Cash" || (transfer_item_type === "Cash" && cash_cents != nil && cash_cents > 0)
   end

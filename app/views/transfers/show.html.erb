@@ -14,12 +14,14 @@
 						<tr>
 							<td colspan="3" style="border-top:0px;">
 								<ul class="horizontal-style">
-									<li>
-										<%= render partial: 'change_transfer_status', locals: {transfer: @transfer, team: @current_user.get_team(league), league: league} %>
-									</li>
-									<li>
-				          	<%= link_to "Negotiate", edit_league_transfer_transfer_item_path(league, @transfer, @transfer.get_cash_transfer_item), class: "mdl-button--primary" %>
-				          </li>
+									<% if @transfer.get_cash_transfer_item %>
+										<li>
+											<%= render partial: 'change_transfer_status', locals: {transfer: @transfer, team: @current_user.get_team(league), league: league} %>
+										</li>
+										<li>
+					          	<%= link_to "Negotiate", edit_league_transfer_transfer_item_path(league, @transfer, @transfer.get_cash_transfer_item), class: "mdl-button--primary" %>
+					          </li>
+				          <% end %>
 			          	<% if @transfer.primary_team.user == @current_user%>
 				          	<li>
 				          		<%= link_to "Cancel", league_transfer_path(league, @transfer), method: :delete, class: "mdl-button--secondary" %>

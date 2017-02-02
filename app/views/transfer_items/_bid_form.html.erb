@@ -21,47 +21,12 @@
     <%= f.hidden_field :sending_team_id, value: @transfer.primary_team.id %>
     <%= f.hidden_field :receiving_team_id, value: @transfer.secondary_team.id %>
     <%= f.hidden_field :transfer_item_type, value: "Cash" %>
-    <div class="mdl-card__actions">
-      <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric normal-text">
-            Player
-          </td>
-          <td class="mdl-data-table__cell--non-numeric normal-text">
-            <%= team_player.full_name(true, 20) %>
-          </td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric normal-text">
-            Contract
-          </td>
-          <td class="mdl-data-table__cell--non-numeric normal-text">
-            <%= number_to_currency(team_player.current_contract.weekly_salary_cents, precision: 0) %> until <%= team_player.current_contract.ends_at.strftime("%d-%b-%y") %>
-          </td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric normal-text">
-            Player value
-          </td>
-          <td class="mdl-data-table__cell--non-numeric normal-text">
-            <%= number_to_currency(team_player.player.player_value(Season.current.first), precision:0) %>
-          </td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric normal-text">
-            Your team budget
-          </td>
-          <td class="mdl-data-table__cell--non-numeric normal-text">
-            <%= number_to_currency(@current_user.get_team(league).cash_balance_cents, precision: 0) %>
-          </td>
-        </tr>
-      </table>
-    </div>
+    <%= render partial: 'transfer_item_player_details', locals: {team_player: team_player, league: league} %>
     <br/>
     <div id="transfer_item_cash_div" >
       <div class="form-group">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <%= f.text_field :cash_cents, pattern: "^[1-9]{1}[0-9]*$", value: team_player.player.player_value(Season.current.first), class: "mdl-textfield__input" %>
+          <%= f.text_field :cash_cents, pattern: "^[1-9]{1}[0-9]*$", value: [[team_player.player.player_value(Season.current.first), @current_user.get_team(league).cash_balance_cents].min, 0].max, class: "mdl-textfield__input" %>
           <%= f.label "Tranfer bid", class: "mdl-textfield__label" %>
           <span class="mdl-textfield__error">Invalid amount.</span>
         </div>

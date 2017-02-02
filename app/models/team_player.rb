@@ -44,8 +44,4 @@ class TeamPlayer < ActiveRecord::Base
       errors.add(:base, "That player's deadline has passed for this gameweek.")
     end
   end
-
-  def get_auction
-    Auction.where(team_player: self, is_active: true).first
-  end
 end

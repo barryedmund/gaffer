@@ -53,6 +53,10 @@ class Transfer < ActiveRecord::Base
     transfer_items.where(transfer_item_type: 'Cash').first
   end
 
+  def get_player_transfer_item
+    transfer_items.where(transfer_item_type: 'Player').first
+  end
+
  	private
  	def teams_in_same_league
  		errors.add(:base, "Teams not in same league.") unless primary_team.league === secondary_team.league

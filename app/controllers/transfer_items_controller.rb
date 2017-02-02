@@ -18,8 +18,8 @@ class TransferItemsController < ApplicationController
       flash[:success] = "Created transfer item"
       redirect_to league_transfer_path(@league, @transfer)
     else
-      flash[:error] = "There was a problem creating that transfer item."
-      redirect_to league_transfer_path(@league, @transfer)
+      flash[:error] = @transfer_item.errors.full_messages.first
+      redirect_to new_league_transfer_transfer_item_path(@transfer_item.get_league, @transfer_item.transfer, direct_bid: @transfer_item.transfer.get_player_transfer_item.team_player.id)
     end
   end
 
@@ -36,7 +36,7 @@ class TransferItemsController < ApplicationController
   end
 
   def update
-    if @transfer_item.update!(transfer_item_params)
+    if @transfer_item.update(transfer_item_params)
       flash[:success] = "Updated transfer item"
       redirect_to league_transfer_path(@league, @transfer)
     else
