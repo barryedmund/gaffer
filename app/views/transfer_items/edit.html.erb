@@ -1,8 +1,10 @@
+<% league = League.find(params[:league_id]) %>
 <div class="col-sm-12">
   <div class="demo-card-wide mdl-card mdl-shadow--2dp">
 		<div class="mdl-card__title">
-			<h2 class="mdl-card__title-text">Edit transfer item</h2>
+			<h2 class="mdl-card__title-text">Change bid</h2>
 		</div>
-			<%= render 'form' %>
+		<%= render partial: 'transfer_item_player_details', locals: {team_player: @transfer_item.transfer.get_player_transfer_item.team_player, league: league} %>
+		<%= render 'form' %>
 	</div>
 </div>

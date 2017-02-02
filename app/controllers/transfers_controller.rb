@@ -15,7 +15,6 @@ class TransfersController < ApplicationController
       # Has nested transfer_item details
       if params[:transfer].has_key?('transfer_item')
         transfer_item_params = params[:transfer][:transfer_item]
-        puts ">>>> #{transfer_item_params}"
         TransferItem.create(transfer: @transfer, sending_team_id: transfer_item_params[:sending_team_id], receiving_team_id: transfer_item_params[:receiving_team_id], transfer_item_type: transfer_item_params[:transfer_item_type], team_player_id: transfer_item_params[:team_player_id])
         redirect_to new_league_transfer_transfer_item_path(@league, @transfer, direct_bid: transfer_item_params[:team_player_id])
       # Does not have nested transfer_item details
