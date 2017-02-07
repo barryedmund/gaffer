@@ -1,5 +1,5 @@
 ActiveAdmin.register TeamPlayer do
-	permit_params :player_id, :team_id, :first_team, :squad_position_id
+	permit_params :player_id, :team_id, :first_team, :squad_position_id, :transfer_minimum_bid, :transfer_completes_at, :is_voluntary_transfer
 
 	index do
 		selectable_column
@@ -14,6 +14,8 @@ ActiveAdmin.register TeamPlayer do
 		column "Squad Position"  do |team_player|
 			team_player.squad_position.short_name
 		end
+		column :is_voluntary_transfer
+		column :transfer_minimum_bid
 		actions
 	end
 
@@ -23,6 +25,9 @@ ActiveAdmin.register TeamPlayer do
 	  	f.input :team
 	  	f.input :player
 	  	f.input :squad_position, :collection => SquadPosition.pluck( :short_name, :id )
+	  	f.input :is_voluntary_transfer
+			f.input :transfer_minimum_bid
+			f.input :transfer_completes_at
 	  end
 	  f.actions
 	end
