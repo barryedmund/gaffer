@@ -1,0 +1,34 @@
+<% team_player = TeamPlayer.find(params[:id]) %>
+<div class="row">
+	<div class="col-sm-12">
+		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+			<div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">Transfer listing <%= team_player.player.full_name(true, 14) %></h2>
+      </div>
+			<div class="mdl-card__actions">
+				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+					<tr>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							Position
+						</td>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							<%= team_player.player.playing_position %>
+						</td>
+					</tr>
+					<tr>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							Value
+						</td>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							<%= number_to_currency(team_player.player.player_value(Season.current.first), precision:0) %>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<%= render partial: 'transfer_list_form', locals: { team_player: team_player, league: team_player.team.league, team: team_player.team} %>
+		</div>
+		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
+			<%= render partial: 'shared/player_game_week_table', locals: {player: team_player.player} %>
+		</div>
+	</div>
+</div>
