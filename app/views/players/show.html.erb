@@ -33,9 +33,11 @@
 							Team
 						</td>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<% if owned %>
+							<% if owned && owned_by_current_user %>
 								<%= link_to truncate(team_player.team.title, length: 30), league_team_path(team_player.team.league, team_player.team), class: "content-link" %>
-							<% elsif %>
+							<% elsif owned && !owned_by_current_user %>
+								<%= link_to truncate(team_player.team.title, length: 30), display_league_team_path(team_player.team.league, team_player.team), class: "content-link" %>
+							<% else %>
 								-
 							<% end %>
 						</td>
