@@ -5,7 +5,15 @@ class TransferItem < ActiveRecord::Base
   belongs_to :team_player
   validates :transfer, :sending_team, :receiving_team, :transfer_item_type, presence: true
   validates :transfer_item_type, inclusion: { in: ['Cash', 'Player'] }
-  validate :cash_transfer_items_have_positive_cash, :cash_transfer_items_do_not_have_team_player, :player_trasnfer_item_to_have_team_player, :player_transfer_items_do_not_have_cash_cents, :sending_team_owns_player, :teams_involved_different, :teams_in_same_league, on: :create
+  validate  :cash_transfer_items_have_positive_cash,
+            :cash_transfer_items_do_not_have_team_player,
+            :player_trasnfer_item_to_have_team_player,
+            :player_transfer_items_do_not_have_cash_cents,
+            :sending_team_owns_player,
+            :teams_involved_different,
+            :teams_in_same_league,
+            :cash_bid_is_not_below_minimum_bid,
+            on: :create
   validate :sending_team_has_enough_money
 
 
@@ -13,7 +21,20 @@ class TransferItem < ActiveRecord::Base
     sending_team.league
   end
 
+  def get_team_player_in_transfer
+    transfer.transfer_items.each do |transfer_item|
+      if transfer_item.transfer_item_type == "Player"
+        return TeamPlayer.find(transfer_item.team_player_id).first
+      end
+    end
+    return nil
+  end
+
   private
+
+  def cash_bid_is_not_below_minimum_bid
+    errors.add(:base, "Offer cannot be below listing price.") unless !get_team_player_in_transfer || get_team_player_in_transfer.transfer_listed? || transfer_item_type != "Cash" || (transfer_item_type === "Cash" && cash_cents != nil && cash_cents > 0 && cash_cents >= get_team_player_in_transfer.transfer_minimum_bid)
+  end
 
   def cash_transfer_items_have_positive_cash
     errors.add(:base, "Cash must be positive for cash transfer items.") unless transfer_item_type != "Cash" || (transfer_item_type === "Cash" && cash_cents != nil && cash_cents > 0)
@@ -44,6 +65,6 @@ class TransferItem < ActiveRecord::Base
   end
 
   def sending_team_has_enough_money
-    errors.add(:base, "Sending team does not have enough money.") unless transfer_item_type != "Cash" || cash_cents === nil || sending_team.cash_balance_cents >= cash_cents
+    errors.add(:base, "Not enough money.") unless transfer_item_type != "Cash" || cash_cents === nil || sending_team.cash_balance_cents >= cash_cents
   end
 end

@@ -46,4 +46,12 @@ class TeamPlayer < ActiveRecord::Base
       errors.add(:base, "That player's deadline has passed for this gameweek.")
     end
   end
+
+  def get_transfer_listed_player_initial_bid
+    transfer_minimum_bid ? transfer_minimum_bid : [[player.player_value(Season.current.first), team.cash_balance_cents].min, 0].max
+  end
+
+  def transfer_listed?
+    transfer_minimum_bid ? true : false
+  end
 end
