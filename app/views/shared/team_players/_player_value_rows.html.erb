@@ -1,0 +1,22 @@
+<tr>
+  <td class="mdl-data-table__cell--non-numeric normal-text">
+    Value
+  </td>
+  <td class="mdl-data-table__cell--non-numeric normal-text">
+    <%= render partial: 'shared/team_players/player_value', locals: {team_player: team_player} %>
+  </td>
+  <% if team_player.transfer_minimum_bid %>
+    <td class="mdl-data-table__cell--non-numeric normal-text">
+      <% if team_player.number_of_offers == 0 %>
+        <%= form_for team_player, url: league_team_team_player_path(team.league, team, team_player), action: :patch do |f| %>
+          <%= f.hidden_field :is_voluntary_transfer, value: false %>
+          <%= f.hidden_field :transfer_completes_at, value: nil %>
+          <%= f.hidden_field :transfer_minimum_bid, value: nil %>
+          <%= f.submit "De-list", class: "negative_action_button" %>
+        <% end %>
+      <% else %>
+        <%= link_to "Offers: #{team_player.number_of_offers}", league_transfers_path(team.league), class: "content-link" %>
+      <% end %>
+    </td>
+  <% end %>
+</tr>

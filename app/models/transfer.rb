@@ -7,6 +7,10 @@ class Transfer < ActiveRecord::Base
  	validate :teams_in_same_league, :teams_not_the_same, on: :create
   accepts_nested_attributes_for :transfer_items
 
+  def self.incomplete_transfers_with_team_involved(team)
+    Transfer.where('(transfers.primary_team_accepted = :accepted_value OR transfers.secondary_team_accepted = :accepted_value) AND (transfers.primary_team_id = :team_value OR transfers.secondary_team_id = :team_value)', {accepted_value: false, team_value: team.id})
+  end
+
   def transfer_completed?
     primary_team_accepted ? (secondary_team_accepted ? true : false) : false
   end
