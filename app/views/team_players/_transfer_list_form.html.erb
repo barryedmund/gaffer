@@ -1,0 +1,17 @@
+<%= form_for ([league, team, team_player]) do |f| %>
+	<%= f.hidden_field :is_voluntary_transfer, value: true %>
+  <%= f.hidden_field :transfer_completes_at, value: 3.days.from_now %>
+	<div class="mdl-card__actions">
+		<div class="form-group">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <%= f.text_field :transfer_minimum_bid, value: team_player.player.player_value(Season.current.first), pattern: "^[1-9]{1}[0-9]*$", class: "mdl-textfield__input" %>
+        <%= f.label "Transfer list price", class: "mdl-textfield__label" %>
+        <span class="mdl-textfield__error">Invalid value.</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.submit "Place on transfer list", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
+      <%= link_to "Cancel", :back, class: "cancel_link_anchor" %>
+    </div>
+	</div>
+<% end %>

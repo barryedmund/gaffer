@@ -1,0 +1,37 @@
+<% has_offers = team_player.number_of_offers > 0 ? true : false %>
+<tr>
+  <td class="mdl-data-table__cell--non-numeric normal-text">
+    Value
+  </td>
+  <td class="mdl-data-table__cell--non-numeric normal-text">
+    <%= render partial: 'shared/team_players/player_value', locals: {team_player: team_player} %>
+  </td>
+  <% if team_player.transfer_minimum_bid %>
+    <td class="mdl-data-table__cell--non-numeric normal-text">
+      <% if !has_offers %>
+        <%= form_for team_player, url: league_team_team_player_path(team.league, team, team_player), action: :patch do |f| %>
+          <%= f.hidden_field :is_voluntary_transfer, value: false %>
+          <%= f.hidden_field :transfer_completes_at, value: nil %>
+          <%= f.hidden_field :transfer_minimum_bid, value: nil %>
+          <%= f.submit "De-list", class: "negative_action_button" %>
+        <% end %>
+      <% else %>
+        <%= link_to "Offers: #{team_player.number_of_offers}", league_transfers_path(team.league), class: "content-link" %>
+      <% end %>
+    </td>
+  <% end %>
+</tr>
+<% if has_offers %>
+  <tr>
+    <td class="mdl-data-table__cell--non-numeric normal-text">
+      Offers
+    </td>
+    <td class="mdl-data-table__cell--non-numeric normal-text" colspan="2">
+      <% team_player.active_transfers.each do |transfer| %>
+        <% other_team_involved = transfer.get_other_team_involved(team_player.team) %>
+        <%= link_to truncate(other_team_involved.title, length: 20), display_league_team_path(team.league, other_team_involved.id), class: "content-link" %>: <%= link_to number_to_currency(transfer.get_cash_transfer_item.cash_cents, precision: 0), league_transfer_path(team.league, transfer), class: "content-link" %>
+        <br/>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

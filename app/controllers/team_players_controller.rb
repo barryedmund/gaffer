@@ -1,7 +1,7 @@
 class TeamPlayersController < ApplicationController
   before_action :require_user
   before_action :set_team
-  before_action :set_team_player, only: [:show, :release]
+  before_action :set_team_player, only: [:show, :release, :update]
 
   def new
   	@team_player = @team.team_players.new
@@ -58,6 +58,15 @@ class TeamPlayersController < ApplicationController
     NewsItem.create(league: league, news_item_resource_type: 'Player', news_item_resource_id: player_for_news_item.id, body: "Player released by #{@team.title}")
   end
 
+  def update
+    if @team_player.update(team_player_params)
+      redirect_to league_team_team_player_path(@team_player.team.league, @team_player.team, @team_player), success: "#{@team_player.full_name} has been transfer listed."
+    else
+      flash[:error] = @team_player.errors.full_messages.first
+      render :edit
+    end
+  end
+
   private
   def set_team
     @team = current_user.teams.find(params[:team_id])
@@ -68,6 +77,6 @@ class TeamPlayersController < ApplicationController
   end
 
   def team_player_params
-  	params.require(:team_player).permit(:first_team, :team_id, :player_id, contracts_attributes: [:weekly_salary_cents, :team_id, :starts_at, :ends_at])
+  	params.require(:team_player).permit(:first_team, :team_id, :player_id, :is_voluntary_transfer, :transfer_minimum_bid, :transfer_completes_at, contracts_attributes: [:weekly_salary_cents, :team_id, :starts_at, :ends_at])
   end
 end

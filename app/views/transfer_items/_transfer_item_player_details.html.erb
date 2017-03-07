@@ -21,7 +21,7 @@
         Player value
       </td>
       <td class="mdl-data-table__cell--non-numeric normal-text">
-        <%= number_to_currency(team_player.player.player_value(Season.current.first), precision:0) %>
+        <%= render partial: 'shared/team_players/player_value', locals: {team_player: team_player} %>
       </td>
     </tr>
     <tr>

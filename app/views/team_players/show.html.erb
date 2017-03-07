@@ -10,49 +10,33 @@
 						<td class="mdl-data-table__cell--non-numeric normal-text">
 							Position
 						</td>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
+						<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2">
 							<%= @team_player.player.playing_position %>
-						</td>
-					</tr>
-					<tr>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							First team
-						</td>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= @team_player.first_team ? 'Yes' : 'No' %>
 						</td>
 					</tr>
 					<tr>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
 							Team
 						</td>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= link_to @team_player.team.title, league_team_path(@team.league, @team), class: "content-link" %>
+						<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2">
+							<%= link_to @team.title, league_team_path(@team.league, @team), class: "content-link" %>
 						</td>
 					</tr>
-					<tr>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							Value
-						</td>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= number_to_currency(@team_player.player.player_value(Season.current.first), precision:0) %>
-						</td>
-					</tr>
+					<%= render partial: 'shared/team_players/player_value_rows', locals: {team_player: @team_player, team: @team} %>
 					<tr>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
 							Salary
 						</td>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= number_to_currency(@team_player.current_contract.weekly_salary_cents, precision: 0) %> 
-							(Release cost: <%= number_to_currency(@team_player.current_contract.release_value, precision: 0) %>)
+						<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2">
+							<%= number_to_currency(@team_player.current_contract.weekly_salary_cents, precision: 0) %>
 						</td>
 					</tr>
 					<tr>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
-							Contract term
+							Contract
 						</td>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= @team_player.current_contract.starts_at.strftime("%d %b %y") %> - <%= @team_player.current_contract.ends_at.strftime("%d %b %y") %>
+						<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2">
+							<%= @team_player.current_contract.starts_at.strftime("%d %b %Y") %> - <%= @team_player.current_contract.ends_at.strftime("%d %b %Y") %>
 						</td>
 					</tr>
 					<% if team_player_deadline = @team_player.player.game_week_deadline_at %>
@@ -60,7 +44,7 @@
 							<td class="mdl-data-table__cell--non-numeric normal-text">
 								Deadline
 							</td>
-							<td class="mdl-data-table__cell--non-numeric normal-text">
+							<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2">
 								<%= team_player_deadline.strftime("%a %d %b, %l:%M%P %Z") %>
 								<% if Time.now <= team_player_deadline %>
 									&nbsp;(in <%= time_ago_in_words(team_player_deadline, include_seconds: true) %>)
@@ -74,14 +58,15 @@
 			</div>
 			<div class="mdl-card__supporting-text">
 				<ul class="horizontal-style">
-					<li>
-						<%= link_to "Pay #{number_to_currency(@team_player.current_contract.release_value, precision: 0)} to release player", release_league_team_team_player_path(@team.league, @team, @team_player), method: :patch, class: "mdl-button--secondary" %>
-					</li>
+					<% if !@team_player.transfer_minimum_bid %>
+						<li><%= link_to "Set transfer price", edit_league_team_team_player_path(@team.league, @team, @team_player), class: "mdl-button--secondary" %></li>
+					<% end %>
+					<li><%= link_to "Release for #{number_to_currency(@team_player.current_contract.release_value, precision: 0)}", release_league_team_team_player_path(@team.league, @team, @team_player), method: :patch, class: "mdl-button--secondary" %></li>
 				</ul>
 			</div>
 		</div>
 		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 			<%= render partial: 'shared/player_game_week_table', locals: {player: @team_player.player} %>
-		</div>		
+		</div>
 	</div>
 </div>

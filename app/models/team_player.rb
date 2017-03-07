@@ -6,6 +6,8 @@ class TeamPlayer < ActiveRecord::Base
   has_many :transfer_items, :dependent => :destroy
   validates :squad_position_id, presence: true
   validate :game_week_deadline_has_not_passed, on: :update
+  validates_presence_of :transfer_completes_at, :if => :transfer_minimum_bid?
+  validates_presence_of :transfer_minimum_bid, :if => :transfer_completes_at?
   accepts_nested_attributes_for :contracts, :allow_destroy => :true
 
   def full_name(abbreviate = false, cut_off = 13)
@@ -43,5 +45,21 @@ class TeamPlayer < ActiveRecord::Base
     if player.game_week_deadline_at < Time.now
       errors.add(:base, "That player's deadline has passed for this gameweek.")
     end
+  end
+
+  def get_transfer_listed_player_initial_bid
+    transfer_minimum_bid ? transfer_minimum_bid : [[player.player_value(Season.current.first), team.cash_balance_cents].min, 0].max
+  end
+
+  def transfer_listed?
+    transfer_minimum_bid ? true : false
+  end
+
+  def active_transfers
+    Transfer.incomplete_transfers_with_team_involved(team).joins(:transfer_items).where('transfer_items.transfer_item_type = ? AND transfer_items.team_player_id = ?', "Player", id)
+  end
+
+  def number_of_offers
+    active_transfers.count
   end
 end

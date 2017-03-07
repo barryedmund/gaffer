@@ -1,0 +1,1 @@
+<%= number_to_currency(team_player.player.player_value(Season.current.first), precision:0) %>  <%= team_player.transfer_minimum_bid ? "(listed for #{number_to_currency(team_player.transfer_minimum_bid, precision:0)})" : '' %>

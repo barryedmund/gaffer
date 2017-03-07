@@ -26,7 +26,7 @@
     <div id="transfer_item_cash_div" >
       <div class="form-group">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-          <%= f.text_field :cash_cents, pattern: "^[1-9]{1}[0-9]*$", value: [[team_player.player.player_value(Season.current.first), @current_user.get_team(league).cash_balance_cents].min, 0].max, class: "mdl-textfield__input" %>
+          <%= f.text_field :cash_cents, pattern: "^[1-9]{1}[0-9]*$", value: team_player.get_transfer_listed_player_initial_bid, class: "mdl-textfield__input" %>
           <%= f.label "Tranfer bid", class: "mdl-textfield__label" %>
           <span class="mdl-textfield__error">Invalid amount.</span>
         </div>
