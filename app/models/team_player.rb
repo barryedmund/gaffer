@@ -55,7 +55,11 @@ class TeamPlayer < ActiveRecord::Base
     transfer_minimum_bid ? true : false
   end
 
+  def active_transfers
+    Transfer.incomplete_transfers_with_team_involved(team).joins(:transfer_items).where('transfer_items.transfer_item_type = ? AND transfer_items.team_player_id = ?', "Player", id)
+  end
+
   def number_of_offers
-    Transfer.incomplete_transfers_with_team_involved(team).joins(:transfer_items).where('transfer_items.transfer_item_type = ? AND transfer_items.team_player_id = ?', "Player", id).count
+    active_transfers.count
   end
 end

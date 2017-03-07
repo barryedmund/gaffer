@@ -62,7 +62,7 @@ class TeamPlayersController < ApplicationController
     if @team_player.update(team_player_params)
       redirect_to league_team_team_player_path(@team_player.team.league, @team_player.team, @team_player), success: "#{@team_player.full_name} has been transfer listed."
     else
-      flash[:error] = "#{@team_player.full_name} was not transfer listed."
+      flash[:error] = @team_player.errors.full_messages.first
       render :edit
     end
   end

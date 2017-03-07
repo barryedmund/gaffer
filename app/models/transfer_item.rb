@@ -22,9 +22,9 @@ class TransferItem < ActiveRecord::Base
   end
 
   def get_team_player_in_transfer
-    transfer.transfer_items.each do |transfer_item|
-      if transfer_item.transfer_item_type == "Player"
-        return TeamPlayer.find(transfer_item.team_player_id).first
+    transfer.transfer_items.each do |this_transfer_item|
+      if this_transfer_item.transfer_item_type == "Player"
+        return TeamPlayer.find_by(id: this_transfer_item.team_player_id)
       end
     end
     return nil
@@ -33,7 +33,12 @@ class TransferItem < ActiveRecord::Base
   private
 
   def cash_bid_is_not_below_minimum_bid
-    errors.add(:base, "Offer cannot be below listing price.") unless !get_team_player_in_transfer || get_team_player_in_transfer.transfer_listed? || transfer_item_type != "Cash" || (transfer_item_type === "Cash" && cash_cents != nil && cash_cents > 0 && cash_cents >= get_team_player_in_transfer.transfer_minimum_bid)
+    errors.add(:base, "Offer cannot be below listing price.") unless
+      !get_team_player_in_transfer ||
+      get_team_player_in_transfer.transfer_listed? ||
+      transfer_item_type != "Cash" ||
+      (transfer_item_type === "Cash" && cash_cents != nil && cash_cents > 0 && !get_team_player_in_transfer.transfer_minimum_bid) || 
+      (transfer_item_type === "Cash" && cash_cents != nil && cash_cents > 0 && cash_cents >= get_team_player_in_transfer.transfer_minimum_bid)
   end
 
   def cash_transfer_items_have_positive_cash
