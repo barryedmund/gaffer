@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170207054012) do
+ActiveRecord::Schema.define(version: 20170308063645) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -147,10 +147,10 @@ ActiveRecord::Schema.define(version: 20170207054012) do
     t.integer "minutes_played"
     t.integer "game_week_id"
     t.integer "player_id"
-    t.integer "goals"
+    t.float   "goals"
     t.boolean "clean_sheet"
-    t.integer "goals_conceded"
-    t.integer "assists"
+    t.float   "goals_conceded"
+    t.float   "assists"
   end
 
   add_index "player_game_weeks", ["game_week_id"], name: "index_player_game_weeks_on_game_week_id", using: :btree
