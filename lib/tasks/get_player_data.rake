@@ -63,11 +63,9 @@ namespace :player_data do
     active_game_week = Competition.find_by(description: 'Premier League').current_season.get_current_game_week
     if active_game_week.starts_at <= Time.now
       puts "GameWeek #{active_game_week.id} has started."
-      # i = 1
-      i = 230
+      i = 1
       continue = true
-      # while continue
-      while continue && i == 230
+      while continue
         response = Net::HTTP.get_response(URI("https://fantasy.premierleague.com/drf/element-summary/#{i}"))
         break unless response.code.to_i == 200
         body = JSON.parse(response.body)
