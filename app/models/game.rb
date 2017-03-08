@@ -34,74 +34,20 @@ class Game < ActiveRecord::Base
  	def calculate_score
  		if game_week.finished
  			if (home_team_score.blank? || away_team_score.blank?)
-
-	 			home_lineup = get_team_lineup(home_team)
-        home_clean_sheet_minutes = 0
-        home_goals_scored = 0
-        home_lineup.each do |lineup|
-          lineup_player_game_week = lineup.player_game_week
-          lineup_player_squad_position = lineup.squad_position
-          
-          player_clean_sheet_minutes = lineup_player_game_week.minutes_played > 0 ? (lineup_player_game_week.minutes_played.to_f / (lineup_player_game_week.goals_conceded + 1)) : 0
-          
-          player_goals = lineup_player_game_week.goals
-          
-          if lineup_player_squad_position.short_name === 'GK'
-            player_goals += lineup_player_game_week.assists.to_i * 0.5
-
-          elsif lineup_player_squad_position.short_name === 'DF'
-            player_goals += lineup_player_game_week.assists.to_i * 0.4
-
-          elsif lineup_player_squad_position.short_name === 'MD'
-            player_clean_sheet_minutes = player_clean_sheet_minutes / 2
-            player_goals += lineup_player_game_week.assists.to_i * 0.3
-
-          elsif lineup_player_squad_position.short_name === 'FW'
-            player_clean_sheet_minutes = 0
-            player_goals += lineup_player_game_week.assists.to_i * 0.2
-            
-          end
-          
-          home_clean_sheet_minutes += player_clean_sheet_minutes
-          home_goals_scored += player_goals
-        end
-
+        home_lineup = get_team_lineup(home_team)
         away_lineup = get_team_lineup(away_team)
-        away_clean_sheet_minutes = 0
-        away_goals_scored = 0
-        away_lineup.each do |lineup|
-          lineup_player_game_week = lineup.player_game_week
-          lineup_player_squad_position = lineup.squad_position
-          
-          player_clean_sheet_minutes = lineup_player_game_week.minutes_played > 0 ? (lineup_player_game_week.minutes_played.to_f / (lineup_player_game_week.goals_conceded + 1)) : 0
-          
-          player_goals = lineup_player_game_week.goals
-          
-          if lineup_player_squad_position.short_name === 'GK'
-            player_goals += lineup_player_game_week.assists.to_i * 0.5
 
-          elsif lineup_player_squad_position.short_name === 'DF'
-            player_goals += lineup_player_game_week.assists.to_i * 0.4
+        home_team_attack = get_total_attacking_contribution(home_lineup)
+        away_team_attack = get_total_attacking_contribution(away_lineup)
 
-          elsif lineup_player_squad_position.short_name === 'MD'
-            player_clean_sheet_minutes = player_clean_sheet_minutes / 2
-            player_goals += lineup_player_game_week.assists.to_i * 0.3
-
-          elsif lineup_player_squad_position.short_name === 'FW'
-            player_clean_sheet_minutes = 0
-            player_goals += lineup_player_game_week.assists.to_i * 0.2
-            
-          end
-          away_clean_sheet_minutes += player_clean_sheet_minutes
-          away_goals_scored += player_goals
-        end
-
-        home_clean_sheet_performance = (home_clean_sheet_minutes / 9.9) / 100
-        away_clean_sheet_performance = (away_clean_sheet_minutes / 9.9) / 100
-        home_score = (home_goals_scored * (1 - away_clean_sheet_performance)).round
-        away_score = (away_goals_scored * (1 - home_clean_sheet_performance)).round
-	 			self.update(home_team_score: home_score)
-	 			self.update(away_team_score: away_score)
+        home_team_defence = get_clean_sheet_minutes(home_lineup)
+        away_team_defence = get_clean_sheet_minutes(away_lineup)
+        
+        home_team_score = (home_team_attack * (1 - away_team_defence/990)).round
+        away_team_score = (away_team_attack * (1 - home_team_defence/990)).round
+	 			
+	 			self.update(home_team_score: home_team_score)
+	 			self.update(away_team_score: away_team_score)
 
         NewsItem.create(league: get_league, news_item_resource_type: 'Game', news_item_resource_id: id, body: get_score_description)
 	 		end

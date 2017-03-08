@@ -8,19 +8,19 @@ class PlayerLineup < ActiveRecord::Base
   def get_attacking_contribution
     attacking_contribution = 0
     if squad_position.short_name === 'GK'
-      attacking_contribution += (player_game_week.goals + (player_game_week.assists.to_i * 0.5))
+      attacking_contribution += (player_game_week.goals.to_f + (player_game_week.assists.to_f * 0.5))
     elsif squad_position.short_name === 'DF'
-      attacking_contribution += (player_game_week.goals + (player_game_week.assists.to_i * 0.4))
+      attacking_contribution += (player_game_week.goals.to_f + (player_game_week.assists.to_f * 0.4))
     elsif squad_position.short_name === 'MD'
-      attacking_contribution += (player_game_week.goals + (player_game_week.assists.to_i * 0.3))
+      attacking_contribution += (player_game_week.goals.to_f + (player_game_week.assists.to_f * 0.3))
     elsif squad_position.short_name === 'FW'
-      attacking_contribution += (player_game_week.goals + (player_game_week.assists.to_i * 0.2))
+      attacking_contribution += (player_game_week.goals + (player_game_week.assists.to_f * 0.2))
     end
     attacking_contribution.round(1)
   end
 
   def get_defensive_contribution
-    clean_sheet_minutes = player_game_week.minutes_played > 0 ? (player_game_week.minutes_played.to_f / (player_game_week.goals_conceded + 1)) : 0.0
+    clean_sheet_minutes = player_game_week.minutes_played > 0 ? (player_game_week.minutes_played.to_i / (player_game_week.goals_conceded + 1)) : 0.0
     if squad_position.short_name === 'MD'
       clean_sheet_minutes = clean_sheet_minutes / 2
     elsif squad_position.short_name === 'FW'

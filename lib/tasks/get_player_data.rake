@@ -63,9 +63,11 @@ namespace :player_data do
     active_game_week = Competition.find_by(description: 'Premier League').current_season.get_current_game_week
     if active_game_week.starts_at <= Time.now
       puts "GameWeek #{active_game_week.id} has started."
-      i = 1
+      # i = 1
+      i = 230
       continue = true
-      while continue
+      # while continue
+      while continue && i == 230
         response = Net::HTTP.get_response(URI("https://fantasy.premierleague.com/drf/element-summary/#{i}"))
         break unless response.code.to_i == 200
         body = JSON.parse(response.body)
@@ -82,6 +84,7 @@ namespace :player_data do
 
         # If the player was found
         if player
+          puts "#{player.first_name} #{player.last_name} (#{i})"
           season = player.competition.current_season
           player_game_weeks = player.player_game_weeks.joins(:game_week).where("game_weeks.season_id =?", season.id).order('game_weeks.game_week_number DESC')  
           current_game_week = season.get_current_game_week
@@ -103,6 +106,8 @@ namespace :player_data do
               total_assists += body_game_weeks[j]['assists']
             end
           end
+
+          puts " > > fixtures_in_game_week: #{fixtures_in_game_week}"
           
           #  If he played and didn't concede goals
           if !(total_minutes_played > 0 && total_goals_conceded == 0)
@@ -112,9 +117,9 @@ namespace :player_data do
           # If it was a multi-fixture EPL round for this player
           if fixtures_in_game_week > 1
             total_minutes_played = total_minutes_played / fixtures_in_game_week
-            total_goals_scored = total_goals_scored / fixtures_in_game_week
-            total_goals_conceded = total_goals_conceded / fixtures_in_game_week
-            total_assists = total_assists / fixtures_in_game_week
+            total_goals_scored = total_goals_scored.to_f / fixtures_in_game_week
+            total_goals_conceded = total_goals_conceded.to_f / fixtures_in_game_week
+            total_assists = total_assists.to_f / fixtures_in_game_week
           end
 
           this_player_current_player_game_week = PlayerGameWeek.where('game_week_id = ? AND player_id = ?', current_game_week.id, player.id).first
