@@ -11,6 +11,16 @@ class Player < ActiveRecord::Base
     where("lower(first_name) LIKE :search OR lower(last_name) LIKE :search OR lower(playing_position) LIKE :search OR lower(real_team_short_name) LIKE :search", {search: "%#{search.downcase}%"})
   end
 
+  def self.get_all_unattached_players(league)
+    Player.where(available: true).where.not(id: (Player.joins(team_players: [:team => :league]).where('leagues.id = ?', league.id) ).map(&:id))
+  end
+
+  def self.get_all_unattached_players_sorted_by_value(league)
+    if most_recently_finished_gameweek = GameWeek.get_most_recent_finished
+      self.get_all_unattached_players(league).joins(:player_game_weeks).where('player_game_weeks.game_week_id = ? AND player_game_weeks.minutes_played >= ?', most_recently_finished_gameweek.id, 90).sort_by{ |player| player.player_value(Season.current.first) }.last(10).sample
+    end
+  end
+
 	def full_name(abbreviate = false, cut_off = 13)
     if abbreviate
       working_full_name = "#{first_name} #{last_name}"
@@ -126,7 +136,7 @@ class Player < ActiveRecord::Base
     game_week_deadline_at ? (team_player.player.game_week_deadline_at > Time.now) : false
   end
 
-  def player_value(season)
+  def player_value(season = Season.current.first)
     defensive_index = ((total_defensive_contribution_per_90(season) / 90) * percentage_of_minutes_played(season)) / 4
     attacking_index = ((total_attacking_contribution_per_90(season)) * percentage_of_minutes_played(season))
     value = ((defensive_index + attacking_index) * 10000000) * 1.5

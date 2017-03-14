@@ -58,6 +58,16 @@
       	News
       </h3>
     </div>
+
+    <div class="mdl-card__title">
+    	<%= Benchmark.measure { Player.get_all_unattached_players_sorted_by_value(League.find_by_id(3)) } %>
+    	
+    	<% if random_high_value_free_agent = Player.get_all_unattached_players_sorted_by_value(League.find_by_id(3)) %>
+    		( <%= random_high_value_free_agent.first_name %> <%= random_high_value_free_agent.last_name %> <%= random_high_value_free_agent.player_value %> )
+    	<% end %>
+    </div>
+
+
     <div class="mdl-card__actions">
     	<% fresh_news_items = news_items.where('created_at > ?', 2.weeks.ago) %>
     	<% if fresh_news_items.count > 0 %>

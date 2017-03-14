@@ -12,6 +12,10 @@ class GameWeek < ActiveRecord::Base
 		GameWeek.where('DATE(?) BETWEEN starts_at AND ends_at', @now).any?
 	end
 
+  def self.get_most_recent_finished
+    GameWeek.where(finished: true).order(:starts_at).last
+  end
+
   def in_play?
     starts_at < Time.now && !finished
   end
