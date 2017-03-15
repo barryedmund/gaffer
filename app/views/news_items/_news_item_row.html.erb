@@ -4,6 +4,17 @@
 	<!-- PLAYER news_items -->
 	<tr>
 		<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
+			<% if news_item.news_item_type %>
+				<i class="material-icons large">
+					<% if news_item.news_item_type == 'high_value_free_agent' %>
+						star_border
+					<% elsif news_item.news_item_type == 'player_released' %>
+						content_cut
+					<% elsif news_item.news_item_type == 'new_free_agent' %>
+						person_add
+					<% end %>
+				</i>
+			<% end %>
 			<%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
 		</td>
 		<td class="normal-text" style="border-bottom:0px;">
@@ -20,7 +31,7 @@
 	<!-- GAME news_items -->
 	<tr>
 		<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
-			<%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
+			<i class="material-icons large">hourglass_empty</i><%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
 		</td>
 		<td class="normal-text" style="border-bottom:0px;">
 			<%= link_to 'View', league_game_path(news_item.league.id, resource.id), class: "mdl-button--primary" %>
@@ -36,7 +47,7 @@
 	<!-- TRANSFER news_items -->
 	<tr>
 		<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
-			<%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
+			<i class="material-icons large">swap_horiz</i><%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
 		</td>
 		<% if resource %>
 			<td class="normal-text" style="border-bottom: 0px;">
@@ -57,7 +68,7 @@
 	<!-- CONTRACT news_items -->
 	<tr>
 		<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
-			<%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
+			<i class="material-icons large">content_paste</i><%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
 		</td>
 		<% if resource %>
 			<td class="normal-text" style="border-bottom:0px;">

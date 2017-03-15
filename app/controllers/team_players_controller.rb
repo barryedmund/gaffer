@@ -55,7 +55,7 @@ class TeamPlayersController < ApplicationController
     league = @team.league
     @team.update_attributes(cash_balance_cents: (@team.cash_balance_cents - @team_player.current_contract.release_value))
     self.destroy
-    NewsItem.create(league: league, news_item_resource_type: 'Player', news_item_resource_id: player_for_news_item.id, body: "Player released by #{@team.title}")
+    NewsItem.create(league: league, news_item_resource_type: 'Player', news_item_type: 'player_released', news_item_resource_id: player_for_news_item.id, body: "Player released by #{@team.title}")
   end
 
   def update

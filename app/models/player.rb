@@ -17,7 +17,7 @@ class Player < ActiveRecord::Base
 
   def self.get_all_unattached_players_sorted_by_value(league)
     if most_recently_finished_gameweek = GameWeek.get_most_recent_finished
-      self.get_all_unattached_players(league).joins(:player_game_weeks).where('player_game_weeks.game_week_id = ? AND player_game_weeks.minutes_played >= ?', most_recently_finished_gameweek.id, 90).sort_by{ |player| player.player_value(Season.current.first) }.last(10).sample
+      self.get_all_unattached_players(league).joins(:player_game_weeks).where('player_game_weeks.game_week_id = ? AND player_game_weeks.minutes_played >= ?', most_recently_finished_gameweek.id, 90).sort_by{ |player| player.player_value(Season.current.first) }.last(12).sample
     end
   end
 
