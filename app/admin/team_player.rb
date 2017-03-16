@@ -16,6 +16,7 @@ ActiveAdmin.register TeamPlayer do
 		end
 		column :is_voluntary_transfer
 		column :transfer_minimum_bid
+		column :transfer_completes_at
 		actions
 	end
 

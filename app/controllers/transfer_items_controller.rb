@@ -15,7 +15,11 @@ class TransferItemsController < ApplicationController
     @transfer_item = TransferItem.new(transfer_item_params)
     if @transfer_item.save
       update_transfer_status
-      flash[:success] = "Created transfer item"
+      team_player_involved = @transfer_item.get_team_player_in_transfer
+      flash[:success] = "Bid made for #{team_player_involved.full_name}"
+      if team_player_involved.number_of_offers === 1
+        team_player_involved.update_attribute(:transfer_completes_at, 3.days.from_now)
+      end
       redirect_to league_transfer_path(@league, @transfer)
     else
       flash[:error] = @transfer_item.errors.full_messages.first

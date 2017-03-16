@@ -1,6 +1,6 @@
 <%= form_for ([league, team, team_player]) do |f| %>
 	<%= f.hidden_field :is_voluntary_transfer, value: true %>
-  <%= f.hidden_field :transfer_completes_at, value: 3.days.from_now %>
+  <%= f.hidden_field :transfer_completes_at, value: nil %>
 	<div class="mdl-card__actions">
 		<div class="form-group">
       <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">

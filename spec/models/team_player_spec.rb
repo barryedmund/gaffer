@@ -30,14 +30,4 @@ describe TeamPlayer do
     before { allow(subject).to receive(:transfer_completes_at?).and_return(false) }
     it { should_not validate_presence_of(:transfer_minimum_bid) }
   end
-
-  context "if eligible" do
-    before { allow(subject).to receive(:transfer_minimum_bid?).and_return(true) }
-    it { should validate_presence_of(:transfer_completes_at) }
-  end
-
-  context "if ineligible" do
-    before { allow(subject).to receive(:transfer_minimum_bid?).and_return(false) }
-    it { should_not validate_presence_of(:transfer_completes_at) }
-  end
 end

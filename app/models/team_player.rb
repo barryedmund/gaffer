@@ -6,7 +6,6 @@ class TeamPlayer < ActiveRecord::Base
   has_many :transfer_items, :dependent => :destroy
   validates :squad_position_id, presence: true
   validate :game_week_deadline_has_not_passed, on: :update
-  validates_presence_of :transfer_completes_at, :if => :transfer_minimum_bid?
   validates_presence_of :transfer_minimum_bid, :if => :transfer_completes_at?
   accepts_nested_attributes_for :contracts, :allow_destroy => :true
 

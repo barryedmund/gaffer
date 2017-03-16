@@ -51,7 +51,11 @@ class TransfersController < ApplicationController
 
   def destroy
     @transfer = Transfer.find(params[:id])
+    team_player_involved_in_transfer = @transfer.get_player_transfer_item.get_team_player_in_transfer
     if @transfer.destroy
+      if team_player_involved_in_transfer.number_of_offers === 0
+        team_player_involved_in_transfer.update_attribute(:transfer_completes_at, nil)
+      end
       flash[:success] = "Transfer was cancelled successfully."
     else
       flash[:error] = "Transfer was not cancelled successfully."
