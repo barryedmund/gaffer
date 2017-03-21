@@ -19,7 +19,7 @@
             <% your_transfers.order(created_at: :desc).each do |transfer| %>
               <tr>
                 <td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
-                  Created <%= time_ago_in_words(transfer.created_at, include_seconds: true) %> ago
+                  Created <%= time_ago_in_words(transfer.created_at, include_seconds: true) %> ago <%= transfer.is_a_transfer_listing ? "(Completes in #{time_ago_in_words(transfer.get_player_transfer_item.get_team_player_in_transfer.transfer_completes_at, include_seconds: true)})" : "" %>
                 </td>
                 <td class="normal-text" style="border-bottom: 0px;">
                   <%= link_to "View", league_transfer_path(league, transfer), class: "mdl-button--primary" %>

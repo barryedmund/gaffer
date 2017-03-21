@@ -65,6 +65,10 @@ class Transfer < ActiveRecord::Base
     primary_team == team ? secondary_team : primary_team
   end
 
+  def is_a_transfer_listing
+    get_player_transfer_item.get_team_player_in_transfer.transfer_listed?
+  end
+
  	private
  	def teams_in_same_league
  		errors.add(:base, "Teams not in same league.") unless primary_team.league === secondary_team.league
