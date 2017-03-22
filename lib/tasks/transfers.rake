@@ -1,4 +1,5 @@
 namespace :transfers do
+
 	task :process_free_agent_with_contract_offers => :environment do
     League.all.each do |league|
       this_league_unsigned_contracts = Contract.joins(:team).where('contracts.signed = ? AND teams.league_id = ?', false, league.id) 
@@ -28,5 +29,13 @@ namespace :transfers do
     empty_transfers = Transfer.includes(:transfer_items).where(:transfer_items => { :id => nil })
     stale_transfers = Transfer.where('updated_at < ? AND (primary_team_accepted = ? OR secondary_team_accepted = ?)', 1.week.ago, false, false)
     (empty_transfers | stale_transfers).each(&:destroy)
-  end  
+  end
+
+  task :process_transfer_listings => :environment do
+    puts transfers = Transfer.incomplete_transfer_listings_due
+    
+    # Get the highest bid per player
+    # The TransferItems of the transfer
+    puts transfers.includes(:transfer_items).map(&:transfer_items).flatten.inspect
+  end
 end

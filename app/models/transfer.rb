@@ -7,8 +7,18 @@ class Transfer < ActiveRecord::Base
  	validate :teams_in_same_league, :teams_not_the_same, on: :create
   accepts_nested_attributes_for :transfer_items
 
+  def self.incomplete_transfers
+    self.where('transfers.primary_team_accepted = :accepted_value OR transfers.secondary_team_accepted = :accepted_value', {accepted_value: false})
+  end
+
   def self.incomplete_transfers_with_team_involved(team)
-    Transfer.where('(transfers.primary_team_accepted = :accepted_value OR transfers.secondary_team_accepted = :accepted_value) AND (transfers.primary_team_id = :team_value OR transfers.secondary_team_id = :team_value)', {accepted_value: false, team_value: team.id})
+    incomplete_transfers.where('transfers.primary_team_id = :team_value OR transfers.secondary_team_id = :team_value', {team_value: team.id})
+  end
+
+  def self.incomplete_transfer_listings_due
+    transfers = incomplete_transfers.select { |transfer| transfer.is_a_transfer_listing && (transfer.transfer_listing_completes_at < Time.now) }
+    transfers.map{|i| i.id}
+    Transfer.where(id: transfers)
   end
 
   def transfer_completed?
@@ -61,12 +71,20 @@ class Transfer < ActiveRecord::Base
     transfer_items.where(transfer_item_type: 'Player').first
   end
 
+  def get_team_player_involved
+    get_player_transfer_item.get_team_player_in_transfer
+  end
+
   def get_other_team_involved(team)
     primary_team == team ? secondary_team : primary_team
   end
 
   def is_a_transfer_listing
-    get_player_transfer_item.get_team_player_in_transfer.transfer_listed?
+    get_team_player_involved.transfer_listed?
+  end
+
+  def transfer_listing_completes_at
+    get_team_player_involved.transfer_completes_at
   end
 
  	private
