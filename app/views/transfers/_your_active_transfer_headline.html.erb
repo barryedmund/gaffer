@@ -1,0 +1,5 @@
+<% this_transfer_is_a_listing = transfer.is_a_transfer_listing %>
+<% if this_transfer_is_a_listing %>
+  <i class="material-icons large <%= transfer.is_winning_bid ? 'success' : 'error' %>">playlist_add_check</i>
+<% end %>
+Created <%= time_ago_in_words(transfer.created_at, include_seconds: true) %> ago <%= this_transfer_is_a_listing ? "(Completes in #{time_ago_in_words(transfer.transfer_listing_completes_at, include_seconds: false)})" : "" %>

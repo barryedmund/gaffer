@@ -88,4 +88,12 @@ class Team < ActiveRecord::Base
       game_week.games.where('home_team_id = :this_team OR away_team_id = :this_team', this_team: self.id).first
     end
   end
+
+  def abbreviated_title(cut_off = 13)
+    working_title = title
+    if working_title.length >= cut_off
+      working_title = working_title[0, cut_off - 1] + '...'
+    end
+    working_title
+  end
 end

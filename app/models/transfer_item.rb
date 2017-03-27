@@ -12,8 +12,8 @@ class TransferItem < ActiveRecord::Base
             :sending_team_owns_player,
             :teams_involved_different,
             :teams_in_same_league,
-            :cash_bid_is_not_below_minimum_bid,
             on: :create
+  validate :cash_bid_is_not_below_minimum_bid
   validate :sending_team_has_enough_money
 
 
@@ -34,9 +34,9 @@ class TransferItem < ActiveRecord::Base
 
   def cash_bid_is_not_below_minimum_bid
     errors.add(:base, "Offer cannot be below listing price.") unless
+      transfer_item_type != "Cash" ||
       !get_team_player_in_transfer ||
       !get_team_player_in_transfer.transfer_listed? ||
-      transfer_item_type != "Cash" ||
       (transfer_item_type === "Cash" && cash_cents != nil && cash_cents > 0 && !get_team_player_in_transfer.transfer_minimum_bid) || 
       (transfer_item_type === "Cash" && cash_cents != nil && cash_cents > 0 && cash_cents >= get_team_player_in_transfer.transfer_minimum_bid)
   end

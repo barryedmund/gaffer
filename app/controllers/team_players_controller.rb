@@ -60,7 +60,13 @@ class TeamPlayersController < ApplicationController
 
   def update
     if @team_player.update(team_player_params)
-      redirect_to league_team_team_player_path(@team_player.team.league, @team_player.team, @team_player), success: "#{@team_player.full_name} has been transfer listed."
+      if @team_player.transfer_listed?
+        redirect_to league_team_team_player_path(@team_player.team.league, @team_player.team, @team_player), success: "#{@team_player.full_name} has been transfer listed."
+        body = 
+        NewsItem.create(league: @team_player.team.league, news_item_resource_type: 'TeamPlayer', news_item_resource_id: @team_player.id, body: "#{@team_player.player.full_name(true, 15)} transfer listed", news_item_type: "team_player_transfer_listed")
+      else
+        redirect_to league_team_team_player_path(@team_player.team.league, @team_player.team, @team_player), success: "#{@team_player.full_name} has been de-listed."
+      end
     else
       flash[:error] = @team_player.errors.full_messages.first
       render :edit

@@ -1,5 +1,7 @@
-<% if transfer.team_transfer_status(team) == 'accepted' %>
-	<%= link_to "Reject", change_response_league_transfer_path(league, @transfer), method: :patch, class: "mdl-button--secondary"  %>
-<% else %>
-	<%= link_to "Accept", change_response_league_transfer_path(league, @transfer), method: :patch, class: "mdl-button--primary"  %>
+<% if !@transfer.is_a_transfer_listing %>
+  <% if transfer.team_transfer_status(team) == 'accepted' %>
+  	<%= link_to "Reject", change_response_league_transfer_path(league, @transfer), method: :patch, class: "mdl-button--secondary" %>
+  <% else %>
+  	<%= link_to "Accept", change_response_league_transfer_path(league, @transfer), method: :patch, class: "mdl-button--primary" %>
+  <% end %>
 <% end %>

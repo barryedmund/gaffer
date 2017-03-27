@@ -32,10 +32,13 @@ namespace :transfers do
   end
 
   task :process_transfer_listings => :environment do
-    puts transfers = Transfer.incomplete_transfer_listings_due
-    
-    # Get the highest bid per player
-    # The TransferItems of the transfer
-    puts transfers.includes(:transfer_items).map(&:transfer_items).flatten.inspect
+    if !GameWeek.has_current_game_week
+      TeamPlayer.transfer_listed_with_offers_and_past_completion_date.each do |team_player|
+        winning_transfer = team_player.get_winning_transfer
+        winning_transfer.complete_a_transfer_listing
+        puts "#{team_player.full_name} / #{winning_transfer.get_cash_transfer_item.cash_cents}"
+        team_player.reset_transfer_attributes
+      end
+    end
   end
 end

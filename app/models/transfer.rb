@@ -15,12 +15,6 @@ class Transfer < ActiveRecord::Base
     incomplete_transfers.where('transfers.primary_team_id = :team_value OR transfers.secondary_team_id = :team_value', {team_value: team.id})
   end
 
-  def self.incomplete_transfer_listings_due
-    transfers = incomplete_transfers.select { |transfer| transfer.is_a_transfer_listing && (transfer.transfer_listing_completes_at < Time.now) }
-    transfers.map{|i| i.id}
-    Transfer.where(id: transfers)
-  end
-
   def transfer_completed?
     primary_team_accepted ? (secondary_team_accepted ? true : false) : false
   end
@@ -39,7 +33,18 @@ class Transfer < ActiveRecord::Base
     self.update_attributes(primary_team_accepted: false, secondary_team_accepted: false)
   end
 
+  def complete_a_transfer_listing
+    if is_a_transfer_listing
+      self.update_attributes(primary_team_accepted: true, secondary_team_accepted: true)
+      complete_transfer
+    end
+  end
+
   def complete_transfer
+    self.get_team_player_involved.active_transfers.where.not(id: self.id).each do |losing_transfer|
+      puts "Losing transfer: #{losing_transfer.get_cash_transfer_item.cash_cents}"
+      losing_transfer.destroy
+    end
     self.transfer_items.each do |transfer_item|
       if transfer_item.transfer_item_type === "Cash"
         transfer_item.sending_team.decrement!(:cash_balance_cents, transfer_item.cash_cents)
@@ -49,12 +54,6 @@ class Transfer < ActiveRecord::Base
         contract.update_attributes!(signed: false)
         contract.update_attributes!(team: transfer_item.receiving_team, signed: true)
         transfer_item.team_player.update_attributes(team: transfer_item.receiving_team, first_team: false, squad_position: SquadPosition.find_by(:short_name => 'SUB'))
-        TransferItem.where(transfer_item_type: "Player", team_player: transfer_item.team_player).where.not(id: transfer_item.id).each do |other_transfer_item|
-          if !other_transfer_item.transfer.transfer_completed?
-            other_transfer_item.transfer.reset_teams_transfer_status
-            other_transfer_item.destroy
-          end
-        end
       end
     end
   end
@@ -85,6 +84,14 @@ class Transfer < ActiveRecord::Base
 
   def transfer_listing_completes_at
     get_team_player_involved.transfer_completes_at
+  end
+
+  def is_winning_bid
+    get_team_player_involved.get_winning_transfer == self ? true : false
+  end
+
+  def get_cash_involved
+    get_cash_transfer_item.cash_cents
   end
 
  	private

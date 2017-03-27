@@ -7,9 +7,8 @@ class GameWeek < ActiveRecord::Base
 	validates :game_week_number, numericality: { greater_than: 0 }
 	validates :game_week_number, uniqueness: { scope: :season, message: "a game week only happens once per season" }
 
-	def self.has_current_game_week?
-		@now = Date.today
-		GameWeek.where('DATE(?) BETWEEN starts_at AND ends_at', @now).any?
+	def self.has_current_game_week
+		self.where('starts_at < ? AND finished = ?', Time.now, false).any?
 	end
 
   def self.get_most_recent_finished
