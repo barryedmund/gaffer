@@ -7,6 +7,7 @@
       </div>
       <div class="mdl-card__supporting-text">
       	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-data-table-fixed">
+      		<%= render partial: 'transfer_listing_status_row', locals: {transfer: @transfer, league: league} %>
       		<tr>
 						<%= render partial: 'transfer_teams_status_row', locals: {transfer: @transfer, league: league} %>
 					</tr>
@@ -18,11 +19,13 @@
 										<li>
 											<%= render partial: 'change_transfer_status', locals: {transfer: @transfer, team: @current_user.get_team(league), league: league} %>
 										</li>
-										<li>
-					          	<%= link_to "Negotiate", edit_league_transfer_transfer_item_path(league, @transfer, @transfer.get_cash_transfer_item), class: "mdl-button--primary" %>
-					          </li>
+										<% if !@transfer.is_a_transfer_listing || @transfer.primary_team.user == @current_user %>
+											<li>
+						          	<%= link_to "Negotiate", edit_league_transfer_transfer_item_path(league, @transfer, @transfer.get_cash_transfer_item), class: "mdl-button--primary" %>
+						          </li>
+						         <% end %>
 				          <% end %>
-			          	<% if @transfer.primary_team.user == @current_user%>
+			          	<% if @transfer.primary_team.user == @current_user %>
 				          	<li>
 				          		<%= link_to "Cancel", league_transfer_path(league, @transfer), method: :delete, class: "mdl-button--secondary" %>
 				          	</li>

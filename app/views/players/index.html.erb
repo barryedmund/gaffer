@@ -29,7 +29,7 @@
 		    	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 		    		<tr>
 							<th class="mdl-data-table__cell--non-numeric">
-								<span>Ps</span>
+								<span>P</span>
 							</th>
 							<th class="mdl-data-table__cell--non-numeric">
 								<span>Tm</span>
@@ -39,6 +39,9 @@
 							</th>
 							<th class="mdl-data-table__cell--non-numeric">
 								<span>Status</span>
+							</th>
+							<th class="mdl-data-table__cell--non-numeric">
+
 							</th>
 						</tr>
 						<% players_array = @players.sort_by{ |player| [player.sort_val, player.real_team_short_name, player.last_name, player.first_name] }.paginate(page: params[:page], per_page: [((@players.count / 5).ceil + 1), 50].max) %>

@@ -64,6 +64,7 @@
 			</td>
 		<% end %>
 	</tr>
+
 <% elsif news_item.news_item_resource_type === 'Contract' %>
 	<!-- CONTRACT news_items -->
 	<tr>
@@ -80,6 +81,30 @@
 		<% if resource %>
 			<td class="mdl-data-table__cell--non-numeric normal-text " colspan="3" style="border-top:0px;">
 				<%= "#{truncate(resource.team.title, length: 12)} offer contract to #{resource.player.full_name_and_playing_position_and_real_team}" %>
+			</td>
+		<% end %>	
+	</tr>
+
+	<% elsif news_item.news_item_resource_type === 'TeamPlayer' %>
+	<!-- TEAM_PLAYER news_items -->
+	<tr>
+		<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
+			<i class="material-icons large">playlist_add_check</i><%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
+		</td>
+		<% if resource %>
+			<td class="normal-text" style="border-bottom:0px;">
+				<%= link_to 'View', league_player_path(news_item.league.id, resource.player.id), class: "mdl-button--primary" %>
+			</td>
+		<% end %>
+	</tr>
+	<tr>
+		<% if resource %>
+			<td class="mdl-data-table__cell--non-numeric normal-text " colspan="3" style="border-top:0px;">
+				<% if resource.transfer_listed? %>
+					<%= "#{resource.team.abbreviated_title(12)} set minimum bid at #{number_to_currency(resource.transfer_minimum_bid, precision: 0)}" %>
+				<% else %>
+					<%= "Transfer listing cancelled" %>
+				<% end %>
 			</td>
 		<% end %>	
 	</tr>

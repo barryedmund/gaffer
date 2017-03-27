@@ -6,9 +6,16 @@ class TeamPlayer < ActiveRecord::Base
   has_many :transfer_items, :dependent => :destroy
   validates :squad_position_id, presence: true
   validate :game_week_deadline_has_not_passed, on: :update
-  validates_presence_of :transfer_completes_at, :if => :transfer_minimum_bid?
   validates_presence_of :transfer_minimum_bid, :if => :transfer_completes_at?
   accepts_nested_attributes_for :contracts, :allow_destroy => :true
+
+  def self.transfer_listed_with_offers
+    self.where.not(transfer_completes_at: nil)
+  end
+
+  def self.transfer_listed_with_offers_and_past_completion_date
+    self.transfer_listed_with_offers.where('transfer_completes_at < ?', Time.now)
+  end
 
   def full_name(abbreviate = false, cut_off = 13)
     if abbreviate
@@ -61,5 +68,23 @@ class TeamPlayer < ActiveRecord::Base
 
   def number_of_offers
     active_transfers.count
+  end
+
+  def get_winning_transfer
+    @active_transfers = active_transfers
+    @number_of_offers = @active_transfers.count
+    if @number_of_offers === 0
+      nil
+    elsif @number_of_offers === 1
+      @active_transfers.first
+    else
+      @active_transfers_transfer_items = @active_transfers.joins(:transfer_items).map(&:transfer_items).flatten
+      @active_transfers_transfer_items.map{|i| i.id}
+      TransferItem.where(id: @active_transfers_transfer_items).where.not(cash_cents: nil).order('cash_cents DESC, created_at').first.transfer
+    end
+  end
+
+  def reset_transfer_attributes
+    self.update_attributes(transfer_minimum_bid: nil, transfer_completes_at: nil, is_voluntary_transfer: false)
   end
 end

@@ -1,0 +1,13 @@
+<% if transfer.is_a_transfer_listing && !transfer.transfer_completed? %>
+  <tr>
+    <td class="mdl-data-table__cell--non-numeric normal-text" colspan="3" style="border-bottom:0px;">
+      <%= "Completes in #{time_ago_in_words(transfer.transfer_listing_completes_at, include_seconds: false)}." %>
+      <% if transfer.is_winning_bid %>
+        This is currently the winning bid.
+      <% else %>
+        <% winning_transfer = transfer.get_team_player_involved.get_winning_transfer %>
+        Winning bid is currently <%= link_to "#{number_to_currency(winning_transfer.get_cash_involved, precision: 0)}", league_transfer_path(league, winning_transfer), class: "content-link" %>.
+      <% end %>
+    </td>
+  </tr>
+<% end %>
