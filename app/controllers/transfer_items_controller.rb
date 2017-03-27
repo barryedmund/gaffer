@@ -23,7 +23,11 @@ class TransferItemsController < ApplicationController
       redirect_to league_transfer_path(@league, @transfer)
     else
       flash[:error] = @transfer_item.errors.full_messages.first
-      redirect_to new_league_transfer_transfer_item_path(@transfer_item.get_league, @transfer_item.transfer, direct_bid: @transfer_item.transfer.get_player_transfer_item.team_player.id)
+      if @transfer_item.transfer.transfer_items.where('transfer_items.transfer_item_type = ?', 'Cash').count > 0
+        redirect_to league_transfer_path(@transfer_item.get_league, @transfer_item.transfer)
+      else
+        redirect_to new_league_transfer_transfer_item_path(@transfer_item.get_league, @transfer_item.transfer, direct_bid: @transfer_item.transfer.get_player_transfer_item.team_player.id)
+      end
     end
   end
 
