@@ -84,6 +84,32 @@ class TeamPlayer < ActiveRecord::Base
     end
   end
 
+  def force_transfer_list
+    new_transfer_minimum_bid = player.player_value
+    new_transfer_completes_at = nil
+    new_is_voluntary_transfer = false
+    
+    if transfer_listed?
+      if player.player_value > transfer_minimum_bid
+        new_transfer_minimum_bid = transfer_minimum_bid
+      end
+      if number_of_offers > 0
+        new_transfer_completes_at = 3.days.from_now
+      end
+    else
+      if number_of_offers > 0
+        if get_winning_transfer.get_cash_transfer_item.cash_cents > player.player_value
+          new_transfer_completes_at = 3.days.from_now
+        else
+          active_transfers.each do |transfer|
+            transfer.destroy
+          end
+        end
+      end
+    end
+    self.update_attributes(transfer_minimum_bid: new_transfer_minimum_bid, transfer_completes_at: new_transfer_completes_at, is_voluntary_transfer: new_is_voluntary_transfer)
+  end
+
   def reset_transfer_attributes
     self.update_attributes(transfer_minimum_bid: nil, transfer_completes_at: nil, is_voluntary_transfer: false)
   end

@@ -96,4 +96,12 @@ class Team < ActiveRecord::Base
     end
     working_title
   end
+
+  def auto_transfer_list_squad
+    puts "#{title} squad is being auto transfer listed..."
+    team_players.each do |team_player|
+      team_player.force_transfer_list
+    end
+    NewsItem.create(league: league, news_item_resource_type: 'Team', news_item_type: 'auto_transfer_list_squad', news_item_resource_id: id, body: "Team in financial difficulty")
+  end
 end
