@@ -15,7 +15,7 @@ ActiveAdmin.register NewsItem do
     f.semantic_errors
     f.inputs do
       f.input :league
-      f.input :news_item_resource_type, collection: ['Contract', 'Game', 'Player', 'Transfer', ]
+      f.input :news_item_resource_type, collection: ['Contract', 'Game', 'Player', 'Team', 'TeamPlayer', 'Transfer']
       f.input :news_item_resource_id
       f.input :body
       f.input :news_item_type

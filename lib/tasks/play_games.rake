@@ -12,6 +12,11 @@ namespace :games do
       if game_week.finished && !game_week.financials_processed?
         puts "Processing financials for game_week ID #{game_week.id}"
         game_week.do_financials
+        Team.all.each do |team|
+          if team.cash_balance_cents < 0
+            team.auto_transfer_list_squad
+          end
+        end
       end
       if game_week.starts_at < Time.now && !game_week.finished
         puts "GameWeek #{game_week.game_week_number} started & not finished"
