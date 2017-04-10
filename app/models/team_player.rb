@@ -49,7 +49,7 @@ class TeamPlayer < ActiveRecord::Base
   end
 
   def game_week_deadline_has_not_passed
-    if player.game_week_deadline_at < Time.now
+    if player.game_week_deadline_at < Time.now && GameWeek.has_current_game_week
       errors.add(:base, "That player's deadline has passed for this gameweek.")
     end
   end

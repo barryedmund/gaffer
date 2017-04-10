@@ -104,4 +104,20 @@ class Team < ActiveRecord::Base
     end
     NewsItem.create(league: league, news_item_resource_type: 'Team', news_item_type: 'auto_transfer_list_squad', news_item_resource_id: id, body: "Team in financial difficulty")
   end
+
+  def transfer_listed_players
+     TeamPlayer.where('team_id = ? AND transfer_minimum_bid IS NOT NULL', self.id)
+  end
+
+  def has_team_players_involuntarily_listed
+    transfer_listed_players.where(is_voluntary_transfer: false).count > 0 ? true : false
+  end
+
+  def should_be_back_in_the_black
+    has_team_players_involuntarily_listed && cash_balance_cents > 0 ? true : false
+  end
+
+  def delist_involuntarily_listed_team_players
+    team_players.each { |team_player| team_player.reset_transfer_attributes }
+  end
 end
