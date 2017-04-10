@@ -42,18 +42,20 @@ class Transfer < ActiveRecord::Base
 
   def complete_transfer
     self.get_team_player_involved.active_transfers.where.not(id: self.id).each do |losing_transfer|
-      puts "Losing transfer: #{losing_transfer.get_cash_transfer_item.cash_cents}"
       losing_transfer.destroy
     end
     self.transfer_items.each do |transfer_item|
+      receiver = transfer_item.receiving_team
+      sender = transfer_item.sending_team
       if transfer_item.transfer_item_type === "Cash"
-        transfer_item.sending_team.decrement!(:cash_balance_cents, transfer_item.cash_cents)
-        transfer_item.receiving_team.increment!(:cash_balance_cents, transfer_item.cash_cents)
+        sender.decrement!(:cash_balance_cents, transfer_item.cash_cents)
+        receiver.increment!(:cash_balance_cents, transfer_item.cash_cents)
+        receiver.delist_involuntarily_listed_team_players if receiver.should_be_back_in_the_black
       elsif transfer_item.transfer_item_type === "Player"
         contract = transfer_item.team_player.current_contract
         contract.update_attributes!(signed: false)
-        contract.update_attributes!(team: transfer_item.receiving_team, signed: true)
-        transfer_item.team_player.update_attributes(team: transfer_item.receiving_team, first_team: false, squad_position: SquadPosition.find_by(:short_name => 'SUB'))
+        contract.update_attributes!(team: receiver, signed: true)
+        transfer_item.team_player.update_attributes(team: receiver, first_team: false, squad_position: SquadPosition.find_by(:short_name => 'SUB'))
       end
     end
   end

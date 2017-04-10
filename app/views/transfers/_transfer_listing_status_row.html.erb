@@ -1,7 +1,11 @@
 <% if transfer.is_a_transfer_listing && !transfer.transfer_completed? %>
   <tr>
     <td class="mdl-data-table__cell--non-numeric normal-text" colspan="3" style="border-bottom:0px;">
-      <%= "Completes in #{time_ago_in_words(transfer.transfer_listing_completes_at, include_seconds: false)}." %>
+      <% if transfer.transfer_listing_completes_at > Time.now %>
+        <%= "Completes in #{time_ago_in_words(transfer.transfer_listing_completes_at, include_seconds: false)}." %>
+      <% else %>
+        <%= "Completes soon." %>
+      <% end %>
       <% if transfer.is_winning_bid %>
         This is currently the winning bid.
       <% else %>

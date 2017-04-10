@@ -15,6 +15,8 @@ namespace :games do
         Team.all.each do |team|
           if team.cash_balance_cents < 0
             team.auto_transfer_list_squad
+          else
+            team.delist_involuntarily_listed_team_players if team.should_be_back_in_the_black
           end
         end
       end
