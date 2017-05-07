@@ -19,6 +19,7 @@ gem 'bootstrap-sass', '~> 3.2.0'
 gem 'autoprefixer-rails'
 gem 'will_paginate', '~> 3.1.0'
 gem 'newrelic_rpm'
+gem "intercom-rails"
 
 group :production, :staging do
   gem 'rails_12factor'

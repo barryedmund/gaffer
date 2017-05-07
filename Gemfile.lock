@@ -104,6 +104,8 @@ GEM
       has_scope (~> 0.6.0.rc)
       railties (>= 3.2, < 5)
       responders
+    intercom-rails (0.3.5)
+      activesupport (> 3.0)
     jbuilder (2.3.0)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
@@ -245,6 +247,7 @@ DEPENDENCIES
   devise
   factory_girl_rails (~> 4.0)
   faker
+  intercom-rails
   jbuilder (~> 2.0)
   jquery-rails
   letter_opener
