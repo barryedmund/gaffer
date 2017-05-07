@@ -18,7 +18,11 @@ class ApplicationController < ActionController::Base
   	if current_user
   		true
   	else
-  		redirect_to login_path, notice: "Please log in or create an account before continuing."
+      if request.path == root_path
+  		  redirect_to login_path
+      else
+        redirect_to login_path, notice: "Please log in or create an account before continuing."
+      end
   	end
   end
 end
