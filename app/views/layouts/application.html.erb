@@ -65,7 +65,7 @@
 			  	</div>
 		    <% else %>
 	        <div class="col-lg-8 col-sm-8 pull-right">
-	        	<%= render 'user_sessions/form' %>	
+	        	<%= render 'user_sessions/form' %>
 	        </div>
 		    <% end %>
 			</div>
@@ -80,9 +80,13 @@
 				</div>
 				<% end %>
 			</div>
-			<div class="row">
-				<%= yield %>
-			</div>
+			<% if logged_in? %>
+				<div class="row">
+					<%= yield %>
+				</div>
+			<% else %>
+				<%= render partial: 'layouts/logged_out_rows' %>
+			<% end %>
 		</div>
 	</body>
 </html>
