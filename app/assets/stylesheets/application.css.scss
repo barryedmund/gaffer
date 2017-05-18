@@ -186,18 +186,27 @@ td.transfer-item-cell {
 	display: none;
 }
 .home-page-row {
-  border-top: 5px solid rgb(139,195,74);
+  border-bottom: 3px solid rgb(139,195,74);
   padding: 30px 0px;
 }
+.home-page-row-closing-remark{
+  display: block;
+  font-weight: 600;
+  letter-spacing: 2px;
+  padding: 25px 0px 0px 0px;
+}
 .home-page-row-content{
-  font-size: 30px;
+  font-size: 32px;
   line-height: 43px;
   padding: 20px 0px;
   text-align: center;
   width: 100%;
 }
 .home-page-row-header{
+  color: rgb(139,195,74);
   font-size: 40px;
+  font-weight: 100;
+  letter-spacing: 3px;
   padding: 20px 0px;
   text-align: center;
   width: 100%;
