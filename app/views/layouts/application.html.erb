@@ -80,13 +80,9 @@
 				</div>
 				<% end %>
 			</div>
-			<% if logged_in? %>
-				<div class="row">
-					<%= yield %>
-				</div>
-			<% else %>
-				<%= render partial: 'layouts/logged_out_display' %>
-			<% end %>
+			<div class="row">
+				<%= yield %>
+			</div>			
 		</div>
 	</body>
 </html>

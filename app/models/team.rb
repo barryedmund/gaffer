@@ -85,7 +85,9 @@ class Team < ActiveRecord::Base
     if league.current_league_season.first
       season = league.current_league_season.first.season
       game_week = season.get_current_game_week
-      game_week.games.where('home_team_id = :this_team OR away_team_id = :this_team', this_team: self.id).first
+      if game_week.present?
+        game_week.games.where('home_team_id = :this_team OR away_team_id = :this_team', this_team: self.id).first
+      end
     end
   end
 
