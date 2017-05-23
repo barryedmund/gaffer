@@ -5,7 +5,9 @@
       </div>
       <div class="home-page-row-content">
         <%= main_content %>
-        <span class="home-page-row-closing-remark"><%= closing_remark %></span>
+        <% if defined? closing_remark %>
+          <span class="home-page-row-closing-remark"><%= closing_remark %></span>
+        <% end %>
       </div>
     </div>
   </div>
