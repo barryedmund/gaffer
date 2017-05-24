@@ -85,7 +85,7 @@
 		<% end %>	
 	</tr>
 
-	<% elsif news_item.news_item_resource_type === 'TeamPlayer' %>
+<% elsif news_item.news_item_resource_type === 'TeamPlayer' %>
 	<!-- TEAM_PLAYER news_items -->
 	<tr>
 		<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
@@ -109,23 +109,15 @@
 		<% end %>	
 	</tr>
 
-	<% elsif news_item.news_item_resource_type === 'Team' %>
-	<!-- TEAM news_items -->
-	<tr>
-		<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
-			<i class="material-icons large">money_off</i><%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
-		</td>
-		<% if resource %>
-			<td class="normal-text" style="border-bottom:0px;">
-				<%= link_to 'View', display_league_team_path(news_item.league.id, resource.id), class: "mdl-button--primary" %>
-			</td>
+<% elsif news_item.news_item_resource_type === 'Team' %>
+	<% if news_item.news_item_type %>
+		<% if news_item.news_item_type === 'auto_transfer_list_squad' %>
+			<% icon_type = "money_off" %>
+			<% copy = "Entire #{resource.abbreviated_title(22)} squad transfer listed." %>
+		<% elsif news_item.news_item_type === 'end_of_season_reward' %>
+			<% icon_type = "money_off" %>
+			<% copy = "Test" %>
 		<% end %>
-	</tr>
-	<tr>
-		<% if resource %>
-			<td class="mdl-data-table__cell--non-numeric normal-text " colspan="3" style="border-top:0px;">
-				<%= "Entire #{resource.abbreviated_title(22)} squad transfer listed." %>
-			</td>
-		<% end %>	
-	</tr>
+		<%= render partial: 'news_items/news_item_row_partials/news_item_partial', locals: { news_item: news_item, resource: resource, icon_type: icon_type, link: display_league_team_path(news_item.league.id, resource.id), copy: copy } %>
+	<% end %>
 <% end %>
