@@ -71,9 +71,13 @@ class LeagueSeason < ActiveRecord::Base
     game_rounds.joins(:games).all
   end
 
-  def is_finished
+  def number_of_game_weeks_remaining
     # Is the most recently finished game week number equal to the total number of game weeks?
-     season.competition.game_weeks_per_season - season.game_weeks.where(finished: true).order(:starts_at).last.game_week_number === 0 ? true : false
+    season.competition.game_weeks_per_season - season.game_weeks.where(finished: true).order(:starts_at).last.game_week_number
+  end
+
+  def is_ready_to_be_wrapped_up
+    (number_of_game_weeks_remaining === 0 && !is_completed) ? true : false
   end
 
   private

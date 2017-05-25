@@ -122,4 +122,8 @@ class Team < ActiveRecord::Base
   def delist_involuntarily_listed_team_players
     team_players.each { |team_player| team_player.reset_transfer_attributes }
   end
+
+  def add_cash(cash_amount)
+    update_attributes(cash_balance_cents: (cash_balance_cents + cash_amount))
+  end
 end
