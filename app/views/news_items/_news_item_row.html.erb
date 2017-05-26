@@ -116,9 +116,9 @@
 			<% icon_type = "money_off" %>
 			<% copy = "Entire #{resource.abbreviated_title(22)} squad transfer listed." %>
 		<% elsif news_item.news_item_type === 'end_of_season_reward' %>
-			<% icon_type = "money_off" %>
-			<% copy = number_to_currency(news_item.body) %>
+			<% icon_type = "cake" %>
+			<% copy = "Awarded #{number_to_currency(news_item.content)}" %>
 		<% end %>
-		<%= render partial: 'news_items/news_item_row_partials/news_item_partial', locals: { news_item: news_item, resource: resource, icon_type: icon_type, link: display_league_team_path(news_item.league.id, resource.id), copy: copy } %>
+		<%= render partial: 'news_items/news_item_row_partials/news_item_partial', locals: { news_item: news_item, resource: resource, icon_type: icon_type, link: league_path(news_item.league.id), copy: copy } %>
 	<% end %>
 <% end %>

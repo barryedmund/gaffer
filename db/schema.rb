@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170525041646) do
+ActiveRecord::Schema.define(version: 20170526044841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -143,6 +143,7 @@ ActiveRecord::Schema.define(version: 20170525041646) do
     t.datetime "updated_at"
     t.text     "body"
     t.string   "news_item_type"
+    t.text     "content"
   end
 
   create_table "player_game_weeks", force: true do |t|
