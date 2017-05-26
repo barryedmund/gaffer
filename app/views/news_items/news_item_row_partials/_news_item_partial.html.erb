@@ -1,0 +1,17 @@
+<tr>
+  <td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
+    <i class="material-icons large"><%= icon_type %></i><%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
+  </td>
+  <% if resource %>
+    <td class="normal-text" style="border-bottom:0px;">
+      <%= link_to 'View', link, class: "mdl-button--primary" %>
+    </td>
+  <% end %>
+</tr>
+<tr>
+  <% if resource %>
+    <td class="mdl-data-table__cell--non-numeric normal-text " colspan="3" style="border-top:0px;">
+      <%= copy %>
+    </td>
+  <% end %> 
+</tr>

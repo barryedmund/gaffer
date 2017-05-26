@@ -71,6 +71,15 @@ class LeagueSeason < ActiveRecord::Base
     game_rounds.joins(:games).all
   end
 
+  def number_of_game_weeks_remaining
+    # Is the most recently finished game week number equal to the total number of game weeks?
+    season.competition.game_weeks_per_season - season.game_weeks.where(finished: true).order(:starts_at).last.game_week_number
+  end
+
+  def is_ready_to_be_wrapped_up
+    (number_of_game_weeks_remaining === 0 && !is_completed) ? true : false
+  end
+
   private
   def league_has_an_even_number_of_teams
     errors.add(:base, "Take a leaf out of Noah's book and make sure there is an even number of teams.") unless league.teams.count % 2 == 0

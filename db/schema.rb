@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170315045233) do
+ActiveRecord::Schema.define(version: 20170526044841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -118,6 +118,7 @@ ActiveRecord::Schema.define(version: 20170315045233) do
     t.integer  "league_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "is_completed", default: false, null: false
   end
 
   add_index "league_seasons", ["league_id"], name: "index_league_seasons_on_league_id", using: :btree
@@ -142,6 +143,7 @@ ActiveRecord::Schema.define(version: 20170315045233) do
     t.datetime "updated_at"
     t.text     "body"
     t.string   "news_item_type"
+    t.text     "content"
   end
 
   create_table "player_game_weeks", force: true do |t|
