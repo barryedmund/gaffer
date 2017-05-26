@@ -18,7 +18,7 @@ namespace :wrap_up_season do
                           body: "#{finishing_position}: #{standings_row[:team_record].title}",
                           content: end_of_season_reward)
         end
-        # league_season.update_attributes(is_completed: true)
+        league_season.update_attributes(is_completed: true)
       end
     end
   end
