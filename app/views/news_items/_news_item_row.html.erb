@@ -112,12 +112,17 @@
 <!-- TEAM news_items -->
 <% elsif news_item.news_item_resource_type === 'Team' %>
 	<% if news_item.news_item_type %>
+		<!-- AUTO TRANSFER LISTED news_items -->
 		<% if news_item.news_item_type === 'auto_transfer_list_squad' %>
 			<% icon_type = "money_off" %>
 			<% copy = "Entire #{resource.abbreviated_title(22)} squad transfer listed." %>
+		<!-- END OF SEASON REWARD news_items -->
 		<% elsif news_item.news_item_type === 'end_of_season_reward' %>
 			<% icon_type = "cake" %>
 			<% copy = "Awarded #{number_to_currency(news_item.content)}" %>
+		<% elsif news_item.news_item_type === 'delist_squad' %>
+			<% icon_type = "attach_money" %>
+			<% copy = "#{truncate(resource.title, length: 36)} players de-listed" %>
 		<% end %>
 		<%= render partial: 'news_items/news_item_row_partials/news_item_partial', locals: { news_item: news_item, resource: resource, icon_type: icon_type, link: league_path(news_item.league.id), copy: copy } %>
 	<% end %>
