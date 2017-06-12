@@ -113,4 +113,8 @@ class TeamPlayer < ActiveRecord::Base
   def reset_transfer_attributes
     self.update_attributes(transfer_minimum_bid: nil, transfer_completes_at: nil, is_voluntary_transfer: false)
   end
+
+  def relative_value
+    (player.player_value(Season.current.first) / current_contract.weekly_salary_cents).round
+  end
 end

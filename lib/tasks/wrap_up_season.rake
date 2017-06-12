@@ -28,4 +28,91 @@ namespace :wrap_up_season do
       end
     end
   end
+
+  task :team_players_records => :environment do
+    current_season = Season.current.first
+    League.all.each do |league|
+      league_teams = league.teams
+      league_players = Player.where(available: true).where(id: (Player.joins(team_players: [:team => :league]).where('leagues.id = ?', league.id) ).map(&:id))
+      unattached_players = Player.get_all_unattached_players(league)
+      league_teams_team_players = league_teams.joins(:team_players)
+      league_team_players = TeamPlayer.joins(:team).where('teams.league_id = ?', league.id)
+
+      puts ""
+      puts "_______ #{league.name} _______"
+
+      # Player awards
+
+      ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'].each do |position|
+        puts "____ #{position} awards ____"
+        league_players_at_position = league_players.where(playing_position: position)
+        league_team_players_at_position = league_team_players.joins(:player).where('players.playing_position = ?', position)
+        unattached_players_at_position = unattached_players.where(playing_position: position)
+        
+        most_valuable_at_position = league_players_at_position.sort_by{ |player| player.player_value(current_season) }.last
+        most_valuable_at_position_team = league_teams_team_players.where('team_players.player_id = ?', most_valuable_at_position.id).first
+        puts "Most valuable is #{most_valuable_at_position.full_name} worth #{most_valuable_at_position.player_value(current_season)} owned by #{most_valuable_at_position_team.title}."
+
+        total_defensive_contribution_at_position = league_players_at_position.sort_by{ |player| player.total_defensive_contribution(current_season) }.last
+        total_defensive_contribution_at_position_team = league_teams_team_players.where('team_players.player_id = ?', total_defensive_contribution_at_position.id).first
+        puts "Highest defensive contribution is #{total_defensive_contribution_at_position.full_name} with #{total_defensive_contribution_at_position.total_defensive_contribution(current_season)} owned by #{total_defensive_contribution_at_position_team.title}."
+
+        total_attacking_contribution_at_position = league_players_at_position.sort_by{ |player| player.total_attacking_contribution(current_season) }.last
+        total_attacking_contribution_at_position_team = league_teams_team_players.where('team_players.player_id = ?', total_attacking_contribution_at_position.id).first
+        puts "Highest attacking contribution is #{total_attacking_contribution_at_position.full_name} with #{total_attacking_contribution_at_position.total_attacking_contribution(current_season)} owned by #{total_attacking_contribution_at_position_team.title}."
+
+        highest_paid_team_player = league_team_players_at_position.sort_by{ |team_player| team_player.current_contract.weekly_salary_cents }.last
+        puts "Highest paid is #{highest_paid_team_player.full_name} earning #{highest_paid_team_player.current_contract.weekly_salary_cents} owned by #{highest_paid_team_player.team.title}."
+
+        team_player_values = league_team_players_at_position.sort_by{ |team_player| team_player.relative_value }
+        overrated_team_player = team_player_values.first
+        puts "Worst signing is #{overrated_team_player.full_name} (value: #{overrated_team_player.player.player_value(current_season)}, salary: #{overrated_team_player.current_contract.weekly_salary_cents}) owned by #{overrated_team_player.team.title}."
+
+        underrated_team_player = team_player_values.last
+        puts "Best signing is #{underrated_team_player.full_name} (value: #{underrated_team_player.player.player_value(current_season)}, salary: #{underrated_team_player.current_contract.weekly_salary_cents}) owned by #{underrated_team_player.team.title}."
+
+        highest_value_unsigned_player = unattached_players_at_position.sort_by{ |player| player.player_value(Season.current.first) }.last
+        puts "Best unsigned is #{highest_value_unsigned_player.full_name}."
+      end
+
+      # Team awards
+      teams_in_order_of_cash = league_teams.order(:cash_balance_cents)
+      richest_team = teams_in_order_of_cash.last
+      poorest_team = teams_in_order_of_cash.first
+      puts "____ Team awards ____"
+      puts "Richest team is #{richest_team.title} with #{richest_team.cash_balance_cents}"
+      puts "Poorest team is #{poorest_team.title} with #{poorest_team.cash_balance_cents}"
+      
+      teams_in_order_of_total_wage_bill = league_teams.sort_by { |team| team.total_weekly_wage_bill }
+      highest_wage_bill_team = teams_in_order_of_total_wage_bill.last
+      lowest_wage_bill_team = teams_in_order_of_total_wage_bill.first
+      puts "Highest total weekly salary is #{highest_wage_bill_team.title} of #{highest_wage_bill_team.total_weekly_wage_bill}"
+      puts "Lowest total weekly salary is #{lowest_wage_bill_team.title} of #{lowest_wage_bill_team.total_weekly_wage_bill}"
+
+      teams_in_order_of_average_weekly_salary = league_teams.sort_by { |team| team.average_weekly_wage_bill }
+      highest_average_salary_team = teams_in_order_of_average_weekly_salary.last
+      lowest_average_salary_team = teams_in_order_of_average_weekly_salary.first
+      puts "Highest average weekly salary is #{highest_average_salary_team.title} of #{highest_average_salary_team.average_weekly_wage_bill}"
+      puts "Lowest average weekly salary is #{lowest_average_salary_team.title} of #{lowest_average_salary_team.average_weekly_wage_bill}"
+      
+
+      teams_in_order_of_total_squad_value = league_teams.sort_by { |team| team.squad_value }
+      most_valuable_team = teams_in_order_of_total_squad_value.last
+      least_valuable_team = teams_in_order_of_total_squad_value.first
+      puts "Most valuable team is #{most_valuable_team.title} valued at #{most_valuable_team.squad_value}"
+      puts "Least valuable team is #{least_valuable_team.title} valued at #{least_valuable_team.squad_value}"
+
+      teams_in_order_of_average_player_value = league_teams.sort_by { |team| team.average_team_player_value }
+      most_valuable_team_average = teams_in_order_of_average_player_value.last
+      least_valuable_team_average = teams_in_order_of_average_player_value.first
+      puts "Team with highest average value of players is #{most_valuable_team_average.title} valued at #{most_valuable_team_average.average_team_player_value}"
+      puts "Team with lowest average value of players is #{least_valuable_team_average.title} valued at #{least_valuable_team_average.average_team_player_value}"
+
+      teams_sorted_by_size = league_teams.sort_by { |team| team.squad_size }
+      biggest_squad = teams_sorted_by_size.last
+      smallest_squad = teams_sorted_by_size.first
+      puts "Biggest squad is #{biggest_squad.title} with #{biggest_squad.squad_size} players"
+      puts "Smallest squad is #{smallest_squad.title} with #{smallest_squad.squad_size} players"
+    end
+  end
 end
