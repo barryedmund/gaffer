@@ -29,6 +29,61 @@ namespace :wrap_up_season do
     end
   end
 
+
+  # Run once unless new achievements have been created in which case just replace the array contents with the new awards
+  task :create_achievements => :environment do
+    [:most_valuable_goalkeeper,
+    :best_defensive_contribution_goalkeeper,
+    :best_attacking_contribution_goalkeeper,
+    :highest_paid_goalkeeper,
+    :worst_signing_goalkeeper,
+    :best_signing_goalkeeper,
+
+    :most_valuable_defender,
+    :best_defensive_contribution_defender,
+    :best_attacking_contribution_defender,
+    :highest_paid_defender,
+    :worst_signing_defender,
+    :best_signing_defender,
+
+    :most_valuable_midfielder,
+    :best_defensive_contribution_midfielder,
+    :best_attacking_contribution_midfielder,
+    :highest_paid_midfielder,
+    :worst_signing_midfielder,
+    :best_signing_midfielder,
+
+    :most_valuable_forward,
+    :best_defensive_contribution_forward,
+    :best_attacking_contribution_forward,
+    :highest_paid_forward,
+    :worst_signing_forward,
+    :best_signing_forward,
+
+    :most_valuable_overall,
+    :best_defensive_contribution_overall,
+    :best_attacking_contribution_overall,
+    :highest_paid_overall,
+    :worst_signing_overall,
+    :best_signing_overall,
+
+    :richect_team,
+    :poorest_team,
+    :highest_total_weekly_salary_team,
+    :lowest_total_weekly_salary_team,
+    :highest_average_weekly_salary_team,
+    :lowest_average_weekly_salary_team,
+    :most_valuable_team,
+    :least_valuable_team,
+    :highest_average_value_of_players_team,
+    :lowest_average_value_of_players_team,
+    :biggest_squad,
+    :smallest_squad].each do |award|
+      new_achievement = Achievement.create(award_type: award, name: award.to_s.titleize)
+      puts new_achievement.inspect
+    end
+  end
+
   task :team_players_records => :environment do
     current_season = Season.current.first
     League.all.each do |league|
