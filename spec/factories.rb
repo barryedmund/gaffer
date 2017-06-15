@@ -1,4 +1,7 @@
-FactoryGirl.define do  factory :achievement do
+FactoryGirl.define do  factory :team_achievement do
+    
+  end
+  factory :achievement do
     
   end
 

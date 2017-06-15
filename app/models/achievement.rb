@@ -1,4 +1,5 @@
 class Achievement < ActiveRecord::Base
+  has_many :team_achievements, dependent: :destroy
   enum award_type: [
     :most_valuable_goalkeeper,
     :best_defensive_contribution_goalkeeper,

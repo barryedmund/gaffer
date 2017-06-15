@@ -2,6 +2,7 @@ class LeagueSeason < ActiveRecord::Base
   belongs_to :league
   belongs_to :season
   has_many :game_rounds, dependent: :destroy
+  has_many :team_achievements, dependent: :destroy
   validate :league_has_an_even_number_of_teams, on: :create
   after_create :create_game_rounds
 
