@@ -1,7 +1,6 @@
 namespace :wrap_up_season do
   task :distribute_end_of_season_cash => :environment do
     LeagueSeason.all.each do |league_season|
-      
       if league_season.is_ready_to_be_wrapped_up
         league_standings = league_season.league.get_standings
         puts "--#{league_season.league.name}--"
@@ -34,7 +33,6 @@ namespace :wrap_up_season do
   task :create_achievements => :environment do
     [:most_valuable_goalkeeper,
     :best_defensive_contribution_goalkeeper,
-    :best_attacking_contribution_goalkeeper,
     :highest_paid_goalkeeper,
     :worst_signing_goalkeeper,
     :best_signing_goalkeeper,
@@ -54,7 +52,6 @@ namespace :wrap_up_season do
     :best_signing_midfielder,
 
     :most_valuable_forward,
-    :best_defensive_contribution_forward,
     :best_attacking_contribution_forward,
     :highest_paid_forward,
     :worst_signing_forward,
@@ -67,24 +64,27 @@ namespace :wrap_up_season do
     :worst_signing_overall,
     :best_signing_overall,
 
-    :richect_team,
+    :richest_team,
     :poorest_team,
     :highest_total_weekly_salary_team,
     :lowest_total_weekly_salary_team,
     :highest_average_weekly_salary_team,
     :lowest_average_weekly_salary_team,
+
     :most_valuable_team,
     :least_valuable_team,
     :highest_average_value_of_players_team,
     :lowest_average_value_of_players_team,
     :biggest_squad,
-    :smallest_squad].each do |award|
+    :smallest_squad,
+    
+    :galacticos].each do |award|
       new_achievement = Achievement.create(award_type: award, name: award.to_s.titleize)
       puts new_achievement.inspect
     end
   end
 
-  task :team_players_records => :environment do
+  task :end_of_season_achievements => :environment do
     current_season = Season.current.first
     League.all.each do |league|
       puts "Gathering data for #{league.name}..."
@@ -180,42 +180,99 @@ namespace :wrap_up_season do
                 details: most_valuable_overall.full_name)
 
       # Team awards
-      # teams_in_order_of_cash = league_teams.order(:cash_balance_cents)
-      # richest_team = teams_in_order_of_cash.last
-      # poorest_team = teams_in_order_of_cash.first
-      # puts "____ Team awards ____"
-      # puts "Richest team is #{richest_team.title} with #{richest_team.cash_balance_cents}"
-      # puts "Poorest team is #{poorest_team.title} with #{poorest_team.cash_balance_cents}"
+      teams_in_order_of_cash = league_teams.order(:cash_balance_cents)
+      richest_team = teams_in_order_of_cash.last
+      poorest_team = teams_in_order_of_cash.first
+      puts "... doing the Team awards..."
+      TeamAchievement.create(
+                achievement: Achievement.where("award_type = ?", Achievement.award_types[:richest_team]).first,
+                team: richest_team,
+                league_season: league_season,
+                details: richest_team.cash_balance_cents)
+      TeamAchievement.create(
+                achievement: Achievement.where("award_type = ?", Achievement.award_types[:poorest_team]).first,
+                team: poorest_team,
+                league_season: league_season,
+                details: poorest_team.cash_balance_cents)
       
-      # teams_in_order_of_total_wage_bill = league_teams.sort_by { |team| team.total_weekly_wage_bill }
-      # highest_wage_bill_team = teams_in_order_of_total_wage_bill.last
-      # lowest_wage_bill_team = teams_in_order_of_total_wage_bill.first
-      # puts "Highest total weekly salary is #{highest_wage_bill_team.title} of #{highest_wage_bill_team.total_weekly_wage_bill}"
-      # puts "Lowest total weekly salary is #{lowest_wage_bill_team.title} of #{lowest_wage_bill_team.total_weekly_wage_bill}"
+      teams_in_order_of_total_wage_bill = league_teams.sort_by { |team| team.total_weekly_wage_bill }
+      highest_wage_bill_team = teams_in_order_of_total_wage_bill.last
+      lowest_wage_bill_team = teams_in_order_of_total_wage_bill.first
+      TeamAchievement.create(
+                achievement: Achievement.where("award_type = ?", Achievement.award_types[:highest_total_weekly_salary_team]).first,
+                team: highest_wage_bill_team,
+                league_season: league_season,
+                details: highest_wage_bill_team.total_weekly_wage_bill)
+      TeamAchievement.create(
+                achievement: Achievement.where("award_type = ?", Achievement.award_types[:lowest_total_weekly_salary_team]).first,
+                team: lowest_wage_bill_team,
+                league_season: league_season,
+                details: lowest_wage_bill_team.total_weekly_wage_bill)
 
-      # teams_in_order_of_average_weekly_salary = league_teams.sort_by { |team| team.average_weekly_wage_bill }
-      # highest_average_salary_team = teams_in_order_of_average_weekly_salary.last
-      # lowest_average_salary_team = teams_in_order_of_average_weekly_salary.first
-      # puts "Highest average weekly salary is #{highest_average_salary_team.title} of #{highest_average_salary_team.average_weekly_wage_bill}"
-      # puts "Lowest average weekly salary is #{lowest_average_salary_team.title} of #{lowest_average_salary_team.average_weekly_wage_bill}"
+      teams_in_order_of_average_weekly_salary = league_teams.sort_by { |team| team.average_weekly_wage_bill }
+      highest_average_salary_team = teams_in_order_of_average_weekly_salary.last
+      lowest_average_salary_team = teams_in_order_of_average_weekly_salary.first
+      TeamAchievement.create(
+                achievement: Achievement.where("award_type = ?", Achievement.award_types[:highest_average_weekly_salary_team]).first,
+                team: highest_average_salary_team,
+                league_season: league_season,
+                details: highest_average_salary_team.average_weekly_wage_bill)
+      TeamAchievement.create(
+                achievement: Achievement.where("award_type = ?", Achievement.award_types[:lowest_total_weekly_salary_team]).first,
+                team: lowest_average_salary_team,
+                league_season: league_season,
+                details: lowest_average_salary_team.average_weekly_wage_bill)
 
-      # teams_in_order_of_total_squad_value = league_teams.sort_by { |team| team.squad_value }
-      # most_valuable_team = teams_in_order_of_total_squad_value.last
-      # least_valuable_team = teams_in_order_of_total_squad_value.first
-      # puts "Most valuable team is #{most_valuable_team.title} valued at #{most_valuable_team.squad_value}"
-      # puts "Least valuable team is #{least_valuable_team.title} valued at #{least_valuable_team.squad_value}"
+      teams_in_order_of_total_squad_value = league_teams.sort_by { |team| team.squad_value }
+      most_valuable_team = teams_in_order_of_total_squad_value.last
+      least_valuable_team = teams_in_order_of_total_squad_value.first
+      TeamAchievement.create(
+                achievement: Achievement.where("award_type = ?", Achievement.award_types[:most_valuable_team]).first,
+                team: most_valuable_team,
+                league_season: league_season,
+                details: most_valuable_team.squad_value)
+      TeamAchievement.create(
+                achievement: Achievement.where("award_type = ?", Achievement.award_types[:least_valuable_team]).first,
+                team: least_valuable_team,
+                league_season: league_season,
+                details: least_valuable_team.squad_value)
 
-      # teams_in_order_of_average_player_value = league_teams.sort_by { |team| team.average_team_player_value }
-      # most_valuable_team_average = teams_in_order_of_average_player_value.last
-      # least_valuable_team_average = teams_in_order_of_average_player_value.first
-      # puts "Team with highest average value of players is #{most_valuable_team_average.title} valued at #{most_valuable_team_average.average_team_player_value}"
-      # puts "Team with lowest average value of players is #{least_valuable_team_average.title} valued at #{least_valuable_team_average.average_team_player_value}"
+      teams_in_order_of_average_player_value = league_teams.sort_by { |team| team.average_team_player_value }
+      most_valuable_team_average = teams_in_order_of_average_player_value.last
+      least_valuable_team_average = teams_in_order_of_average_player_value.first
+      TeamAchievement.create(
+                achievement: Achievement.where("award_type = ?", Achievement.award_types[:highest_average_value_of_players_team]).first,
+                team: most_valuable_team_average,
+                league_season: league_season,
+                details: most_valuable_team_average.average_team_player_value)
+      TeamAchievement.create(
+                achievement: Achievement.where("award_type = ?", Achievement.award_types[:lowest_average_value_of_players_team]).first,
+                team: least_valuable_team_average,
+                league_season: league_season,
+                details: least_valuable_team_average.average_team_player_value)
 
-      # teams_sorted_by_size = league_teams.sort_by { |team| team.squad_size }
-      # biggest_squad = teams_sorted_by_size.last
-      # smallest_squad = teams_sorted_by_size.first
-      # puts "Biggest squad is #{biggest_squad.title} with #{biggest_squad.squad_size} players"
-      # puts "Smallest squad is #{smallest_squad.title} with #{smallest_squad.squad_size} players"
+      teams_sorted_by_size = league_teams.sort_by { |team| team.squad_size }
+      biggest_squad = teams_sorted_by_size.last
+      smallest_squad = teams_sorted_by_size.first
+      TeamAchievement.create(
+                achievement: Achievement.where("award_type = ?", Achievement.award_types[:biggest_squad]).first,
+                team: biggest_squad,
+                league_season: league_season,
+                details: biggest_squad.squad_size)
+      TeamAchievement.create(
+                achievement: Achievement.where("award_type = ?", Achievement.award_types[:smallest_squad]).first,
+                team: smallest_squad,
+                league_season: league_season,
+                details: smallest_squad.squad_size)
+
+      # galacticos
+      teams_sorted_by_galactico_value = league_teams.sort_by { |team| team.galacticos_value }
+      galacticos = teams_sorted_by_galactico_value.last
+      TeamAchievement.create(
+                achievement: Achievement.where("award_type = ?", Achievement.award_types[:galacticos]).first,
+                team: galacticos,
+                league_season: league_season,
+                details: galacticos.galacticos_names)
       puts "... done."
     end
   end

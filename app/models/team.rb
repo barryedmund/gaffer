@@ -148,4 +148,16 @@ class Team < ActiveRecord::Base
   def average_weekly_wage_bill
     contracts.where('signed = ?', true).count > 0 && squad_size > 0 ? (contracts.where('signed = ?', true).sum(:weekly_salary_cents) / squad_size).round : 0
   end
+
+  def galacticos
+    team_players.sort_by{ |team_player| team_player.player.player_value(Season.current.first) }.last(11)
+  end
+
+  def galacticos_names
+    galacticos.collect(&:full_name).join(', ')
+  end
+
+  def galacticos_value
+    galacticos.to_a.sum { |team_player| team_player.player.player_value(Season.current.first) }
+  end
 end

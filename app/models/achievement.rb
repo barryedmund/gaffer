@@ -3,7 +3,6 @@ class Achievement < ActiveRecord::Base
   enum award_type: [
     :most_valuable_goalkeeper,
     :best_defensive_contribution_goalkeeper,
-    :best_attacking_contribution_goalkeeper,
     :highest_paid_goalkeeper,
     :worst_signing_goalkeeper,
     :best_signing_goalkeeper,
@@ -23,7 +22,6 @@ class Achievement < ActiveRecord::Base
     :best_signing_midfielder,
 
     :most_valuable_forward,
-    :best_defensive_contribution_forward,
     :best_attacking_contribution_forward,
     :highest_paid_forward,
     :worst_signing_forward,
@@ -36,17 +34,20 @@ class Achievement < ActiveRecord::Base
     :worst_signing_overall,
     :best_signing_overall,
 
-    :richect_team,
+    :richest_team,
     :poorest_team,
     :highest_total_weekly_salary_team,
     :lowest_total_weekly_salary_team,
     :highest_average_weekly_salary_team,
     :lowest_average_weekly_salary_team,
+
     :most_valuable_team,
     :least_valuable_team,
     :highest_average_value_of_players_team,
     :lowest_average_value_of_players_team,
     :biggest_squad,
-    :smallest_squad
+    :smallest_squad,
+    
+    :galacticos
     ]
 end
