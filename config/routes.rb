@@ -22,6 +22,7 @@ Rails.application.routes.draw do
           patch :release
     		end
     	end
+      resources :team_achievements
     end
     resources :players do
       resources :game_weeks
