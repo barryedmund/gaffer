@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col-sm-12">
+    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__title">
+        <h2 class="mdl-card__title-text">
+          <%= link_to truncate(@league.name, length: 23), league_path(@league), class: "content-link" %>
+          <span>&nbsp;achievements</span>
+        </h2>
+      </div>
+      <div class="mdl-card__actions">
+        <div class="mdl-card__title">
+          <h3 class="mdl-card__title-text">
+            <%= link_to truncate(@team.title, length: 23), league_team_path(@league, @team), class: "content-link" %>
+            <span>&nbsp;achievements</span>
+          </h3>
+        </div>
+        <%= render partial: 'team_achievements_table', locals: { team_achievements: @team_achievements } %>
+      </div>
+      <div class="mdl-card__actions">
+        <div class="mdl-card__title">
+          <h3 class="mdl-card__title-text">
+            All achievements
+          </h3>
+        </div>
+        <%= render partial: 'team_achievements_table', locals: { team_achievements: @league_achievements } %>
+      </div>
+     </div>
+    </div>
+  </div>
+</div>     

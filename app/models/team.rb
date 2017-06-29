@@ -127,4 +127,37 @@ class Team < ActiveRecord::Base
   def add_cash(cash_amount)
     update_attributes(cash_balance_cents: (cash_balance_cents + cash_amount))
   end
+
+  def squad_value
+    players_on_this_team = Player.where(available: true).where(id: (Player.joins(team_players: :team).where('teams.id = ?', self.id) ).map(&:id))
+    players_on_this_team.to_a.sum { |player| player.player_value }
+  end
+
+  def squad_size
+    team_players.count
+  end
+
+  def average_team_player_value
+    squad_size > 0 ? (squad_value / squad_size) : 0
+  end
+
+  def total_weekly_wage_bill
+    contracts.where('signed = ?', true).count > 0 ? (contracts.where('signed = ?', true).sum(:weekly_salary_cents)).round : 0
+  end
+
+  def average_weekly_wage_bill
+    contracts.where('signed = ?', true).count > 0 && squad_size > 0 ? (contracts.where('signed = ?', true).sum(:weekly_salary_cents) / squad_size).round : 0
+  end
+
+  def galacticos
+    team_players.sort_by{ |team_player| team_player.player.player_value(Season.current.first) }.last(11)
+  end
+
+  def galacticos_names
+    galacticos.collect(&:last_name).join(', ')
+  end
+
+  def galacticos_value
+    galacticos.to_a.sum { |team_player| team_player.player.player_value(Season.current.first) }
+  end
 end

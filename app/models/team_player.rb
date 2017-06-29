@@ -32,6 +32,10 @@ class TeamPlayer < ActiveRecord::Base
     end
   end
 
+  def last_name
+    player.last_name
+  end
+
   def current_contract
     self.contracts.where('starts_at <= ? AND signed = ? AND team_id = ?', Date.today, true, team_id).order(starts_at: :desc).first
   end
@@ -112,5 +116,9 @@ class TeamPlayer < ActiveRecord::Base
 
   def reset_transfer_attributes
     self.update_attributes(transfer_minimum_bid: nil, transfer_completes_at: nil, is_voluntary_transfer: false)
+  end
+
+  def relative_value
+    (player.player_value(Season.current.first) / current_contract.weekly_salary_cents).round
   end
 end

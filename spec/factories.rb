@@ -1,4 +1,10 @@
-FactoryGirl.define do
+FactoryGirl.define do  factory :team_achievement do
+    
+  end
+  factory :achievement do
+    
+  end
+
 
 	factory :competition do
 	  country_code "en"

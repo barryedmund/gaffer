@@ -122,7 +122,7 @@
 			<% copy = "Awarded #{number_to_currency(news_item.content)}" %>
 		<% elsif news_item.news_item_type === 'delist_squad' %>
 			<% icon_type = "attach_money" %>
-			<% copy = "#{truncate(resource.title, length: 36)} players de-listed" %>
+			<% copy = "#{resource.abbreviated_title(22)} players de-listed" %>
 		<% end %>
 		<%= render partial: 'news_items/news_item_row_partials/news_item_partial', locals: { news_item: news_item, resource: resource, icon_type: icon_type, link: league_path(news_item.league.id), copy: copy } %>
 	<% end %>
