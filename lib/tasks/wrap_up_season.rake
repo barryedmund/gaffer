@@ -198,7 +198,7 @@ namespace :wrap_up_season do
       
       { :best_signing_overall => [underrated_team_player_overall.team, underrated_team_player_overall.full_name],
         :worst_signing_overall => [overrated_team_player_overall.team, overrated_team_player_overall.full_name],
-        :highest_paid_overall => [highest_paid_team_player_overall.team, "#{highest_paid_team_player_overall.full_name}, #{highest_paid_team_player_overall.current_contract.weekly_salary_cents}"],
+        :highest_paid_overall => [highest_paid_team_player_overall.team, "#{highest_paid_team_player_overall.full_name}, #{Presenters::Contract.new(highest_paid_team_player_overall.current_contract).salary_to_currency}"],
         :best_defensive_contribution_overall => [total_defensive_contribution_overall_team, total_defensive_contribution_overall.full_name],
         :best_attacking_contribution_overall => [total_attacking_contribution_overall_team, total_attacking_contribution_overall.full_name] }.each do |award, details|
           team_achievement = TeamAchievement.create(
