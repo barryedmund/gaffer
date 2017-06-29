@@ -1,19 +1,20 @@
-<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-  <% team_achievements.each do |team_achievement| %>
-    <tr>
-      <td class="mdl-data-table__cell--non-numeric normal-text" style="border-bottom:0px;">
-        <%= team_achievement.achievement.name %>
-      </td>
-      <td class="mdl-data-table__cell--non-numeric normal-text" style="border-bottom:0px;">
-        <%= team_achievement.league_season.season.description %>
-      </td>
-    <tr>
-      <td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;">
-        <%= team_achievement.team.title %>
-      </td>
-      <td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;">
-        <%= team_achievement.details %>
-      </td>
-    </tr>
-  <% end %>
-</table>
+<% if team_achievements.size > 0 %>
+  <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="white-space: normal;">
+    <% team_achievements.each do |team_achievement| %>
+      <tr>
+        <td class="mdl-data-table__cell--non-numeric heavy-text" style="border-bottom:0px;">
+          <%= team_achievement.achievement.name %>
+        </td>
+        <td class="mdl-data-table__cell--non-numeric heavy-text" style="border-bottom:0px;">
+          <%= team_achievement.league_season.season.description %>
+        </td>
+      <tr>
+        <td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-top:0px;">
+          <%= truncate(team_achievement.team.title, length: 28) %> (<%= team_achievement.details %>)
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% else %>
+  <span class="normal-text">No achievements yet</span>
+<% end %>

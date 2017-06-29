@@ -40,6 +40,11 @@
 					</tr>
 				</table>
 			</div>
+			<div class="mdl-card__supporting-text">
+				<ul class="horizontal-style">
+					<li><%= link_to 'Achievements', league_team_team_achievements_path(@team.league, @team), class: "mdl-button--primary" %></li>
+				</ul>
+			</div>
 		</div>
 	</div>
 	<%= render partial: "shared/team_players/other_team_display" %>

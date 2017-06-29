@@ -154,7 +154,7 @@ class Team < ActiveRecord::Base
   end
 
   def galacticos_names
-    galacticos.collect(&:full_name).join(', ')
+    galacticos.collect(&:last_name).join(', ')
   end
 
   def galacticos_value

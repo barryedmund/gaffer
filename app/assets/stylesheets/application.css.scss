@@ -179,6 +179,9 @@ td.transfer-item-cell {
 .green-circle {
 	background: rgb(139,195,74);
 }
+.heavy-text {
+  font-weight: 400;
+}
 .hide-option {
 	display: none;
 }
@@ -304,11 +307,13 @@ td.transfer-item-cell {
 .no-top-border {
 	border-top: 0px;
 }
-.normal-text {
+.normal-text, .heavy-text {
 	color: #111111;
 	font-size: 30px;
-	font-weight: 300;
 	line-height: 46px;
+}
+.normal-text {
+  font-weight: 300;
 }
 .non-floating-label {
 	color: rgb(139,195,74);

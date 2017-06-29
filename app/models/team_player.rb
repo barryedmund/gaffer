@@ -32,6 +32,10 @@ class TeamPlayer < ActiveRecord::Base
     end
   end
 
+  def last_name
+    player.last_name
+  end
+
   def current_contract
     self.contracts.where('starts_at <= ? AND signed = ? AND team_id = ?', Date.today, true, team_id).order(starts_at: :desc).first
   end
