@@ -22,7 +22,8 @@ class LeagueSeason < ActiveRecord::Base
     ordered_game_weeks = season.game_weeks.order(:starts_at) # 38
     ordered_game_rounds = game_rounds.order(:game_round_number) # 3
     teams = league.teams # 10
-    if teams.count == 8
+    # if teams.count == 8
+    if true
       games_per_game_week = teams.count / 2 # 5
       games_per_season = games_per_game_week * league.competition.game_weeks_per_season # 190
       games_per_game_round = teams.count * (teams.count - 1) # 90

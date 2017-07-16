@@ -5,7 +5,7 @@ class GamesController < InheritedResources::Base
   end
 
   def index
-    @games = Game.joins(game_round: :league_season).where('league_seasons.league_id = ?', League.find(params[:league_id]))
+    @games = Game.joins(game_round: :league_season).where('league_seasons.league_id = ? AND league_seasons.season_id = ?', League.find(params[:league_id]), Season.current.first)
   end
 
   def create

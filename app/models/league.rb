@@ -44,7 +44,7 @@ class League < ActiveRecord::Base
 			}
 		end
 		league_games = self.get_games
-		league_games.joins(:game_round).where('game_rounds.league_season_id = ?', current_league_season).where.not('home_team_score' => nil, 'away_team_score' => nil).each do |game|
+		league_games.joins(:game_round).where('game_rounds.league_season_id = ?', current_league_season.first).where.not('home_team_score' => nil, 'away_team_score' => nil).each do |game|
 			current_home_team = standings.find do |standing|
 				standing[:team_record] == game.home_team
 			end
@@ -80,7 +80,7 @@ class League < ActiveRecord::Base
 	end
 
 	def get_games
-		Game.joins(game_round: {league_season: :league}).where(leagues: {id: id}).all
+		Game.joins(game_round: {league_season: [:league, :season]}).where(leagues: {id: id}, seasons: {id: Season.current.first.id}).all
 	end
 
 	def next_game_week_deadline
