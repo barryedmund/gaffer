@@ -20,7 +20,7 @@ RSpec.describe GamesController, :type => :controller do
   
   describe "GET index" do
     it "assigns all games as @games" do
-      game = Game.joins(game_round: :league_season).where('league_seasons.league_id = ?', league.id)
+      game = Game.joins(game_round: :league_season).where('league_seasons.league_id = ? AND league_seasons.season_id = ?', league.id, season.id)
       get :index, {:league_id => league.id}, valid_session
       expect(assigns(:games)).to eq(game)
     end
