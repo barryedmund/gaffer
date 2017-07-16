@@ -20,22 +20,6 @@
 </div>
 <div class="row">
   <div class="col-sm-12">
-    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-      <div class="mdl-card__title">
-        <h2 class="mdl-card__title-text">Your league invites</h2>
-      </div>
-      <div class="mdl-card__actions">
-        <% @league_invites = LeagueInvite.where(email: @current_user.email) %>
-        <% if @league_invites.count > 0 %>
-          <% @league_invites.each do |league_invite| %>
-            <div class="normal-text">
-              <%= link_to league_invite.league.name, league_invite.league, class: "content-link" %>
-            </div>
-          <% end %>
-        <% else %>
-          <div class="normal-text">No invites</div>
-        <% end %>
-      </div>
-    </div>
+    <%= render partial: 'shared/league_invites/league_invites_summary' %>
   </div>
 </div>
