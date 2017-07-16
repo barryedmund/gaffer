@@ -175,5 +175,19 @@ namespace :player_data do
         i = i + 1
       end
     end
-  end  
+  end
+
+  task :cleanse_departed_players => :environment do
+    response = Net::HTTP.get_response(URI("https://fantasy.premierleague.com/drf/bootstrap-static"))
+    if response.code.to_i == 200
+      body = JSON.parse(response.body)
+      Player.all.each do |player|
+        if !body['elements'].find { |epl_player| epl_player['code'] == player.pl_player_code}
+          puts "#{player.full_name} has departed."
+          player.update_attributes(available: false)
+          TeamPlayer.where(player: player).destroy_all
+        end
+      end
+    end
+  end
 end
