@@ -48,8 +48,8 @@ namespace :player_data do
       for i in 0..(game_week_elements.length - 1)
         current_element = game_week_elements[i]
         start_time = Time.at(current_element['deadline_time_epoch']).utc
-        if GameWeek.find_by(game_week_number: current_element['id'])
-          game_week = GameWeek.find_by(game_week_number: current_element['id'])
+        if GameWeek.where(game_week_number: current_element['id'], season: current_season).first
+          game_week = GameWeek.where(game_week_number: current_element['id'], season: current_season).first
           game_week.update_attributes(starts_at: start_time.to_datetime, ends_at: start_time + 1.second, finished: current_element['finished'])
         else
           game_week = GameWeek.create(game_week_number: current_element['id'], starts_at: start_time.to_datetime, ends_at: start_time + 1.second, finished: current_element['finished'], season: current_season)

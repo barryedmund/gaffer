@@ -9,14 +9,16 @@ ActiveAdmin.register Game do
 		column :home_team_score
 		column :away_team_score
 		column :game_week do |game|
-			"#{game.game_week.starts_at}  -  #{game.game_week.ends_at}"
+			game.game_week.game_week_number
 		end
 		column :game_round do |game|
 			if game.game_round
 				"Game round ##{game.game_round.game_round_number}"
 			end
 		end
-		column :league
+		column :league do |game|
+			game.game_round.league_season.league.name
+		end
 		actions
 	end
 
