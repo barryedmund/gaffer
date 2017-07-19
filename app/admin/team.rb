@@ -1,5 +1,11 @@
 ActiveAdmin.register Team do
-	permit_params :title, :user_id, :league_id, :cash_balance_cents
+	controller do
+	  def scoped_collection
+	    Team.unscoped
+	  end
+	end
+
+	permit_params :title, :user_id, :league_id, :cash_balance_cents, :deleted_at
 
 	index do
 		selectable_column
@@ -10,6 +16,7 @@ ActiveAdmin.register Team do
 		column "Cash balance", :cash_balance_cents do |cash|
 			number_to_currency(cash.cash_balance_cents)
 		end
+		column :deleted_at
 		actions
 	end
 
@@ -20,6 +27,7 @@ ActiveAdmin.register Team do
 	  	f.input :user, :collection => User.pluck( :email, :id )
 	  	f.input :league, :collection => League.pluck( :name, :id )
 	  	f.input :cash_balance_cents
+	  	f.input :deleted_at, as: :datetime_picker
 	  end
 	  f.actions
 	end

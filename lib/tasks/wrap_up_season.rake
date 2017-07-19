@@ -1,7 +1,11 @@
 namespace :wrap_up_season do
   task :distribute_end_of_season_cash => :environment do
+    season_should_be_wrapped_up = false
+    season_to_complete = Season.current.first
     LeagueSeason.all.each do |league_season|
       if league_season.is_ready_to_be_wrapped_up
+        season_should_be_wrapped_up = true
+        season_to_complete = league_season.season
         league_standings = league_season.league.get_standings
         puts "--#{league_season.league.name}--"
         league_standings.each_with_index do |standings_row, index|
@@ -23,8 +27,10 @@ namespace :wrap_up_season do
                           content: end_of_season_reward)
           team.delist_involuntarily_listed_team_players if team.should_be_back_in_the_black
         end
-        league_season.update_attributes(is_completed: true)
       end
+    end
+    if season_should_be_wrapped_up && season_to_complete
+      season_to_complete.update_attributes(is_completed: true)
     end
   end
 
