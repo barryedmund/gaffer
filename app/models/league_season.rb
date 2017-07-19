@@ -7,7 +7,7 @@ class LeagueSeason < ActiveRecord::Base
   after_create :create_game_rounds
 
   def create_game_rounds
-    number_of_teams = league.teams.count
+    number_of_teams = league.teams.where(deleted_at: nil).count
     games_per_game_round = number_of_teams * (number_of_teams - 1)
     game_weeks_per_game_round = games_per_game_round / (number_of_teams / 2)
     game_rounds_per_season = (league.competition.game_weeks_per_season / game_weeks_per_game_round.to_f).ceil
@@ -18,12 +18,11 @@ class LeagueSeason < ActiveRecord::Base
   end
 
   def create_games
-    game_permutations = Team.where('league_id = ?', self.league.id).to_a.permutation(2).to_a
+    teams = league.teams.where(deleted_at: nil)
+    game_permutations = teams.to_a.permutation(2).to_a
     ordered_game_weeks = season.game_weeks.order(:starts_at) # 38
     ordered_game_rounds = game_rounds.order(:game_round_number) # 3
-    teams = league.teams # 10
-    # if teams.count == 8
-    if true
+    if teams.count == 8
       games_per_game_week = teams.count / 2 # 5
       games_per_season = games_per_game_week * league.competition.game_weeks_per_season # 190
       games_per_game_round = teams.count * (teams.count - 1) # 90
@@ -79,11 +78,24 @@ class LeagueSeason < ActiveRecord::Base
   end
 
   def is_ready_to_be_wrapped_up
-    (number_of_game_weeks_remaining === 0 && !is_completed) ? true : false
+    (number_of_game_weeks_remaining === 0 && !season.is_completed) ? true : false
+  end
+
+  def completed_games
+    Game.joins(:game_round).where('game_rounds.league_season_id = ?', self.id).where(home_team_score: nil, away_team_score: nil)
+  end
+
+  def participating_teams
+    completed_games_this_league_season = Game.where(id: self.completed_games.map(&:id))
+    home_team_ids = completed_games.uniq.pluck(:home_team_id)
+    away_team_ids = completed_games.uniq.pluck(:away_team_id)
+    all_team_ids = (home_team_ids + away_team_ids).uniq
+    this_league_teams = Team.where(league: self.league)
+    this_league_teams.where(id: all_team_ids).where.not(deleted_at: nil) | this_league_teams.where(deleted_at: nil)
   end
 
   private
   def league_has_an_even_number_of_teams
-    errors.add(:base, "Take a leaf out of Noah's book and make sure there is an even number of teams.") unless league.teams.count % 2 == 0
+    errors.add(:base, "Take a leaf out of Noah's book and make sure there is an even number of teams.") unless league.teams.where(deleted_at: nil).count % 2 == 0
   end
 end

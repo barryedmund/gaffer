@@ -1,5 +1,5 @@
 ActiveAdmin.register LeagueSeason do
-  permit_params :league_id, :season_id, :is_completed
+  permit_params :league_id, :season_id
 
   index do
     column :id
@@ -7,7 +7,9 @@ ActiveAdmin.register LeagueSeason do
     column :season do |ls|
       ls.season.description
     end
-    column :is_completed
+    column :is_completed do |ls|
+      ls.season.is_completed
+    end
     actions
   end
 
@@ -16,7 +18,6 @@ ActiveAdmin.register LeagueSeason do
     f.inputs do
       f.input :league
       f.input :season, :collection => Season.pluck( :description, :id )
-      f.input :is_completed
     end
     f.actions
   end

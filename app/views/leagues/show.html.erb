@@ -61,7 +61,8 @@
 				<% current_season = Season.current.where(competition: @league.competition).first %>
 				<% latest_league_season = LeagueSeason.joins(:season).where('league_seasons.league_id = ? AND league_seasons.season_id = ?', @league.id, current_season.id).order('seasons.starts_at DESC').first %>
 				<% if @league.is_owned_by_this_user?(@current_user) %>
-					<% if @league.teams.count > 0 && @league.teams.count % 2 == 0%>
+					<% number_of_active_teams_in_league = @league.teams.where(deleted_at: nil).count %>
+					<% if number_of_active_teams_in_league > 0 && number_of_active_teams_in_league % 2 == 0 %>
 						<% if !latest_league_season %>
 							<div class="mdl-card__actions">
 								<div class="form-group">

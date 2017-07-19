@@ -129,6 +129,10 @@ class Game < ActiveRecord::Base
     end
   end
 
+  def is_finished
+    (game_week.finished && home_team_score.present? && away_team_score.present?) ? true : false
+  end
+
  	private
   def get_team_lineup(team)
     team.player_lineups.joins(:player_game_week, :squad_position).where('player_game_weeks.game_week_id = ? AND squad_positions.short_name != ?', game_week.id, 'SUB')

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170614041314) do
+ActiveRecord::Schema.define(version: 20170718050633) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -125,7 +125,6 @@ ActiveRecord::Schema.define(version: 20170614041314) do
     t.integer  "league_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "is_completed", default: false, null: false
   end
 
   add_index "league_seasons", ["league_id"], name: "index_league_seasons_on_league_id", using: :btree
@@ -197,6 +196,7 @@ ActiveRecord::Schema.define(version: 20170614041314) do
     t.integer  "competition_id"
     t.date     "ends_at"
     t.date     "starts_at"
+    t.boolean  "is_completed",   default: false, null: false
   end
 
   add_index "seasons", ["competition_id"], name: "index_seasons_on_competition_id", using: :btree
@@ -248,6 +248,7 @@ ActiveRecord::Schema.define(version: 20170614041314) do
     t.integer  "user_id"
     t.integer  "league_id"
     t.integer  "cash_balance_cents", limit: 8
+    t.datetime "deleted_at"
   end
 
   add_index "teams", ["league_id"], name: "index_teams_on_league_id", using: :btree

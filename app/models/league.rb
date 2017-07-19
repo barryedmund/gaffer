@@ -30,7 +30,7 @@ class League < ActiveRecord::Base
 	end
 
 	def get_standings
-		standings = teams.collect do |team|
+		standings = current_league_season.first.participating_teams.collect do |team|
 			{
 				:team_record => team,
 				:games_played => 0,
