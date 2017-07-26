@@ -18,19 +18,15 @@ class League < ActiveRecord::Base
 	end
 
 	def current_league_season
-		league_seasons.each do |ls|
-			if ls.season == Season.current
-				return ls
-			end
-		end
+		league_seasons.joins(:season).where("seasons.starts_at <= :date AND seasons.ends_at >= :date", date: Date.today).first
 	end
 
 	def current_game_week
-		current_league_season.first.season.get_current_game_week
+		current_league_season.season.get_current_game_week
 	end
 
 	def get_standings
-		standings = current_league_season.first.participating_teams.collect do |team|
+		standings = current_league_season.participating_teams.collect do |team|
 			{
 				:team_record => team,
 				:games_played => 0,
@@ -44,7 +40,7 @@ class League < ActiveRecord::Base
 			}
 		end
 		league_games = self.get_games
-		league_games.joins(:game_round).where('game_rounds.league_season_id = ?', current_league_season.first).where.not('home_team_score' => nil, 'away_team_score' => nil).each do |game|
+		league_games.joins(:game_round).where('game_rounds.league_season_id = ?', current_league_season).where.not('home_team_score' => nil, 'away_team_score' => nil).each do |game|
 			current_home_team = standings.find do |standing|
 				standing[:team_record] == game.home_team
 			end
