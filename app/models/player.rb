@@ -74,38 +74,35 @@ class Player < ActiveRecord::Base
     return_value
   end
 
-  def total_minutes_played(season)
-    player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id).sum(:minutes_played)
+  def total_minutes_played
+    player_game_weeks.sum(:minutes_played)
   end
 
-  def percentage_of_minutes_played(season)
-    eligible_game_weeks(season) > 0 ? (total_minutes_played(season).to_f / (eligible_game_weeks(season) * 90).to_f).round(3) : 0
+  def percentage_of_minutes_played
+    eligible_game_weeks > 0 ? (total_minutes_played.to_f / (eligible_game_weeks * 90).to_f).round(3) : 0
   end
 
-  def total_attacking_contribution(season)
-    this_season_player_game_weeks = player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id)
+  def total_attacking_contribution
     attacking_contribution = 0
     if playing_position === 'Goalkeeper'
-      attacking_contribution += (this_season_player_game_weeks.sum(:goals) + (this_season_player_game_weeks.sum(:assists).to_f * 0.5))
+      attacking_contribution += (player_game_weeks.sum(:goals) + (player_game_weeks.sum(:assists).to_f * 0.5))
     elsif playing_position === 'Defender'
-      attacking_contribution += (this_season_player_game_weeks.sum(:goals) + (this_season_player_game_weeks.sum(:assists).to_f * 0.4))
+      attacking_contribution += (player_game_weeks.sum(:goals) + (player_game_weeks.sum(:assists).to_f * 0.4))
     elsif playing_position === 'Midfielder'
-      attacking_contribution += (this_season_player_game_weeks.sum(:goals) + (this_season_player_game_weeks.sum(:assists).to_f * 0.3))
+      attacking_contribution += (player_game_weeks.sum(:goals) + (player_game_weeks.sum(:assists).to_f * 0.3))
     elsif playing_position === 'Forward'
-      attacking_contribution += (this_season_player_game_weeks.sum(:goals) + (this_season_player_game_weeks.sum(:assists).to_f * 0.2))
+      attacking_contribution += (player_game_weeks.sum(:goals) + (player_game_weeks.sum(:assists).to_f * 0.2))
     end
     attacking_contribution.round(1)
   end
 
-  def total_attacking_contribution_per_90(season)
-    total_minutes_played = total_minutes_played(season)
-    total_minutes_played > 0 ? (total_attacking_contribution(season) / (total_minutes_played.to_f / 90)).round(3) : (0.to_f).round(3)
+  def total_attacking_contribution_per_90
+    total_minutes_played > 0 ? (total_attacking_contribution / (total_minutes_played.to_f / 90)).round(3) : (0.to_f).round(3)
   end
 
-  def total_defensive_contribution(season)
-    this_season_player_game_weeks = player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id)
+  def total_defensive_contribution
     total_clean_sheet_minutes = 0
-    this_season_player_game_weeks.each do |player_game_week|
+    player_game_weeks.each do |player_game_week|
       clean_sheet_minutes = player_game_week.minutes_played > 0 ? (player_game_week.minutes_played.to_f / (player_game_week.goals_conceded + 1)) : 0.0
       if playing_position === 'Midfielder'
         clean_sheet_minutes = clean_sheet_minutes / 2
@@ -117,13 +114,12 @@ class Player < ActiveRecord::Base
     total_clean_sheet_minutes.round(1)
   end
 
-  def total_defensive_contribution_per_90(season)
-    total_minutes_played = total_minutes_played(season)
-    total_minutes_played > 0 ? (total_defensive_contribution(season) / (total_minutes_played.to_f / 90)).round(3) : (0.to_f).round(3)
+  def total_defensive_contribution_per_90
+    total_minutes_played > 0 ? (total_defensive_contribution / (total_minutes_played.to_f / 90)).round(3) : (0.to_f).round(3)
   end
 
-  def eligible_game_weeks(season)
-    player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id).count
+  def eligible_game_weeks
+    player_game_weeks.count
   end
 
   def opponent_location_short
@@ -136,9 +132,9 @@ class Player < ActiveRecord::Base
     game_week_deadline_at ? (team_player.player.game_week_deadline_at > Time.now) : false
   end
 
-  def player_value(season = Season.current.first)
-    defensive_index = ((total_defensive_contribution_per_90(season) / 90) * percentage_of_minutes_played(season)) / 4
-    attacking_index = ((total_attacking_contribution_per_90(season)) * percentage_of_minutes_played(season))
+  def player_value
+    defensive_index = ((total_defensive_contribution_per_90 / 90) * percentage_of_minutes_played) / 4
+    attacking_index = ((total_attacking_contribution_per_90) * percentage_of_minutes_played)
     value = ((defensive_index + attacking_index) * 10000000) * 1.5
     [value, Rails.application.config.minimum_player_value].max.round
   end
