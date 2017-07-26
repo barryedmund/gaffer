@@ -10,7 +10,12 @@ describe Contract do
 
   let!(:team_player){TeamPlayer.create(:team => team, :player => player, :squad_position => squad_position)}
 
-  let!(:contract){Contract.create(:weekly_salary_cents => 12000000, :team => team, team_player: team_player, :starts_at => Date.today, :ends_at => (Date.today).advance(:days => 700))}
+  let!(:contract){ Contract.create(
+    weekly_salary_cents: 12000000,
+    team: team,
+    team_player: team_player,
+    starts_at: Date.today,
+    ends_at: Date.today + 100.days) }
 
   let!(:contract_with_negative_salary){Contract.create(:weekly_salary_cents => -1000000, :team => team, team_player: team_player, :starts_at => Date.today, :ends_at => (Date.today).advance(:days => 700))}
 
