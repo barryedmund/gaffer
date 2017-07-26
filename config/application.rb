@@ -30,5 +30,8 @@ module Gaffer
     config.contract_weeks_to_pay_out_on_release = 20
     # How much is each position in the table worth at the end of the season?
     config.reward_per_position_at_end_of_season = 2000000
+    # Min & max length of contract
+    config.min_length_of_contract_days = 90
+    config.max_length_of_contract_days = 1095
   end
 end

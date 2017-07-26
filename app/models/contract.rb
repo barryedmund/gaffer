@@ -45,7 +45,14 @@ class Contract < ActiveRecord::Base
   end
 
   def is_a_valid_length
-    errors.add(:base, "Contracts must be 1 - 4 years in length.") unless ends_at && starts_at && (ends_at - starts_at >= 365) && (ends_at - starts_at <= 1461)
+    if starts_at.blank? || ends_at.blank?
+      errors.add(:base, "Start and end dates must not be blank.")
+    else
+      contract_length = ends_at - starts_at
+      is_greater_or_equal_min_length = (contract_length >= Rails.application.config.min_length_of_contract_days ? true : false)
+      is_less_or_equal_max_length = (contract_length <= Rails.application.config.max_length_of_contract_days ? true : false)
+      errors.add(:base, "Contracts must be between 3 months and 3 years in length.") unless ends_at && starts_at && is_greater_or_equal_min_length && is_less_or_equal_max_length
+    end
   end
 
   def one_signed_contract_per_team_player
