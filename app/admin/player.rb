@@ -21,6 +21,9 @@ ActiveAdmin.register Player do
     column 'H/A' do |player|
       player.opponent_location_short
     end
+    column 'Value' do |player|
+      player.player_value
+    end
     actions
   end
 end
