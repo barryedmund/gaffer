@@ -153,9 +153,9 @@ namespace :player_data do
 
         if body_history.length > 0
           player_code = body_history[body_history.length - 1]['element_code']
-          player = Player.find_by(pl_player_code: player_code)
+          player = Player.where(pl_player_code: player_code, available: true).first
         else
-          player = Player.find_by(pl_element_id: i)
+          player = Player.where(pl_element_id: i, available: true).first
         end
 
         if player && (body_fixture_summary.length > 0) && (body_fixture_summary[0]['event'] == active_game_week_number)

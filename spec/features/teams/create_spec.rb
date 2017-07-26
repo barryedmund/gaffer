@@ -4,7 +4,7 @@ describe "Creating teams" do
 	let!(:user) { create(:user) }
 	let!(:user_2) { create(:user) }
 	let!(:user_3) { create(:user) }
-  let!(:season) { create(:season, starts_at: Date.today - 365.days, ends_at: Date.today - 1.days) }
+  let!(:season) { create(:season, starts_at: Date.today - 365.days, ends_at: Date.today + 1.days) }
   let!(:season_2) { create(:season) }
   let!(:league) { create(:league, competition: season_2.competition) }
   let!(:home_team) { Team.create(id: 1, title: "Home Team", league: league, user: user_2) }

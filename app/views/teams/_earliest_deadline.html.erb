@@ -1,7 +1,7 @@
 <% if team && team.team_players.count > 0 %>
 	<% earliest_team_player_deadline = team.team_players.joins(:player).order('players.game_week_deadline_at').first.player.game_week_deadline_at %>
 <% else %>
-	<% earliest_team_player_deadline = Player.order(:game_week_deadline_at).first.game_week_deadline_at %>
+	<% earliest_team_player_deadline = Player.where(available: true).order(:game_week_deadline_at).first.game_week_deadline_at %>
 <% end %>
 <%= earliest_team_player_deadline.strftime("%a %d %b, %l:%M%P %Z") %>
 <% if display_distance %>

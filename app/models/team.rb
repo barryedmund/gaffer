@@ -77,13 +77,14 @@ class Team < ActiveRecord::Base
   end
 
   def get_season_remaining_of_signed_contracts
-    season = league.current_league_season.first.season
+    season = league.current_league_season.season
     GameWeek.where(season_id: season.id, finished: false).count * get_weekly_total_of_signed_contracts
   end
 
   def get_current_game
-    if league.current_league_season.first
-      season = league.current_league_season.first.season
+    league_current_league_season = league.current_league_season
+    if league_current_league_season
+      season = league_current_league_season.season
       game_week = season.get_current_game_week
       if game_week.present?
         game_week.games.where('home_team_id = :this_team OR away_team_id = :this_team', this_team: self.id).first
