@@ -17,6 +17,12 @@ ActiveAdmin.register TeamPlayer do
 		column :is_voluntary_transfer
 		column :transfer_minimum_bid
 		column :transfer_completes_at
+		column 'Value' do |team_player|
+      team_player.player.player_value
+    end
+    column 'League' do |team_player|
+      team_player.team.league.name
+    end
 		actions
 	end
 
