@@ -26,7 +26,12 @@ class League < ActiveRecord::Base
 	end
 
 	def get_standings
-		standings = current_league_season.participating_teams.collect do |team|
+		if current_league_season
+			participating_teams = current_league_season.participating_teams
+		else
+			participating_teams = teams.where(deleted_at: nil)
+		end
+		standings = participating_teams.collect do |team|
 			{
 				:team_record => team,
 				:games_played => 0,
