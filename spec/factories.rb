@@ -64,6 +64,7 @@ FactoryGirl.define do  factory :team_achievement do
     playing_position "Midfielder"
     pl_player_code 12345
     game_week_deadline_at Time.now + 2.days
+    available true
 	end
 
 	factory :player_game_week do

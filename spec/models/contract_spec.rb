@@ -33,6 +33,19 @@ describe Contract do
 
   let!(:second_signed_contract){Contract.create(:weekly_salary_cents => 13000000, :team => team, team_player: team_player, :starts_at => Date.today, :ends_at => (Date.today).advance(:days => 700), signed: true)}
 
+  let!(:same_player_and_team_contract_1) { Contract.create(weekly_salary_cents: 25000,
+                                                          team: team,
+                                                          starts_at: Date.today,
+                                                          ends_at: (Date.today).advance(:days => 700),
+                                                          signed: false,
+                                                          player: player) }
+  let!(:same_player_and_team_contract_2) { Contract.create(weekly_salary_cents: 35000,
+                                                          team: team,
+                                                          starts_at: Date.today,
+                                                          ends_at: (Date.today).advance(:days => 400),
+                                                          signed: false,
+                                                          player: player) }
+
   context "relationships" do
     it {should belong_to(:team)}
     it {should belong_to(:team_player)}
@@ -81,6 +94,10 @@ describe Contract do
 
     it "validates that a team player can only have one signed contract at once" do
       expect(second_signed_contract).to_not be_valid
+    end
+
+    it "validates that a team can't offer the same player two contracts" do
+      expect(same_player_and_team_contract_2).to_not be_valid
     end
   end
 end

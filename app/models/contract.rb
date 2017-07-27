@@ -4,6 +4,7 @@ class Contract < ActiveRecord::Base
   belongs_to :player
   validates :weekly_salary_cents, :team, :starts_at, :ends_at, :player_id, presence: true
   validate :has_positive_salary, :has_future_end_date, :has_start_date_before_end_date, :is_a_valid_length, :one_signed_contract_per_team_player
+  validates :player, uniqueness: { scope: :team, message: "already offered contract. Perhaps you submitted twice."}
 
   def is_signed_and_current?
     if signed && (starts_at <= Time.now) && (ends_at > Time.now)
