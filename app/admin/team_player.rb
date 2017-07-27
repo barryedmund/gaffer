@@ -38,4 +38,29 @@ ActiveAdmin.register TeamPlayer do
 	  end
 	  f.actions
 	end
+
+	csv do
+    column :id
+		column :team do |team_player|
+			team_player.team.title
+		end
+		column :player do |team_player|
+			team_player.player.full_name
+		end
+		column "Playing Position"  do |team_player|
+			team_player.player.playing_position
+		end
+		column "Squad Position"  do |team_player|
+			team_player.squad_position.short_name
+		end
+		column :is_voluntary_transfer
+		column :transfer_minimum_bid
+		column :transfer_completes_at
+		column 'Value' do |team_player|
+      team_player.player.player_value
+    end
+    column 'League' do |team_player|
+      team_player.team.league.name
+    end
+  end
 end
