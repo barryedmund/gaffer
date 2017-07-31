@@ -155,7 +155,7 @@ class Team < ActiveRecord::Base
   end
 
   def galacticos
-    team_players.sort_by{ |team_player| team_player.player.player_value(Season.current.first) }.last(11)
+    team_players.sort_by{ |team_player| team_player.player.player_value }.last(11)
   end
 
   def galacticos_names
@@ -163,6 +163,6 @@ class Team < ActiveRecord::Base
   end
 
   def galacticos_value
-    galacticos.to_a.sum { |team_player| team_player.player.player_value(Season.current.first) }
+    galacticos.to_a.sum { |team_player| team_player.player.player_value }
   end
 end
