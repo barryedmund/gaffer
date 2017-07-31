@@ -59,7 +59,7 @@ class TeamPlayer < ActiveRecord::Base
   end
 
   def get_transfer_listed_player_initial_bid
-    transfer_minimum_bid ? transfer_minimum_bid : [[player.player_value(Season.current.first), team.cash_balance_cents].min, 0].max
+    transfer_minimum_bid ? transfer_minimum_bid : [[player.player_value, team.cash_balance_cents].min, 0].max
   end
 
   def transfer_listed?

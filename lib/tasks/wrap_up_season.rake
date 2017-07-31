@@ -105,7 +105,7 @@ namespace :wrap_up_season do
         league_players_at_position = league_players.where(playing_position: position)
         league_team_players_at_position = league_team_players.joins(:player).where('players.playing_position = ?', position)
         
-        most_valuable_at_position = league_players_at_position.sort_by{ |player| player.player_value(current_season) }.last
+        most_valuable_at_position = league_players_at_position.sort_by{ |player| player.player_value }.last
         most_valuable_at_position_team = league_teams_team_players.where('team_players.player_id = ?', most_valuable_at_position.id).first
         
         total_defensive_contribution_at_position = league_players_at_position.sort_by{ |player| player.total_defensive_contribution(current_season) }.last
@@ -179,7 +179,7 @@ namespace :wrap_up_season do
 
       # Overall player awards
       puts "... doing the Overall awards..."
-      most_valuable_overall = league_players.sort_by{ |player| player.player_value(current_season) }.last
+      most_valuable_overall = league_players.sort_by{ |player| player.player_value }.last
       most_valuable_overall_team = league_teams_team_players.where('team_players.player_id = ?', most_valuable_overall.id).first
       team_achievement = TeamAchievement.create(
                 achievement: Achievement.where("award_type = ?", Achievement.award_types[:most_valuable_overall]).first,
