@@ -1,21 +1,6 @@
 <div class="row">
   <div class="col-sm-12 margin-bottom-50">
-    <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-      <div class="mdl-card__title">
-        <h2 class="mdl-card__title-text">Your leagues</h2>
-      </div>
-      <div class="mdl-card__actions">
-        <% if @leagues.count > 0 %>
-          <% @leagues.each do |league| %>
-            <div class="normal-text">
-              <%= link_to league.name, league, class: "content-link" %>
-            </div>
-          <% end %>
-        <% else %>
-          <div class="normal-text">You don't have a team in any leagues yet.</div>
-        <% end %>
-      </div>
-    </div>
+    <%= render partial: 'shared/leagues/your_leagues', locals: { leagues: @leagues } %>
   </div>
 </div>
 <div class="row">
