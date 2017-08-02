@@ -1,7 +1,6 @@
 <% team_leagues = League.joins(:teams).where('teams.user_id = ?', @current_user.id) %>
 <% admin_leagues = League.where('leagues.user_id = ?', @current_user.id) %>
 <% leagues = League.where(id: (team_leagues + admin_leagues.uniq)) %>
-<% puts leagues.inspect %>
 <% news_items = NewsItem.where(league: leagues.all.pluck(:id)).order(created_at: :desc) %>
 <div class="col-sm-12">
 	<% if @current_user.teams.count == 0 %>
