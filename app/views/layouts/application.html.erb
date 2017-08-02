@@ -38,18 +38,24 @@
 						<div class="row">
 							<% if current_user_leagues.count == 1 %>
 								<% current_user_team = Team.where(user: @current_user, league: current_user_leagues.first).first %>
-								<div class="col-sm-2 main-nav-item">
-									<%= link_to "League", league_path(current_user_leagues.first) %>
-								</div>
-								<div class="col-sm-2 main-nav-item">
-									<%= link_to "Team", league_team_path(current_user_leagues.first, current_user_team) %>
-								</div>
-								<div class="col-sm-2 main-nav-item">
-									<%= link_to "Players", league_players_path(current_user_leagues.first) %>
-								</div>
-								<div class="col-sm-2 main-nav-item">
-									<%= link_to "Games", league_games_path(current_user_leagues.first) %>
-								</div>
+								<% if current_user_team %>
+									<div class="col-sm-2 main-nav-item">
+										<%= link_to "League", league_path(current_user_leagues.first) %>
+									</div>
+									<div class="col-sm-2 main-nav-item">
+										<%= link_to "Team", league_team_path(current_user_leagues.first, current_user_team) %>
+									</div>
+									<div class="col-sm-2 main-nav-item">
+										<%= link_to "Players", league_players_path(current_user_leagues.first) %>
+									</div>
+									<div class="col-sm-2 main-nav-item">
+										<%= link_to "Games", league_games_path(current_user_leagues.first) %>
+									</div>
+								<% else %>
+									<div class="col-sm-9 main-nav-item">
+										<%= link_to "Create team", new_league_team_path(current_user_leagues.first) %>
+									</div>
+								<% end %>
 								<div class="col-sm-3 main-nav-item">
 					    		<%= link_to "Log out", logout_path, method: :delete %>
 					    	</div>
