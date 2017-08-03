@@ -7,6 +7,7 @@ class LeagueInvitesController < ApplicationController
   def create
     @league_invite = LeagueInvite.new(league_invite_params)
     if @league_invite.save
+      Notifier.league_invitation(@league_invite.email, @league_invite.league).deliver
       flash[:success] = "Invite sent"
       render action: :index
     else
