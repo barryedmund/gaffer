@@ -32,6 +32,14 @@ class League < ActiveRecord::Base
 		end
 	end
 
+	def league_user_name(this_user)
+		if is_owned_by_this_user?(this_user)
+			"you"
+		else
+			user.first_name_camel_cased
+		end
+	end
+
 	def get_standings
 		if current_league_season
 			participating_teams = current_league_season.participating_teams

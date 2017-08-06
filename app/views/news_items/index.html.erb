@@ -29,13 +29,15 @@
 								<% end %>
 							</td>
 						</tr>
-						<% if current_game %>
-							<tr>
-								<td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;" colspan="2">
+						<tr>
+							<td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;" colspan="2">
+								<% if current_game %>
 									<%= render partial: 'teams/earliest_deadline', locals: { team: team, display_distance: true } %>
-								</td>
-							</tr>
-						<% end %>
+								<% else %>
+									The league admin (<%= team.league.league_user_name(@current_user)%>) needs to start the season.
+								<% end %>
+							</td>
+						</tr>
 					<% end %>
 				</table>
 			</div>
