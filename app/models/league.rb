@@ -25,6 +25,13 @@ class League < ActiveRecord::Base
 		current_league_season.season.get_current_game_week
 	end
 
+	def current_game_week_games
+		if current_league_season
+			league_games = get_games
+			league_games.where(home_team_score: nil, away_team_score: nil, game_week: current_game_week)
+		end
+	end
+
 	def get_standings
 		if current_league_season
 			participating_teams = current_league_season.participating_teams

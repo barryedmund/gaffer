@@ -8,8 +8,8 @@
         	<span>&nbsp;games</span>
         </h2>
       </div>
-      <% this_game_week_games = @games.where(home_team_score: nil, away_team_score: nil, game_week: league.current_game_week) %>
-    	<% if this_game_week_games.count > 0 %>
+      <% this_game_week_games = league.current_game_week_games %>
+    	<% if this_game_week_games && this_game_week_games.count > 0 %>
     		<div class="mdl-card__title">
     			<h3 class="mdl-card__title-text">This week's games</h3>
     		</div>
@@ -35,9 +35,19 @@
 						<% end %>
 					</table>
       	<% else %>
-      		<span class="normal-text">Games for this season are yet to be scheduled.</span>
+      		<span class="normal-text">Games for this season are yet to be scheduled.<br/><br/>Once you start the season, the games will appear here. You can start a season from the <%= link_to 'league screen', league_path(league), class: "content-link" %> once there is an even number of teams in the league.<br/><br/>You can't add teams after a season has been started so get those invites out!</span>
+          <div class="mdl-card__supporting-text">
+            <ul class="horizontal-style">
+              <li><%= link_to 'League', league_path(league), class: "mdl-button--primary" %></li>
+              <% if league.is_owned_by_this_user?(@current_user) %>
+                <li><%= link_to 'Invites', league_league_invites_path(league), class: "mdl-button--primary" %></li>
+              <% end %>
+            </ul>
+          </div>
       	<% end %>
-        <%= will_paginate games_to_display %>
+        <% if this_game_week_games && this_game_week_games.count > 0 %>
+          <%= will_paginate games_to_display %>
+        <% end %>
       </div>
     </div>
   </div>
