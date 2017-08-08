@@ -1,0 +1,9 @@
+<tr>
+  <td class="mdl-data-table__cell--non-numeric normal-text" colspan="3" style="border-top:0px;">
+    <% if news_item.content %>
+      <%= news_item.content %>
+    <% else %>
+      <%= resource.full_name_and_playing_position_and_real_team %>
+    <% end %>
+  </td>
+</tr>

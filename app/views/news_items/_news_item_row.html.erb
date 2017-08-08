@@ -12,6 +12,8 @@
 						content_cut
 					<% elsif news_item.news_item_type == 'new_free_agent' %>
 						person_add
+						<% elsif news_item.news_item_type == 'contract_expiry' %>
+						timer
 					<% end %>
 				</i>
 			<% end %>
@@ -21,11 +23,7 @@
 			<%= link_to 'View', league_player_path(news_item.league.id, resource.id), class: "mdl-button--primary" %>
 		</td>
 	</tr>
-	<tr>
-		<td class="mdl-data-table__cell--non-numeric normal-text" colspan="3" style="border-top:0px;">
-			<%= resource.full_name_and_playing_position_and_real_team %>
-		</td>
-	</tr>
+	<%= render partial: 'news_items/news_item_row_partials/news_item_content', locals: { news_item: news_item, resource: resource } %>
 
 <% elsif resource.instance_of? Game %>
 	<!-- GAME news_items -->

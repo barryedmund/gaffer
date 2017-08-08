@@ -19,8 +19,13 @@ namespace :transfers do
   task :release_players_with_expired_contracts => :environment do
     signed_contracts_with_team_players = Contract.where('contracts.signed = ? AND contracts.ends_at < ? AND contracts.team_player_id IS NOT NULL', true, Date.today)
     signed_contracts_with_team_players.each do |contract|
-      puts "#{contract.team_player.full_name} is being released from #{contract.team.title}..."
-      contract.team_player.destroy
+      team_player = contract.team_player
+      league = team_player.team.league
+      player = team_player.player
+      team = team_player.team
+      puts "#{team_player.full_name} is being released from #{team.title}..."
+      team_player.destroy
+      NewsItem.create(league: league, news_item_resource_type: 'Player', news_item_type: 'contract_expiry', news_item_resource_id: player.id, body: "#{player.full_name(true,16)} contract expires", content: "Player released from #{team.title}.")
       puts "... released."
     end
   end
