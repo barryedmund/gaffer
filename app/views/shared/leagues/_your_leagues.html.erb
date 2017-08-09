@@ -4,11 +4,38 @@
   </div>
   <div class="mdl-card__actions">
     <% if leagues.count > 0 %>
+      <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+        <tr>
+          <th class="mdl-data-table__cell--non-numeric">
+            <span>Name</span>
+          </th>
+          <th>
+            <span>Teams</span>
+          </th>
+          <th>
+            <span>Invites sent</span>
+          </th>
+          <th>
+            
+          </th>
+        </tr>
       <% leagues.each do |league| %>
-        <div class="normal-text">
-          <%= link_to league.name, league, class: "content-link" %>
-        </div>
+        <tr>
+          <td class="mdl-data-table__cell--non-numeric normal-text">
+            <%= link_to truncate(league.name, length: 15), league, class: "content-link" %>
+          </td>
+          <td class="normal-text">
+            <%= league.teams.count %>
+          </td>
+          <td class="normal-text">
+            <%= league.league_invites.count %>
+          </td>
+          <td class="mdl-data-table__cell--non-numeric normal-text">
+            <%= link_to 'Send invite', new_league_league_invite_path(league), class: "mdl-button--primary" %>
+          </td>
+        </tr>
       <% end %>
+      </table>
     <% else %>
       <div class="normal-text">You don't have a team in any leagues yet.</div>
     <% end %>

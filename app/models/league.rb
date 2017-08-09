@@ -2,6 +2,7 @@ class League < ActiveRecord::Base
 	has_many :teams, dependent: :destroy
 	has_many :league_seasons, dependent: :destroy
 	has_many :news_items
+	has_many :league_invites
 	belongs_to :user
 	belongs_to :competition
 	validates :user_id, :competition, :name, presence: true

@@ -16,9 +16,10 @@
 			<div class="mdl-card__actions">
 				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 					<% @current_user.teams.each do |team| %>
+						<% league = team.league %>
 						<tr>
 							<td class="mdl-data-table__cell--non-numeric normal-text" style="border-bottom:0px;">
-								<%= link_to team.league.name, league_path(team.league), class: "content-link" %>
+								<%= link_to league.name, league_path(league), class: "content-link" %>
 							</td>
 							<td class="mdl-data-table__cell--non-numeric normal-text" style="border-bottom:0px;">
 								<% current_game = team.get_current_game %>
@@ -33,8 +34,10 @@
 							<td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;" colspan="2">
 								<% if current_game %>
 									<%= render partial: 'teams/earliest_deadline', locals: { team: team, display_distance: true } %>
+								<% elsif league.teams.count == 1 && league.league_invites.count == 0 && league.is_owned_by_this_user?(@current_user) %>
+									Your league needs other teams. Click <%= link_to 'here', new_league_league_invite_path(league), class: "mdl-button--primary" %> to send invites.
 								<% else %>
-									The league admin (<%= team.league.league_user_name(@current_user)%>) needs to start the season.
+									The league admin (<%= league.league_user_name(@current_user)%>) needs to start the season.
 								<% end %>
 							</td>
 						</tr>
