@@ -86,8 +86,6 @@
 					<% end %>
 					<% if @league.is_owned_by_this_user?(@current_user) %>
 						<li><%= link_to 'Send invites', league_league_invites_path(@league), class: "mdl-button--primary" %></li>
-					<% else %>
-						<li><%= link_to 'Invites', leagues_path, class: "mdl-button--primary" %></li>
 					<% end %>
 				</ul>
 			</div>
