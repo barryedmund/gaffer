@@ -7,9 +7,12 @@ namespace :transfers do
         ordered_contracts = this_league_unsigned_contracts.where(player: contract.player).order('contracts.starts_at DESC')
         if ordered_contracts.last.starts_at < 3.days.ago
           best_contract_offer = ordered_contracts.sort_by{ |contract| [-contract.value, contract.created_at] }.first
-          team_player = TeamPlayer.create(team: best_contract_offer.team, player: best_contract_offer.player, squad_position: SquadPosition.find_by(short_name: 'SUB'))
+          team = best_contract_offer.team
+          player = best_contract_offer.player
+          team_player = TeamPlayer.create(team: team, player: player, squad_position: SquadPosition.find_by(short_name: 'SUB'))
+          NewsItem.create(league: league, news_item_resource_type: 'TeamPlayer', news_item_type: 'team_player_signs_contract', news_item_resource_id: team_player.id, body: "#{player.full_name(true,16)} snapped up", content: "Player signs for #{team.title}.")
           best_contract_offer.update_attributes(team_player: team_player, signed: true)
-          puts "#{team_player.full_name} just signed for #{best_contract_offer.team.title}"
+          puts "#{team_player.full_name} just signed for #{team.title}"
           ordered_contracts.where(signed: false).destroy_all
         end
       end

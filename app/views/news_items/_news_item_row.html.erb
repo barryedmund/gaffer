@@ -1,5 +1,7 @@
 <% resource = news_item.news_item_resource %>
 
+
+
 <% if resource.instance_of? Player %>
 	<!-- PLAYER news_items -->
 	<tr>
@@ -12,7 +14,7 @@
 						content_cut
 					<% elsif news_item.news_item_type == 'new_free_agent' %>
 						person_add
-						<% elsif news_item.news_item_type == 'contract_expiry' %>
+					<% elsif news_item.news_item_type == 'contract_expiry' %>
 						timer
 					<% end %>
 				</i>
@@ -24,6 +26,8 @@
 		</td>
 	</tr>
 	<%= render partial: 'news_items/news_item_row_partials/news_item_content', locals: { news_item: news_item, resource: resource } %>
+
+
 
 <% elsif resource.instance_of? Game %>
 	<!-- GAME news_items -->
@@ -40,6 +44,8 @@
 			<%= render partial: 'news_items/news_item_row_partials/full_game_result', locals: { game: resource } %>
 		</td>
 	</tr>
+
+
 
 <% elsif news_item.news_item_resource_type === 'Transfer' %>
 	<!-- TRANSFER news_items -->
@@ -63,6 +69,8 @@
 		<% end %>
 	</tr>
 
+
+
 <% elsif news_item.news_item_resource_type === 'Contract' %>
 	<!-- CONTRACT news_items -->
 	<tr>
@@ -76,18 +84,31 @@
 		<% end %>
 	</tr>
 	<tr>
-		<% if resource %>
-			<td class="mdl-data-table__cell--non-numeric normal-text " colspan="3" style="border-top:0px;">
+		<td class="mdl-data-table__cell--non-numeric normal-text " colspan="3" style="border-top:0px;">
+			<% if resource %>
 				<%= "#{truncate(resource.team.title, length: 12)} offer contract to #{resource.player.full_name_and_playing_position_and_real_team}" %>
-			</td>
-		<% end %>	
+			<% else %>
+				Contract rejected. Signs for other team.
+			<% end %>
+		</td>
 	</tr>
+
+
 
 <% elsif news_item.news_item_resource_type === 'TeamPlayer' %>
 	<!-- TEAM_PLAYER news_items -->
 	<tr>
 		<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
-			<i class="material-icons large">playlist_add_check</i><%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
+			<% if news_item.news_item_type %>
+				<i class="material-icons large">
+					<% if news_item.news_item_type == 'team_player_transfer_listed' %>
+						playlist_add_check
+					<% elsif news_item.news_item_type == 'team_player_signs_contract' %>
+						assignment_ind
+					<% end %>
+				</i>
+			<% end %>
+			<%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
 		</td>
 		<% if resource %>
 			<td class="normal-text" style="border-bottom:0px;">
@@ -98,14 +119,20 @@
 	<tr>
 		<% if resource %>
 			<td class="mdl-data-table__cell--non-numeric normal-text " colspan="3" style="border-top:0px;">
-				<% if resource.transfer_listed? %>
-					<%= "#{resource.team.abbreviated_title(12)} set minimum bid at #{number_to_currency(resource.transfer_minimum_bid, precision: 0)}" %>
-				<% else %>
-					<%= "Transfer listing cancelled" %>
+				<% if news_item.news_item_type == 'team_player_transfer_listed' %>
+					<% if resource.transfer_listed? %>
+						<%= "#{resource.team.abbreviated_title(12)} set minimum bid at #{number_to_currency(resource.transfer_minimum_bid, precision: 0)}" %>
+					<% else %>
+						<%= "Transfer listing cancelled" %>
+					<% end %>
+				<% elsif news_item.news_item_type == 'team_player_signs_contract' %>
+					<%= news_item.content %>
 				<% end %>
 			</td>
 		<% end %>	
 	</tr>
+
+
 
 <!-- TEAM news_items -->
 <% elsif news_item.news_item_resource_type === 'Team' %>
