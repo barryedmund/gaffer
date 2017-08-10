@@ -35,6 +35,7 @@ ActiveAdmin.register TeamPlayer do
 	  	f.input :is_voluntary_transfer
 			f.input :transfer_minimum_bid
 			f.input :transfer_completes_at
+			f.input :first_team
 	  end
 	  f.actions
 	end
