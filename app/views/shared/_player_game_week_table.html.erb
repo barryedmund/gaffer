@@ -27,19 +27,19 @@
 			</tr>
 			<tr>
 				<td class="normal-text">
-					<%= player.total_minutes_played(current_season) %> / <%= player.eligible_game_weeks(current_season) * 90 %>
+					<%= player.total_minutes_played_this_season(current_season) %> / <%= player.eligible_game_weeks_this_season(current_season) * 90 %>
 				</td>
 				<td class="normal-text">
-					<%= player.total_attacking_contribution(current_season) %>
+					<%= player.total_attacking_contribution_this_season(current_season) %>
 				</td>
 				<td class="normal-text">
-					<%= player.total_attacking_contribution_per_90(current_season) %>
+					<%= player.total_attacking_contribution_per_90_this_season(current_season) %>
 				</td>
 				<td class="normal-text">
-					<%= player.total_defensive_contribution(current_season) %>
+					<%= player.total_defensive_contribution_this_season(current_season) %>
 				</td>
 				<td class="normal-text">
-					<%= player.total_defensive_contribution_per_90(current_season) %>
+					<%= player.total_defensive_contribution_per_90_this_season(current_season) %>
 				</td>
 			</tr>
 		</table>
@@ -67,7 +67,7 @@
 					<span>Gc</span>
 				</th>
 			</tr>
-			<% player.player_game_weeks.joins(game_week: :season).where("season_id = ?", Season.current.first.id).order("game_weeks.starts_at DESC").each do |pgw| %>
+			<% player.player_game_weeks.joins(:game_week).order("game_weeks.starts_at DESC").each do |pgw| %>
 				<tr>
 					<td class="mdl-data-table__cell--non-numeric normal-text">
 						<%= pgw.game_week.season.description %>
