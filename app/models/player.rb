@@ -78,6 +78,10 @@ class Player < ActiveRecord::Base
     player_game_weeks.sum(:minutes_played)
   end
 
+  def total_minutes_played_this_season(season)
+    player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id).sum(:minutes_played)
+  end
+
   def percentage_of_minutes_played
     eligible_game_weeks > 0 ? (total_minutes_played.to_f / (eligible_game_weeks * 90).to_f).round(3) : 0
   end
@@ -96,8 +100,28 @@ class Player < ActiveRecord::Base
     attacking_contribution.round(1)
   end
 
+  def total_attacking_contribution_this_season(season)
+    this_season_player_game_weeks = player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id)
+    attacking_contribution = 0
+    if playing_position === 'Goalkeeper'
+      attacking_contribution += (this_season_player_game_weeks.sum(:goals) + (this_season_player_game_weeks.sum(:assists).to_f * 0.5))
+    elsif playing_position === 'Defender'
+      attacking_contribution += (this_season_player_game_weeks.sum(:goals) + (this_season_player_game_weeks.sum(:assists).to_f * 0.4))
+    elsif playing_position === 'Midfielder'
+      attacking_contribution += (this_season_player_game_weeks.sum(:goals) + (this_season_player_game_weeks.sum(:assists).to_f * 0.3))
+    elsif playing_position === 'Forward'
+      attacking_contribution += (this_season_player_game_weeks.sum(:goals) + (this_season_player_game_weeks.sum(:assists).to_f * 0.2))
+    end
+    attacking_contribution.round(1)
+  end
+
   def total_attacking_contribution_per_90
     total_minutes_played > 0 ? (total_attacking_contribution / (total_minutes_played.to_f / 90)).round(3) : (0.to_f).round(3)
+  end
+
+  def total_attacking_contribution_per_90_this_season(season)
+    total_minutes_played = total_minutes_played_this_season(season)
+    total_minutes_played > 0 ? (total_attacking_contribution_this_season(season) / (total_minutes_played_this_season(season).to_f / 90)).round(3) : (0.to_f).round(3)
   end
 
   def total_defensive_contribution
@@ -114,12 +138,36 @@ class Player < ActiveRecord::Base
     total_clean_sheet_minutes.round(1)
   end
 
+  def total_defensive_contribution_this_season(season)
+    this_season_player_game_weeks = player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id)
+    total_clean_sheet_minutes = 0
+    this_season_player_game_weeks.each do |player_game_week|
+      clean_sheet_minutes = player_game_week.minutes_played > 0 ? (player_game_week.minutes_played.to_f / (player_game_week.goals_conceded + 1)) : 0.0
+      if playing_position === 'Midfielder'
+        clean_sheet_minutes = clean_sheet_minutes / 2
+      elsif playing_position === 'Forward'
+        clean_sheet_minutes = 0.0
+      end
+      total_clean_sheet_minutes += clean_sheet_minutes
+    end
+    total_clean_sheet_minutes.round(1)
+  end
+
   def total_defensive_contribution_per_90
     total_minutes_played > 0 ? (total_defensive_contribution / (total_minutes_played.to_f / 90)).round(3) : (0.to_f).round(3)
   end
 
+  def total_defensive_contribution_per_90_this_season(season)
+    total_minutes_played = total_minutes_played_this_season(season)
+    total_minutes_played > 0 ? (total_defensive_contribution_this_season(season) / (total_minutes_played_this_season(season).to_f / 90)).round(3) : (0.to_f).round(3)
+  end
+
   def eligible_game_weeks
     player_game_weeks.count
+  end
+
+  def eligible_game_weeks_this_season(season)
+    player_game_weeks.joins(:game_week).where('game_weeks.season_id = ?', season.id).count
   end
 
   def opponent_location_short
