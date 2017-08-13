@@ -6,7 +6,6 @@ class TeamPlayer < ActiveRecord::Base
   has_many :transfer_items, :dependent => :destroy
   validates :squad_position_id, presence: true
   validate :game_week_deadline_has_not_passed, on: :update
-  validates_presence_of :transfer_completes_at, if: :transfer_minimum_bid
   accepts_nested_attributes_for :contracts, :allow_destroy => :true
 
   def self.transfer_listed_with_offers
@@ -111,6 +110,7 @@ class TeamPlayer < ActiveRecord::Base
         end
       end
     end
+    puts "update_attributes(transfer_minimum_bid: #{new_transfer_minimum_bid}, transfer_completes_at: #{new_transfer_completes_at}, is_voluntary_transfer: #{new_is_voluntary_transfer})"
     self.update_attributes(transfer_minimum_bid: new_transfer_minimum_bid, transfer_completes_at: new_transfer_completes_at, is_voluntary_transfer: new_is_voluntary_transfer)
   end
 

@@ -8,7 +8,7 @@
   </td>
   <% if team_player.transfer_minimum_bid %>
     <td class="mdl-data-table__cell--non-numeric normal-text">
-      <% if !has_offers %>
+      <% if !has_offers && team_player.is_voluntary_transfer %>
         <%= form_for team_player, url: league_team_team_player_path(team.league, team, team_player), action: :patch do |f| %>
           <%= f.hidden_field :is_voluntary_transfer, value: false %>
           <%= f.hidden_field :transfer_completes_at, value: nil %>
