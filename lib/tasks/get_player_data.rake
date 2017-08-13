@@ -16,25 +16,25 @@ namespace :player_data do
         player_status = current_player['status']
         player_position = playing_position_elements.find { |e| e['id'] == current_player['element_type']}['singular_name']
         player_real_team = real_team_elements.find { |f| f['code'] == current_player['team_code']}['short_name']
+        player_news = process_news(current_player['news'])
         player_competition = Competition.find_by description: 'Premier League'
 
         player = Player.find_by(pl_player_code: player_code)
         if player
           if player_status == "u"
-            player.update_attributes(pl_element_id: player_element_id, real_team_short_name: player_real_team, available: false)
+            player.update_attributes(pl_element_id: player_element_id, real_team_short_name: player_real_team, available: false, news: player_news)
             TeamPlayer.where(player: player).destroy_all
           else
-            player.update_attributes(pl_element_id: player_element_id, real_team_short_name: player_real_team, available: true)
+            player.update_attributes(pl_element_id: player_element_id, real_team_short_name: player_real_team, available: true, news: player_news)
           end
         else
           if player_status != "u"
-            player = Player.create(first_name: player_first_name, last_name: player_last_name, playing_position: player_position, pl_player_code: player_code, competition: player_competition, pl_element_id: player_element_id, real_team_short_name: player_real_team, available: true)
+            player = Player.create(first_name: player_first_name, last_name: player_last_name, playing_position: player_position, pl_player_code: player_code, competition: player_competition, pl_element_id: player_element_id, real_team_short_name: player_real_team, available: true, news: player_news)
             League.all.each do |league|
               NewsItem.create(league: league, news_item_resource_type: 'Player', news_item_type: 'new_free_agent', news_item_resource_id: player.id, body: "New free agent")
             end
           end
         end
-        puts player.inspect
       end
     end
   end
@@ -192,5 +192,17 @@ namespace :player_data do
         end
       end
     end
+  end
+
+  def process_news(news)
+    if(news != "")
+      news.gsub!(/Expected back/, 'Returns')
+      news.gsub!(/Lack of match fitness/i, 'Not fit')
+      news.gsub!(/Anterior cruciate ligament/i, 'Inj')
+      news.gsub!(/.+?(?=injury)(injury)/i, 'Inj')
+      news.gsub!(/chance of playing/i, 'fit')
+      news.gsub!(/Unknown return date/i, 'No return date')
+    end
+    news
   end
 end

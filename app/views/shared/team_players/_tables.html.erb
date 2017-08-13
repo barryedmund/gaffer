@@ -6,9 +6,10 @@
         <h3 class="mdl-card__title-text">Squad</h3>
       </div>
 			<ul class="horizontal-style-tabs">
-				<li><a id="performance_details_link" class="normal-text selected-tab">View stats</a></li>
-				<li><a id="contract_details_link" class="normal-text">View contracts</a></li>
-				<li><a id="next_up_details_link" class="normal-text">View next up</a></li>
+				<li><a id="performance_details_link" class="normal-text selected-tab">Stats</a></li>
+				<li><a id="contract_details_link" class="normal-text">Contracts</a></li>
+				<li><a id="next_up_details_link" class="normal-text">Fixtures</a></li>
+				<li><a id="news_details_link" class="normal-text">News</a></li>
 			</ul>
 		</div>
 		<% if @team.team_players.includes(:squad_position, :player).where(first_team: true).count > 0 %>

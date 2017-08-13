@@ -83,9 +83,10 @@
 						<li><%= link_to 'Games', league_games_path(@league), class: "mdl-button--primary" %></li>
 						<li><%= link_to 'Players', league_players_path(@league), class: "mdl-button--primary" %></li>
 						<li><%= link_to 'Transfers', league_transfers_path(@league), class: "mdl-button--primary" %></li>
+						<li><%= link_to 'Contracts', league_contracts_path(@league), class: "mdl-button--primary" %></li>
 					<% end %>
 					<% if @league.is_owned_by_this_user?(@current_user) %>
-						<li><%= link_to 'Send invites', league_league_invites_path(@league), class: "mdl-button--primary" %></li>
+						<li><%= link_to 'Invites', league_league_invites_path(@league), class: "mdl-button--primary" %></li>
 					<% end %>
 				</ul>
 			</div>

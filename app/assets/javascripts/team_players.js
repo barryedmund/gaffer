@@ -8,6 +8,9 @@ $(document).ready(function() {
 
 		$('.next_up_details').addClass("hide");
 		$('#next_up_details_link').removeClass("selected-tab");
+
+    $('.news_details').addClass("hide");
+    $('#news_details_link').removeClass("selected-tab");
 	}
 	else if(getCookie() == "performance_details"){
 		$('.performance_details').removeClass("hide");
@@ -18,6 +21,9 @@ $(document).ready(function() {
 
 		$('.next_up_details').addClass("hide");
 		$('#next_up_details_link').removeClass("selected-tab");
+
+    $('.news_details').addClass("hide");
+    $('#news_details_link').removeClass("selected-tab");
 	}
 	else if(getCookie() == "next_up_details"){
 		$('.next_up_details').removeClass("hide");
@@ -28,6 +34,22 @@ $(document).ready(function() {
 
 		$('.contract_details').addClass("hide");
 		$('#contract_details_link').removeClass("selected-tab");
+
+    $('.news_details').addClass("hide");
+    $('#news_details_link').removeClass("selected-tab");
+  }
+  else if(getCookie() == "news_details"){
+    $('.news_details').removeClass("hide");
+    $('#news_details_link').addClass("selected-tab");
+    
+    $('.performance_details').addClass("hide");
+    $('#performance_details_link').removeClass("selected-tab");
+
+    $('.contract_details').addClass("hide");
+    $('#contract_details_link').removeClass("selected-tab");
+
+    $('.next_up_details').addClass("hide");
+    $('#next_up_details_link').removeClass("selected-tab");
 	}
 
 	$('#performance_details_link').click(function(){
@@ -39,6 +61,9 @@ $(document).ready(function() {
 
 		$('.next_up_details').addClass("hide");
 		$('#next_up_details_link').removeClass("selected-tab");
+
+    $('.news_details').addClass("hide");
+    $('#news_details_link').removeClass("selected-tab");
 
 		setCookie("performance_details");
 	});
@@ -52,22 +77,44 @@ $(document).ready(function() {
 
 		$('.next_up_details').addClass("hide");
 		$('#next_up_details_link').removeClass("selected-tab");
+
+    $('.news_details').addClass("hide");
+    $('#news_details_link').removeClass("selected-tab");
 		
 		setCookie("contract_details");
 	});
 
-	$('#next_up_details_link').click(function(){
-		$('.next_up_details').removeClass("hide");
-		$('#next_up_details_link').addClass("selected-tab");
+	$('#news_details_link').click(function(){
+		$('.news_details').removeClass("hide");
+		$('#news_details_link').addClass("selected-tab");
 		
 		$('.performance_details').addClass("hide");
 		$('#performance_details_link').removeClass("selected-tab");
 
 		$('.contract_details').addClass("hide");
 		$('#contract_details_link').removeClass("selected-tab");
+
+    $('.next_up_details').addClass("hide");
+    $('#next_up_details_link').removeClass("selected-tab");
 		
-		setCookie("next_up_details");
+		setCookie("news_details");
 	});
+
+  $('#next_up_details_link').click(function(){
+    $('.next_up_details').removeClass("hide");
+    $('#next_up_details_link').addClass("selected-tab");
+    
+    $('.performance_details').addClass("hide");
+    $('#performance_details_link').removeClass("selected-tab");
+
+    $('.contract_details').addClass("hide");
+    $('#contract_details_link').removeClass("selected-tab");
+
+    $('.news_details').addClass("hide");
+    $('#news_details_link').removeClass("selected-tab");
+    
+    setCookie("next_up_details");
+  });
 });
 
 function setCookie(cvalue) {
