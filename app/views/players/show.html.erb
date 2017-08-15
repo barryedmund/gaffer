@@ -19,58 +19,26 @@
 		</div>
 		<div class="mdl-card__supporting-text">
 			<div class="mdl-card__actions">
-				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-					<tr>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							Position
-						</td>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= @player.playing_position %>
-						</td>
-					</tr>
-					<tr>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							Team
-						</td>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<% if owned && owned_by_current_user %>
-								<%= link_to truncate(team_player.team.title, length: 30), league_team_path(team_player.team.league, team_player.team), class: "content-link" %>
-							<% elsif owned && !owned_by_current_user %>
-								<%= link_to truncate(team_player.team.title, length: 30), display_league_team_path(team_player.team.league, team_player.team), class: "content-link" %>
-							<% else %>
-								-
-							<% end %>
-						</td>
-					</tr>
-					<% if owned %>
-						<tr>
-							<td class="mdl-data-table__cell--non-numeric normal-text">
-								Contract
-							</td>
-							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<%= number_to_currency(team_player.current_contract.weekly_salary_cents, precision: 0) %> p/w until <%= team_player.current_contract.ends_at.strftime("%d %b %y") %>
-							</td>
-						</tr>
-						<tr>
-							<td class="mdl-data-table__cell--non-numeric normal-text">
-								Value
-							</td>
-							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<%= render partial: 'shared/team_players/player_value', locals: {team_player: team_player} %>
-							</td>
-						</tr>
-					<% end %>
-				</table>
+				<%= render partial: 'shared/player_info', locals: {
+					player: @player,
+					team_player: team_player,
+					owned: owned,
+					owned_by_current_user: owned_by_current_user} %>
 			</div>
 			<ul class="horizontal-style-centre-form">
 				<% if owned && !owned_by_current_user %>
-					<li><%= render partial: 'shared/form_direct_transfer_bid', locals: {
+					<li>
+						<%= render partial: 'shared/form_direct_transfer_bid', locals: {
 						league: league,
 						player: player_object,
 						primary_team: current_user_team_in_this_league,
 						secondary_team: team_player.team,
 						team_player: team_player,
-						truncate_to: 14 } %></li>
+						truncate_to: 14 } %>
+					</li>
+					<li>
+						<%= link_to 'Make offer v2', new_league_transfer_path(league.id, {team_player_id: team_player.id}), class: "mdl-button--primary" %>
+					</li>
 				<% elsif !owned %>
 					<li><%= link_to 'Offer contract', new_league_contract_path(league.id, {player_id: player_object.id}), class: "mdl-button--primary" %></li>
 				<% end %>

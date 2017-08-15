@@ -1,4 +1,4 @@
-<%= form_for([League.find(params[:league_id]), @transfer]) do |f| %>
+<%= form_for([@league, @transfer]) do |f| %>
   <% if @transfer.errors.any? %>
     <div class="mdl-card__supporting-text">
       Please address the <%= "error".pluralize(@transfer.errors.count) %> and try again:
@@ -14,19 +14,37 @@
       </ul>
     </div>
   <% end %>
-
+  <!--
+  Parameters: {"utf8"=>"✓", "authenticity_token"=>"7TtDs+WUdy7EuaQsinMXhd56uVn+rulOt1UUvKr4x7M=", "transfer"=>{"primary_team_id"=>"3", "secondary_team_id"=>"6", "primary_team_accepted"=>"true", "secondary_team_accepted"=>"false", "transfer_item"=>{"sending_team_id"=>"6", "receiving_team_id"=>"3", "transfer_item_type"=>"Player", "cash_cents"=>"1779782", "team_player_id"=>"439"}}, "commit"=>"Place offer", "league_id"=>"2"}-->
   <div class="mdl-card__actions">
-    <% current_user_team = @current_user.teams.where(:league_id => @league.id).first %>
-    <%= f.hidden_field :primary_team_id, :value => current_user_team.id %>
-    <%= f.hidden_field :primary_team_accepted, :value => true %>
-    <%= f.hidden_field :secondary_team_accepted, :value => false %>
-    <div class="form-group">
-      <div class="selectdiv">
-        <%= f.collection_select :secondary_team_id, Team.where("league_id = ? AND id != ?", @league.id, current_user_team.id), :id, :title %>    
+    <% primary_team = @current_user.get_team(@league) %>
+    <% secondary_team = @team_player.team %>
+    <%= f.hidden_field :primary_team_id, value: primary_team.id %>
+    <%= f.hidden_field :secondary_team_id, value: secondary_team.id %>
+    <%= f.hidden_field :primary_team_accepted, value: true %>
+    <%= f.hidden_field :secondary_team_accepted, value: false %>
+    <%= f.fields_for :transfer_item do |f_ti_1| %>
+      <%= f_ti_1.hidden_field :sending_team_id, value: primary_team.id %>
+      <%= f_ti_1.hidden_field :receiving_team_id, value: secondary_team.id %>
+      <%= f_ti_1.hidden_field :transfer_item_type, value: "Cash" %>
+      <div class="form-group">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+          <%= f_ti_1.text_field :cash_cents, pattern: "^[1-9]{1}[0-9]*$", value: @team_player.get_transfer_listed_player_initial_bid, class: "mdl-textfield__input" %>
+          <%= f_ti_1.label "Tranfer bid", class: "mdl-textfield__label" %>
+          <span class="mdl-textfield__error">Invalid amount.</span>
+        </div>
       </div>
-    </div>
+    <% end %>
+
+    <%= f.fields_for :transfer_item do |f_ti_2| %>
+      <%= f_ti_2.hidden_field :sending_team_id, value: secondary_team.id %>
+      <%= f_ti_2.hidden_field :receiving_team_id, value: primary_team.id %>
+      <%= f_ti_2.hidden_field :transfer_item_type, value: "Player" %>
+      <%= f_ti_2.hidden_field :team_player_id, value: @team_player.id %>
+    <% end %>
+
     <div class="form-group">
-      <%= f.submit "Choose team", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
+      <%= f.submit "Place offer", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
       <%= link_to "Cancel", league_transfers_path(@league), class: "cancel_link_anchor" %>
     </div>
   </div>

@@ -1,8 +1,18 @@
+<% @team_player = TeamPlayer.find_by_id(params[:team_player_id]) %>
 <div class="col-sm-12">
   <div class="demo-card-wide mdl-card mdl-shadow--2dp">
 		<div class="mdl-card__title">
-			<h2 class="mdl-card__title-text">Propose transfer</h2>
+			<h2 class="mdl-card__title-text">Offer for <%= @team_player.full_name(true, 18) %></h2>
 		</div>
+    <div class="mdl-card__supporting-text">
+      <div class="mdl-card__actions">
+        <%= render partial: 'shared/player_info', locals: {
+          player: @team_player.player,
+          team_player: @team_player,
+          owned: true,
+          owned_by_current_user: false} %>
+      </div>
+    </div>
 		<%= render 'form' %>
 	</div>
 </div>
