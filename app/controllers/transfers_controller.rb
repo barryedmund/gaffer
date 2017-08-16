@@ -2,6 +2,7 @@ class TransfersController < ApplicationController
 	before_action :require_user
   before_action :set_transfer, only: [:show, :destroy, :edit, :update]
   before_action :set_league
+  before_action :set_back_url
 
 	def new
 		@transfer = Transfer.new
@@ -12,24 +13,47 @@ class TransfersController < ApplicationController
   	@transfer = Transfer.new(transfer_params)
     if @transfer.save
       flash[:success] = "Transfer initiated."
-      # Has nested transfer_item details
-      if params[:transfer].has_key?('transfer_item')
-        transfer_item_params = params[:transfer][:transfer_item]
-        TransferItem.create(transfer: @transfer, sending_team_id: transfer_item_params[:sending_team_id], receiving_team_id: transfer_item_params[:receiving_team_id], transfer_item_type: transfer_item_params[:transfer_item_type], team_player_id: transfer_item_params[:team_player_id])
-        redirect_to new_league_transfer_transfer_item_path(@league, @transfer, direct_bid: transfer_item_params[:team_player_id])
-      # Does not have nested transfer_item details
-      else
-        redirect_to new_league_transfer_transfer_item_path(@league, @transfer)
-      end
+      transfer_item_params = params[:transfer][:transfer_item]
+      
+      TransferItem.create(transfer: @transfer,
+        sending_team_id: transfer_item_params[:sending_team_id],
+        receiving_team_id: transfer_item_params[:receiving_team_id],
+        transfer_item_type: "Player",
+        team_player_id: transfer_item_params[:team_player_id])
+      
+      TransferItem.create(transfer: @transfer,
+        sending_team_id: transfer_item_params[:receiving_team_id],
+        receiving_team_id: transfer_item_params[:sending_team_id],
+        transfer_item_type: "Cash",
+        cash_cents: transfer_item_params[:cash_cents])
+      
+      redirect_to league_transfers_path(@league)
       NewsItem.create(league: @league, news_item_resource_type: 'Transfer', news_item_resource_id: @transfer.id, body: "Transfer initiated by #{@transfer.primary_team.title}")
     else
       flash[:error] = "There was a problem initiating that transfer."
-      redirect_to league_transfers_path(@league)
+      redirect_to league_transfers_path(@league, @transfer)
     end
 	end
 
   def index
     @transfers = Transfer.joins("INNER JOIN teams AS p_team ON p_team.id = transfers.primary_team_id").where(:p_team => {:league_id => League.find(params[:league_id])})
+  end
+
+  def edit
+    @transfer = Transfer.find(params[:id])
+    @team_player = @transfer.transfer_items.where(transfer_item_type: 'Player').first.team_player
+    @cash_offer = @transfer.transfer_items.where(transfer_item_type: 'Cash').first.cash_cents
+  end
+
+  def update
+    @cash_transfer_item = @transfer.transfer_items.where(transfer_item_type: 'Cash').first
+    if @transfer.update(transfer_params) && @cash_transfer_item.update_attributes(cash_cents: params[:transfer][:transfer_item][:cash_cents])
+      flash[:success] = "Updated transfer"
+    else
+      flash[:error] = @transfer.errors.full_messages.first
+      flash[:error] = @cash_transfer_item.errors.full_messages.first
+    end
+    redirect_to league_transfers_path(@league)
   end
 
   def change_response
@@ -65,7 +89,7 @@ class TransfersController < ApplicationController
 
 	private
   def transfer_params
-    params.require(:transfer).permit(:primary_team_id, :secondary_team_id, :primary_team_accepted, :secondary_team_accepted, transfer_items_attributes: [:transfer, :sending_team_id, :receiving_team_id, :transfer_item_type, :team_player_id])
+    params.require(:transfer).permit(:primary_team_id, :secondary_team_id, :primary_team_accepted, :secondary_team_accepted, transfer_items_attributes: [:id, :transfer, :sending_team_id, :receiving_team_id, :transfer_item_type, :team_player_id, :cash_cents])
   end
 
   def set_transfer
@@ -74,5 +98,10 @@ class TransfersController < ApplicationController
 
   def set_league
     @league = League.find(params[:league_id])
+  end
+
+  def set_back_url
+    session.delete(:return_to)
+    @back_url = session[:return_to] ||= request.referer
   end
 end
