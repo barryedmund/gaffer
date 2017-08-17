@@ -3,6 +3,7 @@ class TransfersController < ApplicationController
   before_action :set_transfer, only: [:show, :destroy, :edit, :update]
   before_action :set_league
   before_action :set_back_url
+  before_action :get_current_user_team, only: [:new, :edit]
 
 	def new
 		@transfer = Transfer.new
@@ -11,21 +12,22 @@ class TransfersController < ApplicationController
 
   def create
   	@transfer = Transfer.new(transfer_params)
-    if @transfer.save
+    transfer_item_params = params[:transfer][:transfer_item]
+      
+    player_transfer_item = TransferItem.create(transfer: @transfer,
+      sending_team_id: transfer_item_params[:sending_team_id],
+      receiving_team_id: transfer_item_params[:receiving_team_id],
+      transfer_item_type: "Player",
+      team_player_id: transfer_item_params[:team_player_id])
+    
+    cash_transfer_item = TransferItem.create(transfer: @transfer,
+      sending_team_id: transfer_item_params[:receiving_team_id],
+      receiving_team_id: transfer_item_params[:sending_team_id],
+      transfer_item_type: "Cash",
+      cash_cents: transfer_item_params[:cash_cents])
+
+    if @transfer.save && player_transfer_item.save && cash_transfer_item.save
       flash[:success] = "Transfer initiated."
-      transfer_item_params = params[:transfer][:transfer_item]
-      
-      TransferItem.create(transfer: @transfer,
-        sending_team_id: transfer_item_params[:sending_team_id],
-        receiving_team_id: transfer_item_params[:receiving_team_id],
-        transfer_item_type: "Player",
-        team_player_id: transfer_item_params[:team_player_id])
-      
-      TransferItem.create(transfer: @transfer,
-        sending_team_id: transfer_item_params[:receiving_team_id],
-        receiving_team_id: transfer_item_params[:sending_team_id],
-        transfer_item_type: "Cash",
-        cash_cents: transfer_item_params[:cash_cents])
       
       redirect_to league_transfers_path(@league)
       NewsItem.create(league: @league, news_item_resource_type: 'Transfer', news_item_resource_id: @transfer.id, body: "Transfer initiated by #{@transfer.primary_team.title}")
@@ -43,6 +45,8 @@ class TransfersController < ApplicationController
     @transfer = Transfer.find(params[:id])
     @team_player = @transfer.transfer_items.where(transfer_item_type: 'Player').first.team_player
     @cash_offer = @transfer.transfer_items.where(transfer_item_type: 'Cash').first.cash_cents
+    @primary_team = @transfer.primary_team
+    @secondary_team = @transfer.secondary_team
   end
 
   def update
@@ -103,5 +107,9 @@ class TransfersController < ApplicationController
   def set_back_url
     session.delete(:return_to)
     @back_url = session[:return_to] ||= request.referer
+  end
+
+  def get_current_user_team
+    @current_user_team = @current_user.get_team(@league)
   end
 end

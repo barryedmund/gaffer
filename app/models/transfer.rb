@@ -4,7 +4,7 @@ class Transfer < ActiveRecord::Base
   has_many :transfer_items, dependent: :destroy
  	validates :primary_team, :secondary_team, presence: true
  	validates :primary_team_accepted, :secondary_team_accepted, inclusion: { in: [true, false] }
- 	validate :teams_in_same_league, :teams_not_the_same, on: :create
+ 	validate :teams_in_same_league, :teams_not_the_same
   accepts_nested_attributes_for :transfer_items
 
   def self.incomplete_transfers
@@ -102,6 +102,6 @@ class Transfer < ActiveRecord::Base
  	end
 
  	def teams_not_the_same
- 		errors.add(:base, "A team cannot initiate a transfer with itself.") unless primary_team != secondary_team
+ 		errors.add(:base, "A team cannot make a transfer with itself.") unless primary_team != secondary_team
  	end
 end

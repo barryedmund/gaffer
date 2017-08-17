@@ -15,18 +15,22 @@
     </div>
   <% end %>
   
-  <div class="mdl-card__actions">
+  <div class="mdl-card__actions"> 
     <% if @transfer.id %>
       <% team_player_value = @cash_offer %>
+      <% primary_team = @primary_team %>
+      <% secondary_team = @secondary_team %>
+      <% primary_team_accepted = primary_team == @current_user_team ? true : false %>
+      <% secondary_team_accepted = secondary_team == @current_user_team ? true : false %>
     <% else %>
       <% team_player_value = @team_player.get_transfer_listed_player_initial_bid %>
+      <% primary_team = @current_user_team %>
+      <% secondary_team = @team_player.team %>
     <% end %>
-    <% primary_team = @current_user.get_team(@league) %>
-    <% secondary_team = @team_player.team %>
     <%= f.hidden_field :primary_team_id, value: primary_team.id %>
     <%= f.hidden_field :secondary_team_id, value: secondary_team.id %>
-    <%= f.hidden_field :primary_team_accepted, value: true %>
-    <%= f.hidden_field :secondary_team_accepted, value: false %>
+    <%= f.hidden_field :primary_team_accepted, value: primary_team_accepted %>
+    <%= f.hidden_field :secondary_team_accepted, value: secondary_team_accepted %>
     <%= f.fields_for :transfer_item do |f_ti_1| %>
       <%= f_ti_1.hidden_field :sending_team_id, value: primary_team.id %>
       <%= f_ti_1.hidden_field :receiving_team_id, value: secondary_team.id %>
@@ -48,7 +52,7 @@
     <% end %>
 
     <div class="form-group">
-      <%= f.submit "Place offer", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
+      <%= f.submit (f.object.new_record? ? "Place offer" : "Update offer"), class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
       <%= link_to "Cancel", @back_url, class: "cancel_link_anchor" %>
     </div>
   </div>
