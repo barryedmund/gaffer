@@ -26,15 +26,18 @@
       <% team_player_value = @team_player.get_transfer_listed_player_initial_bid %>
       <% primary_team = @current_user_team %>
       <% secondary_team = @team_player.team %>
+      <% primary_team_accepted = true %>
+      <% secondary_team_accepted = false %>
     <% end %>
     <%= f.hidden_field :primary_team_id, value: primary_team.id %>
     <%= f.hidden_field :secondary_team_id, value: secondary_team.id %>
     <%= f.hidden_field :primary_team_accepted, value: primary_team_accepted %>
     <%= f.hidden_field :secondary_team_accepted, value: secondary_team_accepted %>
     <%= f.fields_for :transfer_item do |f_ti_1| %>
-      <%= f_ti_1.hidden_field :sending_team_id, value: primary_team.id %>
-      <%= f_ti_1.hidden_field :receiving_team_id, value: secondary_team.id %>
-      <%= f_ti_1.hidden_field :transfer_item_type, value: "Cash" %>
+      <%= f_ti_1.hidden_field :sending_team_id, value: secondary_team.id %>
+      <%= f_ti_1.hidden_field :receiving_team_id, value: primary_team.id %>
+      <%= f_ti_1.hidden_field :transfer_item_type, value: "Player" %>
+      <%= f_ti_1.hidden_field :team_player_id, value: @team_player.id %>
       <div class="form-group">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
           <%= f_ti_1.text_field :cash_cents, pattern: "^[1-9]{1}[0-9]*$", value: team_player_value, class: "mdl-textfield__input" %>
@@ -42,13 +45,6 @@
           <span class="mdl-textfield__error">Invalid amount.</span>
         </div>
       </div>
-    <% end %>
-
-    <%= f.fields_for :transfer_item do |f_ti_2| %>
-      <%= f_ti_2.hidden_field :sending_team_id, value: secondary_team.id %>
-      <%= f_ti_2.hidden_field :receiving_team_id, value: primary_team.id %>
-      <%= f_ti_2.hidden_field :transfer_item_type, value: "Player" %>
-      <%= f_ti_2.hidden_field :team_player_id, value: @team_player.id %>
     <% end %>
 
     <div class="form-group">

@@ -13,27 +13,30 @@ class TransfersController < ApplicationController
   def create
   	@transfer = Transfer.new(transfer_params)
     transfer_item_params = params[:transfer][:transfer_item]
-      
-    player_transfer_item = TransferItem.create(transfer: @transfer,
+    @transfer_item_cash = TransferItem.new(transfer: @transfer,
       sending_team_id: transfer_item_params[:sending_team_id],
       receiving_team_id: transfer_item_params[:receiving_team_id],
-      transfer_item_type: "Player",
-      team_player_id: transfer_item_params[:team_player_id])
-    
-    cash_transfer_item = TransferItem.create(transfer: @transfer,
-      sending_team_id: transfer_item_params[:receiving_team_id],
-      receiving_team_id: transfer_item_params[:sending_team_id],
       transfer_item_type: "Cash",
       cash_cents: transfer_item_params[:cash_cents])
-
-    if @transfer.save && player_transfer_item.save && cash_transfer_item.save
+    @transfer_item_player = TransferItem.new(transfer: @transfer,
+      sending_team_id: transfer_item_params[:receiving_team_id],
+      receiving_team_id: transfer_item_params[:sending_team_id],
+      transfer_item_type: "Player",
+      team_player_id: transfer_item_params[:team_player_id])
+    if @transfer_item_player.valid? && @transfer_item_cash.valid? && @transfer.save
+      @transfer_item_player.save
+      @transfer_item_cash.save
       flash[:success] = "Transfer initiated."
-      
       redirect_to league_transfers_path(@league)
       NewsItem.create(league: @league, news_item_resource_type: 'Transfer', news_item_resource_id: @transfer.id, body: "Transfer initiated by #{@transfer.primary_team.title}")
     else
-      flash[:error] = "There was a problem initiating that transfer."
-      redirect_to league_transfers_path(@league, @transfer)
+      error_message = "Unable to create that transfer."
+      cash_sending_team = @transfer_item_cash.sending_team
+      if @transfer_item_cash.cash_cents && @transfer_item_cash.cash_cents > cash_sending_team.cash_balance_cents
+        error_message = "#{cash_sending_team.title} does not have enough funds."
+      end
+      flash[:error] = error_message
+      redirect_to league_transfers_path(@league)
     end
 	end
 
