@@ -82,6 +82,10 @@ class Player < ActiveRecord::Base
     return_value
   end
 
+  def has_contract_offer_from_team?(team)
+    contracts.where(team: team, signed: false).count > 0 ? true : false
+  end
+
   def total_minutes_played
     player_game_weeks.sum(:minutes_played)
   end

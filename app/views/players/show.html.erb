@@ -31,7 +31,11 @@
 						<%= link_to 'Make offer', new_league_transfer_path(league.id, {team_player_id: team_player.id}), class: "mdl-button--primary" %>
 					</li>
 				<% elsif !owned %>
-					<li><%= link_to 'Offer contract', new_league_contract_path(league.id, {player_id: player_object.id}), class: "mdl-button--primary" %></li>
+					<% if player_object.has_contract_offer_from_team?(@current_user.get_team(league)) %>
+						<li><%= link_to 'View contract offer', league_contracts_path(league.id), class: "mdl-button--primary" %></li>
+					<% else %>
+						<li><%= link_to 'Offer contract', new_league_contract_path(league.id, {player_id: player_object.id}), class: "mdl-button--primary" %></li>
+					<% end %>
 				<% end %>
 			</ul>
 		</div>
