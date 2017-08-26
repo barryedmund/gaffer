@@ -202,6 +202,7 @@ namespace :player_data do
       news.gsub!(/.+?(?=injury)(injury)/i, 'Inj')
       news.gsub!(/chance of playing/i, 'fit')
       news.gsub!(/Unknown return date/i, 'No return date')
+      news = "Not available" if news.match(/that he would not be available for selection/).present?
     end
     news
   end
