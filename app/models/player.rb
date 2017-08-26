@@ -194,4 +194,8 @@ class Player < ActiveRecord::Base
     value = ((defensive_index + attacking_index) * 10000000) * 1.5
     [value, Rails.application.config.minimum_player_value].max.round
   end
+
+  def display_news
+    news.blank? ? "-" : news
+  end
 end
