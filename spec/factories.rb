@@ -128,7 +128,7 @@ FactoryGirl.define do  factory :team_achievement do
   
   factory :transfer_item do
     transfer
-    type ""
+    transfer_item_type ""
     association :sending_team, factory: :team
     association :receiving_team, factory: :team
     team_player

@@ -121,4 +121,8 @@ class TeamPlayer < ActiveRecord::Base
   def relative_value
     (player.player_value(Season.current.first) / current_contract.weekly_salary_cents).round
   end
+
+  def display_news
+    player.news.blank? ? "-" : player.news
+  end
 end

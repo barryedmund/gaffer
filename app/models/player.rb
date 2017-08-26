@@ -48,6 +48,14 @@ class Player < ActiveRecord::Base
     end
   end
 
+  def full_position_and_real_team
+    if real_team_short_name
+      "#{playing_position} (#{real_team_short_name})"
+    else
+      playing_position
+    end
+  end
+
   def short_playing_position
     SquadPosition.long_name_to_short_name(playing_position)
   end

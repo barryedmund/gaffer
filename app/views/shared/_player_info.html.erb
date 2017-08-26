@@ -1,0 +1,50 @@
+<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+  <tr>
+    <td class="mdl-data-table__cell--non-numeric normal-text">
+      Position
+    </td>
+    <td class="mdl-data-table__cell--non-numeric normal-text">
+      <%= player.full_position_and_real_team %>
+    </td>
+  </tr>
+  <tr>
+    <td class="mdl-data-table__cell--non-numeric normal-text">
+      Team
+    </td>
+    <td class="mdl-data-table__cell--non-numeric normal-text">
+      <% if owned && owned_by_current_user %>
+        <%= link_to truncate(team_player.team.title, length: 30), league_team_path(team_player.team.league, team_player.team), class: "content-link" %>
+      <% elsif owned && !owned_by_current_user %>
+        <%= link_to truncate(team_player.team.title, length: 30), display_league_team_path(team_player.team.league, team_player.team), class: "content-link" %>
+      <% else %>
+        -
+      <% end %>
+    </td>
+  </tr>
+  <% if owned %>
+    <tr>
+      <td class="mdl-data-table__cell--non-numeric normal-text">
+        Contract
+      </td>
+      <td class="mdl-data-table__cell--non-numeric normal-text">
+        <%= number_to_currency(team_player.current_contract.weekly_salary_cents, precision: 0) %> p/w until <%= team_player.current_contract.ends_at.strftime("%d %b %y") %>
+      </td>
+    </tr>
+    <tr>
+      <td class="mdl-data-table__cell--non-numeric normal-text">
+        Value
+      </td>
+      <td class="mdl-data-table__cell--non-numeric normal-text">
+        <%= render partial: 'shared/team_players/player_value', locals: {team_player: team_player} %>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td class="mdl-data-table__cell--non-numeric normal-text">
+      News
+    </td>
+    <td class="mdl-data-table__cell--non-numeric normal-text">
+      <%= team_player.display_news %>
+    </td>
+  </tr>
+</table>

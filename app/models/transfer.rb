@@ -4,7 +4,7 @@ class Transfer < ActiveRecord::Base
   has_many :transfer_items, dependent: :destroy
  	validates :primary_team, :secondary_team, presence: true
  	validates :primary_team_accepted, :secondary_team_accepted, inclusion: { in: [true, false] }
- 	validate :teams_in_same_league, :teams_not_the_same, on: :create
+ 	validate :teams_in_same_league, :teams_not_the_same
   accepts_nested_attributes_for :transfer_items
 
   def self.incomplete_transfers
@@ -55,7 +55,7 @@ class Transfer < ActiveRecord::Base
         contract = transfer_item.team_player.current_contract
         contract.update_attributes!(signed: false)
         contract.update_attributes!(team: receiver, signed: true)
-        transfer_item.team_player.update_attributes(team: receiver, first_team: false, squad_position: SquadPosition.find_by(:short_name => 'SUB'))
+        transfer_item.team_player.update_attributes!(team: receiver, first_team: false, squad_position: SquadPosition.find_by(:short_name => 'SUB'))
       end
     end
   end
@@ -102,6 +102,6 @@ class Transfer < ActiveRecord::Base
  	end
 
  	def teams_not_the_same
- 		errors.add(:base, "A team cannot initiate a transfer with itself.") unless primary_team != secondary_team
+ 		errors.add(:base, "A team cannot make a transfer with itself.") unless primary_team != secondary_team
  	end
 end
