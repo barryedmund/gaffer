@@ -65,11 +65,11 @@ class TransfersController < ApplicationController
 
   def change_response
     @transfer = Transfer.find(params[:id])
-    if @transfer.primary_team.user == @current_user
+    if @transfer.primary_team.user == current_user
       new_primary_value = @transfer.primary_team_accepted ? false : true
       @transfer.update_attributes(:primary_team_accepted => new_primary_value)
       flash[:success] = "Response changed."
-    elsif @transfer.secondary_team.user == @current_user
+    elsif @transfer.secondary_team.user == current_user
       new_secondary_value = @transfer.secondary_team_accepted ? false : true
       @transfer.update_attributes(:secondary_team_accepted => new_secondary_value)
       flash[:success] = "Response changed."
@@ -78,6 +78,8 @@ class TransfersController < ApplicationController
       @transfer.complete_transfer
     end
     redirect_to :back
+  rescue ActionController::RedirectBackError
+    redirect_to root_path
   end
 
   def destroy

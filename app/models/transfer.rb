@@ -55,7 +55,7 @@ class Transfer < ActiveRecord::Base
         contract = transfer_item.team_player.current_contract
         contract.update_attributes!(signed: false)
         contract.update_attributes!(team: receiver, signed: true)
-        transfer_item.team_player.update_attributes(team: receiver, first_team: false, squad_position: SquadPosition.find_by(:short_name => 'SUB'))
+        transfer_item.team_player.update_attributes!(team: receiver, first_team: false, squad_position: SquadPosition.find_by(:short_name => 'SUB'))
       end
     end
   end

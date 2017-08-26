@@ -34,8 +34,8 @@
     <%= f.hidden_field :primary_team_accepted, value: primary_team_accepted %>
     <%= f.hidden_field :secondary_team_accepted, value: secondary_team_accepted %>
     <%= f.fields_for :transfer_item do |f_ti_1| %>
-      <%= f_ti_1.hidden_field :sending_team_id, value: secondary_team.id %>
-      <%= f_ti_1.hidden_field :receiving_team_id, value: primary_team.id %>
+      <%= f_ti_1.hidden_field :sending_team_id, value: primary_team.id %>
+      <%= f_ti_1.hidden_field :receiving_team_id, value: secondary_team.id %>
       <%= f_ti_1.hidden_field :transfer_item_type, value: "Player" %>
       <%= f_ti_1.hidden_field :team_player_id, value: @team_player.id %>
       <div class="form-group">

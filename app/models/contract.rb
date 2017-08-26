@@ -57,6 +57,6 @@ class Contract < ActiveRecord::Base
   end
 
   def one_signed_contract_per_team_player
-    errors.add(:base, "A team player can only sign one contract at a time") unless !self.signed? || (self.signed? && self.team_player.contracts.where('contracts.signed = ?', true).count == 0)
+    errors.add(:base, "A team player can only sign one contract at a time") unless !self.signed? || (self.signed? && self.team_player.contracts.where('contracts.signed = ?', true).count <= 1)
   end
 end
