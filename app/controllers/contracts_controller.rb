@@ -1,5 +1,8 @@
 class ContractsController < ApplicationController
   before_action :require_user
+  before_action :set_league
+  before_action :set_team
+  before_action :set_player, only: [:new, :edit]
 
   def new
     @contract = Contract.new
@@ -7,11 +10,10 @@ class ContractsController < ApplicationController
 
   def create
     @contract = Contract.new(contract_params)
-    league = League.find_by_id(params[:league_id])
     respond_to do |format|
       if @contract.save
-        format.html { redirect_to league_contracts_path(league), notice: 'Contract has been offered.' }
-        NewsItem.create(league: league, news_item_resource_type: 'Contract', news_item_resource_id: @contract.id, body: "#{@contract.player.full_name(true,13)} offered contract")
+        format.html { redirect_to league_contracts_path(@league), notice: 'Contract has been offered.' }
+        NewsItem.create(league: @league, news_item_resource_type: 'Contract', news_item_resource_id: @contract.id, body: "#{@contract.player.full_name(true,13)} offered contract")
       else
         format.html { render :new }
       end
@@ -40,5 +42,21 @@ class ContractsController < ApplicationController
   private
   def contract_params
     params.require(:contract).permit(:league_id, :weekly_salary_cents, :starts_at, :ends_at, :team_id, :player_id)
+  end
+
+  def set_league
+    @league = League.find(params[:league_id])
+  end
+
+  def set_team
+    @team = current_user.get_team(@league)
+  end
+
+  def set_player
+    if params[:player_id]
+      @player = Player.find(params[:player_id])
+    else
+      @player = Contract.find(params[:id]).player
+    end
   end
 end
