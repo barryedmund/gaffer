@@ -65,6 +65,10 @@ class TeamPlayer < ActiveRecord::Base
     transfer_minimum_bid ? true : false
   end
 
+  def is_force_transfer_listed?
+    transfer_minimum_bid && !is_voluntary_transfer ? true : false
+  end
+
   def active_transfers
     Transfer.incomplete_transfers_with_team_involved(team).joins(:transfer_items).where('transfer_items.transfer_item_type = ? AND transfer_items.team_player_id = ?', "Player", id)
   end
