@@ -26,6 +26,10 @@ class TransfersController < ApplicationController
     if @transfer_item_player.valid? && @transfer_item_cash.valid? && @transfer.save
       @transfer_item_player.save
       @transfer_item_cash.save
+      team_player = @transfer.get_team_player_involved
+      if team_player.is_force_transfer_listed?
+        team_player.update_attributes!(transfer_completes_at: 3.days.from_now)
+      end
       flash[:success] = "Transfer initiated."
       redirect_to league_transfers_path(@league)
       NewsItem.create(league: @league, news_item_resource_type: 'Transfer', news_item_resource_id: @transfer.id, body: "Transfer initiated by #{@transfer.primary_team.title}")

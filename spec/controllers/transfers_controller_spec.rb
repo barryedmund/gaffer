@@ -55,13 +55,25 @@ RSpec.describe TransfersController, :type => :controller do
       end
     end
 
-    describe "with valid params" do
+    describe "with not enough cash" do
       before do
         primary_team.update_attributes(cash_balance_cents: 1000000)
       end
 
-      it "creates a new Transfer" do
+      it "doesn't create a new Transfer" do
         expect { post :create, { league_id: league.id, transfer: attributes }, valid_session }.to change(Transfer, :count).by(0)
+      end
+    end
+
+    describe "when team_player has been involuntarily transfer listed" do
+      before do
+        team_player.update_attributes(transfer_minimum_bid: 1230000, is_voluntary_transfer: false)
+      end
+
+      it "sets transfer_completes_at" do
+        post :create, { league_id: league.id, transfer: attributes }, valid_session
+        team_player.reload
+        expect(team_player.transfer_completes_at).to_not eq(nil)
       end
     end
   end
