@@ -1,0 +1,59 @@
+<div id="logo-row" class="row">
+  <div class="col-sm-12 logo-div">
+    <%= link_to image_tag("gaffer_logo_small_white.png", class: "logo-image"), root_path %>
+  </div>
+</div>
+<div id="header-row" class="row">
+  <% current_user_leagues = League.includes(:teams).where('teams.user_id = :current_user OR leagues.user_id = :current_user', {current_user: @current_user}).references(:teams).distinct %>
+  <div id="main-nav" class="col-sm-12">
+    <div class="row">
+      <div class="col-sm-1">
+        <!-- EMPTY -->
+      </div>
+      <% if current_user_leagues.count == 1 %>
+        <% current_user_team = Team.where(user: @current_user, league: current_user_leagues.first).first %>
+        <% if current_user_team %>
+          <div class="col-sm-2 main-nav-item">
+            <%= link_to "League", league_path(current_user_leagues.first) %>
+          </div>
+          <div class="col-sm-2 main-nav-item">
+            <%= link_to "Team", league_team_path(current_user_leagues.first, current_user_team) %>
+          </div>
+          <div class="col-sm-2 main-nav-item">
+            <%= link_to "Players", league_players_path(current_user_leagues.first) %>
+          </div>
+          <div class="col-sm-2 main-nav-item">
+            <%= link_to "Games", league_games_path(current_user_leagues.first) %>
+          </div>
+          <div class="col-sm-2 main-nav-item">
+            <%= link_to "Log out", logout_path, method: :delete %>
+          </div>
+        <% else %>
+          <div class="col-sm-5 main-nav-item">
+            <%= link_to "Create team", new_league_team_path(current_user_leagues.first) %>
+          </div>
+          <div class="col-sm-5 main-nav-item">
+            <%= link_to "Log out", logout_path, method: :delete %>
+          </div>
+        <% end %>
+      <% elsif current_user_leagues.count > 1 %>
+        <div class="col-sm-5 main-nav-item">
+          <%= link_to "Leagues", leagues_path %>
+        </div>
+        <div class="col-sm-5 main-nav-item">
+          <%= link_to "Log out", logout_path, method: :delete %>
+        </div>
+      <% else %>
+        <div class="col-sm-5 main-nav-item">
+          <%= link_to "Join league", leagues_path %>
+        </div>
+        <div class="col-sm-5 main-nav-item">
+          <%= link_to "Log out", logout_path, method: :delete %>
+        </div>
+      <% end %>
+      <div class="col-sm-1">
+        <!-- EMPTY -->
+      </div>
+    </div>
+  </div>
+</div>

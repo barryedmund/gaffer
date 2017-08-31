@@ -28,61 +28,12 @@
 	  <%= csrf_meta_tags %>
 	</head>
 	<body id="body_id">
+		<% if logged_in? %>
+			<%= render 'shared/navigation/logged_in_nav' %>
+    <% else %>
+    	<%= render 'shared/navigation/logged_out_nav' %>
+    <% end %>
 		<div class="container" id="wide-container">
-			<div id="header-row" class="row">
-				<div class="col-sm-4">
-					<%= link_to image_tag("gaffer_logo_small_text_only.png", class: "logo-icon"), root_path %>
-				</div>
-				<% if logged_in? %>
-					<% current_user_leagues = League.includes(:teams).where('teams.user_id = :current_user OR leagues.user_id = :current_user', {current_user: @current_user}).references(:teams).distinct %>
-					<div id="main-nav" class="col-sm-8">
-						<div class="row">
-							<% if current_user_leagues.count == 1 %>
-								<% current_user_team = Team.where(user: @current_user, league: current_user_leagues.first).first %>
-								<% if current_user_team %>
-									<div class="col-sm-2 main-nav-item">
-										<%= link_to "League", league_path(current_user_leagues.first) %>
-									</div>
-									<div class="col-sm-2 main-nav-item">
-										<%= link_to "Team", league_team_path(current_user_leagues.first, current_user_team) %>
-									</div>
-									<div class="col-sm-2 main-nav-item">
-										<%= link_to "Players", league_players_path(current_user_leagues.first) %>
-									</div>
-									<div class="col-sm-2 main-nav-item">
-										<%= link_to "Games", league_games_path(current_user_leagues.first) %>
-									</div>
-								<% else %>
-									<div class="col-sm-9 main-nav-item">
-										<%= link_to "Create team", new_league_team_path(current_user_leagues.first) %>
-									</div>
-								<% end %>
-								<div class="col-sm-4 main-nav-item">
-					    		<%= link_to "Log out", logout_path, method: :delete %>
-					    	</div>
-							<% elsif current_user_leagues.count > 1 %>
-								<div class="col-sm-6 main-nav-item">
-									<%= link_to "Leagues", leagues_path %>
-								</div>
-								<div class="col-sm-6 main-nav-item">
-					    		<%= link_to "Log out", logout_path, method: :delete %>
-					    	</div>
-					    <% else %>
-					    	<div class="col-sm-6 main-nav-item">
-									<%= link_to "Join league", leagues_path %>
-								</div>
-								<div class="col-sm-6 main-nav-item">
-					    		<%= link_to "Log out", logout_path, method: :delete %>
-					    	</div>
-							<% end %>
-				  	</div>
-			  	</div>
-		    <% else %>
-	        <div class="col-sm-7 pull-right">
-	        	<%= render 'user_sessions/form' %>
-	        </div>
-		    <% end %>
-			</div>
 			<div class="row">
 				<% if flash.count > 0 %>
 				<div class="col-sm-12 text-center alert flash">
