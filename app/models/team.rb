@@ -186,12 +186,18 @@ class Team < ActiveRecord::Base
   end
 
   def is_zombie_team
-    last_updated_team_player = team_players.order(:updated_at).last
+    if user.last_seen_at.blank?
+      last_updated_team_player = team_players.order(:updated_at).last
+      if last_updated_team_player
+        user.update_attributes(last_seen_at: last_updated_team_player.updated_at)
+      else
+        user.update_attributes(last_seen_at: Time.now)
+      end
+    end
+    
     cut_off_game_week = game_week_ago(3)
-    puts "last_updated_team_player: #{last_updated_team_player.inspect}"
-    puts "cut_off_game_week: #{cut_off_game_week.inspect}"
-    if last_updated_team_player && cut_off_game_week
-      last_updated_team_player.updated_at < cut_off_game_week.starts_at
+    if cut_off_game_week
+      user.last_seen_at < cut_off_game_week.starts_at
     else
       false
     end
@@ -219,42 +225,38 @@ class Team < ActiveRecord::Base
     team_players.joins(:squad_position, :player).where('squad_positions.short_name = ? AND team_players.first_team = ? AND players.playing_position = ? AND players.news = ?', 'SUB', false, long_position, '').count > 0
   end
 
-  def sub_to_move_to_first_team
+  def most_needed_position
     if is_eligible_for_robo_first_team_additions
+      has_sub_gk = has_sub_at_position('Goalkeeper')
       num_first_team_gk = number_of_first_team_players_at_position('GK')
-      num_first_team_df = number_of_first_team_players_at_position('DF')
-      num_first_team_md = number_of_first_team_players_at_position('MD')
-      num_first_team_fw = number_of_first_team_players_at_position('FW')
-      num_first_team_outfield = [num_first_team_df, num_first_team_md, num_first_team_fw]
-      formation = "#{num_first_team_gk}-#{num_first_team_df}-#{num_first_team_md}-#{num_first_team_fw} (subs: #{has_subs_available})"
-
-      player_has_not_been_added = true
-      if player_has_not_been_added && num_first_team_gk < 1 && has_sub_at_position('Goalkeeper')
-        player_has_not_been_added = false
-        team_player_to_add = most_valuable_available_sub_at_position('Goalkeeper')
-        team_player_to_add.update_attributes(first_team: true, squad_position: SquadPosition.find_by(id: team_player_to_add.get_squad_position_from_players_playing_position))
-        "Add GK (#{team_player_to_add.full_name})" + formation
-      end
-      if player_has_not_been_added && num_first_team_df == num_first_team_outfield.min && has_sub_at_position('Defender')
-        player_has_not_been_added = false
-        team_player_to_add = most_valuable_available_sub_at_position('Defender')
-        team_player_to_add.update_attributes(first_team: true, squad_position: SquadPosition.find_by(id: team_player_to_add.get_squad_position_from_players_playing_position))
-        "Add DF (#{team_player_to_add.full_name})" + formation
-      end
-      if player_has_not_been_added && num_first_team_md == num_first_team_outfield.min && has_sub_at_position('Midfielder')
-        player_has_not_been_added = false
-        team_player_to_add = most_valuable_available_sub_at_position('Midfielder')
-        team_player_to_add.update_attributes(first_team: true, squad_position: SquadPosition.find_by(id: team_player_to_add.get_squad_position_from_players_playing_position))
-        "Add MD (#{team_player_to_add.full_name})" + formation
-      end
-      if player_has_not_been_added && num_first_team_fw == num_first_team_outfield.min && has_sub_at_position('Forward')
-        player_has_not_been_added = false
-        team_player_to_add = most_valuable_available_sub_at_position('Forward')
-        team_player_to_add.update_attributes(first_team: true, squad_position: SquadPosition.find_by(id: team_player_to_add.get_squad_position_from_players_playing_position))
-        "Add FW (#{team_player_to_add.full_name})" + formation
+      first_team_outfield = [
+        {pos: "Defender", has_sub: has_sub_at_position('Defender'), num_first_team: number_of_first_team_players_at_position('DF')},
+        {pos: "Midfielder", has_sub: has_sub_at_position('Midfielder'), num_first_team: number_of_first_team_players_at_position('MD')},
+        {pos: "Forward", has_sub: has_sub_at_position('Forward'), num_first_team: number_of_first_team_players_at_position('FW')}]
+      if num_first_team_gk < 1 && has_sub_gk
+        'Goalkeeper'
+      elsif team_players.joins(:squad_position).where("short_name NOT LIKE 'GK' AND short_name NOT LIKE 'SUB'").count < 10
+        positions_with_subs = first_team_outfield.select { |position| position[:has_sub] }
+        positions_with_subs_with_fewest_first_team_players = positions_with_subs.min_by { |position| position[:num_first_team] }
+        positions_with_subs_with_fewest_first_team_players[:pos]
       end
     else
-      'not eligible'
+      puts "_______ "
+      puts "_______ "
+      puts "Not eligible"
+      puts "_______ "
+      puts "_______ "
+    end
+  end
+
+  def sub_to_move_to_first_team
+    position_to_add = most_needed_position
+    if position_to_add
+      team_player_to_add = most_valuable_available_sub_at_position(position_to_add)
+      if team_player_to_add
+        team_player_to_add.update_attributes(first_team: true, squad_position: SquadPosition.find_by(id: team_player_to_add.get_squad_position_from_players_playing_position))
+        "#{team_player_to_add.full_name_with_team_name}"
+      end
     end
   end
 end
