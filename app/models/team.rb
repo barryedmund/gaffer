@@ -225,7 +225,7 @@ class Team < ActiveRecord::Base
     team_players.joins(:squad_position, :player).where('squad_positions.short_name = ? AND team_players.first_team = ? AND players.playing_position = ? AND players.news = ?', 'SUB', false, long_position, '').count > 0
   end
 
-  def most_needed_position
+  def get_most_needed_position
     if is_eligible_for_robo_first_team_additions
       has_sub_gk = has_sub_at_position('Goalkeeper')
       num_first_team_gk = number_of_first_team_players_at_position('GK')
@@ -240,23 +240,22 @@ class Team < ActiveRecord::Base
         positions_with_subs_with_fewest_first_team_players = positions_with_subs.min_by { |position| position[:num_first_team] }
         positions_with_subs_with_fewest_first_team_players[:pos]
       end
-    else
-      puts "_______ "
-      puts "_______ "
-      puts "Not eligible"
-      puts "_______ "
-      puts "_______ "
     end
   end
 
   def sub_to_move_to_first_team
-    position_to_add = most_needed_position
+    position_to_add = get_most_needed_position
     if position_to_add
       team_player_to_add = most_valuable_available_sub_at_position(position_to_add)
       if team_player_to_add
         team_player_to_add.update_attributes(first_team: true, squad_position: SquadPosition.find_by(id: team_player_to_add.get_squad_position_from_players_playing_position))
-        "#{team_player_to_add.full_name_with_team_name}"
+        puts "#{team_player_to_add.full_name} (#{team_player_to_add.player.playing_position})"
+        true
+      else
+        false
       end
+    else
+      false
     end
   end
 end
