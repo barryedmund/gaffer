@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   add_flash_types :success
+  before_action :set_last_seen_at, if: proc { logged_in? }
 
   private
   def logged_in?
@@ -24,5 +25,9 @@ class ApplicationController < ActionController::Base
         redirect_to login_path, notice: "Please log in or create an account before continuing."
       end
   	end
+  end
+
+  def set_last_seen_at
+    current_user.update_attribute(:last_seen_at, Time.now)
   end
 end
