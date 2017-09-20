@@ -1,4 +1,4 @@
-<% if transfer.is_a_transfer_listing && !transfer.transfer_completed? %>
+<% if transfer.is_auto_completing && !transfer.transfer_completed? %>
   <tr>
     <td class="mdl-data-table__cell--non-numeric normal-text" colspan="3" style="border-bottom:0px;">
       <% if transfer.transfer_listing_completes_at > Time.now %>

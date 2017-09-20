@@ -19,4 +19,13 @@ namespace :zombies do
       end
     end
   end
+
+  task :sign_players => :environment do
+    League.active_leagues.each do |league|
+      puts league.name
+      most_valuable_unsigned_player = Player.get_most_valuable_unattached_player_at_position(league, 'Midfielder')
+      puts "#{most_valuable_unsigned_player.full_name} valued at #{most_valuable_unsigned_player.player_value}"
+      puts ""
+    end
+  end
 end

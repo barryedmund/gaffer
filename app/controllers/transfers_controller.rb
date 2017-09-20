@@ -27,7 +27,7 @@ class TransfersController < ApplicationController
       @transfer_item_player.save
       @transfer_item_cash.save
       team_player = @transfer.get_team_player_involved
-      if team_player.is_force_transfer_listed?
+      if @transfer.is_a_transfer_listing && team_player.transfer_minimum_bid && @transfer_item_cash.cash_cents >= team_player.transfer_minimum_bid
         team_player.update_attributes!(transfer_completes_at: 3.days.from_now)
       end
       flash[:success] = "Transfer initiated."
@@ -59,6 +59,10 @@ class TransfersController < ApplicationController
   def update
     @cash_transfer_item = @transfer.transfer_items.where(transfer_item_type: 'Cash').first
     if @transfer.update(transfer_params) && @cash_transfer_item.update_attributes(cash_cents: params[:transfer][:transfer_item][:cash_cents])
+      team_player = @transfer.get_team_player_involved
+      if @transfer.is_a_transfer_listing && team_player.transfer_minimum_bid && @cash_transfer_item.cash_cents >= team_player.transfer_minimum_bid
+        team_player.update_attributes!(transfer_completes_at: 3.days.from_now)
+      end
       flash[:success] = "Updated transfer"
     else
       flash[:error] = @transfer.errors.full_messages.first
@@ -90,8 +94,8 @@ class TransfersController < ApplicationController
     @transfer = Transfer.find(params[:id])
     team_player_involved_in_transfer = @transfer.get_team_player_involved
     if @transfer.destroy
-      if team_player_involved_in_transfer.number_of_offers === 0
-        team_player_involved_in_transfer.update_attribute(:transfer_completes_at, nil)
+      if team_player_involved_in_transfer.number_of_offers == 0
+        team_player_involved_in_transfer.update_attributes!(transfer_completes_at: nil)
       end
       flash[:success] = "Transfer was cancelled successfully."
     else
