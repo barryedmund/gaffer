@@ -14,7 +14,6 @@ class TransferItem < ActiveRecord::Base
             :teams_in_same_league,
             :only_one_of_each_transfer_item_type, 
             on: :create
-  validate :cash_bid_is_not_below_minimum_bid
   validate :sending_team_has_enough_money
 
 
@@ -35,15 +34,6 @@ class TransferItem < ActiveRecord::Base
 
   def only_one_of_each_transfer_item_type
     errors.add(:base, "You can only make one offer on the same player.") if transfer.transfer_items.where('transfer_items.transfer_item_type = ?', 'Cash').count > 0
-  end
-
-  def cash_bid_is_not_below_minimum_bid
-    errors.add(:base, "Offer cannot be below listing price.") unless
-      transfer_item_type != "Cash" ||
-      !get_team_player_in_transfer ||
-      !get_team_player_in_transfer.transfer_listed? ||
-      (transfer_item_type === "Cash" && cash_cents != nil && cash_cents > 0 && !get_team_player_in_transfer.transfer_minimum_bid) || 
-      (transfer_item_type === "Cash" && cash_cents != nil && cash_cents > 0 && cash_cents >= get_team_player_in_transfer.transfer_minimum_bid)
   end
 
   def cash_transfer_items_have_positive_cash

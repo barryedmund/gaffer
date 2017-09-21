@@ -1,6 +1,6 @@
-<% this_transfer_is_a_listing = transfer.is_a_transfer_listing %>
+<% this_transfer_is_auto_completing = transfer.is_auto_completing %>
 <td class="mdl-data-table__cell--non-numeric normal-text transfer-item-cell" style="border-top:0px;border-bottom:0px;">
-  <% if !this_transfer_is_a_listing %>
+  <% if !this_transfer_is_auto_completing %>
     <% if transfer.primary_team_accepted %>
       <div class="green-circle"></div>
     <% else %>
@@ -16,7 +16,7 @@
   <% end %>
 </td>
 <td class="mdl-data-table__cell--non-numeric normal-text transfer-item-cell" style="border-top:0px;border-bottom:0px;">
-  <% if !this_transfer_is_a_listing %>
+  <% if !this_transfer_is_auto_completing %>
     <% if transfer.secondary_team_accepted %>
       <div class="green-circle"></div>
     <% else %>

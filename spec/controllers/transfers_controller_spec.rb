@@ -76,6 +76,30 @@ RSpec.describe TransfersController, :type => :controller do
         expect(team_player.transfer_completes_at).to_not eq(nil)
       end
     end
+
+    describe "when team_player has been voluntarily transfer listed and bid is high" do
+      before do
+        team_player.update_attributes(transfer_minimum_bid: 1230000, is_voluntary_transfer: true)
+      end
+
+      it "sets transfer_completes_at" do
+        post :create, { league_id: league.id, transfer: attributes }, valid_session
+        team_player.reload
+        expect(team_player.transfer_completes_at).to_not eq(nil)
+      end
+    end
+
+    describe "when team_player has been voluntarily transfer listed and bid is low" do
+      before do
+        team_player.update_attributes(transfer_minimum_bid: 2000000, is_voluntary_transfer: true)
+      end
+
+      it "does not set transfer_completes_at" do
+        post :create, { league_id: league.id, transfer: attributes }, valid_session
+        team_player.reload
+        expect(team_player.transfer_completes_at).to eq(nil)
+      end
+    end
   end
 
   describe "PATCH change_response" do

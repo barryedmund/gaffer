@@ -19,7 +19,7 @@
 										<li>
 											<%= render partial: 'change_transfer_status', locals: {transfer: @transfer, team: @current_user.get_team(league), league: league} %>
 										</li>
-										<% if !@transfer.is_a_transfer_listing || @transfer.primary_team.user == @current_user %>
+										<% if !@transfer.is_auto_completing || @transfer.primary_team.user == @current_user %>
 											<li>
 						          	<%= link_to "Negotiate", edit_league_transfer_path(league, @transfer), class: "mdl-button--primary" %>
 						          </li>

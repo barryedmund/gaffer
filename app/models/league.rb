@@ -10,6 +10,10 @@ class League < ActiveRecord::Base
    	league.errors.add attr, "Too many teams for league" if league.teams.size >= 20
 	end
 
+	def self.active_leagues
+		League.joins(teams: :user).where('users.last_seen_at > ?', 3.weeks.ago).uniq
+	end
+
 	def has_team_owned_by?(user)
 		self.teams.where('user_id = ?', user.id).any?
 	end

@@ -84,6 +84,10 @@ class Transfer < ActiveRecord::Base
     get_team_player_involved.transfer_listed?
   end
 
+  def is_auto_completing
+    is_a_transfer_listing && get_team_player_involved.transfer_completes_at
+  end
+
   def transfer_listing_completes_at
     get_team_player_involved.transfer_completes_at
   end

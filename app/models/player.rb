@@ -21,6 +21,12 @@ class Player < ActiveRecord::Base
     end
   end
 
+  def self.get_most_valuable_unattached_player_at_position(league, position)
+    all_unattached_players = self.get_all_unattached_players(league).where(news: '', playing_position: position)
+    puts all_unattached_players.count
+    all_unattached_players.sort_by{ |player| player.player_value }.last
+  end
+
 	def full_name(abbreviate = false, cut_off = 13)
     if abbreviate
       working_full_name = "#{first_name} #{last_name}"
