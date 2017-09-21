@@ -1,5 +1,5 @@
 <% this_transfer_is_auto_completing = transfer.is_auto_completing %>
-<% if transfer.is_a_transfer_listing %>
+<% if this_transfer_is_auto_completing %>
   <i class="material-icons large <%= transfer.is_winning_bid ? 'success' : 'error' %>">playlist_add_check</i>
 <% end %>
 Created <%= time_ago_in_words(transfer.created_at, include_seconds: false) %> ago <%= this_transfer_is_auto_completing ? "(Completes in #{time_ago_in_words(transfer.transfer_listing_completes_at, include_seconds: false)})" : "" %>

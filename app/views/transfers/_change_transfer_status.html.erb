@@ -1,4 +1,4 @@
-<% if !@transfer.is_a_transfer_listing %>
+<% if !@transfer.is_auto_completing %>
   <% if transfer.team_transfer_status(team) == 'accepted' %>
   	<%= link_to "Reject", change_response_league_transfer_path(league, @transfer), method: :patch, class: "mdl-button--secondary" %>
   <% else %>
