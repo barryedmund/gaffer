@@ -22,10 +22,14 @@ namespace :zombies do
 
   task :sign_players => :environment do
     League.active_leagues.each do |league|
-      puts league.name
-      most_valuable_unsigned_player = Player.get_most_valuable_unattached_player_at_position(league, 'Midfielder')
-      puts "#{most_valuable_unsigned_player.full_name} valued at #{most_valuable_unsigned_player.player_value}"
-      puts ""
+      puts "--#{league.name}--"
+      league.teams.where(deleted_at: nil).each do |team|
+        if what_to_sign = team.get_position_to_sign
+          who_to_sign = Player.get_most_valuable_unattached_player_at_position(league, what_to_sign)
+          puts "#{team.title}: #{team.formation_with_subs} Recommend: #{who_to_sign.full_name})" if team.is_zombie_team
+        end
+      end
+      puts "_-_-_-_-_-_-_"
     end
   end
 end
