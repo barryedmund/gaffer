@@ -221,6 +221,10 @@ class Team < ActiveRecord::Base
     team_players.joins(:squad_position).where('squad_positions.short_name = ? AND team_players.first_team = ?', short_position, true).count
   end
 
+  def number_of_subs_at_position(long_position)
+    team_players.joins(:squad_position, :player).where('squad_positions.short_name = ? AND team_players.first_team = ? AND players.playing_position = ? AND players.news = ?', 'SUB', false, long_position, '').count
+  end
+
   def has_sub_at_position(long_position)
     team_players.joins(:squad_position, :player).where('squad_positions.short_name = ? AND team_players.first_team = ? AND players.playing_position = ? AND players.news = ?', 'SUB', false, long_position, '').count > 0
   end
@@ -254,6 +258,45 @@ class Team < ActiveRecord::Base
       else
         false
       end
+    else
+      false
+    end
+  end
+
+  def formation_with_subs
+    "#{number_of_first_team_players_at_position('GK')} - #{number_of_first_team_players_at_position('DF')} - #{number_of_first_team_players_at_position('MD')} - #{number_of_first_team_players_at_position('FW')} (#{number_of_subs_at_position('Goalkeeper')} - #{number_of_subs_at_position('Defender')} - #{number_of_subs_at_position('Midfielder')} - #{number_of_subs_at_position('Forward')})"
+  end
+
+  def get_position_to_sign
+    num_ft_gk = number_of_first_team_players_at_position('GK')
+    num_ft_df = number_of_first_team_players_at_position('DF')
+    num_ft_md = number_of_first_team_players_at_position('MD')
+    num_ft_fw = number_of_first_team_players_at_position('FW')
+
+    num_squad_gk = num_ft_gk + number_of_subs_at_position('Goalkeeper')
+    num_squad_df = num_ft_df + number_of_subs_at_position('Defender')
+    num_squad_md = num_ft_md + number_of_subs_at_position('Midfielder')
+    num_squad_fw = num_ft_fw + number_of_subs_at_position('Forward')
+
+    if !has_full_starting_team
+      if num_ft_gk == 0
+        'Goalkeeper'
+      else
+        first_team_outfield = [
+        {pos: "Defender", num_first_team: num_ft_df},
+        {pos: "Midfielder", num_first_team: num_ft_md},
+        {pos: "Forward", num_first_team: num_ft_fw}]
+        positions_with_fewest_first_team_players = first_team_outfield.min_by { |position| position[:num_first_team] }
+        positions_with_fewest_first_team_players[:pos]
+      end
+    elsif num_squad_gk < 2
+      'Goalkeeper'
+    elsif num_squad_df < 6
+      'Defender'
+    elsif num_squad_md < 6
+      'Midfielder'
+    elsif num_squad_fw < 5
+      'Forward'
     else
       false
     end

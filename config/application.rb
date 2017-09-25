@@ -33,5 +33,6 @@ module Gaffer
     # Min & max length of contract
     config.min_length_of_contract_days = 90
     config.max_length_of_contract_days = 1095
+    config.min_weekly_salary_of_contract = 25000
   end
 end
