@@ -24,10 +24,11 @@ namespace :zombies do
     League.active_leagues.each do |league|
       puts "--#{league.name}--"
       league.teams.where(deleted_at: nil).order("RANDOM()").each do |team|
-        if what_to_sign = team.get_position_to_sign
-          who_to_sign = Player.get_most_valuable_unattached_player_at_position(league, what_to_sign)
-          should_make_offer = team.is_zombie_team && !who_to_sign.has_contract_offer_from_team?(team)
-          if should_make_offer
+        players_with_contract_offers_from_team = team.get_players_with_contract_offers
+        if team.is_zombie_team && what_to_sign = team.get_position_to_sign(players_with_contract_offers_from_team)
+          who_to_sign = Player.get_most_valuable_unattached_player_at_position(league, what_to_sign, players_with_contract_offers_from_team)
+          puts "#{players_with_contract_offers_from_team.inspect}"
+          if !who_to_sign.has_contract_offer_from_team?(team)
             @contract_offer = Contract.new(
               team: team,
               player: who_to_sign,
@@ -36,7 +37,7 @@ namespace :zombies do
               weekly_salary_cents: Rails.application.config.min_weekly_salary_of_contract)
             if @contract_offer.save
               NewsItem.create(league: team.league, news_item_resource_type: 'Contract', news_item_resource_id: @contract_offer.id, body: "#{@contract_offer.player.full_name(true,13)} offered contract")
-              puts "#{team.title}: #{team.formation_with_subs} Offered: #{who_to_sign.full_name})"
+              puts "#{team.title}: #{team.formation_with_subs} Offered: #{who_to_sign.full_name}"
             end
           end
         end
