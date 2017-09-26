@@ -21,8 +21,8 @@ class Player < ActiveRecord::Base
     end
   end
 
-  def self.get_most_valuable_unattached_player_at_position(league, position)
-    all_unattached_players = self.get_all_unattached_players(league).where(news: '', playing_position: position)
+  def self.get_most_valuable_unattached_player_at_position(league, position, player_ids_of_contract_offers = nil)
+    all_unattached_players = self.get_all_unattached_players(league).where(news: '', playing_position: position).where.not(id: player_ids_of_contract_offers)
     all_unattached_players.sort_by{ |player| player.player_value }.last
   end
 

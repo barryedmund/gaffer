@@ -85,6 +85,10 @@ class Team < ActiveRecord::Base
      number_of_game_weeks * get_weekly_total_of_signed_contracts
   end
 
+  def get_players_with_contract_offers
+    contracts.where(signed: false).pluck(:player_id)
+  end
+
   def get_current_game
     league_current_league_season = league.current_league_season
     if league_current_league_season
@@ -267,11 +271,17 @@ class Team < ActiveRecord::Base
     "#{number_of_first_team_players_at_position('GK')} - #{number_of_first_team_players_at_position('DF')} - #{number_of_first_team_players_at_position('MD')} - #{number_of_first_team_players_at_position('FW')} (#{number_of_subs_at_position('Goalkeeper')} - #{number_of_subs_at_position('Defender')} - #{number_of_subs_at_position('Midfielder')} - #{number_of_subs_at_position('Forward')})"
   end
 
-  def get_position_to_sign
-    num_ft_gk = number_of_first_team_players_at_position('GK')
-    num_ft_df = number_of_first_team_players_at_position('DF')
-    num_ft_md = number_of_first_team_players_at_position('MD')
-    num_ft_fw = number_of_first_team_players_at_position('FW')
+  def get_position_to_sign(player_ids_of_contract_offers = nil)
+    players_with_contract_offers = Player.where('id IN (?)', player_ids_of_contract_offers)
+    num_contract_offers_gk = players_with_contract_offers.where(playing_position: 'Goalkeeper').count
+    num_contract_offers_df = players_with_contract_offers.where(playing_position: 'Defender').count
+    num_contract_offers_md = players_with_contract_offers.where(playing_position: 'Midfielder').count
+    num_contract_offers_fw = players_with_contract_offers.where(playing_position: 'Forward').count
+
+    num_ft_gk = number_of_first_team_players_at_position('GK') + num_contract_offers_gk
+    num_ft_df = number_of_first_team_players_at_position('DF') + num_contract_offers_df
+    num_ft_md = number_of_first_team_players_at_position('MD') + num_contract_offers_md
+    num_ft_fw = number_of_first_team_players_at_position('FW') + num_contract_offers_fw
 
     num_squad_gk = num_ft_gk + number_of_subs_at_position('Goalkeeper')
     num_squad_df = num_ft_df + number_of_subs_at_position('Defender')
