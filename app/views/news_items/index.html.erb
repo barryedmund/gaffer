@@ -1,7 +1,6 @@
 <% team_leagues = League.joins(:teams).where('teams.user_id = ?', @current_user.id) %>
 <% admin_leagues = League.where('leagues.user_id = ?', @current_user.id) %>
 <% leagues = League.where(id: (team_leagues + admin_leagues.uniq)) %>
-<% news_items = NewsItem.where(league: leagues.all.pluck(:id)).order(created_at: :desc) %>
 <div class="col-sm-12">
 	<% if @current_user.teams.count == 0 %>
 		<%= render partial: 'shared/leagues/your_leagues', locals: { leagues: leagues } %>
@@ -76,7 +75,7 @@
 	    </div>
 
 	    <div class="mdl-card__actions">
-	    	<% fresh_news_items = news_items.where('created_at > ?', 4.days.ago) %>
+	    	<% fresh_news_items = NewsItem.where('news_items.league_id IN (?) AND news_items.created_at >= ?', leagues.all.pluck(:id), 1.week.ago).order(created_at: :desc) %>
 	    	<% if fresh_news_items.count > 0 %>
 		    	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-data-table-fixed">
 		    		<% fresh_news_items.each do |news_item| %>

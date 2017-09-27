@@ -123,6 +123,6 @@ class TeamPlayer < ActiveRecord::Base
   end
 
   def relative_value
-    (player.player_value(Season.current.first) / current_contract.weekly_salary_cents).round
+    (player.player_value / current_contract.weekly_salary_cents).round
   end
 end

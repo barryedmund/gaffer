@@ -45,4 +45,26 @@ namespace :zombies do
       puts "_-_-_-_-_-_-_"
     end
   end
+
+  task :respond_to_transfer_bids => :environment do
+    League.active_leagues.each do |league|
+      puts ""
+      puts "#{league.name}"
+      league.teams.where(deleted_at: nil).each do |team|
+        if team.is_zombie_team
+          puts " > > #{team.title}"
+          puts " > > > > #{team.cash_balance_cents}"
+          team.get_active_transfers.each do |transfer|
+            puts " > > > > #{transfer.get_team_player_involved.full_name}"
+            puts " > > > > > > Forced transfer: #{transfer.get_team_player_involved.is_force_transfer_listed?}"
+            puts " > > > > > > Winning bid: #{transfer.is_winning_bid}"
+            puts " > > > > > > Offer: #{transfer.get_cash_involved}"
+            puts " > > > > > > Value: #{transfer.get_team_player_involved.player.player_value}"
+            puts " > > > > > > Minimum bid: #{transfer.get_team_player_involved.transfer_minimum_bid}"
+            puts " > > > > > > Relative value: #{transfer.get_team_player_involved.relative_value}"
+          end
+        end
+      end
+    end    
+  end
 end

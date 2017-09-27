@@ -34,7 +34,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def complete_a_transfer_listing
-    if is_a_transfer_listing
+    if is_auto_completing
       self.update_attributes(primary_team_accepted: true, secondary_team_accepted: true)
       complete_transfer
     end
@@ -55,7 +55,7 @@ class Transfer < ActiveRecord::Base
         contract = transfer_item.team_player.current_contract
         contract.update_attributes!(signed: false)
         contract.update_attributes!(team: receiver, signed: true)
-        transfer_item.team_player.update_attributes!(team: receiver, first_team: false, squad_position: SquadPosition.find_by(:short_name => 'SUB'))
+        transfer_item.team_player.update_attributes!(team: receiver, first_team: false, squad_position: SquadPosition.find_by(short_name: 'SUB'), transfer_minimum_bid: nil, transfer_completes_at: nil, is_voluntary_transfer: false)
       end
     end
   end
