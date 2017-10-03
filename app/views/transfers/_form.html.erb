@@ -23,9 +23,9 @@
       <% primary_team_accepted = primary_team == @current_user_team ? true : false %>
       <% secondary_team_accepted = secondary_team == @current_user_team ? true : false %>
     <% else %>
-      <% team_player_value = @team_player.get_transfer_listed_player_initial_bid %>
       <% primary_team = @current_user_team %>
       <% secondary_team = @team_player.team %>
+      <% team_player_value = @team_player.get_transfer_listed_player_initial_bid(primary_team) %>
       <% primary_team_accepted = true %>
       <% secondary_team_accepted = false %>
     <% end %>

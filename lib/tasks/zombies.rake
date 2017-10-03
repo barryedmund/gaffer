@@ -62,6 +62,31 @@ namespace :zombies do
             puts " > > > > > > Value: #{transfer.get_team_player_involved.player.player_value}"
             puts " > > > > > > Minimum bid: #{transfer.get_team_player_involved.transfer_minimum_bid}"
             puts " > > > > > > Relative value: #{transfer.get_team_player_involved.relative_value}"
+            team_debt = team.cash_balance_cents < 0 ? team.cash_balance_cents * -1 : 0
+            bid_amount = transfer.get_cash_involved
+            team_player_involved = transfer.get_team_player_involved
+            is_bid_enough_to_clear_debt = team_debt > 0 && bid_amount > team_debt
+            if transfer.is_winning_bid
+              if team_player_involved.transfer_listed?
+                team_player_list_price = team_player_involved.transfer_minimum_bid
+                is_bid_greater_than_list_price = bid_amount >= team_player_list_price
+                is_bid_decent = bid_amount > (team_player_list_price * 0.75)
+                if is_bid_greater_than_list_price || (is_bid_decent && is_bid_enough_to_clear_debt)
+                  puts " > > > > > > > > ACCEPT (a)"
+                else
+                  puts " > > > > > > > > NEGOTIATE (a)"
+                end
+              else
+                is_bid_decent = bid_amount > (team_player_involved.player.player_value * 0.75)
+                if team_player_involved.relative_value < 100 && is_bid_decent
+                  puts " > > > > > > > > ACCEPT (b)"
+                else
+                  puts " > > > > > > > > NEGOTIATE (b)"
+                end
+              end
+            else
+              puts " > > > > > > > > NEGOTIATE (c)"
+            end
           end
         end
       end
