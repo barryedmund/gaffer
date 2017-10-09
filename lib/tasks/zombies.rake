@@ -52,7 +52,7 @@ namespace :zombies do
       puts "#{league.name}"
       league.teams.where(deleted_at: nil).order(:created_at).each do |team|
         if team.is_zombie_team
-          team.get_active_transfers.where(secondary_team: team).each do |transfer|
+          team.get_active_transfers.where(secondary_team: team, secondary_team_accepted: false).each do |transfer|
             other_team = transfer.get_other_team_involved(team)
             team_debt = team.cash_balance_cents < 0 ? team.cash_balance_cents * -1 : 0
             bid_amount = transfer.get_cash_involved
