@@ -57,8 +57,8 @@ class TeamPlayer < ActiveRecord::Base
     end
   end
 
-  def get_transfer_listed_player_initial_bid
-    transfer_minimum_bid ? transfer_minimum_bid : [[player.player_value, team.cash_balance_cents].min, 0].max
+  def get_transfer_listed_player_initial_bid(bidding_team)
+    transfer_minimum_bid ? transfer_minimum_bid : [[player.player_value, bidding_team.cash_balance_cents].min, 0].max
   end
 
   def transfer_listed?
@@ -123,6 +123,6 @@ class TeamPlayer < ActiveRecord::Base
   end
 
   def relative_value
-    (player.player_value(Season.current.first) / current_contract.weekly_salary_cents).round
+    (player.player_value / current_contract.weekly_salary_cents).round
   end
 end
