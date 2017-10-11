@@ -120,7 +120,6 @@ class TeamPlayer < ActiveRecord::Base
         end
       end
     end
-    puts "update_attributes(transfer_minimum_bid: #{new_transfer_minimum_bid}, transfer_completes_at: #{new_transfer_completes_at}, is_voluntary_transfer: #{new_is_voluntary_transfer})"
     self.update_attributes(transfer_minimum_bid: new_transfer_minimum_bid, transfer_completes_at: new_transfer_completes_at, is_voluntary_transfer: new_is_voluntary_transfer)
   end
 
@@ -138,5 +137,11 @@ class TeamPlayer < ActiveRecord::Base
 
   def relative_deal_value
     deal_value > 0 ? (deal_value / current_contract.weekly_salary_cents).round : 0
+  end
+
+  def has_active_transfer_bid_from_team(team_to_check)
+    is_this_team_player = false
+    Transfer.incomplete_transfers_with_team_involved(team_to_check).map{ |transfer| is_this_team_player = true if transfer.get_team_player_involved == self }
+    is_this_team_player
   end
 end

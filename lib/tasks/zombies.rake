@@ -27,27 +27,35 @@ namespace :zombies do
         if team.is_zombie_team && what_to_sign = team.get_position_to_sign(players_with_contract_offers_from_team)
           free_agent_to_sign = Player.get_most_valuable_unattached_player_at_position(league, what_to_sign, players_with_contract_offers_from_team)
           transfer_listed_player_to_sign = TeamPlayer.get_best_deal_of_transfer_listed_team_players_at_position(team, what_to_sign)
+          puts " "
           puts "#{league.name} | #{team.title} | #{team.cash_balance_cents}"
           signing_options = []
           if free_agent_to_sign
-            signing_options << {type: "free_agent", object: free_agent_to_sign.full_name, relative_deal_value: (free_agent_to_sign.player_value / Rails.application.config.min_weekly_salary_of_contract).round}
-            free_agent_relative_deal_value = (free_agent_to_sign.player_value / Rails.application.config.min_weekly_salary_of_contract).round
-            if transfer_listed_player_to_sign
-              signing_options << {type: "transfer_listed", object: transfer_listed_player_to_sign.full_name, relative_deal_value: transfer_listed_player_to_sign.relative_deal_value}
+            signing_options << {type: "free_agent", object: free_agent_to_sign, relative_deal_value: (free_agent_to_sign.player_value / Rails.application.config.min_weekly_salary_of_contract).round, valid: !free_agent_to_sign.has_contract_offer_from_team?(team)}
+          end
+          if transfer_listed_player_to_sign
+            already_bid_on_this_player = transfer_listed_player_to_sign.has_active_transfer_bid_from_team(team)
+            signing_options << {type: "transfer_listed", object: transfer_listed_player_to_sign, relative_deal_value: transfer_listed_player_to_sign.relative_deal_value, valid: (team.cash_balance_cents - transfer_listed_player_to_sign.transfer_minimum_bid >= Rails.application.config.min_remaining_for_zombie_after_transfer_bid) && !already_bid_on_this_player }
+            # TODO Doesn't have a bid by this team
+          end
+          best_option = signing_options.select{ |option| option[:valid] }.max_by{ |option| option[:relative_deal_value] }
+          if best_option.present?
+            if best_option[:type] == "free_agent"
+              puts " > > Sign this bastard: #{best_option[:object].full_name}"
+              # @contract_offer = Contract.new(
+              #   team: team,
+              #   player: free_agent_to_sign,
+              #   starts_at: Date.today,
+              #   ends_at: Rails.application.config.min_length_of_contract_days.days.from_now.strftime('%Y-%m-%d'),
+              #   weekly_salary_cents: Rails.application.config.min_weekly_salary_of_contract)
+              # if @contract_offer.save
+              #   NewsItem.create(league: team.league, news_item_resource_type: 'Contract', news_item_resource_id: @contract_offer.id, body: "#{@contract_offer.player.full_name(true,13)} offered contract")
+              # end
+            elsif best_option[:type] == "transfer_listed"
+              puts " > > Bid on this bastard: #{best_option[:object].full_name}"
             end
           end
-          puts " > > signing_options: #{signing_options.inspect}"
-          # if free_agent_to_sign && !free_agent_to_sign.has_contract_offer_from_team?(team)
-          #   @contract_offer = Contract.new(
-          #     team: team,
-          #     player: free_agent_to_sign,
-          #     starts_at: Date.today,
-          #     ends_at: Rails.application.config.min_length_of_contract_days.days.from_now.strftime('%Y-%m-%d'),
-          #     weekly_salary_cents: Rails.application.config.min_weekly_salary_of_contract)
-          #   if @contract_offer.save
-          #     NewsItem.create(league: team.league, news_item_resource_type: 'Contract', news_item_resource_id: @contract_offer.id, body: "#{@contract_offer.player.full_name(true,13)} offered contract")
-          #   end
-          # end
+          puts " "
         end
       end
     end
