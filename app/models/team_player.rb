@@ -16,6 +16,12 @@ class TeamPlayer < ActiveRecord::Base
     self.transfer_listed_with_offers.where('transfer_completes_at < ?', Time.now)
   end
 
+  def self.get_best_deal_of_transfer_listed_team_players_at_position(team, position)
+    if most_recently_finished_gameweek = GameWeek.get_most_recent_finished
+      self.joins(:team, player: :player_game_weeks).where('team_players.transfer_minimum_bid IS NOT NULL AND team_players.team_id != ? AND teams.league_id = ? AND players.playing_position = ? AND player_game_weeks.game_week_id = ? AND player_game_weeks.minutes_played > ?', team.id, team.league_id, position,most_recently_finished_gameweek.id, 0).select{ |team_player| team_player.relative_deal_value >= 50 }.sort_by{ |team_player| team_player.relative_deal_value }.last
+    end
+  end
+
   def full_name(abbreviate = false, cut_off = 13)
     if abbreviate
       working_full_name = "#{player.first_name} #{player.last_name}"
@@ -114,7 +120,6 @@ class TeamPlayer < ActiveRecord::Base
         end
       end
     end
-    puts "update_attributes(transfer_minimum_bid: #{new_transfer_minimum_bid}, transfer_completes_at: #{new_transfer_completes_at}, is_voluntary_transfer: #{new_is_voluntary_transfer})"
     self.update_attributes(transfer_minimum_bid: new_transfer_minimum_bid, transfer_completes_at: new_transfer_completes_at, is_voluntary_transfer: new_is_voluntary_transfer)
   end
 
@@ -124,5 +129,19 @@ class TeamPlayer < ActiveRecord::Base
 
   def relative_value
     (player.player_value / current_contract.weekly_salary_cents).round
+  end
+
+  def deal_value
+    transfer_listed? ? (player.player_value - transfer_minimum_bid) : 0
+  end
+
+  def relative_deal_value
+    deal_value > 0 ? (deal_value / current_contract.weekly_salary_cents).round : 0
+  end
+
+  def has_active_transfer_bid_from_team(team_to_check)
+    is_this_team_player = false
+    Transfer.incomplete_transfers_with_team_involved(team_to_check).map{ |transfer| is_this_team_player = true if transfer.get_team_player_involved == self }
+    is_this_team_player
   end
 end

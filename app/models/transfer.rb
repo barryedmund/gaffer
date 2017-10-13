@@ -15,6 +15,15 @@ class Transfer < ActiveRecord::Base
     incomplete_transfers.where('transfers.primary_team_id = :team_value OR transfers.secondary_team_id = :team_value', {team_value: team.id})
   end
 
+  def self.set_up_transfer(team_making_offer, team_player, bid_amount)
+    new_transfer = Transfer.create(primary_team: team_making_offer, secondary_team: team_player.team, primary_team_accepted: true, secondary_team_accepted: false)
+    cash_transfer_item = TransferItem.create(transfer: new_transfer, sending_team: team_player.team, receiving_team: team_making_offer, transfer_item_type: 'Player', team_player: team_player)
+    player_transfer_item = TransferItem.create(transfer: new_transfer, sending_team: team_making_offer, receiving_team: team_player.team, transfer_item_type: 'Cash', cash_cents: bid_amount)
+    if new_transfer
+      NewsItem.create(league: team_making_offer.league, news_item_resource_type: 'Transfer', news_item_resource_id: new_transfer.id, body: "Transfer initiated by #{new_transfer.primary_team.title}")
+    end
+  end
+
   def transfer_completed?
     primary_team_accepted ? (secondary_team_accepted ? true : false) : false
   end

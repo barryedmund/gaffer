@@ -22,8 +22,10 @@ class Player < ActiveRecord::Base
   end
 
   def self.get_most_valuable_unattached_player_at_position(league, position, player_ids_of_contract_offers = nil)
-    all_unattached_players = self.get_all_unattached_players(league).where(news: '', playing_position: position).where.not(id: player_ids_of_contract_offers)
-    all_unattached_players.sort_by{ |player| player.player_value }.last
+    if most_recently_finished_gameweek = GameWeek.get_most_recent_finished
+      all_unattached_players = self.get_all_unattached_players(league).joins(:player_game_weeks).where('player_game_weeks.game_week_id = ? AND player_game_weeks.minutes_played > ? AND players.news = ? AND players.playing_position = ?', most_recently_finished_gameweek.id, 0, '', position).where.not(id: player_ids_of_contract_offers)
+      all_unattached_players.sort_by{ |player| player.player_value }.last
+    end
   end
 
 	def full_name(abbreviate = false, cut_off = 13)
