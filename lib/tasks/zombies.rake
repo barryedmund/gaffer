@@ -35,7 +35,9 @@ namespace :zombies do
             already_bid_on_this_player = transfer_listed_player_to_sign.has_active_transfer_bid_from_team(team)
             signing_options << {type: "transfer_listed", object: transfer_listed_player_to_sign, relative_deal_value: transfer_listed_player_to_sign.relative_deal_value, valid: (team.cash_balance_cents - transfer_listed_player_to_sign.transfer_minimum_bid >= Rails.application.config.min_remaining_for_zombie_after_transfer_bid) && !already_bid_on_this_player }
           end
+          puts "-"
           puts "#{team.title}: #{signing_options.inspect}"
+          puts "-"
           best_option = signing_options.select{ |option| option[:valid] }.max_by{ |option| option[:relative_deal_value] }
           if best_option.present?
             if best_option[:type] == "free_agent"

@@ -16,20 +16,12 @@ class Transfer < ActiveRecord::Base
   end
 
   def self.set_up_transfer(team_making_offer, team_player, bid_amount)
-    puts ">>>>>>>>>"
     new_transfer = Transfer.create(primary_team: team_making_offer, secondary_team: team_player.team, primary_team_accepted: true, secondary_team_accepted: false)
     cash_transfer_item = TransferItem.create(transfer: new_transfer, sending_team: team_player.team, receiving_team: team_making_offer, transfer_item_type: 'Player', team_player: team_player)
     player_transfer_item = TransferItem.create(transfer: new_transfer, sending_team: team_making_offer, receiving_team: team_player.team, transfer_item_type: 'Cash', cash_cents: bid_amount)
     if new_transfer
       NewsItem.create(league: team_making_offer.league, news_item_resource_type: 'Transfer', news_item_resource_id: new_transfer.id, body: "Transfer initiated by #{new_transfer.primary_team.title}")
     end
-    # , transfer_items_attributes: [
-    #   { sending_team: team_player.team, receiving_team: team_making_offer, transfer_item_type: 'Player', team_player: team_player },
-    #   { sending_team: team_making_offer, receiving_team: team_player.team, transfer_item_type: 'Cash', cash_cents: bid_amount }]
-    # new_transfer.save!
-    puts new_transfer.inspect
-    puts new_transfer.transfer_items.inspect
-    puts "<<<<<<<<<"
   end
 
   def transfer_completed?
