@@ -116,7 +116,7 @@ class TransfersController < ApplicationController
 
 	private
   def transfer_params
-    params.require(:transfer).permit(:primary_team_id, :secondary_team_id, :primary_team_accepted, :secondary_team_accepted, transfer_items_attributes: [:id, :transfer, :sending_team_id, :receiving_team_id, :transfer_item_type, :team_player_id, :cash_cents])
+    params.require(:transfer).permit(:primary_team_id, :secondary_team_id, :primary_team_accepted, :secondary_team_accepted, transfer_items: [:id, :transfer, :sending_team_id, :receiving_team_id, :transfer_item_type, :team_player_id, :cash_cents])
   end
 
   def set_transfer

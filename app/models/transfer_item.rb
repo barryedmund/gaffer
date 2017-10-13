@@ -7,12 +7,12 @@ class TransferItem < ActiveRecord::Base
   validates :transfer_item_type, inclusion: { in: ['Cash', 'Player'] }
   validate  :cash_transfer_items_have_positive_cash,
             :cash_transfer_items_do_not_have_team_player,
-            :player_trasnfer_item_to_have_team_player,
+            :player_transfer_item_to_have_team_player,
             :player_transfer_items_do_not_have_cash_cents,
             :sending_team_owns_player,
             :teams_involved_different,
             :teams_in_same_league,
-            :only_one_of_each_transfer_item_type, 
+            :bidding_team_does_not_have_separate_bid,
             on: :create
   validate :sending_team_has_enough_money
 
@@ -32,10 +32,6 @@ class TransferItem < ActiveRecord::Base
 
   private
 
-  def only_one_of_each_transfer_item_type
-    errors.add(:base, "You can only make one offer on the same player.") if transfer.transfer_items.where('transfer_items.transfer_item_type = ?', 'Cash').count > 0
-  end
-
   def cash_transfer_items_have_positive_cash
     errors.add(:base, "Cash must be positive for cash transfer items.") unless transfer_item_type != "Cash" || (transfer_item_type === "Cash" && cash_cents != nil && cash_cents > 0)
   end
@@ -44,7 +40,7 @@ class TransferItem < ActiveRecord::Base
     errors.add(:base, "No players are involved in cash transfer items.") unless transfer_item_type != "Cash" || (transfer_item_type === "Cash" && team_player === nil)
   end
 
-  def player_trasnfer_item_to_have_team_player
+  def player_transfer_item_to_have_team_player
     errors.add(:base, "Player must be involved in player transfer items.") unless transfer_item_type != "Player" || (transfer_item_type === "Player" && team_player != nil)
   end
 
@@ -66,5 +62,9 @@ class TransferItem < ActiveRecord::Base
 
   def sending_team_has_enough_money
     errors.add(:base, "Not enough money.") unless transfer_item_type != "Cash" || cash_cents === nil || sending_team.cash_balance_cents >= cash_cents
+  end
+
+  def bidding_team_does_not_have_separate_bid
+    errors.add(:base, "Team already has bid on player.") if transfer_item_type == "Player" && team_player.active_transfers.where(primary_team: receiving_team).count > 0
   end
 end
