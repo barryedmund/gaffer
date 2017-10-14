@@ -18,6 +18,12 @@
 			    	</div>
 			    </div>
 			    <div class="form-group">
+			    	<label class = "mdl-switch mdl-js-switch mdl-js-ripple-effect" for = "is_transfer_listed">
+              <!-- <input type = "checkbox" id = "switch-1" class = "mdl-switch__input" checked> -->
+              <%= check_box_tag :is_transfer_listed, true, false, class: "mdl-switch__input" %>
+            </label>
+			    </div>
+			    <div class="form-group">
 			    	<%= submit_tag "Search", name: nil, class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
 			    </div>
 				<% end %>

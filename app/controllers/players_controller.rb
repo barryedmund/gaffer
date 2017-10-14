@@ -5,7 +5,9 @@ class PlayersController < ApplicationController
 	def index
     @players = Player.where(available: true)
     if params[:search]
-      @players = @players.search(params[:search])
+      puts ">>>>>>>>"
+      puts "#{params[:search]}"
+      @players = @players.search(params[:search].strip)
     end
   end
 

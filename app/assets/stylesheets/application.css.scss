@@ -377,6 +377,10 @@ td.transfer-item-cell {
 	outline: none;
 	text-decoration: underline;
 }
+.highlight_warning {
+  color: #ff6e40;
+  font-weight: bold;
+}
 .selected-tab, .selected-tab:active, .selected-tab:hover, .selected-tab:visited {
 	border: 1px solid #888;
 	color: #111111;

@@ -27,7 +27,7 @@ module Gaffer
     # Player value is based on performance, but if they have no history, or are terrible, this is their value
     config.minimum_player_value = 50000
     # Weeks per year of contract that a team pays when releasing a player
-    config.contract_weeks_to_pay_out_on_release = 20
+    config.contract_weeks_to_pay_out_on_release = 10
     # How much is each position in the table worth at the end of the season?
     config.reward_per_position_at_end_of_season = 2000000
     # Min & max length of contract

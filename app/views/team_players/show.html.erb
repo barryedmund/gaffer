@@ -54,6 +54,14 @@
 							</td>
 						</tr>
 					<% end %>
+					<tr>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							News
+						</td>
+						<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2">
+							<%= @team_player.player.display_news %>
+						</td>
+					</tr>
 				</table>
 			</div>
 			<div class="mdl-card__supporting-text">
@@ -61,7 +69,7 @@
 					<% if !@team_player.transfer_minimum_bid %>
 						<li><%= link_to "Set transfer price", edit_league_team_team_player_path(@team.league, @team, @team_player), class: "mdl-button--secondary" %></li>
 					<% end %>
-					<li><%= link_to "Release for #{number_to_currency(@team_player.current_contract.release_value, precision: 0)}", release_league_team_team_player_path(@team.league, @team, @team_player), method: :patch, class: "mdl-button--secondary" %></li>
+					<li><%= link_to "Pay #{number_to_currency(@team_player.current_contract.release_value, precision: 0)} to release", release_league_team_team_player_path(@team.league, @team, @team_player), method: :patch, class: "mdl-button--secondary" %></li>
 				</ul>
 			</div>
 		</div>

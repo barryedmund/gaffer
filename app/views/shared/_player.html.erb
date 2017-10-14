@@ -20,7 +20,7 @@
 <% end %>
 
 <!-- Position -->
-<td class="mdl-data-table__cell--non-numeric normal-text">
+<td class="mdl-data-table__cell--non-numeric normal-text <%= 'highlight_warning' unless player_object.news.blank? %>">
 	<%= SquadPosition.long_name_to_short_name(player_object.playing_position) %>
 </td>
 
