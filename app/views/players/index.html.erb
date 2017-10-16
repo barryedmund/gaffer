@@ -18,9 +18,10 @@
 			    	</div>
 			    </div>
 			    <div class="form-group">
-			    	<label class = "mdl-switch mdl-js-switch mdl-js-ripple-effect" for = "is_transfer_listed">
-              <!-- <input type = "checkbox" id = "switch-1" class = "mdl-switch__input" checked> -->
-              <%= check_box_tag :is_transfer_listed, true, false, class: "mdl-switch__input" %>
+			    	<% should_be_checked = params[:is_transfer_listed] && params[:is_transfer_listed] == 'true' %>
+			    	<span class = "mdl-checkbox__label">Transfer listed</span>
+			    	<label class = "mdl-switch mdl-js-switch mdl-js-ripple-effect" for="is_transfer_listed">
+              <%= check_box_tag :is_transfer_listed, true, should_be_checked, class: "mdl-switch__input" %>
             </label>
 			    </div>
 			    <div class="form-group">

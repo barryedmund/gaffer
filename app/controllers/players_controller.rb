@@ -4,10 +4,13 @@ class PlayersController < ApplicationController
 
 	def index
     @players = Player.where(available: true)
+    @league = League.find_by_id(params[:league_id])
+    puts "params[:is_transfer_listed]: #{params[:is_transfer_listed]}"
     if params[:search]
-      puts ">>>>>>>>"
-      puts "#{params[:search]}"
       @players = @players.search(params[:search].strip)
+    end
+    if params[:is_transfer_listed] && params[:is_transfer_listed] == 'true'
+      @players = @players.joins(team_players: :team).where('teams.league_id = ? AND team_players.transfer_minimum_bid IS NOT NULL', @league.id)
     end
   end
 

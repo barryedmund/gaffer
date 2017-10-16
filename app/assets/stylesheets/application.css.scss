@@ -75,6 +75,13 @@ li {
 	font-size: 24px;
   line-height: 32px;
 }
+span.mdl-checkbox__label {
+  color: rgb(139,195,74);
+  display: block;
+  font-size: 26px;
+  font-weight: bold;
+  padding: 15px 0px;
+}
 span.mdl-textfield__error {
 	font-size: 26px;
 }
@@ -446,7 +453,7 @@ select
 .col-sm-8 .form-group {
 	margin: 0px;
 }
-.col-sm-8 .mdl-textfield--floating-label.is-focused .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
+.col-sm-8 .mdl-textfield--floating-label.is-focused .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label, .mdl-checkbox__label {
 	font-size: 26px;
 	top: -4px;
 }
@@ -467,7 +474,7 @@ select
 .col-sm-12 .demo-card-wide.mdl-card.mdl-shadow--2dp {
 	box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.14), 0 5px 3px -2px rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.12);
 }
-.col-sm-12 .mdl-textfield--floating-label.is-focused .mdl-textfield__label, .col-sm-12 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .col-sm-12 .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
+.col-sm-12 .mdl-textfield--floating-label.is-focused .mdl-textfield__label, .col-sm-12 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .col-sm-12 .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label, .mdl-checkbox__label {
 	font-size: 26px;
 	top: -4px;	
 }
