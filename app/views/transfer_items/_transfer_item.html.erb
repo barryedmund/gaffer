@@ -6,7 +6,13 @@
 <span class="<%= lefty ? 'skooch-left' : 'skooch-right' %>">
   <i class="material-icons small <%= 'ghost' if !lefty %>">arrow_back</i>
   <% if transfer_item.transfer_item_type === "Player" %>
-    <%= transfer_item.team_player.full_name(true) %>
+    <% team_player = transfer_item.team_player %>
+    <% league = team_player.team.league %>
+    <% if team_player.team.user == @current_user %>
+      <%= link_to team_player.full_name(true), league_team_team_player_path(league.id, team_player.team.id, team_player.id), class: "content-link" %>
+    <% else %>
+      <%= link_to team_player.full_name(true), league_player_path(league.id, team_player.player.id), class: "content-link" %>
+    <% end %>
   <% elsif transfer_item.transfer_item_type === "Cash" %>
     <%= number_to_currency(transfer_item.cash_cents, precision: 0) %> 
   <% end %>

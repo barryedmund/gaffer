@@ -5,7 +5,6 @@ class PlayersController < ApplicationController
 	def index
     @players = Player.where(available: true)
     @league = League.find_by_id(params[:league_id])
-    puts "params[:is_transfer_listed]: #{params[:is_transfer_listed]}"
     if params[:search]
       @players = @players.search(params[:search].strip)
     end
