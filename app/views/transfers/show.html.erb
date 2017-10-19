@@ -13,7 +13,7 @@
 					</tr>
 					<% if @transfer.current_user_involved?(@current_user) && !@transfer.transfer_completed? %>
 						<tr>
-							<td colspan="3" style="border-top:0px;">
+							<td colspan="3" style="border-top:0px; border-bottom:0px;">
 								<ul class="horizontal-style">
 									<% if @transfer.get_cash_transfer_item %>
 										<li>
@@ -33,6 +33,13 @@
 								</ul>
 							</td>
 						</tr>
+						<% if GameWeek.has_current_game_week %>
+							<tr>
+								<td colspan="3" class="mdl-data-table__cell--non-numeric normal-text">
+									<span class="home-page-row-content">Transfers can't be completed during an active game week.</span>
+								</td>
+							</tr>
+						<% end %>
 					<% end %>
 				</table>
       </div>

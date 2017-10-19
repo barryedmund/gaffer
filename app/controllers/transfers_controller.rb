@@ -2,6 +2,7 @@ class TransfersController < ApplicationController
 	before_action :require_user
   before_action :set_transfer, only: [:show, :destroy, :edit, :update]
   before_action :set_league
+  before_action :set_team
   before_action :set_back_url
   before_action :get_current_user_team, only: [:new, :edit]
 
@@ -125,6 +126,10 @@ class TransfersController < ApplicationController
 
   def set_league
     @league = League.find(params[:league_id])
+  end
+
+  def set_team
+    @team = Team.where(league: @league, user: @current_user).first
   end
 
   def set_back_url

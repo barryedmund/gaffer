@@ -58,7 +58,8 @@ class TeamPlayer < ActiveRecord::Base
   end
 
   def game_week_deadline_has_not_passed
-    if player.game_week_deadline_at < Time.now && GameWeek.has_current_game_week
+    allowable_fields = ["is_voluntary_transfer", "transfer_minimum_bid", "transfer_completes_at"]
+    if player.game_week_deadline_at < Time.now && GameWeek.has_current_game_week && (self.changed & allowable_fields).empty?
       errors.add(:base, "That player's deadline has passed for this gameweek.")
     end
   end

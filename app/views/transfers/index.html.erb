@@ -1,42 +1,18 @@
-<% league = League.find(params[:league_id]) %>
-<% team = Team.where(league: league, user: @current_user).first %>
-<% your_transfers = @transfers.where('(transfers.primary_team_id = :your_team OR transfers.secondary_team_id = :your_team) AND (transfers.primary_team_accepted = :not_accepted OR transfers.secondary_team_accepted = :not_accepted)', your_team: team.id, not_accepted: false) %>
+<% your_transfers = Transfer.incomplete_transfers_with_team_involved(Team.where(id: @team.id)) %>
+
 <div class="row">
   <div class="col-sm-12">
     <div class="demo-card-wide mdl-card mdl-shadow--2dp">
       <div class="mdl-card__title">
         <h2 class="mdl-card__title-text">
-          <%= link_to league.name, league_path(league), class: "content-link" %>
+          <%= link_to @league.name, league_path(@league), class: "content-link" %>
           <span>&nbsp;transfers</span>
         </h2>
       </div>
-      <div class="mdl-card__title">
-        <h3 class="mdl-card__title-text">Your active transfers</h3>
-      </div>
-      <div class="mdl-card__actions">
-        <% if your_transfers.count > 0 %>
-          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-data-table-fixed">
-            <% your_transfers.order(created_at: :desc).each do |transfer| %>
-              <tr>
-                <td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
-                  <%= render partial: 'your_active_transfer_headline', locals: {transfer: transfer} %>  
-                </td>
-                <td class="normal-text" style="border-bottom: 0px;">
-                  <%= link_to "View", league_transfer_path(league, transfer), class: "mdl-button--primary" %>
-                </td>
-              </tr>
-              <tr>
-                <%= render partial: 'transfer_teams_status_row', locals: {transfer: transfer} %>
-              </tr>
-            <% end %>
-          </table>
-        <% else %>
-          <span class="normal-text">None</span>
-        <% end %>
-      </div>
+      <%= render partial: 'your_active_transfers_component', locals: { your_transfers: your_transfers } %>
       <div class="mdl-card__supporting-text">
         <ul class="horizontal-style">
-          <li><%= link_to "Browse all players", league_players_path(league), class: "mdl-button--primary" %></li>
+          <li><%= link_to "Browse all players", league_players_path(@league), class: "mdl-button--primary" %></li>
         </ul>
       </div>
     </div>
@@ -53,7 +29,7 @@
                   <%= transfer.transfer_completed? ? "Done deal" : "Active" %> - Created <%= time_ago_in_words(transfer.created_at, include_seconds: true) %> ago
                 </td>
                 <td class="normal-text" style="border-bottom: 0px;">
-                  <%= link_to "View", league_transfer_path(league, transfer), class: "mdl-button--primary" %>
+                  <%= link_to "View", league_transfer_path(@league, transfer), class: "mdl-button--primary" %>
                 </td>
               </tr>
               <tr>

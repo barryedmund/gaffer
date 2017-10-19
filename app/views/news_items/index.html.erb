@@ -1,6 +1,10 @@
 <% team_leagues = League.joins(:teams).where('teams.user_id = ?', @current_user.id) %>
+<% teams = Team.where(user: @current_user) %>
 <% admin_leagues = League.where('leagues.user_id = ?', @current_user.id) %>
 <% leagues = League.where(id: (team_leagues + admin_leagues.uniq)) %>
+<% league_fresh_news_items = NewsItem.fresh_news_items(leagues) %>
+<% your_transfers = Transfer.incomplete_transfers_with_team_involved(teams) %>
+
 <div class="col-sm-12">
 	<% if @current_user.teams.count == 0 %>
 		<%= render partial: 'shared/leagues/your_leagues', locals: { leagues: leagues } %>
@@ -67,18 +71,19 @@
 				</div>
 			</div>
 		<% end %>
+
+		<%= render partial: 'transfers/your_active_transfers_component', locals: { your_transfers: your_transfers } %>
+
 		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 			<div class="mdl-card__title">
 	      <h3 class="mdl-card__title-text">
 	      	News
 	      </h3>
 	    </div>
-
 	    <div class="mdl-card__actions">
-	    	<% fresh_news_items = NewsItem.where('news_items.league_id IN (?) AND news_items.created_at >= ?', leagues.all.pluck(:id), 1.week.ago).order(created_at: :desc) %>
-	    	<% if fresh_news_items.count > 0 %>
+	    	<% if league_fresh_news_items.count > 0 %>
 		    	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-data-table-fixed">
-		    		<% fresh_news_items.each do |news_item| %>
+		    		<% league_fresh_news_items.each do |news_item| %>
 		    			<%= render partial: 'news_item_row', locals: { news_item: news_item } %>
 						<% end %>
 					</table>
