@@ -33,10 +33,10 @@
 								</ul>
 							</td>
 						</tr>
-						<% if GameWeek.has_current_game_week %>
+						<% if GameWeek.has_current_game_week && !@transfer.is_auto_completing %>
 							<tr>
 								<td colspan="3" class="mdl-data-table__cell--non-numeric normal-text">
-									<span class="home-page-row-content">Transfers can't be completed during an active game week.</span>
+									<span class="home-page-row-content">Transfers can't be accepted during an active game week.</span>
 								</td>
 							</tr>
 						<% end %>
