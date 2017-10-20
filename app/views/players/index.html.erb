@@ -9,26 +9,7 @@
 	      </h2>
 	    </div>
 
-	    <div class="mdl-card__actions">
-				<%= form_tag(league_players_path(@league), method: "get", id: "search-form") do %>
-					<div class="form-group">
-	        	<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-			    		<%= text_field_tag :search, params[:search], class: "mdl-textfield__input" %>
-			    		<%= label_tag :search, "Name, position, or team", class: "mdl-textfield__label" %>
-			    	</div>
-			    </div>
-			    <div class="form-group">
-			    	<% should_be_checked = params[:is_transfer_listed] && params[:is_transfer_listed] == 'true' %>
-			    	<span class = "mdl-checkbox__label">Transfer listed</span>
-			    	<label class = "mdl-switch mdl-js-switch mdl-js-ripple-effect" for="is_transfer_listed">
-              <%= check_box_tag :is_transfer_listed, true, should_be_checked, class: "mdl-switch__input" %>
-            </label>
-			    </div>
-			    <div class="form-group">
-			    	<%= submit_tag "Search", name: nil, class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
-			    </div>
-				<% end %>
-			</div>
+	    <%= render partial: 'search_form', locals: {league: @league} %>
 
 	    <div class="mdl-card__actions">
 	    	<% has_players = true %>
