@@ -11,8 +11,9 @@ class Transfer < ActiveRecord::Base
     self.where('transfers.primary_team_accepted = :accepted_value OR transfers.secondary_team_accepted = :accepted_value', {accepted_value: false})
   end
 
-  def self.incomplete_transfers_with_team_involved(team)
-    incomplete_transfers.where('transfers.primary_team_id = :team_value OR transfers.secondary_team_id = :team_value', {team_value: team.id})
+  def self.incomplete_transfers_with_team_involved(teams)
+    team_ids = teams.pluck(:id)
+    incomplete_transfers.where('transfers.primary_team_id IN (:team_value) OR transfers.secondary_team_id IN (:team_value)', {team_value: team_ids})
   end
 
   def self.set_up_transfer(team_making_offer, team_player, bid_amount)
@@ -20,6 +21,7 @@ class Transfer < ActiveRecord::Base
     cash_transfer_item = TransferItem.create(transfer: new_transfer, sending_team: team_player.team, receiving_team: team_making_offer, transfer_item_type: 'Player', team_player: team_player)
     player_transfer_item = TransferItem.create(transfer: new_transfer, sending_team: team_making_offer, receiving_team: team_player.team, transfer_item_type: 'Cash', cash_cents: bid_amount)
     if new_transfer
+      new_transfer.set_team_player_transfer_completes_at
       NewsItem.create(league: team_making_offer.league, news_item_resource_type: 'Transfer', news_item_resource_id: new_transfer.id, body: "Transfer initiated by #{new_transfer.primary_team.title}")
     end
   end
@@ -115,6 +117,17 @@ class Transfer < ActiveRecord::Base
     if team_transfer_status(team) != 'accepted'
       get_cash_transfer_item.update_attributes(cash_cents: counter_offer)
       self.update_attributes(primary_team_accepted: self.primary_team == team, secondary_team_accepted: self.secondary_team == team)
+    end
+  end
+
+  def league_involved
+    primary_team.league
+  end
+
+  def set_team_player_transfer_completes_at
+    team_player_involved = get_team_player_involved
+    if is_a_transfer_listing && team_player_involved.transfer_minimum_bid && get_cash_transfer_item.cash_cents >= team_player_involved.transfer_minimum_bid && team_player_involved.number_of_offers == 1
+      team_player_involved.update_attributes!(transfer_completes_at: 3.days.from_now)
     end
   end
 

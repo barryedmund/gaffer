@@ -1,0 +1,20 @@
+<div class="mdl-card__actions">
+  <%= form_tag(league_players_path(league), method: "get", id: "search-form") do %>
+    <div class="form-group">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <%= text_field_tag :search, params[:search], class: "mdl-textfield__input" %>
+        <%= label_tag :search, "Search player name, position, or team", class: "mdl-textfield__label" %>
+      </div>
+    </div>
+    <div id="search_form_switch_div" class="form-group">
+      <% should_be_checked = params[:is_transfer_listed] && params[:is_transfer_listed] == 'true' %>
+      <span id="search_form_switch_span" class = "mdl-checkbox__label">Only transfer listed</span>
+      <label id="search_form_switch_label" class = "mdl-switch mdl-js-switch mdl-js-ripple-effect" for="is_transfer_listed">
+        <%= check_box_tag :is_transfer_listed, true, should_be_checked, class: "mdl-switch__input" %>
+      </label>
+    </div>
+    <div class="form-group">
+      <%= submit_tag "Search", name: nil, class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
+    </div>
+  <% end %>
+</div>

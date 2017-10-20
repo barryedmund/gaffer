@@ -202,7 +202,10 @@ namespace :player_data do
       news.gsub!(/.+?(?=injury)(injury)/i, 'Inj')
       news.gsub!(/chance of playing/i, 'fit')
       news.gsub!(/Unknown return date/i, 'No return date')
+      news.gsub!(/Dislocation/i, 'inj')
+      news = "Not available" if news.match(/Unavailable to face parent club/).present?
       news = "Not available" if news.match(/that he would not be available for selection/).present?
+      news = "Out on loan" if news.match(/Joined/).present? && news.match(/loan/).present?
     end
     news
   end

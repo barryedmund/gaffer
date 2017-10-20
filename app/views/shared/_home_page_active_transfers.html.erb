@@ -1,0 +1,8 @@
+<% teams = Team.where(user: @current_user) %>
+<% your_transfers = Transfer.incomplete_transfers_with_team_involved(teams) %>
+
+<% if your_transfers.count > 0 %>
+  <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+    <%= render partial: 'transfers/your_active_transfers_component', locals: { your_transfers: your_transfers } %>
+  </div>
+<% end %>

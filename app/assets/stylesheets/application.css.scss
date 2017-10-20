@@ -75,6 +75,13 @@ li {
 	font-size: 24px;
   line-height: 32px;
 }
+span.mdl-checkbox__label {
+  color: rgb(139,195,74);
+  display: block;
+  font-size: 26px;
+  font-weight: bold;
+  padding: 15px 0px;
+}
 span.mdl-textfield__error {
 	font-size: 26px;
 }
@@ -87,6 +94,13 @@ span.skooch-right {
 	display: inline-block;
 	text-align: right;
 	width: 100%;	
+}
+span.disabled_mdl-button--primary {
+  color: #bbbbbb;
+  display: block;
+  font-size: 30px;
+  font-weight: 500;
+  text-align: center;
 }
 table {
 	width: 100%;
@@ -119,6 +133,18 @@ td.transfer-item-cell {
 #main-nav {
 	font-size: 23px;
 	text-align: center;
+}
+#search_form_switch_div{
+  float: left;
+  text-align: center;
+  width: 40%;
+}
+#search_form_switch_label{
+  text-align: center;
+  width: 20%;
+}
+#search_form_switch_span{
+  padding: 9px 0px;
 }
 #wide-container{
 	min-width: 900px;
@@ -377,6 +403,10 @@ td.transfer-item-cell {
 	outline: none;
 	text-decoration: underline;
 }
+.highlight_warning {
+  color: #ff6e40;
+  font-weight: bold;
+}
 .selected-tab, .selected-tab:active, .selected-tab:hover, .selected-tab:visited {
 	border: 1px solid #888;
 	color: #111111;
@@ -442,7 +472,7 @@ select
 .col-sm-8 .form-group {
 	margin: 0px;
 }
-.col-sm-8 .mdl-textfield--floating-label.is-focused .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
+.col-sm-8 .mdl-textfield--floating-label.is-focused .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .col-sm-8 .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label, .mdl-checkbox__label {
 	font-size: 26px;
 	top: -4px;
 }
@@ -463,7 +493,7 @@ select
 .col-sm-12 .demo-card-wide.mdl-card.mdl-shadow--2dp {
 	box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.14), 0 5px 3px -2px rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.12);
 }
-.col-sm-12 .mdl-textfield--floating-label.is-focused .mdl-textfield__label, .col-sm-12 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .col-sm-12 .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
+.col-sm-12 .mdl-textfield--floating-label.is-focused .mdl-textfield__label, .col-sm-12 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .col-sm-12 .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label, .mdl-checkbox__label {
 	font-size: 26px;
 	top: -4px;	
 }

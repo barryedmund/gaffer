@@ -11,14 +11,24 @@
 						<th class="mdl-data-table__cell--non-numeric">
 							<span>Name</span>
 						</th>
+						<th class="mdl-data-table__cell--non-numeric">
+							<span>List price</span>
+						</th>
 					</tr>
 					<% @team.team_players.includes(:player).sort_by{ |tp| [tp.player.sort_val, tp.player.last_name, tp.player.first_name] }.each do |team_player| %>
 						<tr id="<%= dom_id(team_player) %>">
-							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<%= team_player.player.playing_position %>
+							<td class="mdl-data-table__cell--non-numeric normal-text <%= 'highlight_warning' unless team_player.player.news.blank? %>">
+								<%= SquadPosition.long_name_to_short_name(team_player.player.playing_position) %> 
 							</td>
 							<td class="mdl-data-table__cell--non-numeric normal-text">
 								<%= link_to team_player.full_name(true, 14), league_player_path(@league.id, team_player.player.id), class: "content-link" %>
+							</td>
+							<td class="mdl-data-table__cell--non-numeric normal-text">
+								<% if team_player.transfer_minimum_bid %>
+									<%= number_to_currency(team_player.transfer_minimum_bid, precision:0) %>
+								<% else %>
+									-
+								<% end %>
 							</td>
 						</tr>
 					<% end %>

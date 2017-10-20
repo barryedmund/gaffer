@@ -2,6 +2,7 @@ class TransfersController < ApplicationController
 	before_action :require_user
   before_action :set_transfer, only: [:show, :destroy, :edit, :update]
   before_action :set_league
+  before_action :set_team
   before_action :set_back_url
   before_action :get_current_user_team, only: [:new, :edit]
 
@@ -27,9 +28,8 @@ class TransfersController < ApplicationController
       @transfer_item_player.save
       @transfer_item_cash.save
       team_player = @transfer.get_team_player_involved
-      if @transfer.is_a_transfer_listing && team_player.transfer_minimum_bid && @transfer_item_cash.cash_cents >= team_player.transfer_minimum_bid && team_player.number_of_offers == 1
-        team_player.update_attributes!(transfer_completes_at: 3.days.from_now)
-      end
+      # Sets the transfer_completes_at attribute, if appropriate
+      @transfer.set_team_player_transfer_completes_at
       flash[:success] = "Transfer initiated."
       redirect_to league_transfers_path(@league)
       NewsItem.create(league: @league, news_item_resource_type: 'Transfer', news_item_resource_id: @transfer.id, body: "Transfer initiated by #{@transfer.primary_team.title}")
@@ -125,6 +125,10 @@ class TransfersController < ApplicationController
 
   def set_league
     @league = League.find(params[:league_id])
+  end
+
+  def set_team
+    @team = Team.where(league: @league, user: @current_user).first
   end
 
   def set_back_url

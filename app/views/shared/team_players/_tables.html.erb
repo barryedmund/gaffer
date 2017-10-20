@@ -19,7 +19,7 @@
 					<% squad_position_whtelist = @team.get_squad_position_whitelist %>
 					<% @team.team_players.includes(:squad_position, :player).where(first_team: true).reorder('squad_positions.sort_order, players.last_name, players.first_name').each do |team_player| %>
 						<tr id="<%= dom_id(team_player) %>">
-							<td class="mdl-data-table__cell--non-numeric normal-text">
+							<td class="mdl-data-table__cell--non-numeric normal-text <%= 'highlight_warning' unless team_player.player.news.blank? %>">
 								<%= team_player.squad_position.short_name[0,1] %>
 							</td>
 							<%= render partial: 'shared/team_players/details', locals: {team_player: team_player} %>
@@ -46,7 +46,7 @@
 					<% @team.team_players.includes(:player).where(first_team: false).sort_by{ |tp| [tp.player.sort_val, tp.player.last_name, tp.player.first_name] }.each do |team_player| %>
 					
 						<tr id="<%= dom_id(team_player) %>">
-							<td class="mdl-data-table__cell--non-numeric normal-text">
+							<td class="mdl-data-table__cell--non-numeric normal-text <%= 'highlight_warning' unless team_player.player.news.blank? %>">
 								(<%= SquadPosition.long_name_to_short_name(team_player.player.playing_position) %>)
 							</td>
 							<%= render partial: 'shared/team_players/details', locals: {team_player: team_player} %>
