@@ -315,4 +315,8 @@ class Team < ActiveRecord::Base
   def get_active_transfers
     Transfer.where('(transfers.primary_team_id = :your_team OR transfers.secondary_team_id = :your_team) AND (transfers.primary_team_accepted = :not_accepted OR transfers.secondary_team_accepted = :not_accepted)', your_team: self.id, not_accepted: false)
   end
+
+  def all_first_team_team_players
+    team_players.joins(:squad_position).where('squad_positions.short_name != ? AND team_players.first_team = ?', 'SUB', true)
+  end
 end

@@ -159,7 +159,7 @@ namespace :player_data do
         end
 
         if player && (body_fixture_summary.length > 0) && (body_fixture_summary[0]['event'] == active_game_week_number)
-          deadline_datetime = DateTime.parse(body_fixture_summary[0]['kickoff_time']) - 10.minutes
+          deadline_datetime = DateTime.parse(body_fixture_summary[0]['kickoff_time'])
           active_game_week_opponent = body_fixture_summary[0]['opponent_short_name']
           active_game_week_location = body_fixture_summary[0]['is_home'] == true ? 'home' : 'away'
           if player.player_game_weeks.where(game_week: active_game_week).count == 0

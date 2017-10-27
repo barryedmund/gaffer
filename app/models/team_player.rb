@@ -145,4 +145,8 @@ class TeamPlayer < ActiveRecord::Base
     Transfer.incomplete_transfers_with_team_involved(Team.where(id: team_to_check.id)).map{ |transfer| is_this_team_player = true if transfer.get_team_player_involved == self }
     is_this_team_player
   end
+
+  def move_to_subs_bench
+    self.update_attributes(first_team: false, squad_position: SquadPosition.find_by(short_name: 'SUB'))
+  end
 end
