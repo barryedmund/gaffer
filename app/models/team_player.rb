@@ -105,7 +105,9 @@ class TeamPlayer < ActiveRecord::Base
     
     if transfer_listed?
       if player.player_value > transfer_minimum_bid
-        new_transfer_minimum_bid = transfer_minimum_bid
+        new_transfer_minimum_bid = [transfer_minimum_bid * 0.9, Rails.application.config.minimum_player_value].max.round
+      else
+        new_transfer_minimum_bid = [new_transfer_minimum_bid * 0.9, Rails.application.config.minimum_player_value].max.round
       end
       if number_of_offers > 0
         new_transfer_completes_at = 3.days.from_now
