@@ -35,5 +35,6 @@ module Gaffer
     config.max_length_of_contract_days = 1095
     config.min_weekly_salary_of_contract = 25000
     config.min_remaining_for_zombie_after_transfer_bid = 1000000
+    config.forced_listing_weekly_factor = 0.75
   end
 end
