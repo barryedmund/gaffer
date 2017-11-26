@@ -26,4 +26,12 @@ ActiveAdmin.register Player do
     end
     actions
   end
+
+  filter :first_name
+  filter :last_name
+  filter :competition_id
+  filter :game_week_deadline_at
+  filter :pl_element_id
+  filter :pl_player_code
+  filter :available
 end

@@ -80,7 +80,7 @@ namespace :player_data do
           player_code = body_history[body_history.length - 1]['element_code']
           player = Player.find_by(pl_player_code: player_code)
         else
-          player = Player.find_by(pl_element_id: i)
+          player = Player.where(pl_element_id: i, available: true).first
         end
 
         # If the player was found
@@ -129,6 +129,8 @@ namespace :player_data do
           if this_player_current_player_game_week
             this_player_current_player_game_week.update_attributes(minutes_played: total_minutes_played, goals: total_goals_scored, clean_sheet: total_clean_sheet, goals_conceded: total_goals_conceded, assists: total_assists)
           end
+        else
+          puts ">>>>>>>>>>>> Player not found #{i}"
         end
         i = i + 1
       end
