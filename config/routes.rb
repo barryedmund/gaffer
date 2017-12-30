@@ -41,6 +41,6 @@ Rails.application.routes.draw do
   resources :player_game_weeks
   resources :game_rounds
   resources :news_items
-  
+
   root 'news_items#index'
 end

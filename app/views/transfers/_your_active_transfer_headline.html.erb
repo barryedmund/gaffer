@@ -1,7 +1,8 @@
 <% this_transfer_is_auto_completing = transfer.is_auto_completing %>
 <% if this_transfer_is_auto_completing %>
   <i class="material-icons large <%= transfer.is_winning_bid ? 'success' : 'error' %>">playlist_add_check</i>
-  Transfer auto-completes in <%= "#{time_ago_in_words(transfer.transfer_listing_completes_at, include_seconds: false)}" %>.
+  <% completes_at = transfer.transfer_listing_completes_at %>
+  Completes <%= completes_at < Time.now ? GameWeek.has_current_game_week ? "at end of current game week" : "soon" : "in #{time_ago_in_words(completes_at, include_seconds: false)}" %>.
 <% else %>
   Transfer initiated <%= time_ago_in_words(transfer.created_at, include_seconds: false) %> ago.
 <% end %>
