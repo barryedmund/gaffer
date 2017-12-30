@@ -1,5 +1,5 @@
 ActiveAdmin.register Transfer do
-	permit_params :primary_team_id, :secondary_team_id, :primary_team_accepted, :secondary_team_accepted
+	permit_params :primary_team_id, :secondary_team_id, :primary_team_accepted, :secondary_team_accepted, :created_at
 
 	index do
 		selectable_column
@@ -18,6 +18,7 @@ ActiveAdmin.register Transfer do
 	  	f.input :secondary_team, :collection => Team.all.map{ |team| ["#{team.title} (#{team.league.name})", team.id]}
 	  	f.input :primary_team_accepted
 	  	f.input :secondary_team_accepted
+			f.input :created_at
 	  end
 	  f.actions
 	end
