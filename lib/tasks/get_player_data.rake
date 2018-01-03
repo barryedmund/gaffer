@@ -8,7 +8,7 @@ namespace :player_data do
       number_of_players = body['elements'].length
       for i in 0..(number_of_players - 1)
         current_player = body['elements'][i]
-        
+
         player_element_id = current_player['id']
         player_code = current_player['code']
         player_first_name = current_player['first_name']
@@ -87,16 +87,16 @@ namespace :player_data do
         if player
           puts "#{player.first_name} #{player.last_name} (#{i})"
           season = player.competition.current_season
-          player_game_weeks = player.player_game_weeks.joins(:game_week).where("game_weeks.season_id =?", season.id).order('game_weeks.game_week_number DESC')  
+          player_game_weeks = player.player_game_weeks.joins(:game_week).where("game_weeks.season_id =?", season.id).order('game_weeks.game_week_number DESC')
           current_game_week = season.get_current_game_week
-          
+
           total_minutes_played = 0
           total_goals_scored = 0
           total_goals_conceded = 0
           total_assists = 0
           total_clean_sheet = true
           fixtures_in_game_week = 0;
-          
+
           # Go through each 'round' and, if it is this round, update the counter
           for j in 0..(body_game_weeks.length - 1)
             if body_game_weeks[j]['round'] == current_game_week.game_week_number
@@ -109,7 +109,7 @@ namespace :player_data do
           end
 
           puts " > > fixtures_in_game_week: #{fixtures_in_game_week}"
-          
+
           #  If he played and didn't concede goals
           if !(total_minutes_played > 0 && total_goals_conceded == 0)
             total_clean_sheet = false
@@ -140,11 +140,12 @@ namespace :player_data do
   end
 
   task :get_player_gameweek_deadlines => :environment do
-    if Time.now.hour % 2 != 0 
+    if Time.now.hour % 2 != 0
       active_game_week = Competition.find_by(description: 'Premier League').current_season.get_current_game_week
       active_game_week_number = active_game_week.game_week_number
       i = 1
       continue = true
+      max_deadline_datetime = nil
       while continue
         response = Net::HTTP.get_response(URI("https://fantasy.premierleague.com/drf/element-summary/#{i}"))
         break unless response.code.to_i == 200
@@ -160,21 +161,34 @@ namespace :player_data do
           player = Player.where(pl_element_id: i, available: true).first
         end
 
-        if player && (body_fixture_summary.length > 0) && (body_fixture_summary[0]['event'] == active_game_week_number)
-          deadline_datetime = DateTime.parse(body_fixture_summary[0]['kickoff_time'])
-          active_game_week_opponent = body_fixture_summary[0]['opponent_short_name']
-          active_game_week_location = body_fixture_summary[0]['is_home'] == true ? 'home' : 'away'
-          if player.player_game_weeks.where(game_week: active_game_week).count == 0
-            player.update_attributes(
-            game_week_deadline_at: deadline_datetime,
-            active_game_week_opponent: active_game_week_opponent,
-            active_game_week_location: active_game_week_location)
-            puts "#{player.full_name}: #{player.game_week_deadline_at}"
+        if player && body_fixture_summary.length > 0
+          if body_fixture_summary[0]['event'] == active_game_week_number
+            deadline_datetime = DateTime.parse(body_fixture_summary[0]['kickoff_time'])
+            active_game_week_opponent = body_fixture_summary[0]['opponent_short_name']
+            active_game_week_location = body_fixture_summary[0]['is_home'] == true ? 'home' : 'away'
+            if player.player_game_weeks.where(game_week: active_game_week).count == 0
+              player.update_attributes(
+              game_week_deadline_at: deadline_datetime,
+              active_game_week_opponent: active_game_week_opponent,
+              active_game_week_location: active_game_week_location)
+              puts "#{player.full_name}: #{player.game_week_deadline_at}"
+            else
+              player.update_attributes(
+              active_game_week_opponent: active_game_week_opponent,
+              active_game_week_location: active_game_week_location)
+              puts ">>>> #{player.full_name}: #{player.game_week_deadline_at}"
+            end
           else
-            player.update_attributes(
-            active_game_week_opponent: active_game_week_opponent,
-            active_game_week_location: active_game_week_location)
-            puts ">>>> #{player.full_name}: #{player.game_week_deadline_at}"
+            if player.player_game_weeks.where(game_week: active_game_week).count == 0
+              max_deadline_datetime = Player.where(available: true).order(game_week_deadline_at: :desc).first.game_week_deadline_at if max_deadline_datetime.nil?
+              if max_deadline_datetime.present?
+                player.update_attributes(
+                game_week_deadline_at: max_deadline_datetime,
+                active_game_week_opponent: '-',
+                active_game_week_location: 'home')
+                puts "[No game this week] #{player.full_name}: #{player.game_week_deadline_at}"
+              end
+            end
           end
         end
         i = i + 1

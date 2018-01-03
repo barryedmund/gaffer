@@ -1,5 +1,5 @@
 ActiveAdmin.register Player do
-	permit_params :first_name, :last_name, :competition_id, :game_week_deadline_at
+	permit_params :first_name, :last_name, :competition_id, :game_week_deadline_at, :active_game_week_opponent
 
   index do
     selectable_column
