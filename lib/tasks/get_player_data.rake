@@ -8,7 +8,7 @@ namespace :player_data do
       number_of_players = body['elements'].length
       for i in 0..(number_of_players - 1)
         current_player = body['elements'][i]
-        
+
         player_element_id = current_player['id']
         player_code = current_player['code']
         player_first_name = current_player['first_name']
@@ -65,7 +65,6 @@ namespace :player_data do
   task :get_player_game_weeks => :environment do
     active_game_week = Competition.find_by(description: 'Premier League').current_season.get_current_game_week
     if active_game_week.starts_at <= Time.now
-      puts "GameWeek #{active_game_week.id} has started."
       i = 1
       continue = true
       while continue
@@ -85,22 +84,22 @@ namespace :player_data do
 
         # If the player was found
         if player
-          puts "#{player.first_name} #{player.last_name} (#{i})"
           season = player.competition.current_season
-          player_game_weeks = player.player_game_weeks.joins(:game_week).where("game_weeks.season_id =?", season.id).order('game_weeks.game_week_number DESC')  
+          player_game_weeks = player.player_game_weeks.joins(:game_week).where("game_weeks.season_id =?", season.id).order('game_weeks.game_week_number DESC')
           current_game_week = season.get_current_game_week
-          
+
           total_minutes_played = 0
           total_goals_scored = 0
           total_goals_conceded = 0
           total_assists = 0
           total_clean_sheet = true
-          fixtures_in_game_week = 0;
-          
+          fixtures_in_game_week = 0
+
           # Go through each 'round' and, if it is this round, update the counter
           for j in 0..(body_game_weeks.length - 1)
             if body_game_weeks[j]['round'] == current_game_week.game_week_number
               fixtures_in_game_week = fixtures_in_game_week + 1
+
               total_minutes_played += body_game_weeks[j]['minutes']
               total_goals_scored += body_game_weeks[j]['goals_scored']
               total_goals_conceded += body_game_weeks[j]['goals_conceded']
@@ -108,8 +107,6 @@ namespace :player_data do
             end
           end
 
-          puts " > > fixtures_in_game_week: #{fixtures_in_game_week}"
-          
           #  If he played and didn't concede goals
           if !(total_minutes_played > 0 && total_goals_conceded == 0)
             total_clean_sheet = false
@@ -117,6 +114,7 @@ namespace :player_data do
 
           # If it was a multi-fixture EPL round for this player
           if fixtures_in_game_week > 1
+            puts "DGW: #{player.first_name} #{player.last_name}"
             total_minutes_played = total_minutes_played / fixtures_in_game_week
             total_goals_scored = total_goals_scored.to_f / fixtures_in_game_week
             total_goals_conceded = total_goals_conceded.to_f / fixtures_in_game_week
@@ -129,18 +127,14 @@ namespace :player_data do
           if this_player_current_player_game_week
             this_player_current_player_game_week.update_attributes(minutes_played: total_minutes_played, goals: total_goals_scored, clean_sheet: total_clean_sheet, goals_conceded: total_goals_conceded, assists: total_assists)
           end
-        else
-          puts ">>>>>>>>>>>> Player not found #{i}"
         end
         i = i + 1
       end
-    else
-      puts "GameWeek #{active_game_week.id} starts at #{active_game_week.starts_at}."
     end
   end
 
   task :get_player_gameweek_deadlines => :environment do
-    if Time.now.hour % 2 != 0 
+    if Time.now.hour % 2 == 0
       active_game_week = Competition.find_by(description: 'Premier League').current_season.get_current_game_week
       active_game_week_number = active_game_week.game_week_number
       i = 1
@@ -151,6 +145,7 @@ namespace :player_data do
 
         body = JSON.parse(response.body)
         body_history = body['history_past']
+        body_history_full = body['history']
         body_fixture_summary = body['fixtures_summary']
 
         if body_history.length > 0
@@ -161,9 +156,24 @@ namespace :player_data do
         end
 
         if player && (body_fixture_summary.length > 0) && (body_fixture_summary[0]['event'] == active_game_week_number)
-          deadline_datetime = DateTime.parse(body_fixture_summary[0]['kickoff_time'])
+          body_history_game_week_element = 0
+          fixtures_in_game_week = 0
+          # Go through each 'round' and, if it is this round, update the counter
+          for j in 0..(body_history_full.length - 1)
+            if body_history_full[j]['round'] == active_game_week_number
+              fixtures_in_game_week = fixtures_in_game_week + 1
+              body_history_game_week_element = j
+            end
+          end
+
+          if fixtures_in_game_week > 1
+            deadline_datetime = DateTime.parse(body_history_full[body_history_game_week_element - (fixtures_in_game_week - 1)]['kickoff_time'])
+          else
+            deadline_datetime = DateTime.parse(body_fixture_summary[0]['kickoff_time'])
+          end
           active_game_week_opponent = body_fixture_summary[0]['opponent_short_name']
           active_game_week_location = body_fixture_summary[0]['is_home'] == true ? 'home' : 'away'
+
           if player.player_game_weeks.where(game_week: active_game_week).count == 0
             player.update_attributes(
             game_week_deadline_at: deadline_datetime,
