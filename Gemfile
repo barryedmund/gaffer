@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.14.2'
+gem 'rails', '~> 4.2.7.1'
 gem 'bcrypt'
 gem 'pg'
 gem 'sass-rails', '~> 4.0.3'
@@ -21,6 +21,7 @@ gem 'will_paginate', '~> 3.1.0'
 gem 'newrelic_rpm'
 gem 'intercom-rails'
 gem 'railties'
+gem 'responders', '~> 2.0'
 
 group :production, :staging do
   gem 'rails_12factor'
@@ -32,12 +33,13 @@ group :development, :test do
 	gem 'rspec-its'
 	gem 'rspec-activemodel-mocks'
 	gem 'rspec-support'
-	gem 'factory_girl_rails', '~> 4.0'
+	gem 'factory_bot_rails'
 	gem 'railroady'
 end
 
 group :development do
 	gem 'letter_opener'
+  gem 'web-console', '~> 2.0'
 end
 
 group :test do

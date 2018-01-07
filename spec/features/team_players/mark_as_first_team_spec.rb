@@ -11,7 +11,7 @@ describe "Moving team players between first team and bench" do
 	let!(:midfielder_squad_position) { create(:midfielder_squad_position) }
 	let!(:stadium) { create(:stadium, team: team) }
 	before { sign_in league.user, password: "gaffer123" }
-	
+
 	it "is successful when marking a single team player as first team" do
 		visit_team_players team
 		within dom_id_for(team_player) do
@@ -23,8 +23,8 @@ describe "Moving team players between first team and bench" do
 	end
 
 	it "isn't possible when there are already 11 first team players" do
-		FactoryGirl.create_list(:team_player, 11, :with_contract, first_team: true, team: team)
-		twelfth_team_player = FactoryGirl.create(:team_player, :with_contract, first_team: false, team: team)
+		FactoryBot.create_list(:team_player, 11, :with_contract, first_team: true, team: team)
+		twelfth_team_player = FactoryBot.create(:team_player, :with_contract, first_team: false, team: team)
 		visit_team_players team
 		within dom_id_for(twelfth_team_player) do
 			expect(page).to_not have_selector("input[type=submit][value='Add to first team']")
