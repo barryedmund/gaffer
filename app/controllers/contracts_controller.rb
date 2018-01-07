@@ -15,7 +15,8 @@ class ContractsController < ApplicationController
         format.html { redirect_to league_contracts_path(@league), notice: 'Contract has been offered.' }
         NewsItem.create(league: @league, news_item_resource_type: 'Contract', news_item_resource_id: @contract.id, body: "#{@contract.player.full_name(true,13)} offered contract")
       else
-        format.html { render :new }
+        flash.keep
+        format.html { redirect_to new_league_contract_path(@league.id, { player_id: contract_params[:player_id] }), flash: { error: @contract.errors.full_messages.join(', ') }}
       end
     end
   end
@@ -34,7 +35,7 @@ class ContractsController < ApplicationController
       if @contract.update(contract_params)
         format.html { redirect_to league_contracts_path(League.find_by_id(params[:league_id])), notice: 'Contract has been updated.' }
       else
-        format.html { render :edit }
+        format.html { redirect_to edit_league_contract_path(@league.id, @contract.id), flash: { error: @contract.errors.full_messages.join(', ') }}
       end
     end
   end
@@ -55,7 +56,7 @@ class ContractsController < ApplicationController
   def set_player
     if params[:player_id]
       @player = Player.find(params[:player_id])
-    else
+    elsif params[:id]
       @player = Contract.find(params[:id]).player
     end
   end

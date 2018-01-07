@@ -2,7 +2,7 @@ namespace :transfers do
 
 	task :process_free_agent_with_contract_offers => :environment do
     League.all.each do |league|
-      this_league_unsigned_contracts = Contract.joins(:team).where('contracts.signed = ? AND teams.league_id = ?', false, league.id) 
+      this_league_unsigned_contracts = Contract.joins(:team).where('contracts.signed = ? AND teams.league_id = ?', false, league.id)
       this_league_unsigned_contracts.select('DISTINCT player_id').each do |contract|
         ordered_contracts = this_league_unsigned_contracts.where(player: contract.player).order('contracts.starts_at DESC')
         if ordered_contracts.last.starts_at < 3.days.ago
@@ -41,6 +41,7 @@ namespace :transfers do
 
   task :process_transfer_listings => :environment do
     if !GameWeek.has_current_game_week
+			puts "!GameWeek.has_current_game_week"
       TeamPlayer.transfer_listed_with_offers_and_past_completion_date.each do |team_player|
         winning_transfer = team_player.get_winning_transfer
         winning_transfer.complete_a_transfer_listing
