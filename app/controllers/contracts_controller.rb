@@ -35,7 +35,7 @@ class ContractsController < ApplicationController
       if @contract.update(contract_params)
         format.html { redirect_to league_contracts_path(League.find_by_id(params[:league_id])), notice: 'Contract has been updated.' }
       else
-        format.html { render :edit }
+        format.html { redirect_to edit_league_contract_path(@league.id, @contract.id), flash: { error: @contract.errors.full_messages.join(', ') }}
       end
     end
   end
