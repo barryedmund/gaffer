@@ -1,4 +1,4 @@
-FactoryGirl.define do  factory :team_achievement do
+FactoryBot.define do  factory :team_achievement do
     
   end
   factory :achievement do
@@ -114,7 +114,7 @@ FactoryGirl.define do  factory :team_achievement do
     squad_position
     trait :with_contract do
       after :create do |team_player|
-        FactoryGirl.create :contract, {team_player: team_player, team: team_player.team, weekly_salary_cents: 100000, signed: true, player: team_player.player}
+        FactoryBot.create :contract, {team_player: team_player, team: team_player.team, weekly_salary_cents: 100000, signed: true, player: team_player.player}
       end
     end
 	end
