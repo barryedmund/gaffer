@@ -61,9 +61,6 @@ class Contract < ActiveRecord::Base
   end
 
   def has_basic_attributes_for_broke_teams
-    contract_length = ends_at - starts_at
-    is_equal_min_length = contract_length == Rails.application.config.min_length_of_contract_days
-    is_equal_min_salary = weekly_salary_cents == Rails.application.config.min_weekly_salary_of_contract
-    errors.add(:base, "Teams in debt can only offer minimum contracts.") unless (team.cash_balance_cents >= 0) || (is_equal_min_length && is_equal_min_salary)
+    errors.add(:base, "Teams in debt can only offer minimum contracts.") unless (team && team.cash_balance_cents >= 0) || (((ends_at - starts_at) == Rails.application.config.min_length_of_contract_days) && (weekly_salary_cents == Rails.application.config.min_weekly_salary_of_contract))
   end
 end
