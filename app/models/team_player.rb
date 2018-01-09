@@ -102,7 +102,7 @@ class TeamPlayer < ActiveRecord::Base
     new_transfer_minimum_bid = player.player_value
     new_transfer_completes_at = nil
     new_is_voluntary_transfer = false
-    
+
     if transfer_listed?
       if player.player_value > transfer_minimum_bid
         new_transfer_minimum_bid = [transfer_minimum_bid * Rails.application.config.forced_listing_weekly_factor, Rails.application.config.minimum_player_value].max.round

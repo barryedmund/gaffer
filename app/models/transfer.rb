@@ -65,8 +65,12 @@ class Transfer < ActiveRecord::Base
           receiver.delist_involuntarily_listed_team_players if receiver.should_be_back_in_the_black
         elsif transfer_item.transfer_item_type === "Player"
           contract = transfer_item.team_player.current_contract
-          contract.update_attributes!(signed: false, ends_at: 90.days.from_now.strftime('%Y-%m-%d'))
-          contract.update_attributes!(team: receiver, signed: true)
+					contract.update_attributes!(signed: false)
+					contract.update_attributes!(team: receiver)
+					if 90.days.from_now > contract.ends_at
+						contract.update_attributes!(ends_at: 90.days.from_now.strftime('%Y-%m-%d'))
+					end
+					contract.update_attributes!(signed: true)
           transfer_item.team_player.update_attributes!(team: receiver, first_team: false, squad_position: SquadPosition.find_by(short_name: 'SUB'), transfer_minimum_bid: nil, transfer_completes_at: nil, is_voluntary_transfer: false)
         end
       end
