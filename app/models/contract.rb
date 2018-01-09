@@ -62,7 +62,7 @@ class Contract < ActiveRecord::Base
 
   def has_basic_attributes_for_broke_teams
     allowable_fields = ["signed", "team_id"]
-    if ((team.cash_balance_cents >= 0) ||
+    if ((team && team.cash_balance_cents >= 0) ||
       ((ends_at - starts_at) > Rails.application.config.min_length_of_contract_days) ||
       (weekly_salary_cents > Rails.application.config.min_weekly_salary_of_contract)) &&
       (self.changed & allowable_fields).empty?
