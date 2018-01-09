@@ -62,11 +62,14 @@ class Contract < ActiveRecord::Base
 
   def has_basic_attributes_for_broke_teams
     allowable_fields = ["signed", "team_id"]
-    if ((team && team.cash_balance_cents >= 0) ||
-      ((ends_at - starts_at) > Rails.application.config.min_length_of_contract_days) ||
-      (weekly_salary_cents > Rails.application.config.min_weekly_salary_of_contract)) &&
-      (self.changed & allowable_fields).empty?
-      errors.add(:base, "Teams in debt can only offer minimum contracts.")
+    is_team_broke = team && (team.cash_balance_cents < 0)
+    if is_team_broke
+      is_contract_long = (ends_at - starts_at).to_i > (Rails.application.config.min_length_of_contract_days + 1)
+      is_contract_high_value = weekly_salary_cents > Rails.application.config.min_weekly_salary_of_contract
+      is_allowed_changes = (self.changed - allowable_fields).empty?
+      if (is_contract_long || is_contract_high_value) && !is_allowed_changes
+        errors.add(:base, "Teams in debt can only offer minimum contracts.")
+      end
     end
   end
 end
