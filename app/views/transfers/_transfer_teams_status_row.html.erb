@@ -1,27 +1,29 @@
-<% this_transfer_is_auto_completing = transfer.is_auto_completing %>
-<td class="mdl-data-table__cell--non-numeric normal-text transfer-item-cell" style="border-top:0px;border-bottom:0px;">
-  <% if !this_transfer_is_auto_completing %>
-    <% if transfer.primary_team_accepted %>
-      <div class="green-circle"></div>
-    <% else %>
-      <div class="orange-circle"></div>
+<% if transfer.get_player_transfer_item %>
+  <% this_transfer_is_auto_completing = transfer.is_auto_completing %>
+  <td class="mdl-data-table__cell--non-numeric normal-text transfer-item-cell" style="border-top:0px;border-bottom:0px;">
+    <% if !this_transfer_is_auto_completing %>
+      <% if transfer.primary_team_accepted %>
+        <div class="green-circle"></div>
+      <% else %>
+        <div class="orange-circle"></div>
+      <% end %>
     <% end %>
-  <% end %>
-  <%= transfer.primary_team.title %>
-</td>
-<td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;border-bottom:0px;">
-  <% transfer.transfer_items.each do |transfer_item| %>
-    <%= render partial: 'transfer_items/transfer_item', locals: {transfer_item: transfer_item, transfer: transfer} %>
-    <br/>
-  <% end %>
-</td>
-<td class="mdl-data-table__cell--non-numeric normal-text transfer-item-cell" style="border-top:0px;border-bottom:0px;">
-  <% if !this_transfer_is_auto_completing %>
-    <% if transfer.secondary_team_accepted %>
-      <div class="green-circle"></div>
-    <% else %>
-      <div class="orange-circle"></div>
+    <%= transfer.primary_team.title %>
+  </td>
+  <td class="mdl-data-table__cell--non-numeric normal-text" style="border-top:0px;border-bottom:0px;">
+    <% transfer.transfer_items.each do |transfer_item| %>
+      <%= render partial: 'transfer_items/transfer_item', locals: {transfer_item: transfer_item, transfer: transfer} %>
+      <br/>
     <% end %>
-  <% end %>
-  <%= transfer.secondary_team.title %>
-</td>
+  </td>
+  <td class="mdl-data-table__cell--non-numeric normal-text transfer-item-cell" style="border-top:0px;border-bottom:0px;">
+    <% if !this_transfer_is_auto_completing %>
+      <% if transfer.secondary_team_accepted %>
+        <div class="green-circle"></div>
+      <% else %>
+        <div class="orange-circle"></div>
+      <% end %>
+    <% end %>
+    <%= transfer.secondary_team.title %>
+  </td>
+<% end %>
