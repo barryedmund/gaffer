@@ -110,12 +110,12 @@ class TeamPlayer < ActiveRecord::Base
         new_transfer_minimum_bid = [new_transfer_minimum_bid * Rails.application.config.forced_listing_weekly_factor, Rails.application.config.minimum_player_value].max.round
       end
       if number_of_offers > 0
-        new_transfer_completes_at = 3.days.from_now
+        new_transfer_completes_at = transfer_completes_at.present? ? transfer_completes_at : 3.days.from_now
       end
     else
       if number_of_offers > 0
         if get_winning_transfer.get_cash_transfer_item.cash_cents > player.player_value
-          new_transfer_completes_at = 3.days.from_now
+          new_transfer_completes_at = transfer_completes_at.present? ? transfer_completes_at : 3.days.from_now
         else
           active_transfers.each do |transfer|
             transfer.destroy
