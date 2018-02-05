@@ -76,7 +76,7 @@ class Team < ActiveRecord::Base
     end
   end
 
-  def get_season_remaining_of_signed_contracts
+	  def get_season_remaining_of_signed_contracts
     if league.current_league_season
       number_of_game_weeks = GameWeek.where(season_id: league.current_league_season.season.id, finished: false).count
     else
@@ -98,6 +98,10 @@ class Team < ActiveRecord::Base
         game_week.games.where('home_team_id = :this_team OR away_team_id = :this_team', this_team: self.id).first
       end
     end
+  end
+
+	def get_home_games_remaining_this_season
+    Game.unfinished_games_of_team(self)
   end
 
   def abbreviated_title(cut_off = 13)
@@ -198,7 +202,7 @@ class Team < ActiveRecord::Base
         user.update_attributes(last_seen_at: Time.now)
       end
     end
-    
+
     cut_off_game_week = game_week_ago(3)
     if cut_off_game_week
       user.last_seen_at < cut_off_game_week.starts_at
@@ -319,4 +323,9 @@ class Team < ActiveRecord::Base
   def all_first_team_team_players
     team_players.joins(:squad_position).where('squad_positions.short_name != ? AND team_players.first_team = ?', 'SUB', true)
   end
+
+	def end_of_season_financial_position
+		revenue_from_remaining_home_games = (get_home_games_remaining_this_season.count) * (stadium.capacity * Rails.application.config.revenue_per_ticket)
+		revenue_from_remaining_home_games + cash_balance_cents - get_season_remaining_of_signed_contracts
+	end
 end

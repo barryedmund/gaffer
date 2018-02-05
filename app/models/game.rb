@@ -7,6 +7,10 @@ class Game < ActiveRecord::Base
  	validate :teams_in_same_league, :teams_not_the_same, :team_not_playing_twice_in_same_gameweek, on: :create
  	validates_uniqueness_of :game_round, scope: [:home_team, :away_team]
 
+	def self.unfinished_games_of_team(team)
+			Game.where(home_team_score: nil, away_team_score: nil, home_team: team)
+	end
+
  	def match_up
  		"#{home_team.title} - #{away_team.title}"
  	end
@@ -24,7 +28,7 @@ class Game < ActiveRecord::Base
 
     home_team_defence = get_clean_sheet_minutes(home_lineup)
     away_team_defence = get_clean_sheet_minutes(away_lineup)
-    
+
     home_team_score = (home_team_attack * (1 - away_team_defence/990)).round
     away_team_score = (away_team_attack * (1 - home_team_defence/990)).round
 
@@ -42,10 +46,10 @@ class Game < ActiveRecord::Base
 
         home_team_defence = get_clean_sheet_minutes(home_lineup)
         away_team_defence = get_clean_sheet_minutes(away_lineup)
-        
+
         home_team_score = (home_team_attack * (1 - away_team_defence/990)).round
         away_team_score = (away_team_attack * (1 - home_team_defence/990)).round
-	 			
+
 	 			self.update(home_team_score: home_team_score)
 	 			self.update(away_team_score: away_team_score)
 

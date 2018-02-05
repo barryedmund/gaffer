@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe Stadium do
-  let!(:stadium) { create(:stadium) }
+  let!(:team_1) { create(:team) }
+  let!(:stadium) { create(:stadium, team: team_1) }
 
   context "relationships" do
     it { should belong_to(:team) }
