@@ -328,4 +328,8 @@ class Team < ActiveRecord::Base
 		revenue_from_remaining_home_games = (get_home_games_remaining_this_season.count) * (stadium.capacity * Rails.application.config.revenue_per_ticket)
 		revenue_from_remaining_home_games + cash_balance_cents - get_season_remaining_of_signed_contracts
 	end
+
+	def max_stadium_expansion(available_spend = self.cash_balance_cents)
+		[[(available_spend / Rails.application.config.cost_per_additional_stadium_seat), 0].max.floor, Rails.application.config.max_stadium_size - self.stadium.capacity].min
+	end
 end

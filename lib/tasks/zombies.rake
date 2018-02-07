@@ -115,7 +115,9 @@ namespace :zombies do
       league.teams.where(deleted_at: nil).order(:created_at).each do |team|
         if team.is_zombie_team && !team.get_position_to_sign && (team.end_of_season_financial_position >= 0)
           puts "------------"
-          puts team.title
+          puts "#{team.title} #{team.cash_balance_cents}"
+          exact = team.max_stadium_expansion(team.cash_balance_cents * Rails.application.config.zombie_percentage_spend_on_stadium_expansion)
+          puts ((exact.to_f / 50).floor) * 50
           puts "------------"
         end
       end

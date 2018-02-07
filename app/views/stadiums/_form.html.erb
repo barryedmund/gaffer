@@ -1,5 +1,5 @@
 <%= form_for ([@league, @team, @stadium]) do |f| %>
-<% max_expansion = [[(@team.cash_balance_cents / Rails.application.config.cost_per_additional_stadium_seat), 0].max.floor, Rails.application.config.max_stadium_size - @stadium.capacity].min %>
+<% max_expansion = @team.max_stadium_expansion %>
   <% if @stadium.errors.any? %>
     <div class="mdl-card__supporting-text">
       Please address the <%= "error".pluralize(@stadium.errors.count) %> and try again:

@@ -24,8 +24,9 @@ module Gaffer
 
     # Euros per attendance at a home game
     config.revenue_per_ticket = 50
-    config.cost_per_additional_stadium_seat = 300
+    config.cost_per_additional_stadium_seat = 500
     config.max_stadium_size = 120000
+    config.zombie_percentage_spend_on_stadium_expansion = 0.1
     # Player value is based on performance, but if they have no history, or are terrible, this is their value
     config.minimum_player_value = 50000
     # Weeks per year of contract that a team pays when releasing a player
