@@ -141,6 +141,10 @@ class Team < ActiveRecord::Base
     update_attributes(cash_balance_cents: (cash_balance_cents + cash_amount))
   end
 
+	def subtract_cash(cash_amount)
+    update_attributes(cash_balance_cents: (cash_balance_cents - cash_amount))
+  end
+
   def squad_value
     players_on_this_team = Player.where(available: true).where(id: (Player.joins(team_players: :team).where('teams.id = ?', self.id) ).map(&:id))
     players_on_this_team.to_a.sum { |player| player.player_value }
@@ -331,5 +335,13 @@ class Team < ActiveRecord::Base
 
 	def max_stadium_expansion(available_spend = self.cash_balance_cents)
 		[[(available_spend / Rails.application.config.cost_per_additional_stadium_seat), 0].max.floor, Rails.application.config.max_stadium_size - self.stadium.capacity].min
+	end
+
+	def expand_stadium(expansion)
+		if expansion > 0
+			stadium.update_attributes(capacity: (stadium.capacity + expansion))
+			subtract_cash(expansion * Rails.application.config.cost_per_additional_stadium_seat)
+			NewsItem.create(league: league, news_item_resource_type: 'Stadium', news_item_type: 'stadium_expansion', news_item_resource_id: stadium.id, body: "#{stadium.abbreviated_name(16)} grows to #{stadium.capacity} seats", content: "#{abbreviated_title(16)} adds #{expansion} #{'seat'.pluralize(expansion)} to stadium.")
+		end
 	end
 end

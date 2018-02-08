@@ -113,12 +113,11 @@ namespace :zombies do
   task :expand_stadium => :environment do
     League.active_leagues.each do |league|
       league.teams.where(deleted_at: nil).order(:created_at).each do |team|
-        if team.is_zombie_team && !team.get_position_to_sign && (team.end_of_season_financial_position >= 0)
-          puts "------------"
-          puts "#{team.title} #{team.cash_balance_cents}"
-          exact = team.max_stadium_expansion(team.cash_balance_cents * Rails.application.config.zombie_percentage_spend_on_stadium_expansion)
-          puts ((exact.to_f / 50).floor) * 50
-          puts "------------"
+        if team.is_zombie_team && !team.get_position_to_sign && (team.end_of_season_financial_position >= 0) && !GameWeek.has_current_game_week && rand(0...10) == 1
+          exact_affordable_expansion = team.max_stadium_expansion(team.cash_balance_cents * Rails.application.config.zombie_percentage_spend_on_stadium_expansion)
+          rounded_affordable_expansion = ((exact_affordable_expansion.to_f / 50).floor) * 50
+          team.expand_stadium(rounded_affordable_expansion)
+          puts "#{team.title} stadium by #{rounded_affordable_expansion} seats. New capacity is #{team.stadium.capacity}."
         end
       end
     end
