@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     		end
     	end
       resources :team_achievements
+      resources :stadiums
     end
     resources :players do
       resources :game_weeks

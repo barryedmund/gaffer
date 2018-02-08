@@ -1,7 +1,5 @@
 <% resource = news_item.news_item_resource %>
 
-
-
 <% if resource.instance_of? Player %>
 	<!-- PLAYER news_items -->
 	<tr>
@@ -129,7 +127,7 @@
 					<%= news_item.content %>
 				<% end %>
 			</td>
-		<% end %>	
+		<% end %>
 	</tr>
 
 
@@ -150,5 +148,14 @@
 			<% copy = "#{resource.abbreviated_title(22)} players de-listed" %>
 		<% end %>
 		<%= render partial: 'news_items/news_item_row_partials/news_item_partial', locals: { news_item: news_item, resource: resource, icon_type: icon_type, link: league_path(news_item.league.id), copy: copy } %>
+	<% end %>
+
+
+
+<!-- STADIUM news_items -->
+<% elsif resource.instance_of? Stadium %>
+	<% if news_item.news_item_type === 'stadium_expansion' %>
+		<% icon_type = "home" %>
+		<%= render partial: 'news_items/news_item_row_partials/news_item_partial', locals: { news_item: news_item, resource: resource, icon_type: icon_type, link: league_path(news_item.league.id), copy: news_item.content } %>
 	<% end %>
 <% end %>

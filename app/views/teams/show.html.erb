@@ -53,7 +53,7 @@
 							Stadium
 						</td>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
-							<%= @team.stadium.name %> (<%= number_with_delimiter(@team.stadium.capacity, delimiter: ',') %>)
+							<%= link_to @team.stadium.name, edit_league_team_stadium_path(@team.league, @team, @team.stadium.id), class: "content-link" %> (<%=  number_with_delimiter(@team.stadium.capacity, delimiter: ',') %>)
 						</td>
 					</tr>
 					<tr>

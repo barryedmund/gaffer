@@ -1,0 +1,84 @@
+<%= form_for ([@league, @team, @stadium]) do |f| %>
+<% max_expansion = @team.max_stadium_expansion %>
+  <% if @stadium.errors.any? %>
+    <div class="mdl-card__supporting-text">
+      Please address the <%= "error".pluralize(@stadium.errors.count) %> and try again:
+    </div>
+    <div>
+      <ul>
+        <% @stadium.errors.full_messages.each do |message| %>
+          <li>
+            <i class="material-icons large error">face</i>
+            <%= message %>
+          </li>
+       <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mdl-card__actions">
+    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+      <tr>
+        <td class="mdl-data-table__cell--non-numeric normal-text">
+          Current capacity
+        </td>
+        <td class="mdl-data-table__cell--non-numeric normal-text">
+          <%= number_with_delimiter(@stadium.capacity, delimiter: ',') %>
+        </td>
+      </tr>
+      <tr>
+        <td class="mdl-data-table__cell--non-numeric normal-text">
+          Max stadium size
+        </td>
+        <td class="mdl-data-table__cell--non-numeric normal-text">
+          <%= number_with_delimiter(Rails.application.config.max_stadium_size, delimiter: ',') %>
+        </td>
+      </tr>
+      <tr>
+        <td class="mdl-data-table__cell--non-numeric normal-text">
+          Cost per additional seat
+        </td>
+        <td class="mdl-data-table__cell--non-numeric normal-text">
+          <%= number_to_currency(Rails.application.config.cost_per_additional_stadium_seat, precision: 0) %>
+        </td>
+      </tr>
+      <tr>
+        <td class="mdl-data-table__cell--non-numeric normal-text">
+          Revenue per seat per home game
+        </td>
+        <td class="mdl-data-table__cell--non-numeric normal-text">
+          <%= number_to_currency(Rails.application.config.revenue_per_ticket, precision: 0) %>
+        </td>
+      </tr>
+      <tr>
+        <td class="mdl-data-table__cell--non-numeric normal-text">
+          Current team budget
+        </td>
+        <td class="mdl-data-table__cell--non-numeric normal-text">
+          <%= number_to_currency(@team.cash_balance_cents, precision: 0) %>
+        </td>
+      </tr>
+      <tr>
+        <td class="mdl-data-table__cell--non-numeric normal-text">
+          Max affordable expansion
+        </td>
+        <td class="mdl-data-table__cell--non-numeric normal-text">
+          <%= number_with_delimiter(max_expansion, delimiter: ',') %> <%= "seat".pluralize(max_expansion) %>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="mdl-card__actions">
+    <div class="form-group">
+      <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <%= f.text_field :capacity, value: max_expansion, pattern: "^[1-9]{1}[0-9]*$", class: "mdl-textfield__input"%>
+        <%= f.label "Number of seats to add", class: "mdl-textfield__label" %>
+        <span class="mdl-textfield__error">Invalid amount.</span>
+      </div>
+    </div>
+    <div class="form-group">
+      <%= f.submit "Expand", class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
+      <%= link_to "Cancel", league_team_path(@league, @team), class: "cancel_link_anchor" %>
+    </div>
+  </div>
+<% end %>
