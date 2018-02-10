@@ -23,8 +23,9 @@ namespace :games do
       if game_week.starts_at < Time.now && !game_week.finished
         puts "GameWeek #{game_week.game_week_number} started & not finished"
         Player.all.each do |player|
-          if player.player_game_weeks.where(game_week: game_week).count == 0 && player.game_week_deadline_at && player.game_week_deadline_at + 10.minutes < Time.now
-            player_game_week = PlayerGameWeek.create(player: player, game_week: game_week, minutes_played: 0, goals: 0, clean_sheet: true, goals_conceded: 0)
+          # if player.player_game_weeks.where(game_week: game_week).count == 0 && player.game_week_deadline_at && player.game_week_deadline_at + 10.minutes < Time.now
+          if player.player_game_weeks.where(game_week: game_week).count == 0 && player.game_week_deadline_at
+            player_game_week = PlayerGameWeek.create(player: player, game_week: game_week, minutes_played: 0, goals: 0, clean_sheet: true, goals_conceded: 0, player_value: player.player_value)
             puts "Created PlayerGameWeek ##{game_week.game_week_number} for #{player.first_name} #{player.last_name}"
             league_seasons = LeagueSeason.where(season: this_season)
             league_seasons.each do |league_season|

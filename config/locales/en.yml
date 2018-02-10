@@ -22,6 +22,13 @@
 en:
   hello: "Hello world"
   number:
-     currency:
-        format:
-          unit: '€'
+    human:
+      decimal_units:
+        format: "%n%u"
+        units:
+          unit: ""
+          thousand: k
+          million: m
+    currency:
+      format:
+        unit: '€'
