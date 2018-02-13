@@ -199,7 +199,12 @@ class Player < ActiveRecord::Base
     game_week_deadline_at ? (team_player.player.game_week_deadline_at > Time.now) : false
   end
 
-  def player_value
+	def player_value
+		most_recent_player_game_week = player_game_weeks.joins(:game_week).order('game_weeks.starts_at DESC').first
+		most_recent_player_game_week ? most_recent_player_game_week.player_value : Rails.application.config.minimum_player_value
+	end
+
+  def calculate_player_value
     defensive_index = ((total_defensive_contribution_per_90 / 90) * percentage_of_minutes_played) / 4
     attacking_index = ((total_attacking_contribution_per_90) * percentage_of_minutes_played)
     value = ((defensive_index + attacking_index) * 10000000) * 1.5

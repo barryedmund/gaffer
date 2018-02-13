@@ -66,9 +66,6 @@
 				<th>
 					<span>Gc</span>
 				</th>
-				<th>
-					<span>Val</span>
-				</th>
 			</tr>
 			<% previous_value = 0 %>
 			<% player.player_game_weeks.joins(:game_week).order("game_weeks.starts_at DESC").each do |pgw| %>
@@ -90,12 +87,6 @@
 					</td>
 					<td class="normal-text">
 						<%= pgw.goals_conceded.to_f %>
-					</td>
-					<td class="normal-text <%= 'highlight_warning' if pgw.player_value > previous_value %>" >
-						<% if show_value %>
-							<%= number_to_currency(number_to_human(pgw.player_value, precision: 1, separator: '.', significant: false)) %>
-							<% previous_value = pgw.player_value %>
-						<% end %>
 					</td>
 				</tr>
 			<% end %>

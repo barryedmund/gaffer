@@ -76,8 +76,8 @@ class Team < ActiveRecord::Base
     end
   end
 
-	  def get_season_remaining_of_signed_contracts
-    if league.current_league_season
+	def get_season_remaining_of_signed_contracts
+  	if league.current_league_season
       number_of_game_weeks = GameWeek.where(season_id: league.current_league_season.season.id, finished: false).count
     else
       number_of_game_weeks = league.competition.game_weeks_per_season
