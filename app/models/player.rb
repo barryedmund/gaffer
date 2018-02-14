@@ -214,4 +214,21 @@ class Player < ActiveRecord::Base
   def display_news
     news.blank? ? "-" : news
   end
+
+	def recent_form
+		recent_player_game_weeks = player_game_weeks.joins(:game_week).order('game_weeks.starts_at DESC').limit(6)
+		previous_pgw_value = -1
+		form_indicator = 0.0
+		recent_player_game_weeks.reverse.each do |pgw|
+			if previous_pgw_value == -1
+				previous_pgw_value = pgw.player_value
+			else
+				if pgw.player_value > previous_pgw_value
+					form_indicator += 0.2 * (pgw.player_value.to_f / previous_pgw_value.to_f)
+				end
+				previous_pgw_value = pgw.player_value
+			end
+		end
+		form_indicator.round(3)
+	end
 end

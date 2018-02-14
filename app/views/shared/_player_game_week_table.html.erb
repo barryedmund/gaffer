@@ -66,8 +66,10 @@
 				<th>
 					<span>Gc</span>
 				</th>
+				<th>
+					<span>Val</span>
+				</th>
 			</tr>
-			<% previous_value = 0 %>
 			<% player.player_game_weeks.joins(:game_week).order("game_weeks.starts_at DESC").each do |pgw| %>
 				<tr>
 					<td class="mdl-data-table__cell--non-numeric normal-text">
@@ -87,6 +89,9 @@
 					</td>
 					<td class="normal-text">
 						<%= pgw.goals_conceded.to_f %>
+					</td>
+					<td class="normal-text">
+						<%= pgw.player_value %>
 					</td>
 				</tr>
 			<% end %>
