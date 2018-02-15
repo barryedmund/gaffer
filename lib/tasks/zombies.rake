@@ -26,7 +26,14 @@ namespace :zombies do
         players_with_contract_offers_from_team = team.get_players_with_contract_offers
         if team.is_zombie_team && what_to_sign = team.get_position_to_sign(players_with_contract_offers_from_team)
           free_agent_to_sign = Player.get_most_valuable_unattached_player_at_position(league, what_to_sign, players_with_contract_offers_from_team)
+
+
+
+          # Edit this method to return the best player at this position that will not leave the buying team broke.
           transfer_listed_player_to_sign = TeamPlayer.get_best_deal_of_transfer_listed_team_players_at_position(team, what_to_sign)
+
+
+
           signing_options = []
           if free_agent_to_sign
             signing_options << {type: "free_agent", object: free_agent_to_sign, relative_deal_value: (free_agent_to_sign.player_value / Rails.application.config.min_weekly_salary_of_contract).round, valid: !free_agent_to_sign.has_contract_offer_from_team?(team)}
@@ -38,7 +45,14 @@ namespace :zombies do
           puts "-"
           puts "#{team.title}: #{signing_options.inspect}"
           puts "-"
+
+
+
+          # The best option should be the most valuable player. If they are a free agent, sign him. If he needs to be bought, great!
           best_option = signing_options.select{ |option| option[:valid] }.max_by{ |option| option[:relative_deal_value] }
+
+
+
           if best_option.present?
             if best_option[:type] == "free_agent"
               @contract_offer = Contract.new(

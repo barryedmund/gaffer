@@ -3,7 +3,7 @@ namespace :once_off do
     Player.all.each do |player|
       GameWeek.where(finished: true).order(:id).each do |game_week|
         if this_player_game_week = PlayerGameWeek.where(game_week: game_week, player: player).first
-          player_game_week_so_far = player.player_game_weeks.joins(:game_week).where('game_weeks.id < ?', game_week.id)
+          player_game_week_so_far = player.player_game_weeks.joins(:game_week).where('game_weeks.id <= ? AND game_weeks.finished = ?', game_week.id, true)
 
           # total_minutes_played
           total_minutes_played = player_game_week_so_far.sum(:minutes_played)
