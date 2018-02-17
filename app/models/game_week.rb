@@ -12,7 +12,7 @@ class GameWeek < ActiveRecord::Base
 	end
 
   def self.get_most_recent_finished
-    GameWeek.where(finished: true).order(:starts_at).last
+    GameWeek.where(finished: true, financials_processed: true).order(:starts_at).last
   end
 
   def in_play?

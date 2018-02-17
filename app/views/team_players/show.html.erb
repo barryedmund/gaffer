@@ -11,7 +11,7 @@
 							Position
 						</td>
 						<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2">
-							<%= @team_player.player.playing_position %>
+							<%= @team_player.player.full_position_and_real_team %>
 						</td>
 					</tr>
 					<tr>
@@ -25,18 +25,10 @@
 					<%= render partial: 'shared/team_players/player_value_rows', locals: {team_player: @team_player, team: @team} %>
 					<tr>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
-							Salary
-						</td>
-						<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2">
-							<%= number_to_currency(@team_player.current_contract.weekly_salary_cents, precision: 0) %>
-						</td>
-					</tr>
-					<tr>
-						<td class="mdl-data-table__cell--non-numeric normal-text">
 							Contract
 						</td>
 						<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2">
-							<%= @team_player.current_contract.starts_at.strftime("%d %b %Y") %> - <%= @team_player.current_contract.ends_at.strftime("%d %b %Y") %>
+							<%= number_to_currency(@team_player.current_contract.weekly_salary_cents, precision: 0) %> pw until <%=@team_player.current_contract.ends_at.strftime("%d %b %Y") %>
 						</td>
 					</tr>
 					<% if team_player_deadline = @team_player.player.game_week_deadline_at %>

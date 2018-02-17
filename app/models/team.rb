@@ -76,13 +76,13 @@ class Team < ActiveRecord::Base
     end
   end
 
-	  def get_season_remaining_of_signed_contracts
-    if league.current_league_season
+	def get_season_remaining_of_signed_contracts(additional_salary = 0)
+  	if league.current_league_season
       number_of_game_weeks = GameWeek.where(season_id: league.current_league_season.season.id, finished: false).count
     else
       number_of_game_weeks = league.competition.game_weeks_per_season
     end
-     number_of_game_weeks * get_weekly_total_of_signed_contracts
+     number_of_game_weeks * (get_weekly_total_of_signed_contracts + additional_salary)
   end
 
   def get_players_with_contract_offers
@@ -328,9 +328,13 @@ class Team < ActiveRecord::Base
     team_players.joins(:squad_position).where('squad_positions.short_name != ? AND team_players.first_team = ?', 'SUB', true)
   end
 
-	def end_of_season_financial_position
-		revenue_from_remaining_home_games = (get_home_games_remaining_this_season.count) * (stadium.capacity * Rails.application.config.revenue_per_ticket)
-		revenue_from_remaining_home_games + cash_balance_cents - get_season_remaining_of_signed_contracts
+	def home_game_revenue
+		stadium.capacity * Rails.application.config.revenue_per_ticket
+	end
+
+	def end_of_season_financial_position(additional_salary = 0, transfer_fee = 0)
+		revenue_from_remaining_home_games = (get_home_games_remaining_this_season.count) * (home_game_revenue)
+		revenue_from_remaining_home_games + cash_balance_cents - get_season_remaining_of_signed_contracts(additional_salary) - transfer_fee
 	end
 
 	def max_stadium_expansion(available_spend = self.cash_balance_cents)
