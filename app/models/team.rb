@@ -328,8 +328,12 @@ class Team < ActiveRecord::Base
     team_players.joins(:squad_position).where('squad_positions.short_name != ? AND team_players.first_team = ?', 'SUB', true)
   end
 
+	def home_game_revenue
+		stadium.capacity * Rails.application.config.revenue_per_ticket
+	end
+
 	def end_of_season_financial_position(additional_salary = 0, transfer_fee = 0)
-		revenue_from_remaining_home_games = (get_home_games_remaining_this_season.count) * (stadium.capacity * Rails.application.config.revenue_per_ticket)
+		revenue_from_remaining_home_games = (get_home_games_remaining_this_season.count) * (home_game_revenue)
 		revenue_from_remaining_home_games + cash_balance_cents - get_season_remaining_of_signed_contracts(additional_salary) - transfer_fee
 	end
 
