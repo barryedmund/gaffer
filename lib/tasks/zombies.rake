@@ -20,6 +20,31 @@ namespace :zombies do
     end
   end
 
+  task :sign_good_players => :environment do
+    League.active_leagues.each do |league|
+      most_recently_finished_gameweek = GameWeek.get_most_recent_finished
+      league.teams.where(deleted_at: nil).order("RANDOM()").each do |team|
+        players_with_contract_offers_from_team = team.get_players_with_contract_offers
+        if team.is_zombie_team && what_to_sign = team.get_position_to_sign(players_with_contract_offers_from_team)
+          puts "#{team.title}"
+          PlayerGameWeek.where("game_week_id = ? AND minutes_played > ? AND player_value IS NOT NULL", most_recently_finished_gameweek.id, 0).order("player_value DESC").each do |pgw|
+            if pgw.player.playing_position == what_to_sign
+              if team_player = TeamPlayer.where(player: pgw.player).joins(:team).where('teams.league_id = ?', league.id).first
+                if team_player.transfer_minimum_bid.present? && team_player.transfer_minimum_bid <= pgw.player_value && team_player.team != team
+                  puts ">> (#{pgw.player.playing_position}) #{pgw.player.full_name}: #{pgw.player_value} (#{team_player.team.title}, #{team_player.transfer_minimum_bid})"
+                  puts ">> #{team.end_of_season_financial_position(team_player.current_contract.weekly_salary_cents, team_player.transfer_minimum_bid)}"
+                end
+              else
+                puts ">> (#{pgw.player.playing_position}) #{pgw.player.full_name}: #{pgw.player_value}"
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
+
   task :sign_players => :environment do
     League.active_leagues.each do |league|
       league.teams.where(deleted_at: nil).order("RANDOM()").each do |team|
