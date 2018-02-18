@@ -16,12 +16,6 @@ class TeamPlayer < ActiveRecord::Base
     self.transfer_listed_with_offers.where('transfer_completes_at < ?', Time.now)
   end
 
-  def self.get_best_deal_of_transfer_listed_team_players_at_position(team, position)
-    if most_recently_finished_gameweek = GameWeek.get_most_recent_finished
-      self.joins(:team, player: :player_game_weeks).where('team_players.transfer_minimum_bid IS NOT NULL AND team_players.team_id != ? AND teams.league_id = ? AND players.playing_position = ? AND player_game_weeks.game_week_id = ? AND player_game_weeks.minutes_played > ?', team.id, team.league_id, position,most_recently_finished_gameweek.id, 0).select{ |team_player| team_player.relative_deal_value >= 50 }.sort_by{ |team_player| team_player.relative_deal_value }.last
-    end
-  end
-
   def full_name(abbreviate = false, cut_off = 13)
     if abbreviate
       working_full_name = "#{player.first_name} #{player.last_name}"
@@ -134,14 +128,6 @@ class TeamPlayer < ActiveRecord::Base
     (player.player_value / current_contract.weekly_salary_cents).round
   end
 
-  def deal_value
-    transfer_listed? ? (player.player_value - transfer_minimum_bid) : 0
-  end
-
-  def relative_deal_value
-    deal_value > 0 ? (deal_value / current_contract.weekly_salary_cents).round : 0
-  end
-
   def has_active_transfer_bid_from_team(team_to_check)
     is_this_team_player = false
     Transfer.incomplete_transfers_with_team_involved(Team.where(id: team_to_check.id)).map{ |transfer| is_this_team_player = true if transfer.get_team_player_involved == self }
@@ -150,5 +136,22 @@ class TeamPlayer < ActiveRecord::Base
 
   def move_to_subs_bench
     self.update_attributes(first_team: false, squad_position: SquadPosition.find_by(short_name: 'SUB'))
+  end
+
+  def happiness
+    all_player_lineups = PlayerLineup.where(team: team).joins(:player_game_week).where("player_game_weeks.player_id = ?", player_id)
+		num_non_sub = all_player_lineups.where("squad_position_id != ?", 1).count
+		num_sub = all_player_lineups.where("squad_position_id = ?", 1).count
+		num_total = num_non_sub + num_sub
+		if (num_total) > 4
+			(num_non_sub.to_f / num_total.to_f).round(3)
+    else
+      1.to_f.round(3)
+		end
+  end
+
+  def did_value_go_up
+    last_two_pgw = player.player_game_weeks.joins(:game_week).where("game_weeks.finished = ? AND game_weeks.financials_processed = ?", true, true).order("game_weeks.starts_at DESC").limit(2)
+    (last_two_pgw.count == 2 && last_two_pgw.first.player_value > last_two_pgw.last.player_value)
   end
 end

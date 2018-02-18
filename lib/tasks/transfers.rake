@@ -50,4 +50,17 @@ namespace :transfers do
       end
     end
   end
+
+	task :transfer_list_unhappy_player => :environment do
+		uphappy_team_players ||= []
+		# TeamPlayers whose value went up in the last game week & who aren't injured & whose happiness is below X
+		TeamPlayer.all.each do |tp|
+			if tp.player.news.blank? && tp.did_value_go_up && tp.happiness < Rails.application.config.team_player_happiness_threshold && tp.transfer_minimum_bid.blank? && rand(2) == 1
+				uphappy_team_players << tp
+			end
+		end
+		uphappy_team_players_as_relation = TeamPlayer.where(id: uphappy_team_players.map(&:id))
+		most_unhappy_team_player = uphappy_team_players_as_relation.sort_by{ |team_player| team_player.happiness }.first
+		puts "#{most_unhappy_team_player.full_name} (#{most_unhappy_team_player.happiness}) valued at #{most_unhappy_team_player.player.player_value}"
+	end
 end
