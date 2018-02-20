@@ -125,4 +125,8 @@ class League < ActiveRecord::Base
 			end
 		end
 	end
+
+	def team_players
+		TeamPlayer.joins(:team).where("teams.league_id = ?", self.id)
+	end
 end

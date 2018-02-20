@@ -154,4 +154,19 @@ class TeamPlayer < ActiveRecord::Base
     last_two_pgw = player.player_game_weeks.joins(:game_week).where("game_weeks.finished = ? AND game_weeks.financials_processed = ?", true, true).order("game_weeks.starts_at DESC").limit(2)
     (last_two_pgw.count == 2 && last_two_pgw.first.player_value > last_two_pgw.last.player_value)
   end
+
+  def most_recent_player_game_weeks(n = 5)
+    most_recent = player.player_game_weeks.joins(:game_week).order('game_weeks.starts_at DESC').first(n)
+    most_recent_as_pgw = PlayerGameWeek.where(id: most_recent.map(&:id))
+    most_recent_as_pgw
+  end
+
+  def real_minutes_played_recently(n = 5)
+    most_recent_player_game_weeks(n).sum(:minutes_played)
+  end
+
+  def was_on_bench_most_recently
+    most_recent_player_lineup = PlayerLineup.where(team: team).joins(player_game_week: :game_week).where("player_game_weeks.player_id = ?", player_id).order("game_weeks.starts_at DESC").first
+    most_recent_player_lineup.squad_position.short_name == 'SUB'
+  end
 end

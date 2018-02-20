@@ -52,15 +52,20 @@ namespace :transfers do
   end
 
 	task :transfer_list_unhappy_player => :environment do
-		uphappy_team_players ||= []
-		# TeamPlayers whose value went up in the last game week & who aren't injured & whose happiness is below X
-		TeamPlayer.all.each do |tp|
-			if tp.player.news.blank? && tp.did_value_go_up && tp.happiness < Rails.application.config.team_player_happiness_threshold && tp.transfer_minimum_bid.blank? && rand(2) == 1
-				uphappy_team_players << tp
+		League.active_leagues.each do |league|
+			uphappy_team_players ||= []
+			# TeamPlayers whose value went up in the last game week & who aren't injured & whose happiness is below X
+			league.team_players.each do |tp|
+				if tp.player.news.blank? && tp.did_value_go_up && tp.happiness < Rails.application.config.team_player_happiness_threshold && tp.transfer_minimum_bid.blank? && tp.real_minutes_played_recently(5) > 225 && tp.was_on_bench_most_recently
+					uphappy_team_players << tp
+				end
+			end
+			if rand < 1.0
+				uphappy_team_players_as_relation = TeamPlayer.where(id: uphappy_team_players.map(&:id))
+				most_valuable_unhappy_team_player = uphappy_team_players_as_relation.sort_by{ |team_player| team_player.player.player_value }.last
+				most_valuable_unhappy_team_player.force_transfer_list
+				NewsItem.create(league: league, news_item_resource_type: 'TeamPlayer', news_item_type: 'team_player_forces_listing', news_item_resource_id: most_valuable_unhappy_team_player.id, body: "#{most_valuable_unhappy_team_player.full_name(true)} submits transfer request.", content: "Unhappy with #{most_valuable_unhappy_team_player.team.user.last_name} over lack of playing time.")
 			end
 		end
-		uphappy_team_players_as_relation = TeamPlayer.where(id: uphappy_team_players.map(&:id))
-		most_unhappy_team_player = uphappy_team_players_as_relation.sort_by{ |team_player| team_player.happiness }.first
-		puts "#{most_unhappy_team_player.full_name} (#{most_unhappy_team_player.happiness}) valued at #{most_unhappy_team_player.player.player_value}"
 	end
 end
