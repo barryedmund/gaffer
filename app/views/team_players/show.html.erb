@@ -59,7 +59,7 @@
 							Happiness
 						</td>
 						<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2">
-							<%= @team_player.happiness %>
+							<%= render partial: 'shared/team_players/happiness_indicator', locals: {happiness: @team_player.happiness} %>
 						</td>
 					</tr>
 				</table>

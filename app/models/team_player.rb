@@ -52,7 +52,7 @@ class TeamPlayer < ActiveRecord::Base
   end
 
   def game_week_deadline_has_not_passed
-    allowable_fields = ["is_voluntary_transfer", "transfer_minimum_bid", "transfer_completes_at"]
+    allowable_fields = ["is_voluntary_transfer", "transfer_minimum_bid", "transfer_completes_at", "is_team_player_initiated_listing"]
     if player.game_week_deadline_at < Time.now && GameWeek.has_current_game_week && (self.changed & allowable_fields).empty?
       errors.add(:base, "That player's deadline has passed for this gameweek.")
     end
@@ -92,7 +92,7 @@ class TeamPlayer < ActiveRecord::Base
     end
   end
 
-  def force_transfer_list
+  def force_transfer_list(team_player_initiated = false)
     new_transfer_minimum_bid = player.player_value
     new_transfer_completes_at = nil
     new_is_voluntary_transfer = false
@@ -117,11 +117,11 @@ class TeamPlayer < ActiveRecord::Base
         end
       end
     end
-    self.update_attributes(transfer_minimum_bid: new_transfer_minimum_bid, transfer_completes_at: new_transfer_completes_at, is_voluntary_transfer: new_is_voluntary_transfer)
+    self.update_attributes(transfer_minimum_bid: new_transfer_minimum_bid, transfer_completes_at: new_transfer_completes_at, is_voluntary_transfer: false, is_team_player_initiated_listing: team_player_initiated)
   end
 
   def reset_transfer_attributes
-    self.update_attributes(transfer_minimum_bid: nil, transfer_completes_at: nil, is_voluntary_transfer: false)
+    self.update_attributes(transfer_minimum_bid: nil, transfer_completes_at: nil, is_voluntary_transfer: false, is_team_player_initiated_listing: false)
   end
 
   def relative_value
@@ -167,6 +167,6 @@ class TeamPlayer < ActiveRecord::Base
 
   def was_on_bench_most_recently
     most_recent_player_lineup = PlayerLineup.where(team: team).joins(player_game_week: :game_week).where("player_game_weeks.player_id = ?", player_id).order("game_weeks.starts_at DESC").first
-    most_recent_player_lineup.squad_position.short_name == 'SUB'
+    most_recent_player_lineup && most_recent_player_lineup.squad_position.short_name == 'SUB' ? true : false
   end
 end

@@ -1,0 +1,11 @@
+<% if happiness < 0.2 %>
+  <i class="material-icons large error">sentiment_very_dissatisfied</i>
+<% elsif happiness >= 0.2 && happiness < 0.4 %>
+  <i class="material-icons large error">sentiment_dissatisfied</i>
+<% elsif happiness >= 0.6 && happiness < 0.8 %>
+  <i class="material-icons large success">sentiment_satisfied</i>
+<% elsif happiness >= 0.8 && happiness <= 1.0 %>
+  <i class="material-icons large success">sentiment_very_satisfied</i>
+<% else %>
+  <i class="material-icons large">sentiment_neutral</i>
+<% end %>
