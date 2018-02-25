@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180210053402) do
+ActiveRecord::Schema.define(version: 20180225212647) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -232,12 +232,13 @@ ActiveRecord::Schema.define(version: 20180210053402) do
     t.integer  "team_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "first_team",            default: false
+    t.boolean  "first_team",                       default: false
     t.integer  "player_id"
     t.integer  "squad_position_id"
     t.datetime "transfer_completes_at"
-    t.boolean  "is_voluntary_transfer", default: false, null: false
+    t.boolean  "is_voluntary_transfer",            default: false, null: false
     t.integer  "transfer_minimum_bid"
+    t.boolean  "is_team_player_initiated_listing", default: false, null: false
   end
 
   add_index "team_players", ["player_id"], name: "index_team_players_on_player_id", using: :btree

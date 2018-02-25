@@ -54,6 +54,14 @@
 							<%= @team_player.player.display_news %>
 						</td>
 					</tr>
+					<tr>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							Happiness
+						</td>
+						<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2">
+							<%= render partial: 'shared/team_players/happiness_indicator', locals: {happiness: @team_player.happiness} %>
+						</td>
+					</tr>
 				</table>
 			</div>
 			<div class="mdl-card__supporting-text">

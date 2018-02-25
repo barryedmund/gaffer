@@ -62,7 +62,7 @@ class Transfer < ActiveRecord::Base
         if transfer_item.transfer_item_type === "Cash"
           sender.decrement!(:cash_balance_cents, transfer_item.cash_cents)
           receiver.increment!(:cash_balance_cents, transfer_item.cash_cents)
-          receiver.delist_involuntarily_listed_team_players if receiver.should_be_back_in_the_black
+          receiver.delist_non_self_listed_team_players if receiver.should_be_back_in_the_black
         elsif transfer_item.transfer_item_type === "Player"
           contract = transfer_item.team_player.current_contract
 					contract.update_attributes!(signed: false)
@@ -71,7 +71,7 @@ class Transfer < ActiveRecord::Base
 						contract.update_attributes!(ends_at: 90.days.from_now.strftime('%Y-%m-%d'))
 					end
 					contract.update_attributes!(signed: true)
-          transfer_item.team_player.update_attributes!(team: receiver, first_team: false, squad_position: SquadPosition.find_by(short_name: 'SUB'), transfer_minimum_bid: nil, transfer_completes_at: nil, is_voluntary_transfer: false)
+          transfer_item.team_player.update_attributes!(team: receiver, first_team: false, squad_position: SquadPosition.find_by(short_name: 'SUB'), transfer_minimum_bid: nil, transfer_completes_at: nil, is_voluntary_transfer: false, is_team_player_initiated_listing: false)
         end
       end
     end

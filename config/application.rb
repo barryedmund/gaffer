@@ -39,5 +39,6 @@ module Gaffer
     config.min_weekly_salary_of_contract = 25000
     config.min_remaining_for_zombie_after_transfer_bid = 1000000
     config.forced_listing_weekly_factor = 0.75
+    config.team_player_happiness_threshold = 0.35
   end
 end

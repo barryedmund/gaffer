@@ -103,6 +103,8 @@
 						playlist_add_check
 					<% elsif news_item.news_item_type == 'team_player_signs_contract' %>
 						assignment_ind
+					<% elsif news_item.news_item_type == 'team_player_forces_listing' %>
+						airline_seat_recline_normal
 					<% end %>
 				</i>
 			<% end %>
@@ -123,7 +125,7 @@
 					<% else %>
 						<%= "Transfer listing cancelled" %>
 					<% end %>
-				<% elsif news_item.news_item_type == 'team_player_signs_contract' %>
+				<% elsif news_item.news_item_type == 'team_player_signs_contract' || news_item.news_item_type == 'team_player_forces_listing' %>
 					<%= news_item.content %>
 				<% end %>
 			</td>

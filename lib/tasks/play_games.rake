@@ -16,7 +16,7 @@ namespace :games do
           if team.cash_balance_cents < 0
             team.auto_transfer_list_squad
           else
-            team.delist_involuntarily_listed_team_players if team.should_be_back_in_the_black
+            team.delist_non_self_listed_team_players if team.should_be_back_in_the_black
           end
         end
         # Add player's financial value to the most recent player_game_week

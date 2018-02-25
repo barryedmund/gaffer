@@ -50,4 +50,23 @@ namespace :transfers do
       end
     end
   end
+
+	task :transfer_list_unhappy_player => :environment do
+		League.active_leagues.each do |league|
+			uphappy_team_players ||= []
+			# TeamPlayers whose value went up in the last game week & who aren't injured & whose happiness is below X
+			league.team_players.each do |tp| #{tp.real_minutes_played_recently(5) > 225} #{tp.was_on_bench_most_recently} #{tp.full_name}"
+				if tp.player.news.blank? && tp.did_value_go_up && tp.happiness < Rails.application.config.team_player_happiness_threshold && tp.transfer_minimum_bid.blank? && tp.real_minutes_played_recently(5) > 225 && tp.was_on_bench_most_recently
+					uphappy_team_players << tp
+				end
+			end
+			if rand < 0.35
+				uphappy_team_players_as_relation = TeamPlayer.where(id: uphappy_team_players.map(&:id))
+				most_valuable_unhappy_team_player = uphappy_team_players_as_relation.sort_by{ |team_player| team_player.player.player_value }.last
+				most_valuable_unhappy_team_player.force_transfer_list(true)
+				NewsItem.create(league: league, news_item_resource_type: 'TeamPlayer', news_item_type: 'team_player_forces_listing', news_item_resource_id: most_valuable_unhappy_team_player.id, body: "#{most_valuable_unhappy_team_player.full_name(true)} forces listing.", content: "Unhappy with #{most_valuable_unhappy_team_player.team.user.last_name} over lack of playing time.")
+				puts "#{most_valuable_unhappy_team_player.full_name} / happiness: #{most_valuable_unhappy_team_player.happiness} / team: #{most_valuable_unhappy_team_player.team.title} / player value: #{most_valuable_unhappy_team_player.player.player_value}"
+			end
+		end
+	end
 end
