@@ -82,11 +82,10 @@ namespace :zombies do
             team_player_involved = transfer.get_team_player_involved
             is_bid_enough_to_clear_debt = team_debt > 0 ? bid_amount > team_debt : true
             team_player_value = team_player_involved.player.player_value
-            decent_bid = team_player_involved.transfer_listed? ? (team_player_list_price * 0.75).round : (team_player_involved.relative_value < 100 ? (team_player_value * 0.75).round : (team_player_value * 1.1)).round
+            decent_bid = team_player_involved.transfer_listed? ? (team_player_involved.transfer_minimum_bid * 0.75).round : (team_player_involved.relative_value < 100 ? (team_player_value * 0.75).round : (team_player_value * 1.1)).round
             if transfer.is_winning_bid
               if team_player_involved.transfer_listed?
-                team_player_list_price = team_player_involved.transfer_minimum_bid
-                is_bid_greater_than_list_price = bid_amount >= team_player_list_price
+                is_bid_greater_than_list_price = bid_amount >= team_player_involved.transfer_minimum_bid
                 is_bid_decent = bid_amount >= decent_bid
                 if is_bid_greater_than_list_price
                   # Do nothing
