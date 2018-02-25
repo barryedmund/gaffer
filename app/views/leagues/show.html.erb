@@ -43,7 +43,7 @@
 									<% end %>
 								</td>
 								<td class="normal-text">
-									<% if standings_row[:team_record].has_team_players_involuntarily_listed %>
+									<% if standings_row[:team_record].is_in_debt %>
 										<i class="material-icons large">money_off</i>
 									<% end %>
 								</td>
@@ -54,7 +54,7 @@
 								<td class="normal-text"><%= standings_row[:goal_difference] %></td>
 								<td class="normal-text"><%= standings_row[:points] %></td>
 							</tr>
-						<% end %>	
+						<% end %>
 					</table>
 				<% end %>
 

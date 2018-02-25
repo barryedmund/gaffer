@@ -132,6 +132,10 @@ class Team < ActiveRecord::Base
     has_team_players_involuntarily_listed && cash_balance_cents > 0 ? true : false
   end
 
+	def is_in_debt
+		cash_balance_cents < 0
+	end
+
   def delist_non_self_listed_team_players
     team_players.where(is_team_player_initiated_listing: false).each { |team_player| team_player.reset_transfer_attributes }
     NewsItem.create(league: league, news_item_resource_type: 'Team', news_item_type: 'delist_squad', news_item_resource_id: id, body: "Team out of financial difficulty")
