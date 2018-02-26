@@ -26,10 +26,10 @@ namespace :zombies do
       most_recently_finished_gameweek = GameWeek.get_most_recent_finished
       # Go through each team
       league.teams.where(deleted_at: nil).order("RANDOM()").each do |team|
-        players_with_contract_offers_from_team = team.get_players_with_contract_offers
+        combined_players = team.get_players_with_contract_offers + team.get_players_in_existing_bids
         # Are they a zombie team and do they need a player?
-        if team.is_zombie_team && what_to_sign = team.get_position_to_sign(players_with_contract_offers_from_team)
-          puts "#{team.title}"
+        if team.is_zombie_team && what_to_sign = team.get_position_to_sign(combined_players)
+          puts "#{team.title} (#{what_to_sign})"
           # Sort the player game weeks by value
           PlayerGameWeek.where("game_week_id = ? AND minutes_played > ? AND player_value IS NOT NULL", most_recently_finished_gameweek.id, 0).joins(:player).where("players.news = ?", '').order("player_game_weeks.player_value DESC").each do |pgw|
             # If the player is the right position

@@ -283,8 +283,8 @@ class Team < ActiveRecord::Base
     "#{number_of_first_team_players_at_position('GK')} - #{number_of_first_team_players_at_position('DF')} - #{number_of_first_team_players_at_position('MD')} - #{number_of_first_team_players_at_position('FW')} (#{number_of_subs_at_position('Goalkeeper')} - #{number_of_subs_at_position('Defender')} - #{number_of_subs_at_position('Midfielder')} - #{number_of_subs_at_position('Forward')})"
   end
 
-  def get_position_to_sign(player_ids_of_contract_offers = nil)
-    players_with_contract_offers = Player.where('id IN (?)', player_ids_of_contract_offers)
+  def get_position_to_sign(player_ids_of_existing_offers = nil)
+    players_with_contract_offers = Player.where('id IN (?)', player_ids_of_existing_offers)
     num_contract_offers_gk = players_with_contract_offers.where(playing_position: 'Goalkeeper').count
     num_contract_offers_df = players_with_contract_offers.where(playing_position: 'Defender').count
     num_contract_offers_md = players_with_contract_offers.where(playing_position: 'Midfielder').count
@@ -327,6 +327,14 @@ class Team < ActiveRecord::Base
   def get_active_transfers
     Transfer.where('(transfers.primary_team_id = :your_team OR transfers.secondary_team_id = :your_team) AND (transfers.primary_team_accepted = :not_accepted OR transfers.secondary_team_accepted = :not_accepted)', your_team: self.id, not_accepted: false)
   end
+
+	def active_player_transfer_items
+		TransferItem.where(receiving_team: self, transfer_item_type: 'Player').joins(:transfer, :team_player).where('transfers.primary_team_id = :your_team AND (transfers.primary_team_accepted = :not_accepted OR transfers.secondary_team_accepted = :not_accepted)', your_team: self.id, not_accepted: false)
+	end
+
+	def get_players_in_existing_bids
+		active_player_transfer_items.pluck('team_players.player_id')
+	end
 
   def all_first_team_team_players
     team_players.joins(:squad_position).where('squad_positions.short_name != ? AND team_players.first_team = ?', 'SUB', true)
