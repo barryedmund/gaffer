@@ -125,7 +125,7 @@ class Team < ActiveRecord::Base
   end
 
   def has_team_players_involuntarily_listed
-    transfer_listed_players.where(is_voluntary_transfer: false).count > 0 ? true : false
+    transfer_listed_players.where(is_voluntary_transfer: false, is_team_player_initiated_listing: false).count > 0 ? true : false
   end
 
   def should_be_back_in_the_black
