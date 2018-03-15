@@ -41,7 +41,7 @@ namespace :zombies do
                 # If the player is transfer listed
                 if is_transfer_listed
                   team_player_salary = team_player.current_contract.weekly_salary_cents
-                  is_transfer_price_reasonable = team_player.transfer_minimum_bid <= pgw.player_value
+                  is_transfer_price_reasonable = team_player.transfer_minimum_bid <= (pgw.player_value * 1.1)
                   is_not_on_this_team = team_player.team != team
                   is_reasonable_salary = team_player_salary <= (team.home_game_revenue * 0.1)
                   is_fiscally_responsible = team.end_of_season_financial_position(team_player_salary, team_player.transfer_minimum_bid) > Rails.application.config.min_remaining_for_zombie_after_transfer_bid
