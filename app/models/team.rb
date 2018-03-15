@@ -184,7 +184,10 @@ class Team < ActiveRecord::Base
 
   def most_valuable_available_sub_at_position(long_position)
     available_subs_at_position = team_players.joins(:squad_position, :player).where('squad_positions.short_name = ? AND team_players.first_team = ? AND players.news = ? AND players.playing_position = ?', 'SUB', false, '', long_position)
-    if available_subs_at_position
+		available_subs_at_position_with_opponent = available_subs_at_position.joins(:player).where('players.active_game_week_opponent != ?', '-')
+    if available_subs_at_position_with_opponent.count > 0
+			available_subs_at_position_with_opponent.sort_by{ |team_player| team_player.player.player_value }.last
+		else available_subs_at_position
       available_subs_at_position.sort_by{ |team_player| team_player.player.player_value }.last
     end
   end
