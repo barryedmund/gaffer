@@ -24,6 +24,7 @@ namespace :zombies do
     # For each league
     League.active_leagues.each do |league|
       most_recently_finished_gameweek = GameWeek.get_most_recent_finished
+      current_season = Season.current.first
       # Go through each team
       league.teams.where(deleted_at: nil).order("RANDOM()").each do |team|
         combined_players = team.get_players_with_contract_offers + team.get_players_in_existing_bids
@@ -31,9 +32,9 @@ namespace :zombies do
         if team.is_zombie_team && what_to_sign = team.get_position_to_sign(combined_players)
           puts "#{team.title} (#{what_to_sign})"
           # Sort the player game weeks by value
-          PlayerGameWeek.where("game_week_id = ? AND minutes_played > ? AND player_value IS NOT NULL", most_recently_finished_gameweek.id, 0).joins(:player).where("players.news = ?", '').order("player_game_weeks.player_value DESC").each do |pgw|
+          PlayerGameWeek.where("game_week_id = ? AND player_value IS NOT NULL", most_recently_finished_gameweek.id).joins(:player).where("players.news = ?", '').order("player_game_weeks.player_value DESC").each do |pgw|
             # If the player is the right position
-            if pgw.player.playing_position == what_to_sign
+            if pgw.player.playing_position == what_to_sign && pgw.player.percentage_of_minutes_played_this_season(current_season) >= 0.5
               team_player = TeamPlayer.where(player: pgw.player).joins(:team).where('teams.league_id = ?', league.id).first
               # If the player belongs to a team
               if team_player

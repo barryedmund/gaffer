@@ -105,6 +105,10 @@ class Player < ActiveRecord::Base
     eligible_game_weeks > 0 ? (total_minutes_played.to_f / (eligible_game_weeks * 90).to_f).round(3) : 0
   end
 
+	def percentage_of_minutes_played_this_season(season)
+    eligible_game_weeks_this_season(season) > 0 ? (total_minutes_played_this_season(season).to_f / (eligible_game_weeks_this_season(season) * 90).to_f).round(3) : 0
+  end
+
   def total_attacking_contribution
     attacking_contribution = 0
     if playing_position === 'Goalkeeper'
