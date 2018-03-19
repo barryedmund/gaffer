@@ -22,7 +22,11 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         session[:user_id] = @user.id
-        format.html { redirect_to root_path, notice: 'Welcome to Gaffer!' }
+        if @user.has_league_invites
+          format.html { redirect_to root_path, notice: 'Welcome to Gaffer!' }
+        else
+          format.html { redirect_to new_league_path }
+        end
       else
         format.html { render :new }
       end
