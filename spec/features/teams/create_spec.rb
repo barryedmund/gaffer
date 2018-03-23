@@ -10,14 +10,14 @@ describe "Creating teams" do
   let!(:home_team) { Team.create(id: 1, title: "Home Team", league: league, user: user_2) }
   let!(:away_team) { Team.create(id: 2, title: "Away Team", league: league, user: user) }
   let!(:league_season) { create(:league_season, season: season, league: league) }
-	
+
 
 	def create_team(options={})
 		options[:title] ||= "My team"
 		visit "/"
 		visit "leagues/#{league.id}"
 		click_link "Add Team"
-		expect(page).to have_content("#{league.name} new team")
+		expect(page).to have_content("Create team")
 		fill_in :team_title, with: options[:title]
 		fill_in :team_stadium_attributes_name, with: "My Stadium"
 		click_button "Create Team"
@@ -62,7 +62,7 @@ describe "Creating teams" do
 		visit "/"
 		visit "leagues/#{league.id}"
 		click_link "Add Team"
-		expect(page).to have_content("#{league.name} new team")
+		expect(page).to have_content("Create team")
 		fill_in :team_title, with: "Team One"
 		click_button "Create Team"
 

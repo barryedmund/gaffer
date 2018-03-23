@@ -1,9 +1,8 @@
 require 'spec_helper'
 
 describe UsersController do
-
-  let(:valid_attributes){
-    { 
+  let(:valid_attributes_with_invite){
+    {
       "first_name" => "MyString",
       "last_name" => "LastName",
       "email" => "email@example.com",
@@ -11,6 +10,17 @@ describe UsersController do
       "password_confirmation" => "password12345"
     }
   }
+  let(:valid_attributes){
+    {
+      "first_name" => "MyString",
+      "last_name" => "LastName",
+      "email" => "email_2@example.com",
+      "password" => "password12345",
+      "password_confirmation" => "password12345"
+    }
+  }
+  let!(:league) { create(:league) }
+  let!(:league_invite) { create(:league_invite, league: league, email: "email@example.com") }
 
   let(:valid_session) { {} }
 
@@ -43,9 +53,14 @@ describe UsersController do
         assigns(:user).should be_persisted
       end
 
-      it "redirects to the created user" do
-        post :create, {:user => valid_attributes}, valid_session
+      it "redirects to root path when user has invites" do
+        post :create, {:user => valid_attributes_with_invite}, valid_session
         response.should redirect_to(root_path)
+      end
+
+      it "redirects to league creation when user has no invites" do
+        post :create, {:user => valid_attributes}, valid_session
+        response.should redirect_to(new_league_path)
       end
     end
 
