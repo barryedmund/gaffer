@@ -17,55 +17,18 @@ class LeagueSeason < ActiveRecord::Base
     create_games
   end
 
-  def create_games
-    teams = league.teams.where(deleted_at: nil)
-    game_permutations = teams.to_a.permutation(2).to_a
-    ordered_game_weeks = season.game_weeks.order(:starts_at) # 38
-    ordered_game_rounds = game_rounds.order(:game_round_number) # 3
-    if teams.count == 8
-      games_per_game_week = teams.count / 2 # 5
-      games_per_season = games_per_game_week * league.competition.game_weeks_per_season # 190
-      games_per_game_round = teams.count * (teams.count - 1) # 90
-      game_weeks_per_game_round = games_per_game_round / games_per_game_week # 18
-      try_games = true
-
-      while try_games
-        for i in 0..(game_weeks_per_game_round - 1)
-          for j in 0..(game_permutations.length - 1)
-            game_permutations.shuffle
-            game = Game.new(home_team: game_permutations[j][0], away_team: game_permutations[j][1], game_week: ordered_game_weeks[i], game_round: ordered_game_rounds[0])
-            if game.valid?
-              game.save!
-            end
-          end
-        end
-        if ordered_game_rounds[0].games.count == games_per_game_round
-          try_games = false
-        else
-          Game.where(game_round: ordered_game_rounds[0]).delete_all
-        end
-      end
-
-      if ordered_game_rounds.length > 1
-        for i in 1..(ordered_game_rounds.length - 1)
-          remaining_games = games_per_season - get_games.count
-          if remaining_games >= games_per_game_round
-            ordered_game_rounds[0].games.each do |first_game_round_equivalent|
-              this_round_game_week_number = first_game_round_equivalent.game_week.game_week_number + (game_weeks_per_game_round * i)
-              this_round_game_week = ordered_game_weeks.where('game_week_number = ?', this_round_game_week_number).first
-              Game.create(home_team: first_game_round_equivalent.home_team, away_team: first_game_round_equivalent.away_team, game_week: this_round_game_week, game_round: ordered_game_rounds[i])
-            end
-          else
-            ordered_game_rounds[0].games.each do |first_game_round_equivalent|
-              this_round_game_week_number = first_game_round_equivalent.game_week.game_week_number + (game_weeks_per_game_round * i)
-              this_round_game_week = ordered_game_weeks.where('game_week_number = ?', this_round_game_week_number).first
-              Game.create(home_team: first_game_round_equivalent.home_team, away_team: first_game_round_equivalent.away_team, game_week: this_round_game_week, game_round: ordered_game_rounds[i])
-              break if ordered_game_rounds[i].games.count == remaining_games
-            end
-          end
-        end
+  def self.create_games
+    teams = ["A", "B", "C", "D", "E", "F"]
+    unique_games = []
+    (0..(teams.count - 2)).each do |i|
+      prime_team = teams[i]
+      ((i + 1)..(teams.count - 1)).each do |j|
+        unique_games << [prime_team, teams[j]]
+        unique_games << [teams[j], prime_team]
       end
     end
+    puts unique_games.inspect
+    puts unique_games.count
   end
 
   def get_games
