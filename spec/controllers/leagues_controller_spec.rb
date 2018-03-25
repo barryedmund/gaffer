@@ -50,7 +50,8 @@ RSpec.describe LeaguesController, :type => :controller do
 
       it "redirects to the created league" do
         post :create, {:league => valid_attributes_post}, valid_session
-        expect(response).to redirect_to(leagues_path)
+        league = League.last
+        expect(response).to redirect_to(new_league_team_path(league.id))
       end
     end
   end

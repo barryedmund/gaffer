@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
 	before_save :downcase_email
 
 	def downcase_email
-		self.email = email.downcase	
+		self.email = email.downcase
 	end
 
 	def generate_password_reset_token!
@@ -25,6 +25,10 @@ class User < ActiveRecord::Base
 
 	def first_name_camel_cased
 		"#{first_name.downcase.capitalize}"
+	end
+
+	def has_league_invites
+		LeagueInvite.where(email: email).count > 0 ? true : false
 	end
 
 	def only_league

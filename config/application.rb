@@ -40,5 +40,9 @@ module Gaffer
     config.min_remaining_for_zombie_after_transfer_bid = 1000000
     config.forced_listing_weekly_factor = 0.75
     config.team_player_happiness_threshold = 0.35
+
+    # League set up
+    config.team_starting_cash = 20000000
+    config.stadium_starting_capacity = 20000
   end
 end
