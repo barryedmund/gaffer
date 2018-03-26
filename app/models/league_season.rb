@@ -29,6 +29,42 @@ class LeagueSeason < ActiveRecord::Base
     end
     puts unique_games.inspect
     puts unique_games.count
+
+    number_of_game_weeks = unique_games.count / (teams.count / 2)
+    game_week_games = []
+    i = 0
+    while game_week_games.count < number_of_game_weeks
+      game_week_games << []
+      j = 0
+      # While this game week isn't full
+      while (game_week_games[i].count < (teams.count / 2)) && (unique_games.count > 0)
+        # If the game week is empty, just lash in the first game
+        if game_week_games.count == 0
+          game_week_games[i] << unique_games[j]
+          unique_games.delete(unique_games[j])
+          puts "game added: #{game_week_games[i].inspect}"
+        # Else...
+        else
+          teams_involved_so_far = game_week_games[i].flatten.uniq
+          puts "unique_games.count: #{unique_games.count}"
+          puts "teams_involved_so_far: #{teams_involved_so_far}"
+          puts "j: #{j}"
+          puts "game_week_games[#{i}]: #{game_week_games[i].inspect}"
+          puts ""
+          puts ""
+          intersection = teams_involved_so_far & unique_games[j]
+          if intersection.empty?
+            game_week_games[i] << unique_games[j]
+            unique_games.delete(unique_games[j])
+            puts "game added: #{game_week_games[i].inspect}"
+          end
+        end
+        j = j + 1
+      end
+      i = i + 1
+    end
+    puts game_week_games.inspect
+    puts game_week_games.count
   end
 
   def get_games
