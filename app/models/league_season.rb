@@ -18,47 +18,30 @@ class LeagueSeason < ActiveRecord::Base
   end
 
   def self.create_games
-    teams = ["A", "B", "C", "D", "E", "F"]
-    unique_games = []
-    (0..(teams.count - 2)).each do |i|
-      prime_team = teams[i]
-      ((i + 1)..(teams.count - 1)).each do |j|
-        unique_games << [prime_team, teams[j]]
-        unique_games << [teams[j], prime_team]
-      end
-    end
-    puts unique_games.inspect
-    puts unique_games.count
+    teams = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+    home_teams = teams[0..((teams.count / 2) - 1)]
+    away_teams = teams[(teams.count / 2)..(teams.count - 1)].reverse
 
-    number_of_game_weeks = unique_games.count / (teams.count / 2)
-    game_week_games = []
-    i = 0
-    while game_week_games.count < number_of_game_weeks
-      game_week_games << []
-      j = 0
-      # While this game week isn't full
-      while (game_week_games[i].count < (teams.count / 2)) && (unique_games.count > 0)
-
-        if game_week_games[i].count == 0
-          game_week_games[i] << unique_games[j]
-          puts "game added: #{unique_games[j].inspect}"
-          unique_games.delete(unique_games[j])
-        else
-          teams_involved_so_far = game_week_games[i].flatten.uniq
-          intersection = teams_involved_so_far & unique_games[j]
-          if intersection.empty?
-            game_week_games[i] << unique_games[j]
-            puts "game added: #{unique_games[j].inspect}"
-            unique_games.delete(unique_games[j])
-          end
-        end
-        j = j + 1
-      end
-      puts "game_week_games: #{game_week_games.inspect}"
-      i = i + 1
+    games = []
+    (0..(((teams.count - 1) * 2) - 1)).each do |game_weeks|
+      games << []
     end
-    puts game_week_games.inspect
-    puts game_week_games.count
+    (0..(teams.count - 2)).each do |game_week_counter|
+      (0..((teams.count / 2) - 1)).each do |games_per_week_counter|
+        games[game_week_counter] << [home_teams[games_per_week_counter], away_teams[games_per_week_counter]]
+        games[game_week_counter + (teams.count - 1)] << [away_teams[games_per_week_counter], home_teams[games_per_week_counter]]
+      end
+      team_to_move_up = away_teams[0]
+      away_teams.delete(team_to_move_up)
+      home_teams.insert(1, team_to_move_up)
+
+      team_to_move_down = home_teams[home_teams.count - 1]
+      home_teams.delete(team_to_move_down)
+      away_teams << team_to_move_down
+    end
+    games.shuffle!
+    puts games.inspect
+    puts games.count
   end
 
   def get_games
