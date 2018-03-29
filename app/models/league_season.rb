@@ -17,19 +17,22 @@ class LeagueSeason < ActiveRecord::Base
     create_games
   end
 
-  def self.create_games
-    teams = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
-    home_teams = teams[0..((teams.count / 2) - 1)]
-    away_teams = teams[(teams.count / 2)..(teams.count - 1)].reverse
+  def create_games
+    league = self.league
+    competition = league.competition
+    teams_in_league = league.teams.where(deleted_at: nil).to_a
+    number_of_teams_in_league = teams_in_league.count
+    home_teams = teams_in_league[0..((number_of_teams_in_league / 2) - 1)]
+    away_teams = teams_in_league[(number_of_teams_in_league / 2)..(number_of_teams_in_league - 1)].reverse
 
     games = []
-    (0..(((teams.count - 1) * 2) - 1)).each do |game_weeks|
+    (0..(((number_of_teams_in_league - 1) * 2) - 1)).each do |game_weeks|
       games << []
     end
-    (0..(teams.count - 2)).each do |game_week_counter|
-      (0..((teams.count / 2) - 1)).each do |games_per_week_counter|
-        games[game_week_counter] << [home_teams[games_per_week_counter], away_teams[games_per_week_counter]]
-        games[game_week_counter + (teams.count - 1)] << [away_teams[games_per_week_counter], home_teams[games_per_week_counter]]
+    (0..(number_of_teams_in_league - 2)).each do |game_week_counter|
+      (0..((number_of_teams_in_league / 2) - 1)).each do |games_per_week_counter|
+        games[game_week_counter] << [home_teams[games_per_week_counter].title, away_teams[games_per_week_counter].title]
+        games[reverse_game_week_number] << [away_teams[games_per_week_counter].title, home_teams[games_per_week_counter].title]
       end
       team_to_move_up = away_teams[0]
       away_teams.delete(team_to_move_up)
@@ -40,6 +43,14 @@ class LeagueSeason < ActiveRecord::Base
       away_teams << team_to_move_down
     end
     games.shuffle!
+    i = 0
+    while games.count < competition.game_weeks_per_season
+      if i == games.count - 1
+        i = 0
+      end
+      games << games[i]
+      i = i + 1
+    end
     puts games.inspect
     puts games.count
   end
