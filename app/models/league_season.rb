@@ -18,21 +18,27 @@ class LeagueSeason < ActiveRecord::Base
   end
 
   def create_games
-    league = self.league
+    # league = self.league
+    # season = self.season
     competition = league.competition
+    competition_game_weeks = competition.game_weeks_per_season
+
     teams_in_league = league.teams.where(deleted_at: nil).to_a
     number_of_teams_in_league = teams_in_league.count
+
+    game_weeks_remaining = number_of_game_weeks_remaining
+    games_per_game_round = (number_of_teams_in_league - 1) * 2
     home_teams = teams_in_league[0..((number_of_teams_in_league / 2) - 1)]
     away_teams = teams_in_league[(number_of_teams_in_league / 2)..(number_of_teams_in_league - 1)].reverse
 
     games = []
-    (0..(((number_of_teams_in_league - 1) * 2) - 1)).each do |game_weeks|
+    (0..(games_per_game_round - 1)).each do |game_weeks|
       games << []
     end
     (0..(number_of_teams_in_league - 2)).each do |game_week_counter|
       (0..((number_of_teams_in_league / 2) - 1)).each do |games_per_week_counter|
-        games[game_week_counter] << [home_teams[games_per_week_counter].title, away_teams[games_per_week_counter].title]
-        games[reverse_game_week_number] << [away_teams[games_per_week_counter].title, home_teams[games_per_week_counter].title]
+        games[game_week_counter] << [home_teams[games_per_week_counter], away_teams[games_per_week_counter]]
+        games[game_week_counter + (number_of_teams_in_league - 1)] << [away_teams[games_per_week_counter], home_teams[games_per_week_counter]]
       end
       team_to_move_up = away_teams[0]
       away_teams.delete(team_to_move_up)
@@ -44,15 +50,32 @@ class LeagueSeason < ActiveRecord::Base
     end
     games.shuffle!
     i = 0
-    while games.count < competition.game_weeks_per_season
+    while games.count < competition_game_weeks
       if i == games.count - 1
         i = 0
       end
       games << games[i]
       i = i + 1
     end
-    puts games.inspect
-    puts games.count
+
+    game_weeks_for_rest_of_season = games[0..game_weeks_remaining - 1]
+    (0..game_weeks_for_rest_of_season.count - 1).each do |i|
+      game_week_number = competition_game_weeks - game_weeks_remaining + 1 + i
+      game_week = GameWeek.where(season: season, game_week_number: game_week_number).first
+      game_round_number = ((i + 1).to_f / games_per_game_round.to_f).ceil
+      game_round = GameRound.where(league_season: self, game_round_number: game_round_number).first
+      (0..game_weeks_for_rest_of_season[i].count - 1).each do |j|
+        home_team = game_weeks_for_rest_of_season[i][j][0]
+        away_team = game_weeks_for_rest_of_season[i][j][1]
+        game = Game.new(home_team: home_team, away_team: away_team, game_week: game_week, game_round: game_round)
+        if game.valid?
+          game.save!
+        else
+          puts "Game invalid: #{game.inspect}"
+        end
+      end
+    end
+    puts Game.joins(:game_round).where('game_rounds.league_season_id = ?', self.id).inspect
   end
 
   def get_games
