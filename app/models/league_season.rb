@@ -26,7 +26,7 @@ class LeagueSeason < ActiveRecord::Base
     teams_in_league = league.teams.where(deleted_at: nil).to_a
     number_of_teams_in_league = teams_in_league.count
 
-    game_weeks_remaining = number_of_game_weeks_remaining
+    game_weeks_remaining = number_of_game_weeks_remaining || competition_game_weeks
     games_per_game_round = (number_of_teams_in_league - 1) * 2
     home_teams = teams_in_league[0..((number_of_teams_in_league / 2) - 1)]
     away_teams = teams_in_league[(number_of_teams_in_league / 2)..(number_of_teams_in_league - 1)].reverse
@@ -83,8 +83,11 @@ class LeagueSeason < ActiveRecord::Base
   end
 
   def number_of_game_weeks_remaining
-    # Is the most recently finished game week number equal to the total number of game weeks?
-    season.competition.game_weeks_per_season - season.game_weeks.where(finished: true).order(:starts_at).last.game_week_number
+    if last_game_week = season.game_weeks.where(finished: true).order(:starts_at).last
+      season.competition.game_weeks_per_season - last_game_week.game_week_number
+    else
+      season.competition.game_weeks_per_season
+    end
   end
 
   def is_ready_to_be_wrapped_up
