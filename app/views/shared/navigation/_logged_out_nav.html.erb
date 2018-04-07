@@ -8,7 +8,9 @@
     <!-- Empty -->
   </div>
   <div class="col-sm-10">
-    <%= render 'user_sessions/form' %>
+    <% if controller_name == "user_sessions" %>
+      <%= render 'user_sessions/form' %>
+    <% end %>
   </div>
   <div class="col-sm-1">
     <!-- Empty -->
