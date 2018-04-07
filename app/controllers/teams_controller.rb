@@ -31,11 +31,17 @@ class TeamsController < ApplicationController
   # POST /teams.json
   def create
     @team = current_user.teams.new(team_params)
-    @team.league_id = params[:league_id]
+    @league = League.find_by(id: params[:league_id])
+    @team.league = @league
     if @team.save
-      LeagueInvite.where(email: current_user.email, league: League.find_by(id: params[:league_id])).destroy_all
+      LeagueInvite.where(email: current_user.email, league: @league).destroy_all
       flash[:success] = "Added team to league"
-      redirect_to league_path(@team.league_id)
+      if @league.teams.count == 10 && current_season = Season.current.first
+        if LeagueSeason.where(league: @league, season: current_season).count == 0
+          LeagueSeason.create(league: @league, season: current_season)
+        end
+      end
+      redirect_to league_path(@league)
     else
       render action: :new
     end

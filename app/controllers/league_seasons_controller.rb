@@ -1,5 +1,5 @@
  class LeagueSeasonsController < ApplicationController
-  
+
   def new
     @league_season = LeagueSeason.new
   end
