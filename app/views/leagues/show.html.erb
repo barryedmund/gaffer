@@ -57,26 +57,11 @@
 						<% end %>
 					</table>
 				<% end %>
-
-				<% current_season = Season.current.where(competition: @league.competition).first %>
-				<% latest_league_season = LeagueSeason.joins(:season).where('league_seasons.league_id = ? AND league_seasons.season_id = ?', @league.id, current_season.id).order('seasons.starts_at DESC').first %>
-				<% if @league.is_owned_by_this_user?(@current_user) %>
-					<% number_of_active_teams_in_league = @league.teams.where(deleted_at: nil).count %>
-					<% if number_of_active_teams_in_league > 0 && number_of_active_teams_in_league % 2 == 0 %>
-						<% if !latest_league_season %>
-							<div class="mdl-card__actions">
-								<div class="form-group">
-									<%= button_to "Start #{current_season.description}", {action: :create, controller: :league_seasons, league_id: @league.id, season_id: current_season.id}, :method => :post, class: "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" %>
-								</div>
-							</div>
-						<% end %>
-					<% else %>
-						<% flash[:notice] = "You need an even number of teams to start a season." %>
-					<% end %>
-				<% end %>
 			</div>
 			<div class="mdl-card__supporting-text">
 				<ul class="horizontal-style">
+					<% current_season = Season.current.where(competition: @league.competition).first %>
+					<% latest_league_season = LeagueSeason.joins(:season).where('league_seasons.league_id = ? AND league_seasons.season_id = ?', @league.id, current_season.id).order('seasons.starts_at DESC').first %>
 					<% if !@league.has_team_owned_by?(@current_user) && @league.teams.count < 20 && !latest_league_season %>
 						<li><%= link_to 'Add Team', new_league_team_path(@league), class: "mdl-button--primary" %></li>
 					<% elsif @league.has_team_owned_by?(@current_user) %>

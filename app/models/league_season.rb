@@ -18,8 +18,6 @@ class LeagueSeason < ActiveRecord::Base
   end
 
   def create_games
-    # league = self.league
-    # season = self.season
     competition = league.competition
     competition_game_weeks = competition.game_weeks_per_season
 
