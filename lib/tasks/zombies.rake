@@ -34,7 +34,11 @@ namespace :zombies do
           # Sort the player game weeks by value
           PlayerGameWeek.where("game_week_id = ? AND player_value IS NOT NULL", most_recently_finished_gameweek.id).joins(:player).where("players.news = ?", '').order("player_game_weeks.player_value DESC").each do |pgw|
             # If the player is the right position
-            if pgw.player.playing_position == what_to_sign && pgw.player.percentage_of_minutes_played_this_season(current_season) >= 0.5
+            should_randomise = false
+            if team.team_players.count < 6 && rand < 0.3
+              should_randomise = true
+            end
+            if pgw.player.playing_position == what_to_sign && pgw.player.percentage_of_minutes_played_this_season(current_season) >= 0.5 && !should_randomise
               team_player = TeamPlayer.where(player: pgw.player).joins(:team).where('teams.league_id = ?', league.id).first
               # If the player belongs to a team
               if team_player

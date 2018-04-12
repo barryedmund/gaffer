@@ -62,7 +62,7 @@ namespace :transfers do
 					uphappy_team_players << tp
 				end
 			end
-			if rand < 0.35
+			if rand < 0.5
 				uphappy_team_players_as_relation = TeamPlayer.where(id: uphappy_team_players.map(&:id))
 				most_valuable_unhappy_team_player = uphappy_team_players_as_relation.sort_by{ |team_player| team_player.player.player_value }.last
 				most_valuable_unhappy_team_player.force_transfer_list(true)
