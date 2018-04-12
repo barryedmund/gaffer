@@ -303,28 +303,33 @@ class Team < ActiveRecord::Base
     num_squad_md = num_ft_md + number_of_subs_at_position('Midfielder')
     num_squad_fw = num_ft_fw + number_of_subs_at_position('Forward')
 
-    if !has_full_starting_team
-      if num_ft_gk == 0
-        'Goalkeeper'
-      else
-        first_team_outfield = [
-        {pos: "Defender", num_first_team: num_ft_df},
-        {pos: "Midfielder", num_first_team: num_ft_md},
-        {pos: "Forward", num_first_team: num_ft_fw}]
-        positions_with_fewest_first_team_players = first_team_outfield.min_by { |position| position[:num_first_team] }
-        positions_with_fewest_first_team_players[:pos]
-      end
-    elsif num_squad_gk < 2
-      'Goalkeeper'
-    elsif num_squad_df < 6
-      'Defender'
-    elsif num_squad_md < 6
-      'Midfielder'
-    elsif num_squad_fw < 5
-      'Forward'
-    else
-      false
-    end
+		num_squad_total = num_squad_gk + num_squad_df + num_squad_md + num_squad_fw
+		if num_squad_total < 6
+			['Goalkeeper', 'Defender', 'Midfielder', 'Forward'].sample
+		else
+	    if !has_full_starting_team
+	      if num_ft_gk == 0
+	        'Goalkeeper'
+	      else
+	        first_team_outfield = [
+	        {pos: "Defender", num_first_team: num_ft_df},
+	        {pos: "Midfielder", num_first_team: num_ft_md},
+	        {pos: "Forward", num_first_team: num_ft_fw}]
+	        positions_with_fewest_first_team_players = first_team_outfield.min_by { |position| position[:num_first_team] }
+	        positions_with_fewest_first_team_players[:pos]
+	      end
+	    elsif num_squad_gk < 2
+	      'Goalkeeper'
+	    elsif num_squad_df < 6
+	      'Defender'
+	    elsif num_squad_md < 6
+	      'Midfielder'
+	    elsif num_squad_fw < 5
+	      'Forward'
+	    else
+	      false
+	    end
+		end
   end
 
   def get_active_transfers
