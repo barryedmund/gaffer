@@ -260,8 +260,10 @@ class Team < ActiveRecord::Base
         'Goalkeeper'
       elsif team_players.joins(:squad_position).where("short_name NOT LIKE 'GK' AND short_name NOT LIKE 'SUB'").count < 10
         positions_with_subs = first_team_outfield.select { |position| position[:has_sub] }
-        positions_with_subs_with_fewest_first_team_players = positions_with_subs.min_by { |position| position[:num_first_team] }
-        positions_with_subs_with_fewest_first_team_players[:pos]
+				if positions_with_subs.count > 0
+	        positions_with_subs_with_fewest_first_team_players = positions_with_subs.min_by { |position| position[:num_first_team] }
+	        positions_with_subs_with_fewest_first_team_players[:pos]
+				end
       end
     end
   end
