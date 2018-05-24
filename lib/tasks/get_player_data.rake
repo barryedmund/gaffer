@@ -64,7 +64,7 @@ namespace :player_data do
 
   task :get_player_game_weeks => :environment do
     active_game_week = Competition.find_by(description: 'Premier League').current_season.get_current_game_week
-    if active_game_week.starts_at <= Time.now
+    if active_game_week && active_game_week.starts_at <= Time.now
       i = 1
       continue = true
       while continue
