@@ -1,7 +1,7 @@
 <% puts team_achievements.inspect %>
 <% if team_achievements.size > 0 %>
   <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="white-space: normal;">
-    <% team_achievements.each do |team_achievement| %>
+    <% team_achievements.includes(:achievement).order('achievements.award_type, team_achievements.league_season_id').each do |team_achievement| %>
       <tr>
         <td class="mdl-data-table__cell--non-numeric heavy-text" style="border-bottom:0px;">
           <%= team_achievement.achievement.name %>

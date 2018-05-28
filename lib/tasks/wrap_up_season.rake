@@ -92,10 +92,10 @@ namespace :wrap_up_season do
 
   task :end_of_season_achievements => :environment do
     current_season = Season.current.first
-    League.all.each do |league|
+    League.active_leagues.each do |league|
       puts "Gathering data for #{league.name}..."
       league_season = LeagueSeason.where(league: league, season: current_season).first
-      league_teams = league.teams
+      league_teams = league.teams.where(deleted_at: nil)
       league_players = Player.where(available: true).where(id: (Player.joins(team_players: [:team => :league]).where('leagues.id = ?', league.id) ).map(&:id))
       league_teams_team_players = league_teams.joins(:team_players)
       league_team_players = TeamPlayer.joins(:team).where('teams.league_id = ?', league.id)
@@ -108,10 +108,10 @@ namespace :wrap_up_season do
         most_valuable_at_position = league_players_at_position.sort_by{ |player| player.player_value }.last
         most_valuable_at_position_team = league_teams_team_players.where('team_players.player_id = ?', most_valuable_at_position.id).first
 
-        total_defensive_contribution_at_position = league_players_at_position.sort_by{ |player| player.total_defensive_contribution(current_season) }.last
+        total_defensive_contribution_at_position = league_players_at_position.sort_by{ |player| player.total_defensive_contribution }.last
         total_defensive_contribution_at_position_team = league_teams_team_players.where('team_players.player_id = ?', total_defensive_contribution_at_position.id).first
 
-        total_attacking_contribution_at_position = league_players_at_position.sort_by{ |player| player.total_attacking_contribution(current_season) }.last
+        total_attacking_contribution_at_position = league_players_at_position.sort_by{ |player| player.total_attacking_contribution }.last
         total_attacking_contribution_at_position_team = league_teams_team_players.where('team_players.player_id = ?', total_attacking_contribution_at_position.id).first
 
         highest_paid_team_player = league_team_players_at_position.sort_by{ |team_player| team_player.current_contract.weekly_salary_cents }.last
@@ -197,9 +197,9 @@ namespace :wrap_up_season do
       overrated_team_player_overall = team_player_values_overall.first
       underrated_team_player_overall = team_player_values_overall.last
       highest_paid_team_player_overall = league_team_players.sort_by{ |team_player| team_player.current_contract.weekly_salary_cents }.last
-      total_defensive_contribution_overall = league_players.sort_by{ |player| player.total_defensive_contribution(current_season) }.last
+      total_defensive_contribution_overall = league_players.sort_by{ |player| player.total_defensive_contribution }.last
       total_defensive_contribution_overall_team = league_teams_team_players.where('team_players.player_id = ?', total_defensive_contribution_overall.id).first
-      total_attacking_contribution_overall = league_players.sort_by{ |player| player.total_attacking_contribution(current_season) }.last
+      total_attacking_contribution_overall = league_players.sort_by{ |player| player.total_attacking_contribution }.last
       total_attacking_contribution_overall_team = league_teams_team_players.where('team_players.player_id = ?', total_attacking_contribution_overall.id).first
 
       { :best_signing_overall => [underrated_team_player_overall.team, underrated_team_player_overall.full_name],
