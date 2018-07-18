@@ -45,7 +45,7 @@ namespace :player_data do
       body = JSON.parse(response.body)
       game_week_elements = body['events']
       current_season = Season.current.first
-      if !current_season.is_completed
+      if current_season && !current_season.is_completed
         for i in 0..(game_week_elements.length - 1)
           current_element = game_week_elements[i]
           start_time = Time.at(current_element['deadline_time_epoch']).utc
