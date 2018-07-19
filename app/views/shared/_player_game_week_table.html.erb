@@ -1,31 +1,32 @@
 <% current_season = Season.current.first %>
-<% if player.player_game_weeks.joins(game_week: :season).where("season_id = ?", Season.current.first.id).count > 0 %>
+
+<div class="mdl-card__title">
+	<h3 class="mdl-card__title-text">Stats</h3>
+</div>
+<div class="mdl-card__actions">
 	<div class="mdl-card__title">
-		<h3 class="mdl-card__title-text">Stats</h3>
+		<h4 class="mdl-card__title-text">Summary</h4>
 	</div>
-	<div class="mdl-card__actions">
-		<div class="mdl-card__title">
-			<h4 class="mdl-card__title-text">Summary</h4>
-		</div>
-		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-			<tr>
-				<th>
-					<span>Mp</span>
-				</th>
-				<th>
-					<span>Att</span>
-				</th>
-				<th>
-					<span>Att / 90</span>
-				</th>
-				<th>
-					<span>Def</span>
-				</th>
-				<th>
-					<span>Def / 90</span>
-				</th>
-			</tr>
-			<tr>
+	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+		<tr>
+			<th>
+				<span>Mp</span>
+			</th>
+			<th>
+				<span>Att</span>
+			</th>
+			<th>
+				<span>Att / 90</span>
+			</th>
+			<th>
+				<span>Def</span>
+			</th>
+			<th>
+				<span>Def / 90</span>
+			</th>
+		</tr>
+		<tr>
+			<% if player.player_game_weeks.joins(game_week: :season).where("season_id = ?", Season.current.first.id).count > 0 %>
 				<td class="normal-text">
 					<%= player.total_minutes_played_this_season(current_season) %> / <%= player.eligible_game_weeks_this_season(current_season) * 90 %>
 				</td>
@@ -41,32 +42,38 @@
 				<td class="normal-text">
 					<%= player.total_defensive_contribution_per_90_this_season(current_season) %>
 				</td>
-			</tr>
-		</table>
-		<div class="mdl-card__title">
-			<h4 class="mdl-card__title-text">Game weeks</h4>
-		</div>
-		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-			<tr>
-				<th class="mdl-data-table__cell--non-numeric">
-					<span>Sn</span>
-				</th>
-				<th>
-					<span>GW</span>
-				</th>
-				<th>
-					<span>Mp</span>
-				</th>
-				<th>
-					<span>Gs</span>
-				</th>
-				<th>
-					<span>A</span>
-				</th>
-				<th>
-					<span>Gc</span>
-				</th>
-			</tr>
+			<% else %>
+				<td class="mdl-data-table__cell--non-numeric normal-text" colspan="5">
+					No game weeks played.
+				</td>
+			<% end %>
+		</tr>
+	</table>
+	<div class="mdl-card__title">
+		<h4 class="mdl-card__title-text">Game weeks</h4>
+	</div>
+	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+		<tr>
+			<th class="mdl-data-table__cell--non-numeric">
+				<span>Sn</span>
+			</th>
+			<th>
+				<span>GW</span>
+			</th>
+			<th>
+				<span>Mp</span>
+			</th>
+			<th>
+				<span>Gs</span>
+			</th>
+			<th>
+				<span>A</span>
+			</th>
+			<th>
+				<span>Gc</span>
+			</th>
+		</tr>
+		<% if player.player_game_weeks.count > 0 %>
 			<% player.player_game_weeks.joins(:game_week).order("game_weeks.starts_at DESC").each do |pgw| %>
 				<tr>
 					<td class="mdl-data-table__cell--non-numeric normal-text">
@@ -89,69 +96,12 @@
 					</td>
 				</tr>
 			<% end %>
-		</table>
-	</div>
-<% else %>
-	<div class="mdl-card__title">
-		<h3 class="mdl-card__title-text">Stats</h3>
-	</div>
-	<div class="mdl-card__actions">
-		<div class="mdl-card__title">
-			<h4 class="mdl-card__title-text">Summary</h4>
-		</div>
-		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-			<tr>
-				<th>
-					<span>Mp</span>
-				</th>
-				<th>
-					<span>Att</span>
-				</th>
-				<th>
-					<span>Att / 90</span>
-				</th>
-				<th>
-					<span>Def</span>
-				</th>
-				<th>
-					<span>Def / 90</span>
-				</th>
-			</tr>
-			<tr>
-				<td class="mdl-data-table__cell--non-numeric normal-text" colspan="5">
-					No game weeks played.
-				</td>
-			</tr>
-		</table>
-		<div class="mdl-card__title">
-			<h4 class="mdl-card__title-text">Game weeks</h4>
-		</div>
-		<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-			<tr>
-				<th class="mdl-data-table__cell--non-numeric">
-					<span>Season</span>
-				</th>
-				<th>
-					<span>GW</span>
-				</th>
-				<th>
-					<span>Mp</span>
-				</th>
-				<th>
-					<span>Gs</span>
-				</th>
-				<th>
-					<span>A</span>
-				</th>
-				<th>
-					<span>Gc</span>
-				</th>
-			</tr>
+		<% else %>
 			<tr>
 				<td class="mdl-data-table__cell--non-numeric normal-text">
 					No game weeks played.
 				</td>
 			</tr>
-		</table>
-	</div>
-<% end %>
+		<% end %>
+	</table>
+</div>

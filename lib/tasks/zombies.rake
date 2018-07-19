@@ -38,7 +38,8 @@ namespace :zombies do
             if team.team_players.count < 6 && rand < 0.3
               should_randomise = true
             end
-            if pgw.player.playing_position == what_to_sign && pgw.player.percentage_of_minutes_played_this_season(current_season) >= 0.5 && !should_randomise
+            player_plays = (pgw.player.percentage_of_minutes_played_this_season(current_season) >= 0.5) || (pgw.player.eligible_game_weeks_this_season(current_season) == 0)
+            if pgw.player.playing_position == what_to_sign && player_plays && !should_randomise
               team_player = TeamPlayer.where(player: pgw.player).joins(:team).where('teams.league_id = ?', league.id).first
               # If the player belongs to a team
               if team_player

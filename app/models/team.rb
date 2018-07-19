@@ -217,6 +217,8 @@ class Team < ActiveRecord::Base
     cut_off_game_week = game_week_ago(3)
     if cut_off_game_week
       user.last_seen_at < cut_off_game_week.starts_at
+		elsif user.last_seen_at < 6.months.ago
+			true
     else
       false
     end
