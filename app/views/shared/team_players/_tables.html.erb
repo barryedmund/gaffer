@@ -12,33 +12,39 @@
 				<li><a id="news_details_link" class="normal-text">News</a></li>
 			</ul>
 		</div>
-		<% if @team.team_players.includes(:squad_position, :player).where(first_team: true).count > 0 %>
-			<div class="mdl-card__actions">
-				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-					<%= render partial: "shared/team_players/table_header" %>
-					<% squad_position_whtelist = @team.get_squad_position_whitelist %>
-					<% @team.team_players.includes(:squad_position, :player).where(first_team: true).reorder('squad_positions.sort_order, players.last_name, players.first_name').each do |team_player| %>
-						<tr id="<%= dom_id(team_player) %>">
-							<td class="mdl-data-table__cell--non-numeric normal-text <%= 'highlight_warning' unless team_player.player.news.blank? %>">
-								<%= team_player.squad_position.short_name[0,1] %>
-							</td>
-							<%= render partial: 'shared/team_players/details', locals: {team_player: team_player} %>
-							<td class="mdl-data-table__cell--non-numeric normal-text">
-								<% if team_player.player.game_week_deadline_at && team_player.player.game_week_deadline_at > Time.now %>
-									<%= form_for team_player, url: update_first_team_league_team_team_player_path(@league, team_player.team, team_player)  do |f| %>
-										<%= f.submit "Drop", class: "negative_action_button" %>
-									<% end %>
+		<% position_ordered_first_team = @team.team_players.includes(:squad_position, :player).where(first_team: true).reorder('squad_positions.sort_order, players.last_name, players.first_name') %>
+		<div class="mdl-card__actions">
+			<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+				<%= render partial: "shared/team_players/table_header" %>
+				<% squad_position_whtelist = @team.get_squad_position_whitelist %>
+				<% position_ordered_first_team.each do |team_player| %>
+					<tr id="<%= dom_id(team_player) %>">
+						<td class="mdl-data-table__cell--non-numeric normal-text <%= 'highlight_warning' unless team_player.player.news.blank? %>">
+							<%= team_player.squad_position.short_name[0,1] %>
+						</td>
+						<%= render partial: 'shared/team_players/details', locals: {team_player: team_player} %>
+						<td class="mdl-data-table__cell--non-numeric normal-text">
+							<% if team_player.player.game_week_deadline_at && team_player.player.game_week_deadline_at > Time.now %>
+								<%= form_for team_player, url: update_first_team_league_team_team_player_path(@league, team_player.team, team_player)  do |f| %>
+									<%= f.submit "Drop", class: "negative_action_button" %>
 								<% end %>
-							</td>
-						</tr>
-					<% end %>
-				</table>
-			</div>
-		<% else %>
-			<div class="mdl-card__supporting-text">
-				You need to add some players to your first team.
-			</div>
-		<% end %>
+							<% end %>
+						</td>
+					</tr>
+				<% end %>
+				<% (1..11 - position_ordered_first_team.count).each do %>
+					<tr>
+						<td class="mdl-data-table__cell--non-numeric normal-text"></td>
+						<td class="mdl-data-table__cell--non-numeric normal-text">-</td>
+						<td class="normal-text"></td>
+						<td class="normal-text"></td>
+						<td class="normal-text"></td>
+						<td class="normal-text"></td>
+						<td class="mdl-data-table__cell--non-numeric normal-text"></td>
+					</tr>
+				<% end %>
+			</table>
+		</div>
 		<% if @team.team_players.where(first_team: false).count > 0 %>
 			<div class="mdl-card__actions">
 				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
