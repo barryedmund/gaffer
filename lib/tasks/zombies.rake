@@ -32,7 +32,7 @@ namespace :zombies do
         if team.is_zombie_team && what_to_sign = team.get_position_to_sign(combined_players)
           puts "#{team.title} (#{what_to_sign})"
           # Sort the player game weeks by value
-          PlayerGameWeek.where("game_week_id = ? AND player_value IS NOT NULL", most_recently_finished_gameweek.id).joins(:player).where("players.news = ?", '').order("player_game_weeks.player_value DESC").each do |pgw|
+          PlayerGameWeek.where("game_week_id = ? AND player_value IS NOT NULL", most_recently_finished_gameweek.id).joins(:player).where("players.news = ? AND players.available = ?", '', true).order("player_game_weeks.player_value DESC").each do |pgw|
             # If the player is the right position
             should_randomise = false
             if team.team_players.count < 6 && rand < 0.3
