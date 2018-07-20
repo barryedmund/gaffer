@@ -45,26 +45,42 @@
 
 
 
-<% elsif news_item.news_item_resource_type === 'Transfer' %>
-	<!-- TRANSFER news_items -->
-	<tr>
-		<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
-			<i class="material-icons large">swap_horiz</i><%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
-		</td>
-		<% if resource %>
+<% elsif resource.instance_of? Transfer %>
+	<!-- TRANSFER initiated news_items -->
+	<% if news_item.news_item_type == "transfer_complete" %>
+		<tr>
+			<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
+				<i class="material-icons large">done_all</i><%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 45) %>
+			</td>
 			<td class="normal-text" style="border-bottom: 0px;">
-				<%= link_to 'View', league_transfer_path(resource.primary_team.league.id, resource.id), class: "mdl-button--primary" %>
+				<%= link_to 'View', league_transfers_path(resource.primary_team.league.id), class: "mdl-button--primary" %>
 			</td>
-		<% end %>
-	</tr>
-	<tr>
-		<% if resource %>
-			<%= render partial: 'transfers/transfer_teams_status_row', locals: {transfer: resource} %>
-		<% else %>
-			<td class="mdl-data-table__cell--non-numeric normal-text " colspan="3" style="border-top:0px;">
-				Transfer cancelled
+		</tr>
+		<tr>
+			<td class="mdl-data-table__cell--non-numeric normal-text" colspan="3" style="border-top:0px;">
+				<%= "Moves from #{resource.secondary_team.abbreviated_title(20)} for #{number_to_currency(resource.get_cash_involved, precision: 0)}" %>
 			</td>
+		</tr>
+	<% else %>
+		<tr>
+			<td class="mdl-data-table__cell--non-numeric normal-text" colspan="2" style="border-bottom:0px;">
+				<i class="material-icons large">swap_horiz</i><%= news_item.created_at.strftime("%d %b") %> - <%= truncate(news_item.body, length: 36) %>
+			</td>
+			<% if resource %>
+				<td class="normal-text" style="border-bottom: 0px;">
+					<%= link_to 'View', league_transfer_path(resource.primary_team.league.id, resource.id), class: "mdl-button--primary" %>
+				</td>
+			<% end %>
+		</tr>
+		<tr>
+			<% if resource %>
+				<%= render partial: 'transfers/transfer_teams_status_row', locals: {transfer: resource} %>
+			<% else %>
+				<td class="mdl-data-table__cell--non-numeric normal-text " colspan="3" style="border-top:0px;">
+					Transfer cancelled
+				</td>
 		<% end %>
+	<% end %>
 	</tr>
 
 

@@ -65,8 +65,7 @@ class Transfer < ActiveRecord::Base
           receiver.delist_non_self_listed_team_players if receiver.should_be_back_in_the_black
         elsif transfer_item.transfer_item_type === "Player"
           contract = transfer_item.team_player.current_contract
-					contract.update_attributes!(signed: false)
-					contract.update_attributes!(team: receiver)
+					contract.update_attributes!(signed: false, team: receiver, starts_at: Date.today.strftime('%Y-%m-%d'))
 					if 90.days.from_now > contract.ends_at
 						contract.update_attributes!(ends_at: 90.days.from_now.strftime('%Y-%m-%d'))
 					end
@@ -74,6 +73,7 @@ class Transfer < ActiveRecord::Base
           transfer_item.team_player.update_attributes!(team: receiver, first_team: false, squad_position: SquadPosition.find_by(short_name: 'SUB'), transfer_minimum_bid: nil, transfer_completes_at: nil, is_voluntary_transfer: false, is_team_player_initiated_listing: false)
         end
       end
+			NewsItem.create(league: self.primary_team.league, news_item_resource_type: 'Transfer', news_item_resource_id: self.id, news_item_type: "transfer_complete", body: "#{self.get_team_player_involved.full_name(true, 17)} signs for #{self.primary_team.abbreviated_title}")
     end
   end
 
