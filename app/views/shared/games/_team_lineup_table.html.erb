@@ -13,11 +13,11 @@
     </div>
   </div>
 	<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-		<%= render partial: "shared/games/table_header" %>          
-	          
-	  <% team_lineups = team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ? AND squad_positions.short_name != ?', game_week.id, 'SUB') %>
+		<%= render partial: "shared/games/table_header" %>
 
-	  <% game.get_team_lineup_including_yet_to_play(team).each do |game_player| %>
+	  <% team_lineups = team.player_lineups.joins(:player_game_week, :squad_position).where('game_week_id = ? AND squad_positions.short_name != ?', game_week.id, 'SUB') %>
+    <% selected_team_players = game.get_team_lineup_including_yet_to_play(team) %>
+	  <% selected_team_players.each do |game_player| %>
 	    <% if game_player.player_game_weeks.joins(:player_lineups).where('player_game_weeks.game_week_id = ?', game_week.id).count == 0 %>
 	      <%= render partial: "shared/games/player_lineup_yet_to_play_row", locals: {yet_to_play_team_player: game_player} %>
 	    <% else %>
@@ -25,6 +25,35 @@
 	      <%= render partial: "shared/games/player_lineup_table_row", locals: {player_lineup: player_lineup} %>
 	    <% end %>
 	  <% end %>
+
+    <% (1..11 - selected_team_players.count).each do %>
+      <tr>
+        <td class="mdl-data-table__cell--non-numeric normal-text">
+
+        </td>
+        <td class="mdl-data-table__cell--non-numeric normal-text">
+
+        </td>
+        <td class="normal-text">
+          -
+        </td>
+        <td class="normal-text detailed_stats">
+          -
+        </td>
+        <td class="normal-text detailed_stats">
+          -
+        </td>
+        <td class="normal-text detailed_stats">
+          -
+        </td>
+        <td class="normal-text hide summary_stats">
+          -
+        </td>
+        <td class="normal-text hide summary_stats">
+          -
+        </td>
+      </tr>
+    <% end %>
 
 	  <%= render partial: "shared/games/summary_row", locals: {player_lineups: team_lineups} %>
 	</table>
