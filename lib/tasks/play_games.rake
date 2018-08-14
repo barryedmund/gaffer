@@ -1,8 +1,10 @@
 namespace :games do
   task :play_games => :environment do
+    start = Time.now
     Game.all.each do |game|
       game.calculate_score
     end
+    puts "End: #{Time.now - start}"
   end
 
   task :create_player_lineups => :environment do

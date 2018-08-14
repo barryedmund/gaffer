@@ -1,1 +1,1 @@
-<%= link_to "#{truncate(game.home_team.title, length: 13)} vs. #{truncate(game.away_team.title, length: 13)}", league_game_path(game.get_league, game), class: "content-link" %><% if game.game_week.in_play? %> (<%= game.get_live_score %>)<% end %>
+<%= link_to "#{truncate(game.home_team.title, length: 13)} vs. #{truncate(game.away_team.title, length: 13)}", league_game_path(game.get_league, game), class: "content-link" %><% if game.game_week.in_play? %> (<%= game.present_live_score %>)<% end %>

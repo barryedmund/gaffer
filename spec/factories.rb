@@ -1,10 +1,6 @@
-FactoryBot.define do  factory :team_achievement do
-    
-  end
+FactoryBot.define do
   factory :achievement do
-    
   end
-
 
 	factory :competition do
 	  country_code "en"
@@ -108,6 +104,9 @@ FactoryBot.define do  factory :team_achievement do
     cash_balance_cents 200000000
 	end
 
+  factory :team_achievement do
+  end
+
 	factory :team_player do
     team
     player
@@ -125,7 +124,7 @@ FactoryBot.define do  factory :team_achievement do
   	primary_team_accepted true
   	secondary_team_accepted false
 	end
-  
+
   factory :transfer_item do
     transfer
     transfer_item_type ""

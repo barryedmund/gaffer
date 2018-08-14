@@ -13,6 +13,6 @@
 		<% end %>
 	</td>
 	<td class="mdl-data-table__cell--non-numeric normal-text">
-		<% if game.game_week.in_play? %> (<%= game.get_live_score %>)<% else %><%= game.get_score %><% end %>
+		<% if game.game_week.in_play? %> (<%= game.present_live_score %>)<% else %><%= game.get_score %><% end %>
 	</td>
 	</tr>
