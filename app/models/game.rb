@@ -8,7 +8,7 @@ class Game < ActiveRecord::Base
  	validates_uniqueness_of :game_round, scope: [:home_team, :away_team]
 
 	def self.unfinished_games_of_team(team)
-			Game.where(home_team_score: nil, away_team_score: nil, home_team: team)
+			Game.where(is_complete: false, home_team: team)
 	end
 
  	def match_up
@@ -18,6 +18,14 @@ class Game < ActiveRecord::Base
  	def get_league
  		game_round.league_season.league
  	end
+
+	def present_live_score
+		unless home_team_score.blank? && away_team_score.blank?
+			"#{home_team_score} : #{away_team_score}"
+		else
+			"0 : 0"
+		end
+	end
 
   def get_live_score
     home_lineup = get_team_lineup(home_team)
@@ -31,35 +39,28 @@ class Game < ActiveRecord::Base
 
     home_team_score = (home_team_attack * (1 - away_team_defence/990)).round
     away_team_score = (away_team_attack * (1 - home_team_defence/990)).round
-
-    "#{home_team_score} : #{away_team_score}"
+		[home_team_score, away_team_score]
   end
 
  	def calculate_score
  		if game_week.finished
- 			if (home_team_score.blank? || away_team_score.blank?)
-        home_lineup = get_team_lineup(home_team)
-        away_lineup = get_team_lineup(away_team)
-
-        home_team_attack = get_total_attacking_contribution(home_lineup)
-        away_team_attack = get_total_attacking_contribution(away_lineup)
-
-        home_team_defence = get_clean_sheet_minutes(home_lineup)
-        away_team_defence = get_clean_sheet_minutes(away_lineup)
-
-        home_team_score = (home_team_attack * (1 - away_team_defence/990)).round
-        away_team_score = (away_team_attack * (1 - home_team_defence/990)).round
-
-	 			self.update(home_team_score: home_team_score)
-	 			self.update(away_team_score: away_team_score)
+ 			if !is_complete
+				live_score = get_live_score
+	 			self.update(home_team_score: live_score[0])
+	 			self.update(away_team_score: live_score[1])
+				self.update(is_complete: true)
 
         NewsItem.create(league: get_league, news_item_resource_type: 'Game', news_item_resource_id: id, body: get_score_description)
 	 		end
- 		end
+		elsif game_week.in_play?
+			live_score = get_live_score
+			self.update(home_team_score: live_score[0])
+			self.update(away_team_score: live_score[1])
+		end
 	end
 
  	def get_score
- 		if home_team_score.present? && away_team_score.present?
+ 		if is_complete
  			"#{home_team_score} : #{away_team_score}"
  		else
  			"- : -"
@@ -87,7 +88,7 @@ class Game < ActiveRecord::Base
   end
 
   def get_score_description
-    if (!home_team_score.blank? && !away_team_score.blank?)
+    if is_complete
       winner = home_team_score == away_team_score ? false : true
       if winner
         winning_team = home_team_score > away_team_score ? home_team : away_team
@@ -134,7 +135,7 @@ class Game < ActiveRecord::Base
   end
 
   def is_finished
-    (game_week.finished && home_team_score.present? && away_team_score.present?) ? true : false
+    (game_week.finished && is_complete) ? true : false
   end
 
  	private

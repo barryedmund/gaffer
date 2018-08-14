@@ -93,7 +93,7 @@ class LeagueSeason < ActiveRecord::Base
   end
 
   def completed_games
-    Game.joins(:game_round).where('game_rounds.league_season_id = ?', self.id).where(home_team_score: nil, away_team_score: nil)
+    Game.joins(:game_round).where('game_rounds.league_season_id = ?', self.id).where(is_complete: false)
   end
 
   def participating_teams
