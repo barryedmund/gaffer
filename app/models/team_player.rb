@@ -80,6 +80,7 @@ class TeamPlayer < ActiveRecord::Base
 
   def get_winning_transfer
     @active_transfers = active_transfers
+    puts "@active_transfers: #{@active_transfers.inspect}"
     @number_of_offers = @active_transfers.count
     if @number_of_offers === 0
       nil
