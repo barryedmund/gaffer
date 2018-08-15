@@ -1,7 +1,7 @@
 namespace :games do
   task :play_games => :environment do
     start = Time.now
-    Game.all.each do |game|
+    Game.where(is_complete: false).each do |game|
       game.calculate_score
     end
     puts "End: #{Time.now - start}"
