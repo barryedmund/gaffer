@@ -45,10 +45,14 @@ namespace :transfers do
     if !GameWeek.has_current_game_week
 			puts "!GameWeek.has_current_game_week"
       TeamPlayer.transfer_listed_with_offers_and_past_completion_date.each do |team_player|
+				puts "#{team_player.id} / #{team_player.full_name} / #{team_player.team.title} / #{team_player.team.league.name}"
         winning_transfer = team_player.get_winning_transfer
-        winning_transfer.complete_a_transfer_listing
-        puts "#{team_player.full_name} / #{winning_transfer.get_cash_transfer_item.cash_cents}"
-        team_player.reset_transfer_attributes
+				if winning_transfer
+        	winning_transfer.complete_a_transfer_listing
+        	team_player.reset_transfer_attributes
+				elsif team_player.transfer_completes_at.present?
+					team_player.update_attributes!(transfer_completes_at: nil)
+				end
       end
     end
   end
