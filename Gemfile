@@ -11,7 +11,7 @@ gem 'turbolinks', '~> 5.0.0'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'spring', group: :development
-gem 'activeadmin', '~> 1.0.0.pre3'
+gem 'activeadmin', '~> 1.1.0'
 gem 'devise'
 gem 'faker'
 gem 'validates_overlap'
