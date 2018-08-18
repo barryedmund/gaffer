@@ -42,10 +42,9 @@ namespace :transfers do
   end
 
   task :process_transfer_listings => :environment do
+		puts "rake transfers:process_transfer_listings"
     if !GameWeek.has_current_game_week
-			puts "!GameWeek.has_current_game_week"
       TeamPlayer.transfer_listed_with_offers_and_past_completion_date.each do |team_player|
-				puts "#{team_player.id} / #{team_player.full_name} / #{team_player.team.title} / #{team_player.team.league.name}"
         winning_transfer = team_player.get_winning_transfer
 				if winning_transfer
         	winning_transfer.complete_a_transfer_listing
