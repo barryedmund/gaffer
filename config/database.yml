@@ -6,12 +6,14 @@ default: &default
 development:
   <<: *default
   database: gaffer_development
-
+  username: postgres
+  password: Hqex8TyiUjRTKDQ
 
 test:
   <<: *default
   database: gaffer_test
-  
+  username: postgres
+  password: Hqex8TyiUjRTKDQ
 
 production:
   <<: *default
