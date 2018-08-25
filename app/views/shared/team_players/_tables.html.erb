@@ -1,4 +1,5 @@
 <% @league = params[:league_id] %>
+<% @star_players = @team.get_star_team_players %>
 <div class="col-sm-12 show">
 	<div class="demo-card-wide mdl-card mdl-shadow--2dp">
 		<div class="mdl-card__supporting-text">
@@ -20,7 +21,7 @@
 				<% position_ordered_first_team.each do |team_player| %>
 					<tr id="<%= dom_id(team_player) %>">
 						<td class="mdl-data-table__cell--non-numeric normal-text <%= 'highlight_warning' unless team_player.player.news.blank? %>">
-							<%= team_player.squad_position.short_name[0,1] %>
+							<%= team_player.display_squad_position %> <% if team_player.is_star_team_player(@star_players) %><i class="material-icons small">star_border</i><% end %>
 						</td>
 						<%= render partial: 'shared/team_players/details', locals: {team_player: team_player} %>
 						<td class="mdl-data-table__cell--non-numeric normal-text">
@@ -50,10 +51,9 @@
 				<table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
 					<%= render partial: "shared/team_players/table_header" %>
 					<% @team.team_players.includes(:player).where(first_team: false).sort_by{ |tp| [tp.player.sort_val, tp.player.last_name, tp.player.first_name] }.each do |team_player| %>
-
 						<tr id="<%= dom_id(team_player) %>">
 							<td class="mdl-data-table__cell--non-numeric normal-text <%= 'highlight_warning' unless team_player.player.news.blank? %>">
-								(<%= SquadPosition.long_name_to_short_name(team_player.player.playing_position) %>)
+								<%= team_player.display_squad_position %> <% if team_player.is_star_team_player(@star_players) %><i class="material-icons small">star_border</i><% end %>
 							</td>
 							<%= render partial: 'shared/team_players/details', locals: {team_player: team_player} %>
 							<td class="mdl-data-table__cell--non-numeric normal-text">

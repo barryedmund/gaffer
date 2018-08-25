@@ -28,4 +28,8 @@ class PlayerLineup < ActiveRecord::Base
     end
     clean_sheet_minutes.round(1)
   end
+
+	def is_in_first_team
+		squad_position.short_name != 'SUB' ? true : false
+	end
 end

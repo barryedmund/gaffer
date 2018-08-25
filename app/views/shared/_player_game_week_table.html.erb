@@ -57,6 +57,12 @@
 			<th class="mdl-data-table__cell--non-numeric">
 				<span>Sn</span>
 			</th>
+			<th class="mdl-data-table__cell--non-numeric">
+				<span>Team</span>
+			</th>
+			<th class="mdl-data-table__cell--non-numeric">
+				<span>Pckd</span>
+			</th>
 			<th>
 				<span>GW</span>
 			</th>
@@ -75,9 +81,28 @@
 		</tr>
 		<% if player.player_game_weeks.count > 0 %>
 			<% player.player_game_weeks.joins(:game_week).order("game_weeks.starts_at DESC").each do |pgw| %>
+				<% this_player_lineup = pgw.player_lineups.joins(:team).where('teams.league_id = ?', league).first %>
 				<tr>
 					<td class="mdl-data-table__cell--non-numeric normal-text">
 						<%= pgw.game_week.season.description %>
+					</td>
+					<td class="mdl-data-table__cell--non-numeric normal-text">
+						<% if this_player_lineup %>
+							<%= this_player_lineup.team.abbreviated_title(10) %>
+						<% else %>
+							-
+						<% end %>
+					</td>
+					<td class="mdl-data-table__cell--non-numeric normal-text">
+						<% if this_player_lineup %>
+							<% if this_player_lineup.is_in_first_team %>
+							  <i class="material-icons large success">sentiment_very_satisfied</i>
+							<% else %>
+								<i class="material-icons large error">sentiment_very_dissatisfied</i>
+							<% end %>
+						<% else %>
+							-
+						<% end %>
 					</td>
 					<td class="normal-text">
 						<%= pgw.game_week.game_week_number %>

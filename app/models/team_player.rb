@@ -170,4 +170,16 @@ class TeamPlayer < ActiveRecord::Base
     most_recent_player_lineup = PlayerLineup.where(team: team).joins(player_game_week: :game_week).where("player_game_weeks.player_id = ?", player_id).order("game_weeks.starts_at DESC").first
     most_recent_player_lineup && most_recent_player_lineup.squad_position.short_name == 'SUB' ? true : false
   end
+
+  def display_squad_position(other_team = false)
+    if other_team
+      SquadPosition.long_name_to_short_name(player.playing_position)
+    else
+      first_team? ? squad_position.short_name[0,1] : SquadPosition.long_name_to_short_name(player.playing_position)
+    end
+  end
+
+  def is_star_team_player(star_players)
+    star_players.find_by(id: self.id) ? true : false
+  end
 end

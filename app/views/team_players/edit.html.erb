@@ -1,4 +1,5 @@
 <% team_player = TeamPlayer.find(params[:id]) %>
+<% league = team_player.team.league %>
 <div class="row">
 	<div class="col-sm-12">
 		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
@@ -25,10 +26,10 @@
 					</tr>
 				</table>
 			</div>
-			<%= render partial: 'transfer_list_form', locals: { team_player: team_player, league: team_player.team.league, team: team_player.team} %>
+			<%= render partial: 'transfer_list_form', locals: { team_player: team_player, league: league, team: team_player.team} %>
 		</div>
 		<div class="demo-card-wide mdl-card mdl-shadow--2dp">
-			<%= render partial: 'shared/player_game_week_table', locals: {player: team_player.player} %>
+			<%= render partial: 'shared/player_game_week_table', locals: {player: team_player.player, league: league} %>
 		</div>
 	</div>
 </div>

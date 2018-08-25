@@ -16,7 +16,7 @@ a.mdl-button {
 	padding-top: 16px;
 	width: 45%;
 }
-body#body_id {	
+body#body_id {
 	font-family: "Roboto";
 }
 div.mdl-card__actions {
@@ -36,6 +36,11 @@ i.ghost {
 i.large {
 	font-size: 48px;
 	margin-right: 5px;
+}
+i.team-icons {
+	font-size: 26px;
+	margin: 0px;
+	padding: 0px;
 }
 i.small {
 	font-size: 30px;
@@ -93,7 +98,7 @@ span.skooch-left {
 span.skooch-right {
 	display: inline-block;
 	text-align: right;
-	width: 100%;	
+	width: 100%;
 }
 span.disabled_mdl-button--primary {
   color: #bbbbbb;
@@ -115,7 +120,7 @@ td[id^="my_contract_offer_name_"].best-offer {
 	border-left: 6px solid rgb(139,195,74);
 }
 td.transfer-item-cell {
-	overflow: hidden;  
+	overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -495,7 +500,7 @@ select
 }
 .col-sm-12 .mdl-textfield--floating-label.is-focused .mdl-textfield__label, .col-sm-12 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .col-sm-12 .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label, .mdl-checkbox__label {
 	font-size: 26px;
-	top: -4px;	
+	top: -4px;
 }
 /************************************************/
 @import "bootstrap-sprockets";
