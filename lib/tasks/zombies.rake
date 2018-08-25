@@ -55,7 +55,7 @@ namespace :zombies do
                   has_enough_cash = team_player.transfer_minimum_bid < team.cash_balance_cents
                   has_existing_bid = team_player.has_active_transfer_bid_from_team(team)
                   # If the finances match up
-                  if is_transfer_price_reasonable && is_not_on_this_team && is_reasonable_salary && is_fiscally_responsible && !has_existing_bid
+                  if is_transfer_price_reasonable && is_not_on_this_team && is_reasonable_salary && is_fiscally_responsible && !has_existing_bid && has_enough_cash
                     puts ">> Has #{team.cash_balance_cents}. Will bid on #{pgw.player.full_name} from #{team_player.team.title} for #{team_player.transfer_minimum_bid}. Will leave team with #{team.end_of_season_financial_position(team_player_salary, team_player.transfer_minimum_bid)} at the end of the season."
                     Transfer.set_up_transfer(team, team_player, team_player.transfer_minimum_bid)
                     break
