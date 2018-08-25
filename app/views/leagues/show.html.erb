@@ -12,7 +12,7 @@
 								<span>Team</span>
 							</th>
 							<th>
-								<!-- For forced transfer listing indicator -->
+								<!-- For icons -->
 							</th>
 							<th>
 								<span>Pld</span>
@@ -44,7 +44,12 @@
 								</td>
 								<td class="normal-text">
 									<% if standings_row[:team_record].is_in_debt %>
-										<i class="material-icons large">money_off</i>
+										<i class="material-icons team-icons">money_off</i>
+									<% end %>
+									<% if standings_row[:team_record].number_of_titles %>
+										<% (1..standings_row[:team_record].number_of_titles).each do |title| %>
+											<i class="material-icons team-icons">star_border</i>
+										<% end %>
 									<% end %>
 								</td>
 								<td class="normal-text"><%= standings_row[:games_played] %></td>

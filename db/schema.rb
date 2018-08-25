@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180812220718) do
+ActiveRecord::Schema.define(version: 20180820012732) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -253,6 +253,7 @@ ActiveRecord::Schema.define(version: 20180812220718) do
     t.integer  "league_id"
     t.integer  "cash_balance_cents", limit: 8
     t.datetime "deleted_at"
+    t.integer  "number_of_titles"
   end
 
   add_index "teams", ["league_id"], name: "index_teams_on_league_id", using: :btree

@@ -372,4 +372,17 @@ class Team < ActiveRecord::Base
 			NewsItem.create(league: league, news_item_resource_type: 'Stadium', news_item_type: 'stadium_expansion', news_item_resource_id: stadium.id, body: "#{stadium.abbreviated_name(16)} grows to #{stadium.capacity} seats", content: "#{abbreviated_title(16)} adds #{expansion} #{'seat'.pluralize(expansion)} to stadium.")
 		end
 	end
+
+	def get_star_team_players
+		star_gk = team_players.joins(:player).where('players.playing_position = ?', 'Goalkeeper').sort_by{ |team_player| team_player.player.player_value }.last
+		star_df = team_players.joins(:player).where('players.playing_position = ?', 'Defender').sort_by{ |team_player| team_player.player.player_value }.last
+		star_md = team_players.joins(:player).where('players.playing_position = ?', 'Midfielder').sort_by{ |team_player| team_player.player.player_value }.last
+		star_fw = team_players.joins(:player).where('players.playing_position = ?', 'Forward').sort_by{ |team_player| team_player.player.player_value }.last
+		star_team_players = []
+		star_gk.present? ? star_team_players << star_gk : false
+		star_df.present? ? star_team_players << star_df : false
+		star_md.present? ? star_team_players << star_md : false
+		star_fw.present? ? star_team_players << star_fw : false
+		TeamPlayer.where(id: star_team_players.map(&:id))
+	end
 end

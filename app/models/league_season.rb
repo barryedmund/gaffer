@@ -73,7 +73,6 @@ class LeagueSeason < ActiveRecord::Base
         end
       end
     end
-    puts Game.joins(:game_round).where('game_rounds.league_season_id = ?', self.id).inspect
   end
 
   def get_games
