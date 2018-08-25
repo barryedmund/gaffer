@@ -21,6 +21,7 @@ namespace :zombies do
   end
 
   task :sign_players => :environment do
+    puts "Rake task: sign_players"
     # For each league
     League.active_leagues.each do |league|
       most_recently_finished_gameweek = GameWeek.get_most_recent_finished
@@ -51,6 +52,7 @@ namespace :zombies do
                   is_not_on_this_team = team_player.team != team
                   is_reasonable_salary = team_player_salary <= (team.home_game_revenue * 0.1)
                   is_fiscally_responsible = team.end_of_season_financial_position(team_player_salary, team_player.transfer_minimum_bid) > Rails.application.config.min_remaining_for_zombie_after_transfer_bid
+                  has_enough_cash = team_player.transfer_minimum_bid < team.cash_balance_cents
                   has_existing_bid = team_player.has_active_transfer_bid_from_team(team)
                   # If the finances match up
                   if is_transfer_price_reasonable && is_not_on_this_team && is_reasonable_salary && is_fiscally_responsible && !has_existing_bid
@@ -78,12 +80,14 @@ namespace :zombies do
   end
 
   task :respond_to_transfer_bids => :environment do
+    puts "Rake task: respond_to_transfer_bids"
     League.active_leagues.each do |league|
       league.teams.where(deleted_at: nil).order(:created_at).each do |team|
         if team.is_zombie_team
           team.get_active_transfers.where(secondary_team: team, secondary_team_accepted: false).each do |transfer|
             other_team = transfer.get_other_team_involved(team)
             team_debt = team.cash_balance_cents < 0 ? team.cash_balance_cents * -1 : 0
+            puts transfer.inspect
             bid_amount = transfer.get_cash_involved
             team_player_involved = transfer.get_team_player_involved
             is_bid_enough_to_clear_debt = team_debt > 0 ? bid_amount > team_debt : true
