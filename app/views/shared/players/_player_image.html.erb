@@ -1,0 +1,3 @@
+<% unless (defined?(player)).nil? %>
+  <%= image_tag "https://platform-static-files.s3.amazonaws.com/premierleague/photos/players/110x140/p#{player.pl_player_code}.png", style: "height: 70px; width: 55px", onerror: "this.style.display='none'" %>
+<% end %>

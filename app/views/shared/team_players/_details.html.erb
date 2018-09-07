@@ -1,4 +1,5 @@
 <td class="mdl-data-table__cell--non-numeric normal-text">
+	<%= render partial: 'shared/players/player_image', locals: {team_player: team_player.player} %>
 	<%= link_to team_player.full_name(true, 14), league_team_team_player_path(@league, team_player.team, team_player), class: "content-link" %>
 </td>
 <td class="normal-text performance_details">

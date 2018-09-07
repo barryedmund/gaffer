@@ -3,10 +3,11 @@
     <%= player_lineup.squad_position.short_name[0,1] %>
   </td>
   <td class="mdl-data-table__cell--non-numeric normal-text">
+    <%= render partial: 'shared/players/player_image', locals: {player: player_lineup.player_game_week.player} %>
     <%= player_lineup.player_game_week.player.full_name(true) %>
   </td>
   <td class="normal-text">
-    <%= player_lineup.player_game_week.minutes_played.to_i %>  
+    <%= player_lineup.player_game_week.minutes_played.to_i %>
   </td>
   <td class="normal-text detailed_stats">
     <%= player_lineup.player_game_week.goals.to_f %>
