@@ -22,6 +22,7 @@
 								<%= team_player.display_squad_position(true) %> <% if team_player.is_star_team_player(@star_players) %><i class="material-icons small">star_border</i><% end %>
 							</td>
 							<td class="mdl-data-table__cell--non-numeric normal-text">
+								<%= render partial: 'shared/players/player_image', locals: {player: team_player.player} %>
 								<%= link_to team_player.full_name(true, 14), league_player_path(@league.id, team_player.player.id), class: "content-link" %>
 							</td>
 							<td class="mdl-data-table__cell--non-numeric normal-text">

@@ -3,6 +3,7 @@
     <%= yet_to_play_team_player.short_playing_position %>
   </td>
   <td class="mdl-data-table__cell--non-numeric normal-text">
+    <%= render partial: 'shared/players/player_image', locals: {player: yet_to_play_team_player} %>
     <%= yet_to_play_team_player.full_name(true) %>
   </td>
   <td class="normal-text">
