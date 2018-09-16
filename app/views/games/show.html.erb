@@ -59,8 +59,8 @@
         <li><a id="detailed_stats_link" class="normal-text selected-tab">View details</a></li>
         <li><a id="summary_stats_link" class="normal-text">View summary</a></li>
       </ul>
-
-      
+      <%= render partial: "shared/games/team_lineup_table", locals: {team: @home_team, game_week: @game_week, game: @game} %>
+      <%= render partial: "shared/games/team_lineup_table", locals: {team: @away_team, game_week: @game_week, game: @game} %>
     </div>
   </div>
 </div>
