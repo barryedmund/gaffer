@@ -1,5 +1,6 @@
 namespace :once_off do
   task :back_fill_player_values => :environment do
+    puts "Rake task: back_fill_player_values"
     Player.all.each do |player|
       GameWeek.where(finished: true).order(:id).each do |game_week|
         if this_player_game_week = PlayerGameWeek.where(game_week: game_week, player: player).first

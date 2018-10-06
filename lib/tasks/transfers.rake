@@ -1,6 +1,7 @@
 namespace :transfers do
 
 	task :process_free_agent_with_contract_offers => :environment do
+		puts "Rake task: process_free_agent_with_contract_offers"
     League.all.each do |league|
       this_league_unsigned_contracts = Contract.joins(:team).where('contracts.signed = ? AND teams.league_id = ?', false, league.id)
       this_league_unsigned_contracts.select('DISTINCT player_id').each do |contract|
@@ -20,6 +21,7 @@ namespace :transfers do
 	end
 
   task :release_players_with_expired_contracts => :environment do
+		puts "Rake task: release_players_with_expired_contracts"
 		if !GameWeek.has_current_game_week
 	    signed_contracts_with_team_players = Contract.where('contracts.signed = ? AND contracts.ends_at < ? AND contracts.team_player_id IS NOT NULL', true, Date.today)
 	    signed_contracts_with_team_players.each do |contract|
@@ -36,13 +38,14 @@ namespace :transfers do
   end
 
   task :clean_up_transfers => :environment do
+		puts "Rake task: clean_up_transfers"
     empty_transfers = Transfer.includes(:transfer_items).where(:transfer_items => { :id => nil })
     stale_transfers = Transfer.where('updated_at < ? AND (primary_team_accepted = ? OR secondary_team_accepted = ?)', 1.week.ago, false, false)
     (empty_transfers | stale_transfers).each(&:destroy)
   end
 
   task :process_transfer_listings => :environment do
-		puts "rake transfers:process_transfer_listings"
+		puts "Rake task: process_transfer_listings"
     if !GameWeek.has_current_game_week
       TeamPlayer.transfer_listed_with_offers_and_past_completion_date.each do |team_player|
         winning_transfer = team_player.get_winning_transfer
@@ -57,6 +60,7 @@ namespace :transfers do
   end
 
 	task :transfer_list_unhappy_player => :environment do
+		puts "Rake task: transfer_list_unhappy_player"
 		League.active_leagues.each do |league|
 			uphappy_team_players ||= []
 			# TeamPlayers whose value went up in the last game week & who aren't injured & whose happiness is below X

@@ -1,11 +1,13 @@
 namespace :games do
   task :play_games => :environment do
+    puts "Rake task: play_games"
     Game.where(is_complete: false).each do |game|
       game.calculate_score
     end
   end
 
   task :create_player_lineups => :environment do
+    puts "Rake task: create_player_lineups"
     this_season = Season.current
     this_season_game_weeks = GameWeek.where(season: this_season).order(:starts_at)
     this_season_game_weeks.each do |game_week|

@@ -1,5 +1,6 @@
 namespace :faking_data do
 	task :randomly_assign_team_players, [:league_id] => :environment do |task, args|
+		puts "Rake task: randomly_assign_team_players"
 	  teams = Team.where(league_id: args.league_id)
 	  valuable_players = Player.joins(:player_game_weeks).having('SUM(player_game_weeks.minutes_played) > 2000').group('players.id').order('SUM(player_game_weeks.goals)')
 	  valuable_players.each do |vp|
@@ -10,6 +11,7 @@ namespace :faking_data do
 	end
 
 	task :randomly_create_player_lineups => :environment do
+		puts "Rake task: randomly_create_player_lineups"
 	  games = Game.joins(game_round: :league_season).where('league_seasons.league_id = ?', 2)
 	  games.each do |game|
 	    game_week = game.game_week
