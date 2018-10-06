@@ -1,5 +1,6 @@
 namespace :zombies do
   task :move_subs_to_first_team => :environment do
+    puts "Rake task: move_subs_to_first_team"
     Team.where(deleted_at: nil).each do |team|
       if team.league.current_league_season && !GameWeek.has_current_game_week
         puts "-_-_-_-_-_-_-_-"
@@ -132,6 +133,7 @@ namespace :zombies do
   end
 
   task :expand_stadium => :environment do
+    puts "Rake task: expand_stadium"
     League.active_leagues.each do |league|
       league.teams.where(deleted_at: nil).order(:created_at).each do |team|
         if team.is_zombie_team && !team.get_position_to_sign && (team.end_of_season_financial_position >= 0) && !GameWeek.has_current_game_week && rand < 0.1

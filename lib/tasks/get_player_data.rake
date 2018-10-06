@@ -1,5 +1,6 @@
 namespace :player_data do
   task :get_players => :environment do
+    puts "Rake task: get_players"
     response = Net::HTTP.get_response(URI("https://fantasy.premierleague.com/drf/bootstrap-static"))
     if response.code.to_i == 200
       body = JSON.parse(response.body)
@@ -40,6 +41,7 @@ namespace :player_data do
   end
 
   task :get_game_week_details => :environment do
+    puts "Rake task: get_game_week_details"
     response = Net::HTTP.get_response(URI("https://fantasy.premierleague.com/drf/bootstrap-static"))
     if response.code.to_i == 200
       body = JSON.parse(response.body)
@@ -63,6 +65,7 @@ namespace :player_data do
   end
 
   task :get_player_game_weeks => :environment do
+    puts "Rake task: get_player_game_weeks"
     active_game_week = Competition.find_by(description: 'Premier League').current_season.get_current_game_week
     if active_game_week && active_game_week.starts_at <= Time.now
       i = 1
@@ -134,6 +137,7 @@ namespace :player_data do
   end
 
   task :get_player_gameweek_deadlines => :environment do
+    puts "Rake task: get_player_gameweek_deadlines"
     if Time.now.hour % 2 == 0
       active_game_week = Competition.find_by(description: 'Premier League').current_season.get_current_game_week
       active_game_week_number = active_game_week.game_week_number
@@ -193,6 +197,7 @@ namespace :player_data do
   end
 
   task :cleanse_departed_players => :environment do
+    puts "Rake task: cleanse_departed_players"
     response = Net::HTTP.get_response(URI("https://fantasy.premierleague.com/drf/bootstrap-static"))
     if response.code.to_i == 200
       body = JSON.parse(response.body)

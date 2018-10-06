@@ -1,5 +1,6 @@
 namespace :wrap_up_season do
   task :distribute_end_of_season_cash => :environment do
+    puts "Rake task: distribute_end_of_season_cash"
     season_should_be_wrapped_up = false
     season_to_complete = Season.current.first
     LeagueSeason.all.each do |league_season|
@@ -37,6 +38,7 @@ namespace :wrap_up_season do
 
   # Run once unless new achievements have been created in which case just replace the array contents with the new awards
   task :create_achievements => :environment do
+    puts "Rake task: create_achievements"
     [:most_valuable_goalkeeper,
     :best_defensive_contribution_goalkeeper,
     :highest_paid_goalkeeper,
@@ -91,6 +93,7 @@ namespace :wrap_up_season do
   end
 
   task :end_of_season_achievements => :environment do
+    puts "Rake task: end_of_season_achievements"
     current_season = Season.current.first
     League.active_leagues.each do |league|
       puts "Gathering data for #{league.name}..."
