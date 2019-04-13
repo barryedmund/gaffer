@@ -1,9 +1,13 @@
 class NewsItemsController < ApplicationController
-  before_action :require_user
+  # before_action :require_user
   before_action :find_news_item_resource_object, only: [:create]
 
   def index
-    @news_items = NewsItem.all
+    if current_user
+      @news_items = NewsItem.all
+    else
+      redirect_to home_path
+    end
   end
 
   def new
@@ -11,7 +15,7 @@ class NewsItemsController < ApplicationController
   end
 
   def create
-    @news_item = NewsItem.new(news_item_params)  
+    @news_item = NewsItem.new(news_item_params)
     respond_to do |format|
       if @news_item.save
         format.html { redirect_to :index }

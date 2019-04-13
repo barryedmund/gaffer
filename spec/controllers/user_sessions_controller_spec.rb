@@ -54,7 +54,7 @@ describe UserSessionsController do
 
       it "sets the flash error message" do
         post :create, email: email, password: password
-        expect(flash[:error]).to eq("There was a problem logging in. Please check your email and password.")
+        expect(flash[:error]).to eq("Erp! That email / password combo doesn't exist. Try again.")
       end
     end
 

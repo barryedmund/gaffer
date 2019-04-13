@@ -1,19 +1,13 @@
-<div class="col-sm-12">
-  <%= render partial: 'layouts/logged_out_row', locals: {
-          header: "Gaffer expands fantasy football",
-          main_content: "There is more to managing a club than picking the team so why should fantasy football stop there?",
-          closing_remark: "Build a team. Create a legacy." } %>
-  <%= render partial: 'layouts/logged_out_row', locals: {
-          header: "Player contracts",
-          main_content: "Offer the best salaries. Get the best players. Earn money with gate receipts. Invest in your stadium to increase capacity. Cash-based player transfers." } %>
-  <%= render partial: 'layouts/logged_out_row', locals: {
-          header: "Multi-season",
-          main_content: "If you spot young talent, sign them up to a multi-season contract and keep them in your squad for multiple seasons." } %>
-  <%= render partial: 'layouts/logged_out_row', locals: {
-          header: "Realistic scorelines",
-          main_content: "Play against one opponent per week & come out with realistic scorelines. Three points for a win. One point for a draw."} %>
-  <%= render partial: 'layouts/logged_out_row', locals: {
-          header: "Let your defenders defend",
-          main_content: "Sign defenders who can defend not just the lads who take the penalties or get the odd assist. Your defenders in Gaffer influence the opponent's ability to score." } %>
+<div id="log-in-hero-row" class="row">
+  <div class="col-sm-1">
+    <!-- Empty -->
+  </div>
+  <div class="col-sm-10">
+    <% if controller_name == "user_sessions" %>
+      <%= render 'user_sessions/form' %>
+    <% end %>
+  </div>
+  <div class="col-sm-1">
+    <!-- Empty -->
+  </div>
 </div>
-
