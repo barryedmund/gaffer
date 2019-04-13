@@ -1,7 +1,10 @@
 class UserSessionsController < ApplicationController
   skip_before_filter :verify_authenticity_token, :only => :create
-  
+
   def new
+  end
+
+  def index
   end
 
   def create
@@ -11,7 +14,7 @@ class UserSessionsController < ApplicationController
   		flash[:success] = "Welcome back #{user.first_name}!"
   		redirect_to root_path
   	else
-  		flash[:error] = "There was a problem logging in. Please check your email and password."
+  		flash[:error] = "Erp! That email / password combo doesn't exist. Try again."
   		render action: 'new'
   	end
   end
@@ -19,6 +22,6 @@ class UserSessionsController < ApplicationController
   def destroy
     session[:user_id] = nil
     reset_session
-    redirect_to login_path, notice: "Please log in or create an account before continuing."
+    redirect_to root_path, notice: "Please log in or create an account before continuing."
   end
 end

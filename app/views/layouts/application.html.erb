@@ -35,21 +35,19 @@
     <% else %>
     	<%= render 'shared/navigation/logged_out_nav' %>
     <% end %>
-		<div class="container" id="wide-container">
-			<div class="row">
-				<% if flash.count > 0 %>
-				<div class="col-sm-12 text-center alert flash">
-					<% flash.each do |type, message| %>
-						<div class="alert_sub_div">
-							<i class="material-icons large <%= type %>">face</i><%= message %>
-						</div>
-					<% end %>
-				</div>
+		<div class="flash-div row">
+			<% if flash.count > 0 %>
+			<div class="col-sm-12 text-center alert flash">
+				<% flash.each do |type, message| %>
+					<div class="alert_sub_div">
+						<i class="material-icons large <%= type %>">face</i><%= message %>
+					</div>
 				<% end %>
 			</div>
-			<div class="row">
-				<%= yield %>
-			</div>
+			<% end %>
+		</div>
+		<div class="row">
+			<%= yield %>
 		</div>
 	</body>
 </html>

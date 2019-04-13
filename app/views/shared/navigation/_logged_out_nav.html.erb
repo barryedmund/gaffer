@@ -1,18 +1,13 @@
-<div id="logo-row" class="row">
-  <div class="col-sm-12 logo-div">
-    <%= link_to image_tag("gaffer_logo_small_white.png", class: "logo-image"), root_path %>
-  </div>
-</div>
 <div class="row">
-  <div class="col-sm-1">
-    <!-- Empty -->
-  </div>
-  <div class="col-sm-10">
-    <% if controller_name == "user_sessions" %>
-      <%= render 'user_sessions/form' %>
-    <% end %>
-  </div>
-  <div class="col-sm-1">
-    <!-- Empty -->
+  <div id="logo-row" class="row">
+    <div class="col-sm-8 logo-div">
+      <%= link_to image_tag("gaffer_logo_black_large_no_slogan_no_crest.png", class: "logo-image"), root_path %>
+    </div>
+    <div class="col-sm-2 main-nav-item">
+      <%= link_to "LOG IN", login_path, class: "main-nav-item-logged_out" %>
+    </div>
+    <div class="col-sm-2 main-nav-item">
+      <%= link_to "SIGN UP", signup_path, class: "main-nav-item-logged_out" %>
+    </div>
   </div>
 </div>

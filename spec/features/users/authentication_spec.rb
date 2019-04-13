@@ -17,7 +17,7 @@ describe "Logging in" do
 		fill_in "Password", with: "wrong"
 		click_button "Log in"
 
-		expect(page).to have_content("Please check your email and password")
+		expect(page).to have_content("Erp! That email / password combo doesn't exist. Try again.")
 		expect(page).to have_field("login_email", with: "barrywallace.is@gmail.com")
 	end
 end

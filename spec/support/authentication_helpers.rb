@@ -8,7 +8,7 @@ module AuthenticationHelpers
 
 	module Feature
 		def sign_in(user, options={})
-			visit ""
+			visit "/login"
 			fill_in "login_email", with: user.email
 			fill_in "Password", with: options[:password]
 			click_button "Log in"

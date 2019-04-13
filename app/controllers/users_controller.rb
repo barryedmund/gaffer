@@ -19,17 +19,17 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    respond_to do |format|
-      if @user.save
-        session[:user_id] = @user.id
-        if @user.has_league_invites
-          format.html { redirect_to root_path, notice: 'Welcome to Gaffer!' }
-        else
-          format.html { redirect_to new_league_path }
-        end
+    if @user.save
+      session[:user_id] = @user.id
+      if @user.has_league_invites
+        flash[:success] = "Welcome to Gaffer!"
+    		redirect_to root_path
       else
-        format.html { render :new }
+        redirect_to new_league_path
       end
+    else
+      flash[:error] = @user.errors.full_messages.join(', ')
+  		render action: 'new'
     end
   end
 

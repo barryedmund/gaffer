@@ -34,15 +34,15 @@ class Contract < ActiveRecord::Base
 
   private
   def has_positive_salary
-    errors.add(:base, "Don't be tight. Weekly salary must be greater than €25,000.") unless weekly_salary_cents && (weekly_salary_cents >= Rails.application.config.min_weekly_salary_of_contract)
+    errors.add(:base, "Minimum weekly salary is €25,000") unless weekly_salary_cents && (weekly_salary_cents >= Rails.application.config.min_weekly_salary_of_contract)
   end
 
   def has_future_end_date
-    errors.add(:base, "Hey Marty, contracts must end in the future.") unless ends_at && (ends_at > Date.today)
+    errors.add(:base, "Contracts must end in the future") unless ends_at && (ends_at > Date.today)
   end
 
   def has_start_date_before_end_date
-    errors.add(:base, "You're going the wrong way. Start date must be before end date.") unless ends_at && starts_at && (ends_at > starts_at)
+    errors.add(:base, "Start date must be before end date") unless ends_at && starts_at && (ends_at > starts_at)
   end
 
   def is_a_valid_length
