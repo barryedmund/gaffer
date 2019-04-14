@@ -12,10 +12,10 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'spring', group: :development
 gem 'activeadmin', '~> 1.1.0'
-gem 'devise'
+gem 'devise', '>= 4.6.0';
 gem 'faker'
 gem 'validates_overlap'
-gem 'bootstrap-sass', '~> 3.2.0'
+gem "bootstrap-sass", ">= 3.4.1"
 gem 'autoprefixer-rails'
 gem 'will_paginate', '~> 3.1.0'
 gem 'newrelic_rpm'
