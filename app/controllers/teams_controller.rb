@@ -37,7 +37,7 @@ class TeamsController < ApplicationController
       LeagueInvite.where(email: current_user.email, league: @league).destroy_all
       flash[:success] = "Added team to league"
       if @league.teams.count == 10 && current_season = Season.current.first
-        if LeagueSeason.where(league: @league, season: current_season).count == 0
+        if LeagueSeason.where(league: @league, season: current_season).count == 0 && !current_season.is_completed
           LeagueSeason.create(league: @league, season: current_season)
         end
       end
