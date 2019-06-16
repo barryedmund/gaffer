@@ -41,7 +41,7 @@ class TeamsController < ApplicationController
           LeagueSeason.create(league: @league, season: current_season)
         end
       end
-      redirect_to league_path(@league)
+      redirect_to league_players_path(@league)
     else
       render action: :new
     end
