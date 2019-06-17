@@ -129,4 +129,61 @@ class League < ActiveRecord::Base
 	def team_players
 		TeamPlayer.joins(:team).where("teams.league_id = ?", self.id)
 	end
+
+	def sign_players_for_zombies
+		puts ""
+		puts self.name
+		most_recently_finished_gameweek = GameWeek.get_most_recent_finished
+		current_season = Season.current.first
+		# Go through each team
+		self.teams.where(deleted_at: nil).order("RANDOM()").each do |team|
+			combined_players = team.get_players_with_contract_offers + team.get_players_in_existing_bids
+			# Are they a zombie team and do they need a player?
+			if team.is_zombie_team && what_to_sign = team.get_position_to_sign(combined_players)
+				puts "#{team.title} (#{what_to_sign})"
+				# Sort the player game weeks by value
+				PlayerGameWeek.where("game_week_id = ? AND player_value IS NOT NULL", most_recently_finished_gameweek.id).joins(:player).where("players.news = ? AND players.available = ?", '', true).order("player_game_weeks.player_value DESC").each do |pgw|
+					# If the player is the right position
+					should_randomise = false
+					if team.team_players.count < 6 && rand < 0.3
+						should_randomise = true
+					end
+					player_plays = (pgw.player.percentage_of_minutes_played_this_season(current_season) >= 0.5) || (pgw.player.eligible_game_weeks_this_season(current_season) == 0)
+					if pgw.player.playing_position == what_to_sign && player_plays && !should_randomise
+						team_player = TeamPlayer.where(player: pgw.player).joins(:team).where('teams.league_id = ?', self.id).first
+						# If the player belongs to a team
+						if team_player
+							is_transfer_listed = team_player.transfer_minimum_bid.present?
+							# If the player is transfer listed
+							if is_transfer_listed
+								team_player_salary = team_player.current_contract.weekly_salary_cents
+								is_transfer_price_reasonable = team_player.transfer_minimum_bid <= (pgw.player_value * 1.1)
+								is_not_on_this_team = team_player.team != team
+								is_reasonable_salary = team_player_salary <= (team.home_game_revenue * 0.1)
+								is_fiscally_responsible = team.end_of_season_financial_position(team_player_salary, team_player.transfer_minimum_bid) > Rails.application.config.min_remaining_for_zombie_after_transfer_bid
+								has_enough_cash = team_player.transfer_minimum_bid < team.cash_balance_cents
+								has_existing_bid = team_player.has_active_transfer_bid_from_team(team)
+								# If the finances match up
+								if is_transfer_price_reasonable && is_not_on_this_team && is_reasonable_salary && is_fiscally_responsible && !has_existing_bid && has_enough_cash
+									puts ">> Has #{team.cash_balance_cents}. Will bid on #{pgw.player.full_name} from #{team_player.team.title} for #{team_player.transfer_minimum_bid}. Will leave team with #{team.end_of_season_financial_position(team_player_salary, team_player.transfer_minimum_bid)} at the end of the season."
+									Transfer.set_up_transfer(team, team_player, team_player.transfer_minimum_bid)
+									break
+								end
+							end
+						# If the player is a free agent
+						else
+							puts ">> Has #{team.cash_balance_cents}. Will sign #{pgw.player.full_name} for free. Will leave team with #{team.end_of_season_financial_position(25000)} at the end of the season."
+							standard_ends_at = Rails.application.config.min_length_of_contract_days.days.from_now.strftime('%Y-%m-%d')
+							standard_salary = Rails.application.config.min_weekly_salary_of_contract
+							@contract_offer = Contract.new(team: team, player: pgw.player, starts_at: Date.today, ends_at: standard_ends_at, weekly_salary_cents: standard_salary)
+							if @contract_offer.save
+								NewsItem.create(league: team.league, news_item_resource_type: 'Contract', news_item_resource_id: @contract_offer.id, body: "#{@contract_offer.player.full_name(true,13)} offered contract")
+							end
+							break
+						end
+					end
+				end
+			end
+		end
+	end
 end
