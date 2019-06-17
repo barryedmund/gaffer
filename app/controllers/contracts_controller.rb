@@ -14,6 +14,9 @@ class ContractsController < ApplicationController
       if @contract.save
         format.html { redirect_to league_contracts_path(@league), notice: 'Contract has been offered.' }
         NewsItem.create(league: @league, news_item_resource_type: 'Contract', news_item_resource_id: @contract.id, body: "#{@contract.player.full_name(true,13)} offered contract")
+        if @league.created_at > 1.day.ago && Contract.joins(team: :league).where('leagues.id = ?', @league.id).count == 1
+          @league.sign_players_for_zombies
+        end
       else
         flash.keep
         format.html { redirect_to new_league_contract_path(@league.id, { player_id: contract_params[:player_id] }), flash: { error: @contract.errors.full_messages.join(', ') }}
