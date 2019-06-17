@@ -2,13 +2,11 @@
 <% league = League.find(params[:league_id].to_i)%>
 
 <div class="col-sm-12">
-  <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-		<div class="mdl-card__title">
-			<h2 class="mdl-card__title-text">
-				Offer contract
-			</h2>
-		</div>
-		<%= render partial: 'form', locals: { league: @league, team: @team, player: player } %>
-		<%= render partial: 'shared/player_game_week_table', locals: {player: player, league: league} %>
+	<div class="mdl-card__title">
+		<h2 class="mdl-card__title-text">
+			Offer contract
+		</h2>
 	</div>
+	<%= render partial: 'form', locals: { league: @league, team: @team, player: player } %>
+	<%= render partial: 'shared/player_game_week_table', locals: {player: player, league: league} %>
 </div>

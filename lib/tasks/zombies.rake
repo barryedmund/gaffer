@@ -25,6 +25,8 @@ namespace :zombies do
     puts "Rake task: sign_players"
     # For each league
     League.active_leagues.each do |league|
+      puts ""
+      puts league.name
       most_recently_finished_gameweek = GameWeek.get_most_recent_finished
       current_season = Season.current.first
       # Go through each team
