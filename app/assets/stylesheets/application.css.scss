@@ -220,7 +220,7 @@ td.transfer-item-cell {
   width: 37%;
 }
 .col-sm-12 .mdl-textfield--floating-label.is-dirty .mdl-textfield__label{
-	color: #fff;
+	color: #000;
   font-size: 20px;
   top: 4px;
   visibility: visible;
@@ -249,7 +249,7 @@ td.transfer-item-cell {
 	display: none;
 }
 .demo-card-wide.mdl-card {
-	margin: 96px 0px 30px 0px;
+	margin: 10px 0px 10px 0px;
   padding: 0px 20px 10px 40px;
   width: 100%;
 }
@@ -399,6 +399,7 @@ div.home-page-align-columns{
 .margin-bottom-50{
 	margin-bottom: 50px;
 }
+
 .mdl-button--raised.mdl-button--colored{
 	font-size: 34px;
 	height: 68px;

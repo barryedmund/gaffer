@@ -7,14 +7,16 @@ class LeagueSeason < ActiveRecord::Base
   after_create :create_game_rounds
 
   def create_game_rounds
-    number_of_teams = league.teams.where(deleted_at: nil).count
-    games_per_game_round = number_of_teams * (number_of_teams - 1)
-    game_weeks_per_game_round = games_per_game_round / (number_of_teams / 2)
-    game_rounds_per_season = (league.competition.game_weeks_per_season / game_weeks_per_game_round.to_f).ceil
-    (1..game_rounds_per_season).each do |i|
-      game_round = game_rounds.create(:game_round_number => i, :league_season => self)
+    if !self.season.is_completed
+      number_of_teams = league.teams.where(deleted_at: nil).count
+      games_per_game_round = number_of_teams * (number_of_teams - 1)
+      game_weeks_per_game_round = games_per_game_round / (number_of_teams / 2)
+      game_rounds_per_season = (league.competition.game_weeks_per_season / game_weeks_per_game_round.to_f).ceil
+      (1..game_rounds_per_season).each do |i|
+        game_round = game_rounds.create(:game_round_number => i, :league_season => self)
+      end
+      create_games
     end
-    create_games
   end
 
   def create_games

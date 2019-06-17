@@ -10,37 +10,33 @@
 	<% player_object = @player %>
 <% end %>
 
-<div class="col-sm-12">
-  <div class="demo-card-wide mdl-card mdl-shadow--2dp">
-		<div class="mdl-card__title">
-			<h2 class="mdl-card__title-text">
-				<%= @player.full_name %>
-			</h2>
+<div class="col-sm-12">\
+	<div class="mdl-card__title">
+		<h2 class="mdl-card__title-text">
+			<%= @player.full_name %>
+		</h2>
+	</div>
+	<div class="mdl-card__supporting-text">
+		<div class="mdl-card__actions">
+			<%= render partial: 'shared/player_info', locals: {
+				player: @player,
+				team_player: team_player,
+				owned: owned,
+				owned_by_current_user: owned_by_current_user} %>
 		</div>
-		<div class="mdl-card__supporting-text">
-			<div class="mdl-card__actions">
-				<%= render partial: 'shared/player_info', locals: {
-					player: @player,
-					team_player: team_player,
-					owned: owned,
-					owned_by_current_user: owned_by_current_user} %>
-			</div>
-			<ul class="horizontal-style-centre-form">
-				<% if owned && !owned_by_current_user %>
-					<li>
-						<%= link_to 'Make offer', new_league_transfer_path(league.id, {team_player_id: team_player.id}), class: "mdl-button--primary" %>
-					</li>
-				<% elsif !owned %>
-					<% if player_object.has_contract_offer_from_team?(@current_user.get_team(league)) %>
-						<li><%= link_to 'View contract offer', league_contracts_path(league.id), class: "mdl-button--primary" %></li>
-					<% else %>
-						<li><%= link_to 'Offer contract', new_league_contract_path(league.id, {player_id: player_object.id}), class: "mdl-button--primary" %></li>
-					<% end %>
+		<ul class="horizontal-style-centre-form">
+			<% if owned && !owned_by_current_user %>
+				<li>
+					<%= link_to 'Make offer', new_league_transfer_path(league.id, {team_player_id: team_player.id}), class: "mdl-button--primary" %>
+				</li>
+			<% elsif !owned %>
+				<% if player_object.has_contract_offer_from_team?(@current_user.get_team(league)) %>
+					<li><%= link_to 'View contract offer', league_contracts_path(league.id), class: "mdl-button--primary" %></li>
+				<% else %>
+					<li><%= link_to 'Offer contract', new_league_contract_path(league.id, {player_id: player_object.id}), class: "mdl-button--primary" %></li>
 				<% end %>
-			</ul>
-		</div>
+			<% end %>
+		</ul>
 	</div>
-	<div class="demo-card-wide mdl-card mdl-shadow--2dp">
-		<%= render partial: 'shared/player_game_week_table', locals: {player: @player, league: league} %>
-	</div>
+	<%= render partial: 'shared/player_game_week_table', locals: {player: @player, league: league} %>
 </div>
